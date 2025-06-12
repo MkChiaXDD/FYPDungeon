@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
-
+    
     [SerializeField] private GameObject ball;
     
     private Vector3 _MousePos;
@@ -84,6 +84,12 @@ public class PlayerController : MonoBehaviour
          }*/
         
     }
+
+    public Vector3 GetDirection()
+    {
+        return ( _MousePos - transform.position ).normalized;
+    }
+
     private void Move()
     {
         //_rb.MovePosition(transform.position + (transform.forward * _Input.magnitude )* _speed * Time.deltaTime);
