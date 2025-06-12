@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 _MousePos;
     private Vector3 _Input;
 
+    [SerializeField] private List<Weapon> weapons;
+    private int currentIndex = 0;
 
     // Update is called once per frame
     void Update()
@@ -25,6 +27,19 @@ public class PlayerController : MonoBehaviour
         GatherInput();
         look();
         MousePosition();
+
+        if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
+            weapons[currentIndex].Attack();
+
+        // Switch weapons with number keys
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectWeapon(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
+    }
+
+    void SelectWeapon(int idx)
+    {
+        if (idx >= 0 && idx < weapons.Count)
+            currentIndex = idx;
     }
 
     private void FixedUpdate()
@@ -70,7 +85,7 @@ public class PlayerController : MonoBehaviour
                 ball.transform.position = _MousePos;
             }
         }
-        Debug.Log("Mouse pos : " + _MousePos);
+        //Debug.Log("Mouse pos : " + _MousePos);
          
 /*         {
 
