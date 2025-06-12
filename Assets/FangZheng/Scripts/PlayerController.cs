@@ -102,6 +102,14 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public void Interact()
+    {
+        if (Input.GetKeyDown("E"))
+        {
+            Debug.Log("Interact");
+        }
+    }
+
     public Vector3 GetDirection()
     {
         return ( _MousePos - transform.position ).normalized;
