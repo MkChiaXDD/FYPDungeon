@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -75,16 +76,17 @@ public class PlayerController : MonoBehaviour
     void MousePosition()
     {
         Vector3 mousePos = Input.mousePosition;
-        RaycastHit hit;
         Ray ray = _camera.ScreenPointToRay(mousePos);
-        if (Physics.Raycast(ray, out hit))
-        {
+        RaycastHit[] hits = Physics.RaycastAll(ray);
+        foreach (RaycastHit hit in hits) {
             if (hit.transform.gameObject.tag == "Ground")
             {
-                 _MousePos = hit.point;
+                _MousePos = hit.point;
                 ball.transform.position = _MousePos;
+                return;
             }
         }
+        
         //Debug.Log("Mouse pos : " + _MousePos);
          
 /*         {
