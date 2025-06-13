@@ -1,22 +1,45 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EarthShatter : MonoBehaviour
 {
     [SerializeField] private ParticleSystem EarthShatterVFX;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private GameObject EarthShatterAttack;
+    [SerializeField] private GameObject AttackCollider;
+    [SerializeField] private float AttackDuration;
+
+    [SerializeField] private float AttackOffsetZ;
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            EarthShatterVFX.Play();
+            SummonEarthShatterAttack();
+            // PlayEarthShatterAttackVFX();
         }
+    }
+
+    private void PlayEarthShatterAttackVFX()
+    {
+        EarthShatterVFX.Play();
+        HandleAttackCollider();
+    }
+
+    private void SummonEarthShatterAttack()
+    {
+        Instantiate(EarthShatterAttack, transform.position, transform.rotation);
+    }
+
+    private void HandleAttackCollider()
+    {
+        StartCoroutine(ActivateAttackCollider());
+    }
+
+    private IEnumerator ActivateAttackCollider()
+    {
+        AttackCollider.SetActive(true);
+        yield return new WaitForSeconds(AttackDuration);
+        AttackCollider.SetActive(false);
     }
 }

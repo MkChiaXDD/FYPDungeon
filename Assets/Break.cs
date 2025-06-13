@@ -28,13 +28,13 @@ public class Break : MonoBehaviour
         // Check if the collider's tag is "Enemy"
         if (other.gameObject.CompareTag("EarthShatterAttack"))
         {
+            StartCoroutine(nameof(BreakObject));
             Debug.Log("Triggered by EarthShatter!");
         }
     }
 
     private IEnumerator BreakObject()
     {
-
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
         Destroy(gameObject);
     }
