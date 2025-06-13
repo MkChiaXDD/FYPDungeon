@@ -8,5 +8,4 @@ public class EnemyData : ScriptableObject
     public int maxHealth;
     public float moveSpeed;
     public int damage;
-    public GameObject prefab;
 }
