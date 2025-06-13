@@ -4,6 +4,6 @@ using UnityEngine;
 public class WeaponData : ScriptableObject
 {
     public string weaponName;
-    public float damage;
+    public int damage;
     public LayerMask hitLayers;
 }

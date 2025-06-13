@@ -1,18 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WaveAttack : Weapon
 {
-    [SerializeField] private float waveSpeed = 15f;
-    [SerializeField] private float waveLifetime = 1.5f;
-    [SerializeField] private float waveRadius = 1f;
+    [Header("Wave Settings")]
+    [SerializeField] private float waveSpeed = 1f;
+    [SerializeField] private float waveLifetime = 133.5f;
+    [SerializeField] private float waveRadius = 3f;
+    [SerializeField] private float startOffset = 0.5f;  // Start in front of player
 
     private PlayerController player;
+    private HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
 
     protected override void Awake()
     {
         base.Awake();
         player = GetComponentInParent<PlayerController>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Attack();
+        }
     }
 
     public override void Attack()
@@ -22,43 +34,72 @@ public class WaveAttack : Weapon
 
     private IEnumerator WaveRoutine()
     {
-        Debug.Log("ATTACK!");
-        float t = 0f;
-        Vector3 dir = player.GetDirection();
-        Vector3 pos = transform.position;
+        damagedTargets.Clear();
+        Vector3 direction = player.GetDirection();
+        Vector3 startPosition = transform.position + direction * startOffset;
+        float elapsed = 0f;
 
-        while (t < waveLifetime)
+        while (elapsed < waveLifetime)
         {
-            pos += dir * waveSpeed * Time.deltaTime;
-            var hits = Physics.OverlapSphere(pos, waveRadius, data.hitLayers);
-            foreach (var c in hits)
-                if (c.TryGetComponent<IDamageable>(out var d))
-                    d.TakeDamage(damage);
+            Vector3 currentPosition = startPosition + direction * (waveSpeed * elapsed);
 
-            t += Time.deltaTime;
+            // Visual effect would go here (e.g., moving sphere)
+            DebugVisualization(currentPosition);
+
+            CheckDamage(currentPosition);
+            elapsed += Time.deltaTime;
             yield return null;
         }
     }
 
-    // ←–––––––––– ADD THIS ––––––––––→
+    private void CheckDamage(Vector3 position)
+    {
+        Collider[] hits = Physics.OverlapSphere(position,
+                                                waveRadius,
+                                                data.hitLayers);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.TryGetComponent(out IDamageable damageable))
+            {
+                // Skip if we've already damaged this target
+                if (damagedTargets.Contains(damageable)) continue;
+
+                // Skip if it's the player themselves
+                if (damageable == player.GetComponent<IDamageable>()) continue;
+
+                damageable.TakeDamage(damage);
+                damagedTargets.Add(damageable);
+
+                // Optional: Visual feedback
+                Debug.Log($"Hit: {hit.gameObject.name}", hit.gameObject);
+            }
+        }
+    }
+
+    private void DebugVisualization(Vector3 position)
+    {
+        // Only show in editor
+
+        Debug.DrawLine(position, position + Vector3.up, Color.cyan, 0.1f);
+
+    }
+
     void OnDrawGizmosSelected()
     {
-        // pick a direction in-editor if we can't get the player one
-        Vector3 dir = Application.isPlaying && player != null
-            ? player.GetDirection()
-            : transform.forward;
-
+        Vector3 dir = player != null ? player.GetDirection() : transform.forward;
         dir.y = 0;
         dir.Normalize();
 
-        Vector3 start = transform.position;
-        Vector3 end = start + dir * waveSpeed * waveLifetime;
+        Vector3 start = transform.position + dir * startOffset;
+        Vector3 end = start + dir * (waveSpeed * waveLifetime);
 
-        Gizmos.color = Color.cyan;
-        // draw the path
+        Gizmos.color = new Color(0, 1, 1, 0.4f);
         Gizmos.DrawLine(start, end);
-        // draw the impact sphere at the end
         Gizmos.DrawWireSphere(end, waveRadius);
+
+        // Draw start position
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(start, 0.2f);
     }
-    // ←––––––––––––––––––––––––––––––→
 }

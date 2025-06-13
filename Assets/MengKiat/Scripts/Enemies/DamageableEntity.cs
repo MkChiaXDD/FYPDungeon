@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageableEntity : MonoBehaviour
+public class DamageableEntity : MonoBehaviour, IDamageable
 {
     protected int maxHealth = 100;
     protected int currentHealth = 100;
@@ -34,7 +34,7 @@ public class DamageableEntity : MonoBehaviour
         _renderer.material.color = originalColour;
     }
 
-    protected void TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
 
         if (_renderer != null)
@@ -53,9 +53,9 @@ public class DamageableEntity : MonoBehaviour
         }
     }
 
-    protected void Die()
+    public void Die()
     {
-            Destroy(gameObject);   
+        Destroy(gameObject);
     }
 
     protected void HealHealthToMax()
