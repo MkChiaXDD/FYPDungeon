@@ -34,7 +34,7 @@ public class DamageableEntity : MonoBehaviour
         _renderer.material.color = originalColour;
     }
 
-    protected void TakeDamage(float amount)
+    protected void TakeDamage(int amount)
     {
 
         if (_renderer != null)
