@@ -124,7 +124,11 @@ PrefabInstance:
     - {fileID: 4149444465944086751, guid: d5096d2f3599f074abc6e5f78e18df34, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2550602631759860039, guid: d5096d2f3599f074abc6e5f78e18df34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4805876102030197441}
   m_SourcePrefab: {fileID: 100100000, guid: d5096d2f3599f074abc6e5f78e18df34, type: 3}
 --- !u!198 &2607760211389291897 stripped
 ParticleSystem:
@@ -132,6 +136,29 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 2105676752343508523}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4493838497710520172 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2550602631759860039, guid: d5096d2f3599f074abc6e5f78e18df34,
+    type: 3}
+  m_PrefabInstance: {fileID: 2105676752343508523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4805876102030197441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493838497710520172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ffc4a87abbb9e4e97e4f3a93655c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageRadius: 5
+  damageAmount: 10
+  damageableLayers:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!4 &5902905895142631689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5535918430671245090, guid: d5096d2f3599f074abc6e5f78e18df34,
