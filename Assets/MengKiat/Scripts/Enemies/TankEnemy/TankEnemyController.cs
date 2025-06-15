@@ -62,4 +62,21 @@ public class TankEnemyController : Enemy
         Debug.Log("TANKENEMY: Attack!");
         attackTimer = attackCooldown;
     }
+
+    // Enemy-specific implementation
+    public override void TakeDamage(int damageAmount)
+    {
+        // Add enemy-specific reactions (animation, sound, etc)
+        Debug.Log("Enemy damaged!");
+
+        // Call base functionality
+        base.TakeDamage(damageAmount);
+    }
+
+    public override void Die()
+    {
+        // Enemy-specific death behavior
+        Debug.Log("Enemy defeated!");
+        base.Die();
+    }
 }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class WaveAttack : Weapon
 {
+
+    [SerializeField] private GameObject wavePrefab;
+
     [Header("Wave Settings")]
     [SerializeField] private float waveSpeed = 1f;
     [SerializeField] private float waveLifetime = 133.5f;
@@ -35,6 +38,7 @@ public class WaveAttack : Weapon
     private IEnumerator WaveRoutine()
     {
         damagedTargets.Clear();
+
         Vector3 direction = player.GetDirection();
         Vector3 startPosition = transform.position + direction * startOffset;
         float elapsed = 0f;
