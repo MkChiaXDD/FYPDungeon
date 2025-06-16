@@ -23,6 +23,7 @@ public class BigBossOneController : Enemy
 
     [Header("Hop Settings")]
     public float hopHeight = 5f;
+    [SerializeField] private ScreenShake screenShake;
 
     [Header("Roam Settings")]
     public float roamDuration = 3f;
@@ -188,6 +189,9 @@ public class BigBossOneController : Enemy
                 yield return null;
             }
 
+            screenShake.Shake();
+         
+            
             transform.position = targetXZ;
             yield return new WaitForSeconds(dashDelay); // reuse dashDelay as rest time
         }
