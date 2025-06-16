@@ -39,10 +39,15 @@ public class EnemyBullet : MonoBehaviour
         }
         else if (other.CompareTag("Parry"))
         {
-            direction = new Vector3(-direction.x, direction.y, -direction.z);
+            BounceBack();
             Debug.Log("Parry");
             return;
         }
         Destroy(gameObject);
+    }
+
+    public void BounceBack()
+    {
+        direction = new Vector3(-direction.x, direction.y, -direction.z);
     }
 }
