@@ -40,12 +40,13 @@ public class WaveAttack : Weapon
         damagedTargets.Clear();
 
         Vector3 direction = player.GetDirection();
-        Vector3 startPosition = transform.position + direction * startOffset;
+        Vector3 newDir = new Vector3(direction.x, 0, direction.z);
+        Vector3 startPosition = transform.position + newDir * startOffset;
         float elapsed = 0f;
 
         while (elapsed < waveLifetime)
         {
-            Vector3 currentPosition = startPosition + direction * (waveSpeed * elapsed);
+            Vector3 currentPosition = startPosition + newDir * (waveSpeed * elapsed);
 
             // Visual effect would go here (e.g., moving sphere)
             DebugVisualization(currentPosition);
