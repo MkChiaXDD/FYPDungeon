@@ -1,11 +1,26 @@
 using UnityEngine;
 
-public class Enemy : DamageableEntity
+public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EnemyData data;
+    protected float currentHealth;
 
-    private void Start()
+    protected virtual void Awake()
     {
-        SetMaxHealth(data.maxHealth);
+        currentHealth = data.maxHealth;
+    }
+
+    // Shared damage logic
+    public virtual void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0f)
+            Die();
+    }
+
+    // Shared death logic
+    public virtual void Die()
+    {
+        Destroy(gameObject);
     }
 }

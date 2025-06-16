@@ -34,7 +34,7 @@ public class DamageableEntity : MonoBehaviour, IDamageable
         _renderer.material.color = originalColour;
     }
 
-    public void TakeDamage(int amount)
+    public virtual void TakeDamage(int amount)
     {
 
         if (_renderer != null)
@@ -53,7 +53,7 @@ public class DamageableEntity : MonoBehaviour, IDamageable
         }
     }
 
-    public void Die()
+    public virtual void Die()
     {
         Destroy(gameObject);
     }
