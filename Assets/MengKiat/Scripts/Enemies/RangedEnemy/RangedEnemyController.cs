@@ -68,7 +68,15 @@ public class RangedEnemyController : Enemy
         Vector3 spawnPos = transform.position + transform.forward * fireOffset;
         var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
         var b = go.GetComponent<EnemyBullet>();
-        if (b != null) b.SetDamage(data.damage);
+        Vector3 dir = player.position - transform.position;
+        if (b != null)
+        {
+            b.Initialize(dir);
+            b.SetDamage(data.damage);
+        }
+        //if (b != null) b.SetDamage(data.damage);
+        
+        //Initialize();
     }
 
     void ChooseRepositionTarget()
