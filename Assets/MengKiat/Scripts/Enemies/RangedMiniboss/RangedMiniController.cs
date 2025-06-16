@@ -76,7 +76,7 @@ public class RangedMiniController : Enemy
     {
         Vector3 spawnPos = transform.position + transform.forward * fireOffset;
         var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
-        var b = go.GetComponent<EnemyBullet>();
+        var b = go.GetComponent<RangedMiniBullet>();
         if (b != null) b.SetDamage(data.damage);
         Vector3 dir = player.position - transform.position;
         if (b != null)
