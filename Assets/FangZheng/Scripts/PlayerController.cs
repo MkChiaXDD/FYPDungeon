@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
     
-    [SerializeField] private GameObject ball;
+    //[SerializeField] private GameObject ball;
 
     [SerializeField] private float parryThreshold = 0.5f;
     [SerializeField] private bool _IsParry;
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
             if (hit.transform.gameObject.tag == "Ground")
             {
                 _MousePos = hit.point;
-                ball.transform.position = _MousePos;
+                //ball.transform.position = _MousePos;
                 return;
             }
         }
