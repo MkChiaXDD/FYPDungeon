@@ -77,14 +77,26 @@ public class BomberEnemyController : Enemy
 
     void MoveTowards(Vector3 target)
     {
-        Vector3 dir = (target - transform.position).normalized;
+        // Create horizontal target (same Y as current position)
+        Vector3 horizontalTarget = new Vector3(
+            target.x,
+            transform.position.y,  // Maintain current height
+            target.z
+        );
+
+        Vector3 dir = (horizontalTarget - transform.position).normalized;
         transform.position += dir * data.moveSpeed * Time.deltaTime;
     }
 
     void ChooseRoamTarget()
     {
         Vector2 rnd = Random.insideUnitCircle * roamRadius;
-        roamTarget = spawnPosition + new Vector3(rnd.x, 0, rnd.y);
+        // Create roam target at current height
+        roamTarget = new Vector3(
+            spawnPosition.x + rnd.x,
+            transform.position.y,  // Use current height
+            spawnPosition.z + rnd.y
+        );
     }
 
     void Explode()
