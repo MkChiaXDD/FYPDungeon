@@ -4,7 +4,7 @@ public class EnemyBullet : MonoBehaviour
 {
     public float speed = 20f;
     public float lifetime = 5f;
-    public float damage;
+    public int damage;
     public Vector3 direction;
 
     void Start()
@@ -26,7 +26,7 @@ public class EnemyBullet : MonoBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    public void SetDamage(float dmg)
+    public void SetDamage(int dmg)
     {
         damage = dmg;
     }
@@ -43,7 +43,12 @@ public class EnemyBullet : MonoBehaviour
             Debug.Log("Parry");
             return;
         }
-        Destroy(gameObject);
+        if (!other.TryGetComponent<IDamageable>(out var damageable))
+        {
+            return;
+        }
+
+        damageable.TakeDamage(damage);
     }
 
     public void BounceBack()
