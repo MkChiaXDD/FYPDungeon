@@ -14,7 +14,11 @@ public class WaveAttack : Weapon
     [SerializeField] private float startOffset = 0.5f;  // Start in front of player
 
     private PlayerController player;
-    private HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
+    private readonly HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
+    [SerializeField] private float knockbackForce = 5f;
+
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private LayerMask enemyLayer;
 
     protected override void Awake()
     {
@@ -47,7 +51,7 @@ public class WaveAttack : Weapon
         while (elapsed < waveLifetime)
         {
             Vector3 currentPosition = startPosition + newDir * (waveSpeed * elapsed);
-
+             
             // Visual effect would go here (e.g., moving sphere)
             DebugVisualization(currentPosition);
 
@@ -73,6 +77,7 @@ public class WaveAttack : Weapon
                 // Skip if it's the player themselves
                 if (damageable == player.GetComponent<IDamageable>()) continue;
 
+                ApplyKnockBack(hit);
                 damageable.TakeDamage(damage);
                 damagedTargets.Add(damageable);
 
@@ -106,5 +111,19 @@ public class WaveAttack : Weapon
         // Draw start position
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(start, 0.2f);
+    }
+
+    public void ApplyKnockBack(Collider hit) 
+    {
+        Rigidbody enemyRb = hit.GetComponent<Rigidbody>();
+        if (enemyRb != null)
+        {
+            // Calculate knockback direction
+            Vector3 knockbackDirection = hit.transform.position - transform.position;
+            knockbackDirection.y = hit.transform.position.y; // Keep the knockback horizontal
+
+            // Apply force to the enemy
+            enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
+        }
     }
 }
