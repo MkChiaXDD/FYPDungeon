@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _normalspeed = 4 ;
     [SerializeField] private float _runspeed = 10;
     [SerializeField] private float _turnspeed = 360;
-    //[SerializeField] private Transform _body;
+    [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
     
     //[SerializeField] private GameObject ball;
@@ -98,14 +98,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_Input != Vector3.zero || _MousePos != Vector3.zero)
         {
-            Vector3 flatMousePos = new Vector3(_MousePos.x, transform.position.y, _MousePos.z);
+            Vector3 flatMousePos = new Vector3(_MousePos.x, _body.position.y, _MousePos.z);
 
-            Vector3 direction = (flatMousePos - transform.position).normalized;
+            Vector3 direction = (flatMousePos - _body.position).normalized;
 
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnspeed * Time.deltaTime);
+                _body.rotation = Quaternion.RotateTowards(_body.rotation, targetRotation, _turnspeed * Time.deltaTime);
             }
         }
     }
