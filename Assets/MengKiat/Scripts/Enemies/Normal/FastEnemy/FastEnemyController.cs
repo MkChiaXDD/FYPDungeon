@@ -49,8 +49,18 @@ public class FastEnemyController : Enemy
     private void Chase()
     {
         Vector3 dir = (player.position - transform.position).normalized;
+
+        // Move
         transform.position += dir * data.moveSpeed * Time.deltaTime;
+
+        // Rotate toward movement direction
+        if (dir != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f); // Adjust speed as needed
+        }
     }
+
 
     private void Attack()
     {

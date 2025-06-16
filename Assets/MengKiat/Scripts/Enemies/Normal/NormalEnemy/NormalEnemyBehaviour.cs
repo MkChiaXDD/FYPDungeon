@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Normal enemy with Idle, Chase, Attack states
-public class TankEnemyController : Enemy
+public class NormalEnemyController : Enemy
 {
     [SerializeField] private float chaseRange = 10f;
     [SerializeField] private float attackRange = 2f;
@@ -32,10 +32,10 @@ public class TankEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
-                Debug.Log("TANKENEMY: Idle!");
+                Debug.Log("NORMALENEMY: Idle!");
                 break;
             case State.Chase:
-                Debug.Log("TANKENEMY: Chase!");
+                Debug.Log("NORMALENEMY: Chase!");
                 Chase();
                 break;
             case State.Attack:
@@ -49,7 +49,16 @@ public class TankEnemyController : Enemy
     private void Chase()
     {
         Vector3 dir = (player.position - transform.position).normalized;
+
+        // Move
         transform.position += dir * data.moveSpeed * Time.deltaTime;
+
+        // Rotate toward movement direction
+        if (dir != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f); // Adjust speed as needed
+        }
     }
 
     private void Attack()
@@ -59,24 +68,7 @@ public class TankEnemyController : Enemy
         //var health = player.GetComponent<PlayerHealth>();
         //if (health != null)
         //    health.TakeDamage(data.damage);
-        Debug.Log("TANKENEMY: Attack!");
+        Debug.Log("NORMALENEMY: Attack!");
         attackTimer = attackCooldown;
-    }
-
-    // Enemy-specific implementation
-    public override void TakeDamage(int damageAmount)
-    {
-        // Add enemy-specific reactions (animation, sound, etc)
-        Debug.Log("Enemy damaged!");
-
-        // Call base functionality
-        base.TakeDamage(damageAmount);
-    }
-
-    public override void Die()
-    {
-        // Enemy-specific death behavior
-        Debug.Log("Enemy defeated!");
-        base.Die();
     }
 }
