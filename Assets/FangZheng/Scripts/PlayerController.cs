@@ -9,16 +9,27 @@ public class PlayerController : MonoBehaviour
 {
 
     [SerializeField] private Rigidbody _rb;
-    [SerializeField] private float _speed = 4;
+    [SerializeField] private float _normalspeed = 4 ;
+    [SerializeField] private float _runspeed = 10;
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
     
     [SerializeField] private GameObject ball;
-    
+
+    [SerializeField] private float parryThreshold = 0.5f;
+    [SerializeField] private bool _IsParry;
+    [SerializeField] private bool _IsBlock;
+    [SerializeField] private bool _IsInv;
+
+    [SerializeField] private Renderer _renderer;
+
+    [SerializeField] private GameObject _parryzone;
+    private float BlockHoldTime;
+
     private Vector3 _MousePos;
     private Vector3 _Input;
-
+    private float _speed = 4;
     [SerializeField] private List<Weapon> weapons;
     private int currentIndex = 0;
 
@@ -28,7 +39,9 @@ public class PlayerController : MonoBehaviour
         GatherInput();
         look();
         MousePosition();
-
+        Dash();
+        Blocking();
+        changeCollor();
         if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
             weapons[currentIndex].Attack();
 
@@ -37,6 +50,34 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
+    private void changeCollor()
+    {
+        if (_IsInv == true)
+        {
+            _renderer.material.color = Color.gray;
+        }
+        else if (_IsParry)
+        {
+            _renderer.material.color = Color.blue;
+        }
+        else if (_IsBlock)
+        {
+            _renderer.material.color = Color.black;
+        }
+        else
+        {
+            _renderer.material.color = Color.yellow;
+        }
+    }
+    public bool GetParry()
+    {
+        return _IsParry;
+    }
+
+    public bool GetBlock()
+    {
+        return _IsBlock;
+    }
     void SelectWeapon(int idx)
     {
         if (idx >= 0 && idx < weapons.Count)
@@ -57,13 +98,10 @@ public class PlayerController : MonoBehaviour
     {
         if (_Input != Vector3.zero || _MousePos != Vector3.zero)
         {
-            // Keep the mouse target's Y level the same as the player's
             Vector3 flatMousePos = new Vector3(_MousePos.x, _body.position.y, _MousePos.z);
 
-            // Get direction to look at (on the horizontal plane only)
             Vector3 direction = (flatMousePos - _body.position).normalized;
 
-            // If direction is valid, rotate
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -104,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     public void Interact()
     {
-        if (Input.GetKeyDown("E"))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("Interact");
         }
@@ -115,16 +153,104 @@ public class PlayerController : MonoBehaviour
         return ( _MousePos - transform.position ).normalized;
     }
 
-    private void Move()
-    {
-        //_rb.MovePosition(transform.position + (transform.forward * _Input.magnitude )* _speed * Time.deltaTime);
 
-        _rb.MovePosition(_body.position + _Input.ToIso() * _Input.normalized.magnitude * _speed * Time.deltaTime);
-    }
     public void DrawRay(Vector3 origin, Vector3 direction, float length)
     {
         Debug.DrawRay(origin, direction.normalized * length, Color.red);
     }
+    private void Move()
+    {
+        //_rb.MovePosition(transform.position + (transform.forward * _Input.magnitude )* _speed * Time.deltaTime);
+
+        //_rb.MovePosition(_body.position + _Input.ToIso() * _Input.normalized.magnitude * _speed * Time.deltaTime);
+
+        _rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+
+        Vector3 force = _Input.ToIso().normalized * _speed;
+
+        _rb.AddForce(force,ForceMode.Impulse);
+
+        if (_rb.velocity.magnitude > _speed)
+        {
+            _rb.velocity = _rb.velocity.normalized * _speed;
+        }
+
+    }
+
+    public void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(Dashing());
+        }
+    }
+
+    public void Blocking()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            BlockHoldTime = Time.time;
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            if (!_IsBlock && Time.time - BlockHoldTime > parryThreshold)
+            {
+                Block();
+            }
+ 
+        }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            float heldTime = Time.time - BlockHoldTime;
+            if (heldTime <= parryThreshold)
+            {
+                Parry();
+            }
+            else
+            {
+                stopBlock();
+            }
+        }
+    }
+
+    public void Block()
+    {
+        _IsBlock = true;
+        Debug.Log("Block");
+    }
+
+    public void stopBlock()
+    {
+        _IsBlock= false;
+        Debug.Log("UnBlock()");
+    }
+
+    public void Parry()
+    {
+        if (_IsParry) return;
+        _IsParry = true;
+        _parryzone.active = true;
+        Debug.Log("Parry");
+        StartCoroutine(ParryWindow());
+    }
+
+    IEnumerator ParryWindow()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _IsParry = false;
+        _parryzone.active = false;
+    }
+
+    IEnumerator Dashing()
+    {
+        _speed = 30;
+        yield return new WaitForSeconds(0.2f);
+        _speed = _normalspeed;
+    }
+
+
 
     public void OnDrawGizmos()
     {
