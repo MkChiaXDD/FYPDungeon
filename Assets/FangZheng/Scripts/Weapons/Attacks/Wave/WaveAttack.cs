@@ -73,7 +73,6 @@ public class WaveAttack : Weapon
             {
                 // Skip if we've already damaged this target
                 if (damagedTargets.Contains(damageable)) continue;
-
                 // Skip if it's the player themselves
                 if (damageable == player.GetComponent<IDamageable>()) continue;
 
