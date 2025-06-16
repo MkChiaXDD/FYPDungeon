@@ -44,12 +44,19 @@ public class RangedEnemyController : Enemy
                 break;
 
             case State.Reposition:
+                Vector3 horizontalTarget = new Vector3(
+                    repositionTarget.x,
+                    transform.position.y,
+                    repositionTarget.z
+                );
+
                 transform.position = Vector3.MoveTowards(
                     transform.position,
-                    repositionTarget,
+                    horizontalTarget,
                     data.moveSpeed * Time.deltaTime
                 );
-                if (Vector3.Distance(transform.position, repositionTarget) < 0.1f)
+
+                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f)
                     state = State.Idle;
                 break;
         }
@@ -68,6 +75,7 @@ public class RangedEnemyController : Enemy
         Vector3 spawnPos = transform.position + transform.forward * fireOffset;
         var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
         var b = go.GetComponent<EnemyBullet>();
+        if (b != null) b.SetDamage(data.damage);
         Vector3 dir = player.position - transform.position;
         if (b != null)
         {
@@ -75,13 +83,17 @@ public class RangedEnemyController : Enemy
             b.SetDamage(data.damage);
         }
         //if (b != null) b.SetDamage(data.damage);
-        
+
         //Initialize();
     }
 
     void ChooseRepositionTarget()
     {
         Vector2 rnd = Random.insideUnitCircle * repositionRadius;
-        repositionTarget = spawnPosition + new Vector3(rnd.x, 0, rnd.y);
+        repositionTarget = new Vector3(
+            spawnPosition.x + rnd.x,
+            transform.position.y,
+            spawnPosition.z + rnd.y
+        );
     }
 }

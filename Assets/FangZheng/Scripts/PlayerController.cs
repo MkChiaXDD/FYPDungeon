@@ -190,6 +190,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             BlockHoldTime = Time.time;
+            Debug.Log("F");
         }
 
         if (Input.GetKey(KeyCode.F))
