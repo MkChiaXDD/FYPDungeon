@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
 
     [SerializeField] private Rigidbody _rb;
@@ -14,17 +14,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
-    
-    //[SerializeField] private GameObject ball;
-
     [SerializeField] private float parryThreshold = 0.5f;
     [SerializeField] private bool _IsParry;
     [SerializeField] private bool _IsBlock;
     [SerializeField] private bool _IsInv;
 
-    [SerializeField] private Renderer _renderer;
 
+    [SerializeField] private Renderer _renderer;
     [SerializeField] private GameObject _parryzone;
+    [SerializeField] private GameObject _hitBox;
+    [SerializeField] private GameObject _Area;
+    [SerializeField] private LayerMask EnemyLayer;
+    [SerializeField] private float _ParryCooldown = 0;
+
     private float BlockHoldTime;
 
     private Vector3 _MousePos;
@@ -42,6 +44,11 @@ public class PlayerController : MonoBehaviour
         Dash();
         Blocking();
         changeCollor();
+        Attack();
+
+
+        _ParryCooldown -= Time.deltaTime;
+
         if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
             weapons[currentIndex].Attack();
 
@@ -140,6 +147,49 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public void Attack()
+    {
+        if (Input.GetMouseButtonDown(0)) {
+            Debug.Log("attack");
+            
+            StartCoroutine(ActiveHitbox());
+
+            BoxCollider box = _Area.GetComponent<BoxCollider>();
+            if (box == null)
+            {
+                return;
+            }
+
+            Vector3 center = box.transform.TransformPoint(box.center);
+            Vector3 halfExtents = Vector3.Scale(box.size, box.transform.lossyScale) / 2f;
+
+            Collider[] hits = Physics.OverlapBox(center, halfExtents, box.transform.rotation, EnemyLayer);
+            float Diatance = Mathf.Infinity;
+            GameObject target = null;
+            foreach (Collider hit in hits)
+            {
+                if (Diatance > Vector3.Distance(hit.gameObject.transform.position, this.transform.position))
+                {
+                    target = hit.gameObject;
+                }
+            }
+
+            if (target != null)
+            {
+                //transform.position += (target.transform.position - transform.position).normalized * 5 * Time.deltaTime;
+                _rb.AddForce((target.transform.position - transform.position).normalized * 50, ForceMode.Impulse);
+                //transform.position = Vector3.Lerp( transform.position, target.transform.position + target.transform.forward , 1);
+            }
+
+        }
+    }
+
+    public IEnumerator ActiveHitbox()
+    {
+        _hitBox.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        _hitBox.gameObject.SetActive(false);
+    }
     public void Interact()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -202,7 +252,7 @@ public class PlayerController : MonoBehaviour
  
         }
 
-        if (Input.GetKeyUp(KeyCode.F))
+        if (Input.GetKeyUp(KeyCode.F) && _ParryCooldown <= 0)
         {
             float heldTime = Time.time - BlockHoldTime;
             if (heldTime <= parryThreshold)
@@ -237,9 +287,14 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(ParryWindow());
     }
 
+    public void resetParryCooldown()
+    {
+        _ParryCooldown = 0;
+    }
     IEnumerator ParryWindow()
     {
-        yield return new WaitForSeconds(0.3f);
+        _ParryCooldown = 4.0f;
+        yield return new WaitForSeconds(0.5f);
         _IsParry = false;
         _parryzone.active = false;
     }
@@ -250,8 +305,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         _speed = _normalspeed;
     }
-
-
 
     public void OnDrawGizmos()
     {
@@ -265,6 +318,15 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(ray.origin, 10000f);
     }
 
+    public void TakeDamage(int damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void Die()
+    {
+        throw new System.NotImplementedException();
+    }
 } 
 public static class Helpers
 {

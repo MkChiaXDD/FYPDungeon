@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        Debug.Log("Get Hit");
         if (currentHealth <= 0f)
             Die();
     }

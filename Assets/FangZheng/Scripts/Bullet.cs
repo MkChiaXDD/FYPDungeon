@@ -6,7 +6,9 @@ public class Bullet : MonoBehaviour
 {
     private Vector3 direction;
     private float speed;
+
     [SerializeField] private float lifeTime = 10f;
+    
     public void Initialize(Vector3 dir, float spd)
     {
         direction = dir.normalized;
