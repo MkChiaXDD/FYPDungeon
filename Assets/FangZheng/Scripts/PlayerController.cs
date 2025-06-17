@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void SwitchTarget()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             Auto = false;
             DepthOfRange += 1;
@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             if (Lockon && TargetEnemy != null)
             {
@@ -243,7 +243,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                 StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
             }
 
-            StartCoroutine(ActiveHitbox());
+            //StartCoroutine(ActiveHitbox());
             
         }
     }
@@ -444,6 +444,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void Blocking()
     {
+        stopBlock();
         if (Input.GetKeyDown(KeyCode.F))
         {
             BlockHoldTime = Time.time;
@@ -471,6 +472,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                 stopBlock();
             }
         }
+        
     }
 
     public void Block()
