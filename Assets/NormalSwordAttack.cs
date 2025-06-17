@@ -24,7 +24,7 @@ public class NormalSwordAttack : MonoBehaviour
 
     void SwordAttack()
     {
-        slashGO.transform.rotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
+        slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
         // apply damage & knockback
         Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
