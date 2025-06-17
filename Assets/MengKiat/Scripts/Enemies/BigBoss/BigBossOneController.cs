@@ -6,11 +6,8 @@ public class BigBossOneController : Enemy
 {
     private Transform player;
 
-    private enum State { Idle, Dash, SpinShoot, Roam }
+    private enum State { Idle, Dash, SpinShoot, Hop, Roam }
     private State state = State.Idle;
-
-    [Header("Boss Timing")]
-    public float idleTime = 0.5f;
 
     [Header("Dash Settings")]
     public float dashDistance = 5f;
@@ -24,13 +21,27 @@ public class BigBossOneController : Enemy
     public int bulletsPerWave = 12;
     public float shootInterval = 0.3f;
 
+    [Header("Hop Settings")]
+    public int hopCount = 3;
+    public float hopDuration = 1f;
+    public float hopHeight = 5f;
+
+    [Header("Hop Knockback")]
+    public float knockbackRadius = 1f;
+    public float knockbackForce = 30f;
+    public float knockbackUpwards = 5f;
+
     [Header("Roam Settings")]
     public float roamDuration = 3f;
 
     [SerializeField] private ScreenShake screenShake;
 
-    private bool isBusy;
-    private int attackCounter;
+    [SerializeField] private BoxCollider Collider;
+    [SerializeField] private BoxCollider PlsceHolderCollider;
+    [SerializeField] private Rigidbody rigidbody;
+
+    private bool isBusy = false;
+    private int attackCounter = 0;
 
     void Start()
     {
@@ -67,7 +78,7 @@ public class BigBossOneController : Enemy
             }
             else
             {
-                state = (State)Random.Range(1, 3); // 1=Dash, 2=SpinShoot
+                state = (State)Random.Range(1, 4);
                 attackCounter++;
 
                 switch (state)
@@ -78,11 +89,11 @@ public class BigBossOneController : Enemy
                     case State.SpinShoot:
                         yield return StartCoroutine(DoSpinShoot());
                         break;
+                    case State.Hop:
+                        yield return StartCoroutine(DoHop());
+                        break;
                 }
             }
-
-            state = State.Idle;
-            yield return new WaitForSeconds(idleTime);
         }
     }
 
@@ -138,6 +149,84 @@ public class BigBossOneController : Enemy
         isBusy = false;
     }
 
+    private IEnumerator DoHop()
+    {
+        // remember where we started
+        Vector3 origin = transform.position;
+
+        isBusy = true;
+        Collider.isTrigger = true;
+        rigidbody.isKinematic = true;
+        PlsceHolderCollider.enabled = true;
+
+        // perform the hops
+        for (int i = 0; i < hopCount; i++)
+        {
+            Vector3 startPos = transform.position;
+            Vector3 target = player.position;
+            target.y = startPos.y;
+
+            float t = 0f;
+            while (t < hopDuration)
+            {
+                float prog = t / hopDuration;
+                float height = Mathf.Sin(prog * Mathf.PI) * hopHeight;
+                Vector3 flat = Vector3.Lerp(startPos, target, prog);
+                transform.position = new Vector3(flat.x, startPos.y + height, flat.z);
+
+                t += Time.deltaTime * data.moveSpeed;
+                yield return null;
+            }
+
+            transform.position = target;
+            screenShake.Shake();
+            ApplyKnockback();
+            yield return new WaitForSeconds(dashDelay);
+        }
+
+        // now jump back to where we began
+        float r = 0f;
+        Vector3 returnStart = transform.position;
+        while (r < hopDuration)
+        {
+            float prog = r / hopDuration;
+            float height = Mathf.Sin(prog * Mathf.PI) * hopHeight;
+            Vector3 flat = Vector3.Lerp(returnStart, origin, prog);
+            transform.position = new Vector3(flat.x, origin.y + height, flat.z);
+
+            r += Time.deltaTime * data.moveSpeed;
+            yield return null;
+        }
+        transform.position = origin;
+
+        // cleanup
+        Collider.isTrigger = false;
+        rigidbody.isKinematic = false;
+        PlsceHolderCollider.enabled = false;
+        isBusy = false;
+    }
+
+
+    private void ApplyKnockback()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, knockbackRadius);
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
+            {
+                Rigidbody rb = hit.attachedRigidbody;
+                rb.velocity = Vector3.zero;
+                Vector3 rnd = new Vector3(
+                    Random.Range(-1f, 1f),
+                    0f,
+                    Random.Range(-1f, 1f)
+                ).normalized;
+                Vector3 knock = rnd * knockbackForce + Vector3.up * knockbackUpwards;
+                rb.AddForce(knock, ForceMode.VelocityChange);
+            }
+        }
+    }
+
     private IEnumerator DoRoam()
     {
         isBusy = true;
@@ -152,5 +241,11 @@ public class BigBossOneController : Enemy
             yield return null;
         }
         isBusy = false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, knockbackRadius);
     }
 }
