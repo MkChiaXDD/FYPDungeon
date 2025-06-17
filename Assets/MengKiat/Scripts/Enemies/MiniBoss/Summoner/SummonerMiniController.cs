@@ -9,6 +9,7 @@ public class SummonerMiniController : Enemy
 
     [Header("References")]
     public Transform player;
+    [SerializeField] ParticleSystem SummonVFX;
 
     [Header("Summon Settings")]
     public List<GameObject> summonEnemyPrefabs;
@@ -79,6 +80,7 @@ public class SummonerMiniController : Enemy
             PickNewDirection();
             currentState = State.RunAround;
         }
+        PlaySummonVFX();
     }
 
     void HandleRunAround()
@@ -122,5 +124,10 @@ public class SummonerMiniController : Enemy
         }
 
         Debug.Log($"[Summoner] Spawned {amountToSummon} enemies.");
+    }
+
+    private void PlaySummonVFX()
+    {
+        SummonVFX.Play();      
     }
 }
