@@ -237,6 +237,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (Input.GetMouseButtonDown(1))
         {
+            
             if (Lockon && TargetEnemy != null)
             {
 
@@ -260,7 +261,8 @@ public class PlayerController : MonoBehaviour, IDamageable
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.position = targetPos;
+        //transform.position = targetPos;
+        StartCoroutine(slowmo());
         //yield return new WaitForSeconds(0.1f);
     }
 
@@ -511,7 +513,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     IEnumerator Dashing()
     {
         _speed = 30;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         _speed = _normalspeed;
     }
 
@@ -527,6 +529,20 @@ public class PlayerController : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(ray.origin, 10000f);
     }
 
+
+    public void ToggleSlowmo()
+    {
+
+    }
+
+    public IEnumerator slowmo()
+    {
+        Time.timeScale = 0.2f;
+        Time.fixedDeltaTime = 0.02f * 0.2f;
+        yield return new WaitForSeconds(0.01f);
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f * 1f;
+    }
     public void TakeDamage(int damage)
     {
         Debug.Log("ouch");
