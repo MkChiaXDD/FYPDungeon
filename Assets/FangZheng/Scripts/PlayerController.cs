@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         //_rb.MovePosition(_body.position + _Input.ToIso() * _Input.normalized.magnitude * _speed * Time.deltaTime);
 
-        _rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+        _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
         Vector3 force = _Input.ToIso().normalized * _speed;
 
