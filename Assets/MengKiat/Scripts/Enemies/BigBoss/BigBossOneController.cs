@@ -6,8 +6,11 @@ public class BigBossOneController : Enemy
 {
     private Transform player;
 
-    private enum State { Idle, Dash, SpinShoot, Hop, Roam }
+    private enum State { Idle, Dash, SpinShoot, Roam }
     private State state = State.Idle;
+
+    [Header("Boss Timing")]
+    public float idleTime = 0.5f;
 
     [Header("Dash Settings")]
     public float dashDistance = 5f;
@@ -21,15 +24,13 @@ public class BigBossOneController : Enemy
     public int bulletsPerWave = 12;
     public float shootInterval = 0.3f;
 
-    [Header("Hop Settings")]
-    public float hopHeight = 5f;
-    [SerializeField] private ScreenShake screenShake;
-
     [Header("Roam Settings")]
     public float roamDuration = 3f;
 
-    private bool isBusy = false;
-    private int attackCounter = 0;
+    [SerializeField] private ScreenShake screenShake;
+
+    private bool isBusy;
+    private int attackCounter;
 
     void Start()
     {
@@ -44,10 +45,11 @@ public class BigBossOneController : Enemy
             Vector3 lookDir = player.position - transform.position;
             lookDir.y = 0;
             if (lookDir != Vector3.zero)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(lookDir);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
-            }
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(lookDir),
+                    Time.deltaTime * 10f
+                );
         }
     }
 
@@ -62,162 +64,93 @@ public class BigBossOneController : Enemy
                 attackCounter = 0;
                 state = State.Roam;
                 yield return StartCoroutine(DoRoam());
-                continue;
             }
-
-            state = GetRandomAttack();
-            attackCounter++;
-
-            switch (state)
+            else
             {
-                case State.Dash:
-                    yield return StartCoroutine(DoDash());
-                    break;
-                case State.SpinShoot:
-                    yield return StartCoroutine(DoSpinShoot());
-                    break;
-                case State.Hop:
-                    yield return StartCoroutine(DoHop());
-                    break;
-            }
-        }
-    }
+                state = (State)Random.Range(1, 3); // 1=Dash, 2=SpinShoot
+                attackCounter++;
 
-    private State GetRandomAttack()
-    {
-        return (State)Random.Range(1, 4); // skip Idle and Roam
+                switch (state)
+                {
+                    case State.Dash:
+                        yield return StartCoroutine(DoDash());
+                        break;
+                    case State.SpinShoot:
+                        yield return StartCoroutine(DoSpinShoot());
+                        break;
+                }
+            }
+
+            state = State.Idle;
+            yield return new WaitForSeconds(idleTime);
+        }
     }
 
     private IEnumerator DoDash()
     {
         isBusy = true;
-        state = State.Dash;
-
         for (int i = 0; i < dashCount; i++)
         {
-            Vector3 flatDir = player.position - transform.position;
-            flatDir.y = 0f;
-            flatDir.Normalize();
-
-            Vector3 target = transform.position + flatDir * dashDistance;
+            Vector3 dir = player.position - transform.position;
+            dir.y = 0;
+            dir.Normalize();
+            Vector3 target = transform.position + dir * dashDistance;
             target.y = transform.position.y;
 
-            float dashTime = 0f;
+            float t = 0f;
             Vector3 start = transform.position;
-            Vector3 end = target;
-
-            while (dashTime < 1f)
+            while (t < 1f)
             {
-                transform.position = Vector3.Lerp(start, end, dashTime);
-                dashTime += Time.deltaTime * data.moveSpeed;
+                transform.position = Vector3.Lerp(start, target, t);
+                t += Time.deltaTime * data.moveSpeed;
                 yield return null;
             }
-
-            transform.position = end;
+            transform.position = target;
             yield return new WaitForSeconds(dashDelay);
         }
-
         isBusy = false;
     }
-
 
     private IEnumerator DoSpinShoot()
     {
         isBusy = true;
-        state = State.SpinShoot;
-
         float timer = 0f;
-        float spinAnglePerFrame = spinSpeed;
         float shootTimer = 0f;
-
         while (timer < spinDuration)
         {
-            transform.Rotate(Vector3.up, spinAnglePerFrame * Time.deltaTime);
-
+            transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime);
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval)
             {
                 shootTimer = 0f;
-
                 for (int i = 0; i < bulletsPerWave; i++)
                 {
                     float angle = i * (360f / bulletsPerWave);
-                    Vector3 baseForward = transform.forward;
-                    Quaternion spinOffset = Quaternion.Euler(0, angle, 0);
-                    Vector3 dir = spinOffset * baseForward;
-
-                    GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-                    MiniBullet mini = bullet.GetComponent<MiniBullet>();
-                    if (mini != null)
-                    {
-                        mini.Initialize(dir, 10f, data.damage);
-                    }
+                    Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+                    Instantiate(bulletPrefab, transform.position, Quaternion.identity)
+                        .GetComponent<MiniBullet>()
+                        ?.Initialize(dir, 10f, data.damage);
                 }
             }
-
             timer += Time.deltaTime;
             yield return null;
         }
-
         isBusy = false;
     }
-
-    private IEnumerator DoHop()
-    {
-        isBusy = true;
-        state = State.Hop;
-
-        int hopCount = 3;
-        float duration = 1f;
-
-        for (int i = 0; i < hopCount; i++)
-        {
-            Vector3 startPos = transform.position;
-            Vector3 targetXZ = player.position;
-            targetXZ.y = startPos.y;
-
-            float hopTime = 0f;
-
-            while (hopTime < duration)
-            {
-                float t = hopTime / duration;
-                float height = Mathf.Sin(t * Mathf.PI) * hopHeight;
-                Vector3 flatLerp = Vector3.Lerp(startPos, targetXZ, t);
-                transform.position = new Vector3(flatLerp.x, startPos.y + height, flatLerp.z);
-
-                hopTime += Time.deltaTime * data.moveSpeed;
-                yield return null;
-            }
-
-            screenShake.Shake();
-         
-            
-            transform.position = targetXZ;
-            yield return new WaitForSeconds(dashDelay); // reuse dashDelay as rest time
-        }
-
-        isBusy = false;
-    }
-
-
 
     private IEnumerator DoRoam()
     {
         isBusy = true;
-        state = State.Roam;
-
         float timer = 0f;
         Vector3 roamDir = Random.insideUnitSphere;
         roamDir.y = 0;
         roamDir.Normalize();
-
         while (timer < roamDuration)
         {
             transform.position += roamDir * data.moveSpeed * Time.deltaTime;
             timer += Time.deltaTime;
             yield return null;
         }
-
         isBusy = false;
     }
 }

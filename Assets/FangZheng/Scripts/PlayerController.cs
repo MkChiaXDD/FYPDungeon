@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -28,10 +30,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float _ParryCooldown = 0;
 
     [SerializeField] private bool Lockon = false;
+    [SerializeField] private bool Auto = true;
     [SerializeField] private Transform TargetEnemy = null;
     [SerializeField] private List<GameObject> EnemyNearby;
-    [SerializeField] private float AngleThreshold = 45f;
+    [SerializeField] private float AngleThreshold = 35f;
+    [SerializeField] private Dictionary<GameObject, float> EnemyNear = new Dictionary<GameObject, float>();
+    [SerializeField] private Dictionary<GameObject, float> EnemyInView = new Dictionary<GameObject, float>();
+    [SerializeField] private int DepthOfRange;
+    [SerializeField] private GameObject ForEasyLocation;
 
+    [SerializeField] private float dot;
     private float BlockHoldTime;
 
     private Vector3 _MousePos;
@@ -51,9 +59,25 @@ public class PlayerController : MonoBehaviour, IDamageable
         changeCollor();
         
         Lockingon();
-        GetEnemiesZone();
-        Attack();
+        if (Lockon)
+        {
+            handleEnemyInView();
+            SwitchTarget();
+            GetEnemiesZone();
+            if (Auto == true) {
+                HandleAutoTargetTracking();
+            }
 
+            if (EnemyInView.Count == 0)
+            {
+                ClearTargets();
+            }
+        }
+        LocateTarget();
+        Attack();
+        Check();
+        CheckDictionary(EnemyNear);
+        CheckDictionary(EnemyInView);
 
         _ParryCooldown -= Time.deltaTime;
 
@@ -65,20 +89,54 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
+    void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
+    {
+        if (objectDictionary.Values.Any(value => value == null))
+        {
+            objectDictionary.Clear();
+            Debug.Log("Dictionary cleared due to null reference");
+        }
+    }
+
+    private void Check()
+    {
+        if (TargetEnemy == null)
+        {
+           
+            ClearTargets();
+        }
+    }
     private void Lockingon()
     {
-        if (Lockon == false)
-        {
-            Lockon = true;
+        if (Input.GetKeyDown(KeyCode.P)) {
+            if (Lockon == false)
+            {
+                Lockon = true;
+            }
+            else
+            {
+                Lockon = false;
+                ClearTargets();
+            }
         }
-        else
+    }
+
+    private void ConsolelogginList()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            Lockon = false;
+            int i = 1;
+            foreach (KeyValuePair<GameObject, float> enemy in EnemyNear)
+            {
+                Debug.Log(i + "." + enemy.Value);
+                i++;
+            }
         }
     }
 
     private void GetEnemiesZone()
     {
+        EnemyNear.Clear();
         BoxCollider box = _Area.GetComponent<BoxCollider>();
         if (box == null)
         {
@@ -92,34 +150,120 @@ public class PlayerController : MonoBehaviour, IDamageable
         foreach (Collider hit in hits)
         {
             if (hit.GetComponent<Enemy>() != null) {
-                EnemyNearby.Add(hit.gameObject);
+                //EnemyNearby.Add(hit.gameObject);
+                EnemyNear.Add(hit.gameObject, Vector3.Distance(hit.gameObject.transform.position, this.transform.position));
             }
         }
     }
 
-    private void HandleTargetTracking()
+    private void HandleAutoTargetTracking()
     {
+        TargetEnemy = null;
         float Diatance = Mathf.Infinity;
-        foreach (GameObject enemy in EnemyNearby)
+        foreach (GameObject enemy in EnemyNear.Keys)
         {
-            Vector3 dir = ( enemy.transform.position - this.transform.position ).normalized;
-            Vector3 playerforward = this.transform.forward;
-            float dotProduct = Vector3.Dot(playerforward, dir);
-            
-/*            if(angle < AngleThreshold)
+            Vector3 dir = (  enemy.transform.position - this.transform.position  ).normalized;
+            Vector3 forward = _body.transform.forward;
+            float dotProduct = Vector3.Dot(forward, dir);
+            Debug.Log(dotProduct);
+            float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
+            dot = angle;
+            if (angle < AngleThreshold)
             {
-                if ()
+                if (Diatance > Vector3.Distance(enemy.transform.position , this.transform.position))
                 {
-
+                    Diatance = Vector3.Distance(enemy.transform.position, this.transform.position);
+                    TargetEnemy = enemy.transform;
                 }
-            }*/
+            }
         }
     }
 
-    public void Attack()
+    public void handleEnemyInView()
     {
+        EnemyInView.Clear();
+        float Diatance = Mathf.Infinity;
+        foreach (KeyValuePair<GameObject, float> enemy in EnemyNear)
+        {
+            if (enemy.Key != null) {
+                Vector3 dir = (enemy.Key.transform.position - this.transform.position).normalized;
+                Vector3 forward = _body.transform.forward;
+                float dotProduct = Vector3.Dot(forward, dir);
+                Debug.Log(dotProduct);
+                float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
+                dot = angle;
+                if (angle < AngleThreshold)
+                {
+                    EnemyInView.Add(enemy.Key, enemy.Value);
+                }
+            }
+        }
+    }
+    public void SwitchTarget()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Auto = false;
+            DepthOfRange += 1;
+            SwitchingTarget();
+        }
+    }
+
+    public void SwitchingTarget()
+    {
+        if (DepthOfRange >= EnemyInView.Count )
+        {
+            DepthOfRange = 0;
+        }
+        var sortedEnemy = EnemyInView.OrderBy(pair => pair.Value);
+        KeyValuePair<GameObject, float> enemy = sortedEnemy.ElementAt(DepthOfRange);
+        TargetEnemy = enemy.Key.transform;
+    }
+
+    public void ClearTargets()
+    {
+        DepthOfRange = 0;
+        Auto = true;
 
     }
+
+    public void LocateTarget()
+    {
+        if (TargetEnemy != null) {
+            ForEasyLocation.transform.position = TargetEnemy.position;
+        }
+    }
+    public void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Lockon && TargetEnemy != null)
+            {
+
+                StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
+            }
+
+            StartCoroutine(ActiveHitbox());
+            
+        }
+    }
+
+    private IEnumerator FFCombat(Vector3 targetPos)
+    {
+        float elapsed = 0;
+        Vector3 startPos = transform.position;
+        //Vector3 targetPos = TargetEnemy.position - (TargetEnemy.forward * 1.5f);
+
+        while (elapsed < 0.2f)
+        {
+            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / 0.15f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPos;
+        //yield return new WaitForSeconds(0.1f);
+    }
+
     private void changeCollor()
     {
         if (_IsInv == true)
@@ -277,7 +421,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         //_rb.MovePosition(_body.position + _Input.ToIso() * _Input.normalized.magnitude * _speed * Time.deltaTime);
 
-        _rb.velocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+        _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
         Vector3 force = _Input.ToIso().normalized * _speed;
 
