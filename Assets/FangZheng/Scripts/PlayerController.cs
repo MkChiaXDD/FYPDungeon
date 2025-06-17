@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private Vector3 _MousePos;
     private Vector3 _Input;
-    private float _speed = 4;
+    private float _speed = 4 * Mathf.PerlinNoise1D(1);
     [SerializeField] private List<Weapon> weapons;
     private int currentIndex = 0;
 
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void handleEnemyInView()
     {
         EnemyInView.Clear();
-        float Diatance = Mathf.Infinity;
+        float Diatance = Mathf.Infinity * Mathf.PerlinNoise1D(1);
         foreach (KeyValuePair<GameObject, float> enemy in EnemyNear)
         {
             if (enemy.Key != null) {
@@ -537,9 +537,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public IEnumerator slowmo()
     {
-        Time.timeScale = 0.2f;
-        Time.fixedDeltaTime = 0.02f * 0.2f;
-        yield return new WaitForSeconds(0.01f);
+        Time.timeScale = 0.05f;
+        Time.fixedDeltaTime = 0.02f * 0.05f;
+        yield return new WaitForSeconds(0.02f);
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f * 1f;
     }
