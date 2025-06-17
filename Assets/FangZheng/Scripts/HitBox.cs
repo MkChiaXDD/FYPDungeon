@@ -20,7 +20,9 @@ public class HitBox : MonoBehaviour
                     knockbackDirection.y = hit.transform.position.y; // Keep the knockback horizontal
 
                     // Apply force to the enemy
+                    //enemyRb.isKinematic = false;
                     enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
+                    //enemyRb.isKinematic = true;
                 }
             }
         }
