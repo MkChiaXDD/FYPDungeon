@@ -27,6 +27,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask EnemyLayer;
     [SerializeField] private float _ParryCooldown = 0;
 
+    [SerializeField] private bool Lockon = false;
+    [SerializeField] private Transform TargetEnemy = null;
+    [SerializeField] private List<GameObject> EnemyNearby;
+    [SerializeField] private float AngleThreshold = 45f;
+
     private float BlockHoldTime;
 
     private Vector3 _MousePos;
@@ -44,6 +49,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         Dash();
         Blocking();
         changeCollor();
+        
+        Lockingon();
+        GetEnemiesZone();
         Attack();
 
 
@@ -57,6 +65,61 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
+    private void Lockingon()
+    {
+        if (Lockon == false)
+        {
+            Lockon = true;
+        }
+        else
+        {
+            Lockon = false;
+        }
+    }
+
+    private void GetEnemiesZone()
+    {
+        BoxCollider box = _Area.GetComponent<BoxCollider>();
+        if (box == null)
+        {
+            return;
+        }
+
+        Vector3 center = box.transform.TransformPoint(box.center);
+        Vector3 halfExtents = Vector3.Scale(box.size, box.transform.lossyScale) / 2f;
+
+        Collider[] hits = Physics.OverlapBox(center, halfExtents, box.transform.rotation, EnemyLayer);
+        foreach (Collider hit in hits)
+        {
+            if (hit.GetComponent<Enemy>() != null) {
+                EnemyNearby.Add(hit.gameObject);
+            }
+        }
+    }
+
+    private void HandleTargetTracking()
+    {
+        float Diatance = Mathf.Infinity;
+        foreach (GameObject enemy in EnemyNearby)
+        {
+            Vector3 dir = ( enemy.transform.position - this.transform.position ).normalized;
+            Vector3 playerforward = this.transform.forward;
+            float dotProduct = Vector3.Dot(playerforward, dir);
+            
+/*            if(angle < AngleThreshold)
+            {
+                if ()
+                {
+
+                }
+            }*/
+        }
+    }
+
+    public void Attack()
+    {
+
+    }
     private void changeCollor()
     {
         if (_IsInv == true)
@@ -147,7 +210,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         
     }
 
-    public void Attack()
+/*    public void Attack()
     {
         if (Input.GetMouseButtonDown(0)) {
             Debug.Log("attack");
@@ -183,7 +246,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         }
     }
-
+*/
     public IEnumerator ActiveHitbox()
     {
         _hitBox.gameObject.SetActive(true);
