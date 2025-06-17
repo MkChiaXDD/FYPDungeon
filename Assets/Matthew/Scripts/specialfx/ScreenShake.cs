@@ -82,6 +82,7 @@ public class ScreenShake : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            Debug.Log("Press F to test Shake() in ScreenShake.cs");
             Shake();
         }
     }
