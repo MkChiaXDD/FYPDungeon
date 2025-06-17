@@ -21,7 +21,7 @@ public class Room
     public List<Room> ConnectedRooms { get; } = new List<Room>();
 }
 
-public class DungeonGenerator : MonoBehaviour
+public class gae : MonoBehaviour
 {
     [Header("Generation Settings")]
     [SerializeField] private int _minRooms = 6;
@@ -62,10 +62,7 @@ public class DungeonGenerator : MonoBehaviour
         Debug.Log($"Generated dungeon with {_rooms.Count} rooms");
     }
 
-    public void RegenerateDungeon()
-    {
-        GenerateDungeon();
-    }
+
 
     private void ClearExistingDungeon()
     {
@@ -374,21 +371,3 @@ public class DungeonGenerator : MonoBehaviour
     }
 }
 
-#if UNITY_EDITOR
-[CustomEditor(typeof(DungeonGenerator))]
-public class DungeonGeneratorEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        DungeonGenerator generator = (DungeonGenerator)target;
-
-        GUILayout.Space(10);
-        if (GUILayout.Button("Generate Dungeon", GUILayout.Height(30)))
-        {
-            generator.RegenerateDungeon();
-        }
-    }
-}
-#endif
