@@ -34,7 +34,7 @@ public class ScreenShake : MonoBehaviour
 
     [Header("Translational Shake")]
     [Tooltip("Maximum translation intensity in local space")]
-    [SerializeField] private Vector3 _translationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f);
+    [SerializeField] private Vector3 _translationalShakeMagnitude = new(0.5f, 0.5f, 0f);
 
     [Tooltip("Speed of the Perlin noise sampling for translation")]
     [SerializeField] private float _translationalNoiseSpeed = 2f;
@@ -106,11 +106,19 @@ public class ScreenShake : MonoBehaviour
     {
         if (_shakeType != ShakeType.Translational)
         {
+
+          
+
+          
+
+
             transform.localRotation = Quaternion.Lerp(
                 transform.localRotation,
                 _originalLocalRotation,
                 Time.deltaTime * _dampingSpeed
             );
+           
+      
         }
 
         if (_shakeType != ShakeType.Rotational)
