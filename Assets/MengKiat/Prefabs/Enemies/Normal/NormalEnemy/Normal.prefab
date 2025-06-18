@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3639012608244869936
 MeshFilter:
@@ -132,7 +132,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &6752998752777940316
 MonoBehaviour:
@@ -147,6 +147,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 31b40d944b99e654bb3322eef28d656b, type: 2}
-  chaseRange: 10
+  chaseRange: 100
   attackRange: 2
   attackCooldown: 1
+  feelerLength: 8
+  feelerRadius: 0.2
+  avoidWeight: 200
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  turnSpeed: 30
+  smoothing: 1
