@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BigBossOneController : Enemy
@@ -34,23 +33,35 @@ public class BigBossOneController : Enemy
     [Header("Roam Settings")]
     public float roamDuration = 3f;
 
-    [SerializeField] private ScreenShake screenShake;
+    [Header("Line of Sight")]
+    [Tooltip("Layers that can block sight (e.g. walls)")]
+    [SerializeField] private LayerMask obstructionMask;
+    [Tooltip("Height offset for ray origin and target")]
+    [SerializeField] private float eyeHeight = 1f;
 
+    [SerializeField] private ScreenShake screenShake;
     [SerializeField] private BoxCollider Collider;
     [SerializeField] private BoxCollider PlsceHolderCollider;
-    [SerializeField] private Rigidbody rigidbody;
+    [SerializeField] private Rigidbody rb;
 
+    private Vector3 spawnPosition;
+    private Vector3 roamTarget;
+    private float roamTimer;
     private bool isBusy = false;
     private int attackCounter = 0;
 
     void Start()
     {
+        spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
+        state = State.Roam;
+        ChooseRoamTarget();
         StartCoroutine(BossLoop());
     }
 
     void Update()
     {
+        // Always face the player except during spin
         if (state != State.SpinShoot && player != null)
         {
             Vector3 lookDir = player.position - transform.position;
@@ -70,6 +81,7 @@ public class BigBossOneController : Enemy
         {
             yield return new WaitUntil(() => !isBusy);
 
+            // Every 3rd attack do a roam
             if (attackCounter >= 2)
             {
                 attackCounter = 0;
@@ -78,8 +90,14 @@ public class BigBossOneController : Enemy
             }
             else
             {
-                state = (State)Random.Range(1, 4);
+                state = (State)Random.Range(1, 4); // 1=Dash,2=SpinShoot,3=Hop
                 attackCounter++;
+
+                // only allow Dash or Hop if boss can see the player
+                if ((state == State.Dash || state == State.Hop) && !HasLineOfSight())
+                {
+                    state = State.Roam;
+                }
 
                 switch (state)
                 {
@@ -92,9 +110,28 @@ public class BigBossOneController : Enemy
                     case State.Hop:
                         yield return StartCoroutine(DoHop());
                         break;
+                    case State.Roam:
+                        yield return StartCoroutine(DoRoam());
+                        break;
                 }
             }
         }
+    }
+
+    private bool HasLineOfSight()
+    {
+        if (player == null) return false;
+
+        Vector3 origin = transform.position + Vector3.up * eyeHeight;
+        Vector3 target = player.position + Vector3.up * eyeHeight;
+        Vector3 dir = target - origin;
+        float dist = dir.magnitude;
+
+        // if any obstruction in the way, LOS is blocked
+        if (Physics.Raycast(origin, dir.normalized, out RaycastHit hit, dist, obstructionMask))
+            return false;
+
+        return true;
     }
 
     private IEnumerator DoDash()
@@ -151,15 +188,13 @@ public class BigBossOneController : Enemy
 
     private IEnumerator DoHop()
     {
-        // remember where we started
         Vector3 origin = transform.position;
 
         isBusy = true;
         Collider.isTrigger = true;
-        rigidbody.isKinematic = true;
+        rb.isKinematic = true;
         PlsceHolderCollider.enabled = true;
 
-        // perform the hops
         for (int i = 0; i < hopCount; i++)
         {
             Vector3 startPos = transform.position;
@@ -184,7 +219,7 @@ public class BigBossOneController : Enemy
             yield return new WaitForSeconds(dashDelay);
         }
 
-        // now jump back to where we began
+        // return to origin
         float r = 0f;
         Vector3 returnStart = transform.position;
         while (r < hopDuration)
@@ -199,13 +234,11 @@ public class BigBossOneController : Enemy
         }
         transform.position = origin;
 
-        // cleanup
         Collider.isTrigger = false;
-        rigidbody.isKinematic = false;
+        rb.isKinematic = false;
         PlsceHolderCollider.enabled = false;
         isBusy = false;
     }
-
 
     private void ApplyKnockback()
     {
@@ -230,17 +263,26 @@ public class BigBossOneController : Enemy
     private IEnumerator DoRoam()
     {
         isBusy = true;
-        float timer = 0f;
-        Vector3 roamDir = Random.insideUnitSphere;
-        roamDir.y = 0;
-        roamDir.Normalize();
-        while (timer < roamDuration)
+        roamTimer = 0f;
+        ChooseRoamTarget();
+        while (roamTimer < roamDuration)
         {
-            transform.position += roamDir * data.moveSpeed * Time.deltaTime;
-            timer += Time.deltaTime;
+            transform.position += (roamTarget - transform.position).normalized
+                                  * data.moveSpeed * Time.deltaTime;
+            roamTimer += Time.deltaTime;
             yield return null;
         }
         isBusy = false;
+    }
+
+    private void ChooseRoamTarget()
+    {
+        Vector2 rnd = Random.insideUnitCircle * roamDuration;
+        roamTarget = new Vector3(
+            spawnPosition.x + rnd.x,
+            transform.position.y,
+            spawnPosition.z + rnd.y
+        );
     }
 
     private void OnDrawGizmosSelected()
