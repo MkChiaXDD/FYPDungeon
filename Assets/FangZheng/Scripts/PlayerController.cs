@@ -52,6 +52,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private List<Weapon> weapons;
     private int currentIndex = 0;
 
+    void Start()
+    {
+        _speed = _normalspeed;
+    }
     // Update is called once per frame
     void Update()
     {
