@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using static UnityEngine.UI.Image;
 
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject _Area;
     [SerializeField] private LayerMask EnemyLayer;
     [SerializeField] private float _ParryCooldown = 0;
-
+    //[SerializeField] private float HitCooldown = 0;
     [SerializeField] private bool Lockon = false;
     [SerializeField] private bool Auto = true;
     [SerializeField] private Transform TargetEnemy = null;
@@ -40,6 +41,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject ForEasyLocation;
 
     [SerializeField] private float dot;
+    [SerializeField] private LayerMask _LayerMaskIgnore;
+    [SerializeField] private LayerMask[] _LayerMaskHit;
+
     private float BlockHoldTime;
 
     private Vector3 _MousePos;
@@ -80,6 +84,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         CheckDictionary(EnemyInView);
 
         _ParryCooldown -= Time.deltaTime;
+        //HitCooldown -= Time.deltaTime;
 
         if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
             weapons[currentIndex].Attack();
@@ -89,12 +94,53 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
+    //private bool CastARay(GameObject Target)
+    //{
+    //    //RaycastHit hit;
+    //    float distance = Vector3.Distance(this.transform.position, Target.transform.position);
+    //    Vector3 directionToTarget = (Target.transform.position - transform.position).normalized;
+
+    //    //int layerMask = _LayerMaskIgnore | (1 << 8);
+
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(transform.position, directionToTarget, out hit, distance, ~_LayerMaskIgnore))
+    //    {
+
+    //        Debug.DrawRay(transform.position, directionToTarget * distance, Color.yellow);
+    //        Debug.Log("Did Hit");
+    //        return true;
+    //    }
+    //    return false;
+    //}
+
+    private bool CastARay(GameObject Target)
+    {
+        float distance = Vector3.Distance(this.transform.position, Target.transform.position);
+        Vector3 directionToTarget = (Target.transform.position - transform.position).normalized;
+        Vector3 rayStart = transform.position + Vector3.up * 0.5f;
+
+        Ray ray = new Ray(transform.position, directionToTarget);
+        RaycastHit[] hits = Physics.RaycastAll(ray, distance , ~_LayerMaskIgnore);
+
+        //Debug.DrawRay(rayStart, directionToTarget * distance, Color.cyan, 1.0f);
+        foreach (RaycastHit hit in hits)
+        {
+            //Debug.Log(hit.collider.name);
+            if (hit.collider.CompareTag("Object"))
+            {
+                //Debug.Log("Hit");
+                return false;
+            }
+        }
+        return true;
+    }
+
     void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
     {
         if (objectDictionary.Values.Any(value => value == null))
         {
             objectDictionary.Clear();
-            Debug.Log("Dictionary cleared due to null reference");
+            //Debug.Log("Dictionary cleared due to null reference");
         }
     }
 
@@ -165,10 +211,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             Vector3 dir = (  enemy.transform.position - this.transform.position  ).normalized;
             Vector3 forward = _body.transform.forward;
             float dotProduct = Vector3.Dot(forward, dir);
-            Debug.Log(dotProduct);
+            //Debug.Log(dotProduct);
             float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
             dot = angle;
-            if (angle < AngleThreshold)
+            if (angle < AngleThreshold && CastARay(enemy) == true)
             {
                 if (Diatance > Vector3.Distance(enemy.transform.position , this.transform.position))
                 {
@@ -189,10 +235,10 @@ public class PlayerController : MonoBehaviour, IDamageable
                 Vector3 dir = (enemy.Key.transform.position - this.transform.position).normalized;
                 Vector3 forward = _body.transform.forward;
                 float dotProduct = Vector3.Dot(forward, dir);
-                Debug.Log(dotProduct);
+                //Debug.Log(dotProduct);
                 float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
                 dot = angle;
-                if (angle < AngleThreshold)
+                if (angle < AngleThreshold && CastARay(enemy.Key) == true)
                 {
                     EnemyInView.Add(enemy.Key, enemy.Value);
                 }
@@ -235,7 +281,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void Attack()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) )
         {
             
             if (Lockon && TargetEnemy != null)
@@ -248,21 +294,34 @@ public class PlayerController : MonoBehaviour, IDamageable
             
         }
     }
-
+    public Vector3 GetPlayerSize()
+    {
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            Vector3 size = collider.bounds.size;
+            return size;
+            
+        }
+        return Vector3.zero;
+    }
     private IEnumerator FFCombat(Vector3 targetPos)
     {
         float elapsed = 0;
         Vector3 startPos = transform.position;
         //Vector3 targetPos = TargetEnemy.position - (TargetEnemy.forward * 1.5f);
-
+        //Vector3 EndPos = new Vector3(targetPos.x, _MousePos.y + (GetPlayerSize().y * 0.5f), targetPos.z);
+        Vector3 EndPos = new Vector3(targetPos.x, transform.position.y, targetPos.z);
         while (elapsed < 0.2f)
         {
-            transform.position = Vector3.Lerp(startPos, targetPos, elapsed / 0.15f);
+            transform.position = Vector3.Lerp(startPos, EndPos, elapsed / 0.15f);
             elapsed += Time.deltaTime;
             yield return null;
         }
         //transform.position = targetPos;
-        StartCoroutine(slowmo());
+        //StartCoroutine(slowmo());
+        ToggleSlowmo();
+        //HitCooldown = 1.5f;
         //yield return new WaitForSeconds(0.1f);
     }
 
@@ -403,7 +462,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Interact");
+            //Debug.Log("Interact");
         }
     }
 
@@ -450,7 +509,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (Input.GetKeyDown(KeyCode.F))
         {
             BlockHoldTime = Time.time;
-            Debug.Log("F");
+            //Debug.Log("F");
         }
 
         if (Input.GetKey(KeyCode.F))
@@ -480,13 +539,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Block()
     {
         _IsBlock = true;
-        Debug.Log("Block");
+        //Debug.Log("Block");
     }
 
     public void stopBlock()
     {
         _IsBlock= false;
-        Debug.Log("UnBlock()");
+        //Debug.Log("UnBlock()");
     }
 
     public void Parry()
@@ -494,7 +553,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (_IsParry) return;
         _IsParry = true;
         _parryzone.active = true;
-        Debug.Log("Parry");
+        //Debug.Log("Parry");
         StartCoroutine(ParryWindow());
     }
 
@@ -532,7 +591,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void ToggleSlowmo()
     {
-
+        HitStop hitstopFX = GetComponent<HitStop>();
+        hitstopFX.TriggerHitStop();
     }
 
     public IEnumerator slowmo()
