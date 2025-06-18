@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Break : MonoBehaviour
+public class Breakable : MonoBehaviour, IDamageable
 {
     [SerializeField] private GameObject brokenObject;
+    [SerializeField] private ItemDropSystem dropSystem;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +19,6 @@ public class Break : MonoBehaviour
         {
             StartCoroutine(nameof(BreakObject));
         }
-
-        
     }
 
     // Using OnTriggerEnter (for trigger collisions)
@@ -36,6 +35,11 @@ public class Break : MonoBehaviour
     private IEnumerator BreakObject()
     {
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
+        dropSystem.SpawnDropItem();
         Destroy(gameObject);
     }
+
+    public void TakeDamage(int damage) => Die();
+    public void Die() => StartCoroutine(nameof(BreakObject));
+
 }
