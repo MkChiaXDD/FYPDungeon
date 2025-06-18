@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private int DepthOfRange;
 
     [Space, Header("Combat & Weapons")]
-    [SerializeField] private List<Weapon> weapons;
+    [SerializeField] private List<Spell> weapons;
     [SerializeField] private float dot;
 
     [Space, Header("Health")]

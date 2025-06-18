@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Spell : MonoBehaviour
 {
-    [SerializeField] protected WeaponData data;
+    [SerializeField] protected SpellData data;
     protected int damage;
     protected LayerMask hitLayers;
 

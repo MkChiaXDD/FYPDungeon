@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
-public class WeaponDatas : ScriptableObject
+public class WeaponDatas : ItemSOData
 {
-    string WeaponName;
-    string Description;
+    //string WeaponName;
+    //string Description;
+    //Sprite icon;
     int dmg;
     int Duration;
     GameObject WeaponPrefab;
-    Sprite icon;
     enum WeaponType
     {
         Spinning_Sword,

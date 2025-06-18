@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Weapons/Weapon Data")]
-public class WeaponData : ScriptableObject
+[CreateAssetMenu(menuName = "Spells/Spell Data")]
+public class SpellData : ScriptableObject
 {
     public string weaponName;
     public int damage;
