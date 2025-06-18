@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Dictionary<GameObject, float> EnemyInView = new Dictionary<GameObject, float>();
     [SerializeField] private int DepthOfRange;
     [SerializeField] private GameObject ForEasyLocation;
-
+    [SerializeField] private int MaxHealth = 100;
+    [SerializeField] private int Health;
     [SerializeField] private float dot;
     [SerializeField] private LayerMask _LayerMaskIgnore;
     [SerializeField] private LayerMask[] _LayerMaskHit;
@@ -52,9 +53,15 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private List<Weapon> weapons;
     private int currentIndex = 0;
 
-    void Start()
+    void Awake()
     {
+        Health = MaxHealth;
         _speed = _normalspeed;
+    }
+
+    public int GetHealth()
+    {
+        return Health;
     }
     // Update is called once per frame
     void Update()
@@ -607,8 +614,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f * 1f;
     }
+
     public void TakeDamage(int damage)
     {
+        Health = Health - damage;
         Debug.Log("ouch");
     }
 

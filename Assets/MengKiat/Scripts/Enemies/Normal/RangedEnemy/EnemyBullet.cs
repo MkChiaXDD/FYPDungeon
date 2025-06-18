@@ -44,6 +44,10 @@ public class EnemyBullet : MonoBehaviour
         if (other.CompareTag("Player") && _type != Type.Player)
         {
             Debug.Log("RANGEDENEMY: HIT PLAYER");
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
             Destroy(gameObject);
             //Destroy(gameObject);
         }
