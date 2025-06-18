@@ -1,35 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.UI.Image;
-
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
 
+    #region Serialized Fields
+
+    [Header("Components")]
     [SerializeField] private Rigidbody _rb;
-    [SerializeField] private float _normalspeed = 4 ;
-    [SerializeField] private float _runspeed = 10;
-    [SerializeField] private float _turnspeed = 360;
     [SerializeField] private Transform _body;
     [SerializeField] private Camera _camera;
-    [SerializeField] private float parryThreshold = 0.5f;
-    [SerializeField] private bool _IsParry;
-    [SerializeField] private bool _IsBlock;
-    [SerializeField] private bool _IsInv;
-
-
     [SerializeField] private Renderer _renderer;
     [SerializeField] private GameObject _parryzone;
     [SerializeField] private GameObject _hitBox;
     [SerializeField] private GameObject _Area;
-    [SerializeField] private LayerMask EnemyLayer;
+    [SerializeField] private GameObject ForEasyLocation;
+
+    [Space, Header("Movement Settings")]
+    [SerializeField] private float _normalspeed = 4;
+    [SerializeField] private float _runspeed = 10;
+    [SerializeField] private float _turnspeed = 360;
+
+    [Space, Header("Parry & Block")]
+    [SerializeField] private float parryThreshold = 0.5f;
     [SerializeField] private float _ParryCooldown = 0;
-    //[SerializeField] private float HitCooldown = 0;
+    [SerializeField] private bool _IsParry;
+    [SerializeField] private bool _IsBlock;
+    [SerializeField] private bool _IsInv;
+
+    [Space, Header("Targeting & Lock-On")]
+    [SerializeField] private LayerMask EnemyLayer;
     [SerializeField] private bool Lockon = false;
     [SerializeField] private bool Auto = true;
     [SerializeField] private Transform TargetEnemy = null;
@@ -38,20 +40,31 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Dictionary<GameObject, float> EnemyNear = new Dictionary<GameObject, float>();
     [SerializeField] private Dictionary<GameObject, float> EnemyInView = new Dictionary<GameObject, float>();
     [SerializeField] private int DepthOfRange;
-    [SerializeField] private GameObject ForEasyLocation;
+
+    [Space, Header("Combat & Weapons")]
+    [SerializeField] private List<Weapon> weapons;
+    [SerializeField] private float dot;
+
+    [Space, Header("Health")]
     [SerializeField] private int MaxHealth = 100;
     [SerializeField] private int Health;
-    [SerializeField] private float dot;
+
+    [Space, Header("Layers & Masks")]
     [SerializeField] private LayerMask _LayerMaskIgnore;
     [SerializeField] private LayerMask[] _LayerMaskHit;
 
-    private float BlockHoldTime;
+    #endregion
 
+    #region Private Fields
+
+    private float BlockHoldTime;
     private Vector3 _MousePos;
     private Vector3 _Input;
     private float _speed = 4 * Mathf.PerlinNoise1D(1);
-    [SerializeField] private List<Weapon> weapons;
     private int currentIndex = 0;
+
+    #endregion
+
 
     void Awake()
     {
