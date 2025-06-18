@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RangedMiniController : Enemy
@@ -7,16 +5,24 @@ public class RangedMiniController : Enemy
     enum State { Idle, Attack, Reposition }
     State state;
 
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float fireOffset = 1f;
-    [SerializeField] float attackRange = 10f;
-    [SerializeField] float attackCooldown = 2f;
-    [SerializeField] float repositionRadius = 5f;
+    [Header("Attack Settings")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float fireOffset = 1f;
+    [SerializeField] private float attackRange = 10f;
+    [SerializeField] private float attackCooldown = 2f;
 
-    float attackTimer;
-    Vector3 spawnPosition;
-    Vector3 repositionTarget;
-    Transform player;
+    [Header("Reposition Settings")]
+    [SerializeField] private float repositionRadius = 5f;
+    [SerializeField] private float repositionDuration = 3f; // max time to reposition
+
+    [Header("Rotation")]
+    [SerializeField] private float rotationSpeed = 5f; // higher = faster turn
+
+    private float attackTimer;
+    private float repositionTimer;
+    private Vector3 spawnPosition;
+    private Vector3 repositionTarget;
+    private Transform player;
 
     void Start()
     {
@@ -27,7 +33,9 @@ public class RangedMiniController : Enemy
 
     void Update()
     {
-        FacePlayer();
+        // always smooth-look at the player
+        SmoothFacePlayer();
+
         attackTimer += Time.deltaTime;
 
         switch (state)
@@ -35,17 +43,22 @@ public class RangedMiniController : Enemy
             case State.Idle:
                 if (Vector3.Distance(transform.position, player.position) <= attackRange
                     && attackTimer >= attackCooldown)
+                {
                     state = State.Attack;
+                }
                 break;
 
             case State.Attack:
                 Shoot();
                 attackTimer = 0f;
                 ChooseRepositionTarget();
+                repositionTimer = 0f;
                 state = State.Reposition;
                 break;
 
             case State.Reposition:
+                repositionTimer += Time.deltaTime;
+
                 Vector3 horizontalTarget = new Vector3(
                     repositionTarget.x,
                     transform.position.y,
@@ -58,38 +71,42 @@ public class RangedMiniController : Enemy
                     data.moveSpeed * Time.deltaTime
                 );
 
-                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f)
-                    state = State.Idle;
+                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f
+                    || repositionTimer >= repositionDuration)
+                {
+                    state = State.Attack;
+                }
                 break;
         }
     }
 
-    void FacePlayer()
+    private void SmoothFacePlayer()
     {
         Vector3 dir = player.position - transform.position;
         dir.y = 0;
         if (dir.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(dir);
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                rotationSpeed * Time.deltaTime
+            );
+        }
     }
 
-    void Shoot()
+    private void Shoot()
     {
         Vector3 spawnPos = transform.position + transform.forward * fireOffset;
         var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
-        var b = go.GetComponent<RangedMiniBullet>();
-        if (b != null) b.SetDamage(data.damage);
-        Vector3 dir = player.position - transform.position;
-        if (b != null)
+        if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(dir);
+            b.Initialize(player.position - transform.position);
             b.SetDamage(data.damage);
         }
-        //if (b != null) b.SetDamage(data.damage);
-
-        //Initialize();
     }
 
-    void ChooseRepositionTarget()
+    private void ChooseRepositionTarget()
     {
         Vector2 rnd = Random.insideUnitCircle * repositionRadius;
         repositionTarget = new Vector3(
