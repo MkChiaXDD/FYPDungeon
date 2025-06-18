@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WaveAttack : Weapon
+public class WaveAttack : MonoBehaviour
 {
 
     [SerializeField] private GameObject wavePrefab;
@@ -20,9 +20,12 @@ public class WaveAttack : Weapon
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private LayerMask enemyLayer;
 
-    protected override void Awake()
+    [SerializeField] private int damage = 1;
+    
+
+    protected void Awake()
     {
-        base.Awake();
+        
         player = GetComponentInParent<PlayerController>();
     }
 
@@ -34,7 +37,7 @@ public class WaveAttack : Weapon
         }
     }
 
-    public override void Attack()
+    public void Attack()
     {
         StartCoroutine(WaveRoutine());
     }
@@ -65,7 +68,7 @@ public class WaveAttack : Weapon
     {
         Collider[] hits = Physics.OverlapSphere(position,
                                                 waveRadius,
-                                                data.hitLayers);
+                                                enemyLayer);
 
         foreach (Collider hit in hits)
         {

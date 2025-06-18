@@ -27,7 +27,7 @@ public class SpringChest : MonoBehaviour
     {
         
 
-        if (CheckPlayerProximity() && Input.GetKeyDown(interactKey) && !isOpen)
+        if (CheckPlayerProximity() && Input.GetKeyDown(interactKey) /*&& !isOpen*/)
         {
             isOpen = !isOpen;
             dropSystem.SpawnDropItem();

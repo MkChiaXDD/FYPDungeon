@@ -35,7 +35,7 @@ Transform:
   - {fileID: 7150323965384211033}
   - {fileID: 8297450204970222721}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2435535006543774403
 Rigidbody:
@@ -106,7 +106,7 @@ MonoBehaviour:
   interactionRadius: 3
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   dropSystem: {fileID: 3427600855799159945}
 --- !u!114 &3427600855799159945
 MonoBehaviour:
@@ -123,7 +123,7 @@ MonoBehaviour:
   _dropItem:
   - _dropItemPrefab: {fileID: 2476117311166538866, guid: 1fc8ae5927b505a43b6c8e8ec3173523,
       type: 3}
-    _dropRate: 100
+    _dropRate: 0
   _dropHeight: 3.5
 --- !u!1 &3313790609672292317
 GameObject:
@@ -235,7 +235,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4748172242969654961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00000059418295, y: -0.28640383, z: 0.87935996}
+  m_LocalPosition: {x: 0.00000059418295, y: -0.28640383, z: 0.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -317,14 +317,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5546268425162243845}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.03}
+  m_LocalRotation: {x: -0.7063873, y: -0.031891484, z: -0.031891484, w: 0.7063873}
+  m_LocalPosition: {x: 0, y: 0.16, z: -1.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7150323965384211033}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: -5.17, z: 0}
 --- !u!108 &1004688666264658728
 Light:
   m_ObjectHideFlags: 0
@@ -337,10 +337,10 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.9766117, b: 0.53207546, a: 1}
-  m_Intensity: 10
-  m_Range: 10
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_Intensity: 31.08
+  m_Range: 1.84
+  m_SpotAngle: 179
+  m_InnerSpotAngle: 170.80206
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -380,7 +380,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 4929
+  m_ColorTemperature: 7409
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
