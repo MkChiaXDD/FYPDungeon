@@ -8,7 +8,7 @@ public class HitStop : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float defaultDuration = 0.1f;
-    [SerializeField] private float defaultTimeScale = 0.02f;
+    [SerializeField] private float targetTimeScale = 0.02f;
     [SerializeField]
     private AnimationCurve timeScaleCurve = new AnimationCurve(
         new Keyframe(0, 0),
@@ -22,15 +22,16 @@ public class HitStop : MonoBehaviour
     //helper function to trigger hitstop
     //to ensure that each hitstop ends properly 
     //<summary>
-    public void TriggerHitStop(float intensity = 1f)
+    public void TriggerHitStop()
     {
         if (currentHitStop != null)
         {
             StopCoroutine(currentHitStop);
             Time.timeScale = originalTimeScale; // Reset immediately when interrupted
+          
         }
 
-        currentHitStop = StartCoroutine(DoHitStop(defaultDuration * intensity));
+        currentHitStop = StartCoroutine(DoHitStop(defaultDuration));
     }
 
 
@@ -40,13 +41,14 @@ public class HitStop : MonoBehaviour
     private IEnumerator DoHitStop(float duration)
     {
         float elapsed = 0f;
-        Time.timeScale = defaultTimeScale;
+        Time.timeScale = targetTimeScale;
+        
 
         while (elapsed < duration)
         {
             elapsed += Time.unscaledDeltaTime;
             float t = elapsed / duration;
-            Time.timeScale = Mathf.Lerp(defaultTimeScale, originalTimeScale, timeScaleCurve.Evaluate(t));
+            Time.timeScale = Mathf.Lerp(targetTimeScale, originalTimeScale, timeScaleCurve.Evaluate(t));
             yield return null;
         }
 
