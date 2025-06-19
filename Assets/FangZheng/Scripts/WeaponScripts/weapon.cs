@@ -6,18 +6,21 @@ public class weapon : MonoBehaviour
 {
     [SerializeField] WeaponDatas weaponData;
     [SerializeField] private int CurrDurability;
-    [SerializeField] private List<SpellCast> spellCastList;
+    [SerializeField] private SpellCast spellCastList;
+    //[SerializeField] private List<SpellCast> spellCastList;
+
     protected void Start()
     {
 
         CurrDurability = weaponData.MaxDurability;
         spellCastList = weaponData.spells;
-        spellCastList.Reverse();
+        spellCastList.Initialize(this.transform); 
+        //spellCastList.Reverse();
 
-        for (int i = 0; i < spellCastList.Count; i++)
-        {
-            spellCastList[i].Initialize(this.transform);
-        }
+        //for (int i = 0; i < spellCastList.Count; i++)
+        //{
+        //    spellCastList[i].Initialize(this.transform);
+        //}
     }
 
     private void Update()
@@ -33,15 +36,15 @@ public class weapon : MonoBehaviour
         {
             return;
         }
-        Cast();
-        //ReduceDua( 1);
+        
+        ReduceDua( 1);
         
 
     }
 
     public void Cast()
     {
-        spellCastList[CurrDurability - 1].spell?.Attack();
+        spellCastList.spell?.Attack();
     }
 
     public void ReduceDua(int amount)
@@ -49,12 +52,14 @@ public class weapon : MonoBehaviour
         CurrDurability -= amount;
         if (CurrDurability <= 0)
         {
+            Cast();
             BreakWeapon();
         }
     }
 
     public void BreakWeapon()
     {
-        Destroy(this.gameObject, 0.2f );
+       
+        Destroy(this.gameObject, 10);
     }
 }

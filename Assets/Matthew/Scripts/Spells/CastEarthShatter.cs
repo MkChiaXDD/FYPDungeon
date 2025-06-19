@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CastEarthShatter : MonoBehaviour
+public class CastEarthShatter : Spell
 {
     //[SerializeField] private ParticleSystem EarthShatterVFX;
     [SerializeField] private GameObject EarthShatterAttack;
@@ -44,5 +44,8 @@ public class CastEarthShatter : MonoBehaviour
         //AttackCollider.SetActive(false);
     }
 
-  
+    public override void Attack()
+    {
+        SummonEarthShatterAttack();
+    }
 }

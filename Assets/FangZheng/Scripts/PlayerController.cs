@@ -44,6 +44,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Space, Header("Combat & Weapons")]
     [SerializeField] private List<Spell> weapons;
     [SerializeField] private float dot;
+    [SerializeField] private Animator animator;
+    [SerializeField] private bool CombotContinue;
+    [SerializeField] private bool CombotWindow;
+    [SerializeField] private bool IsAttack;
+    [SerializeField, Range(0, 100)] private int ThreshholdPercentage; 
 
     [Space, Header("Health")]
     [SerializeField] private int MaxHealth = 100;
@@ -64,12 +69,68 @@ public class PlayerController : MonoBehaviour, IDamageable
     private int currentIndex = 0;
 
     #endregion
+    public static PlayerController Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
 
-
-    void Awake()
+    
+    void Start()
     {
         Health = MaxHealth;
         _speed = _normalspeed;
+    }
+
+    public void ResetCombo()
+    {
+        animator.SetBool("Combo" , false);
+        IsAttack = false;
+        CombotContinue = false;
+        CombotWindow = false;
+    }
+
+    public void CalculateAnimationPercentage(float duration)
+    {
+        Debug.Log("Duration of Animation : " + duration);
+        float DurationToWait = duration * (ThreshholdPercentage / 100);
+        
+        StartCoroutine(ActivateAttackWindow(DurationToWait));
+    }
+
+    IEnumerator ActivateAttackWindow(float AwaitTime)
+    {
+        animator.SetBool("Combo", false);
+        //IsAttack = false;
+        CombotWindow = false;
+        yield return new WaitForSeconds(AwaitTime);
+        //IsAttack = false;
+        //CombotContinue = false;
+        CombotWindow = true;
+    }
+
+    public void ActiveAttack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (CombotContinue == false) {
+                animator.SetTrigger("Attack");
+                CombotContinue = true;
+            }
+
+            if (CombotWindow == true)
+            {
+                animator.SetBool("Combo", true);
+            }
+        }
     }
 
     public int GetHealth()
@@ -106,6 +167,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         Check();
         CheckDictionary(EnemyNear);
         CheckDictionary(EnemyInView);
+
+        ActiveAttack();
+
 
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;

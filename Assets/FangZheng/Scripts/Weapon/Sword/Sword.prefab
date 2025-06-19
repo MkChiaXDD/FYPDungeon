@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6729255124254305624}
   - component: {fileID: 2651902087240180011}
   - component: {fileID: 3591532396007630527}
+  - component: {fileID: -1811295276367697992}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -105,3 +106,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-1811295276367697992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2559788273133413441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0b51d8a7280d541a60bfb89f71bee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 11400000, guid: fab835bd6d20e4e448388e72ff3c5cec, type: 2}
+  CurrDurability: 0
+  spellCastList:
+    SpellPrefab: {fileID: 235494608288341401, guid: 66f076ac3243f7345ab019384da95dd2,
+      type: 3}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    Animation: {fileID: 0}

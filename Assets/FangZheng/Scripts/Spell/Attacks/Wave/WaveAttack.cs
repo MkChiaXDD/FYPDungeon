@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WaveAttack : MonoBehaviour
+public class WaveAttack : Spell
 {
 
     [SerializeField] private GameObject wavePrefab;
@@ -29,15 +29,24 @@ public class WaveAttack : MonoBehaviour
         player = GetComponentInParent<PlayerController>();
     }
 
+    public void Init(float waveSpeed, float Duration, float Radius, float Range , int damage)
+    {
+        this.waveSpeed = waveSpeed;
+        this.waveLifetime = Duration;
+        this.waveRadius = Radius;
+        this.attackRange = Range;
+        this.damage = damage;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Attack();
+            Attacks();
         }
     }
 
-    public void Attack()
+    public void Attacks()
     {
         StartCoroutine(WaveRoutine());
     }
@@ -127,5 +136,10 @@ public class WaveAttack : MonoBehaviour
             // Apply force to the enemy
             enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
         }
+    }
+
+    public override void Attack()
+    {
+        StartCoroutine(WaveRoutine());
     }
 }

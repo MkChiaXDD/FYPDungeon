@@ -11,9 +11,10 @@ public class WeaponDatas : ItemSOData
     //Sprite icon;
     public int MaxDurability;
     public GameObject WeaponPrefab;
-    public List<SpellCast> spells;
+    public SpellCast spells;
+    //public List<SpellCast> spells;
 
-    
+
 }
 [System.Serializable]
 public class SpellCast
