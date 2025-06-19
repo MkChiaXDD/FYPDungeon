@@ -1,10 +1,12 @@
 using UnityEngine;
 
-public abstract class Spell : MonoBehaviour
+public abstract class Spell : MonoBehaviour , ISpell
 {
     [SerializeField] protected SpellData data;
     protected int damage;
     protected LayerMask hitLayers;
+
+    public abstract void Attack();
 
     protected virtual void Awake()
     {
@@ -12,8 +14,4 @@ public abstract class Spell : MonoBehaviour
         hitLayers = data.hitLayers;
     }
 
-    /// <summary>
-    /// Fire this weapon’s effect. Subclasses implement their own behavior.
-    /// </summary>
-    public abstract void Attack();
 }
