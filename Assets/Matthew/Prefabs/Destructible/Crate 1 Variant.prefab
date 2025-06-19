@@ -104,6 +104,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2176319040582034219}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 994fdd47efd519f4c9087019265c7c43,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5994782545432060766}
   m_SourcePrefab: {fileID: 100100000, guid: 994fdd47efd519f4c9087019265c7c43, type: 3}
 --- !u!1 &4376475487152208472 stripped
 GameObject:
@@ -125,6 +129,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 1254647782578227035, guid: e7f493f9b398c44478d434ed33098a12,
     type: 3}
+  dropSystem: {fileID: -5994782545432060766}
+  explodeRange: 1.5
+  explosionRadius: 3
+  explosionForce: 5
+  explosionUpwardModifier: 1
+  everyMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!54 &1527823125698759516
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -173,3 +185,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0014468, y: 1.0014471, z: 1.0014472}
   m_Center: {x: -0.00000047683716, y: 0.50072354, z: -0.000000059604645}
+--- !u!114 &-5994782545432060766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4376475487152208472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bad6ce9f8de69e47a62a9ea5e9a50b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropItem:
+  - _dropItemPrefab: {fileID: 0}
+    _dropRate: 0
+  _dropHeight: 3.5

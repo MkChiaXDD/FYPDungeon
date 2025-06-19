@@ -6,6 +6,12 @@ public class Breakable : MonoBehaviour, IDamageable
 {
     [SerializeField] private GameObject brokenObject;
     [SerializeField] private ItemDropSystem dropSystem;
+
+    [SerializeField] float explodeRange = 1.5f;
+    [SerializeField] float explosionRadius = 3f;
+    [SerializeField] float explosionForce = 5f;
+    [SerializeField] private float explosionUpwardModifier = 1f;
+    [SerializeField] LayerMask everyMask;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +41,30 @@ public class Breakable : MonoBehaviour, IDamageable
     private IEnumerator BreakObject()
     {
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
-        dropSystem.SpawnDropItem();
+        Explode();
+        dropSystem.SpawnDropItem();      
+        Destroy(gameObject);
+    }
+
+    void Explode()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position,transform.localScale.x,~everyMask);
+        foreach (var hit in hits)
+        {
+       
+
+            if (hit.attachedRigidbody != null)
+            {
+                hit.attachedRigidbody.AddExplosionForce(
+                    explosionForce,            // base force
+                    transform.position,        // origin
+                    explosionRadius,           // radius
+                    explosionUpwardModifier,   // upwards modifier
+                    ForceMode.Impulse          // instant burst
+                );
+            }
+        }
+
         Destroy(gameObject);
     }
 
