@@ -8,6 +8,7 @@ public class SpikeTrap : MonoBehaviour
     [SerializeField] private float activateDuration = 3f;
     [SerializeField] private float activeDuration = 1f;
     [SerializeField] private float knockbackForce = 10f;
+    [SerializeField] private GameObject spikes;
     private float timer;
     private bool isActivated = false;
 
@@ -24,6 +25,7 @@ public class SpikeTrap : MonoBehaviour
                 isActivated = true;
                 timer = 0;
             }
+            spikes.SetActive(false);
         }
         else
         {
@@ -33,6 +35,7 @@ public class SpikeTrap : MonoBehaviour
                 isActivated = false;
                 timer = 0;
             }
+            spikes.SetActive(true);
         }
     }
 

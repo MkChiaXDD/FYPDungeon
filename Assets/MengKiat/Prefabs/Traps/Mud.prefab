@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4751063357345343565}
   - component: {fileID: 5603098670613591667}
   - component: {fileID: 4078720705900493388}
-  - component: {fileID: 5057730896484600511}
+  - component: {fileID: 6580531886886699714}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: Mud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4751063357345343565
 MeshFilter:
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f4bc947b1fe1ae349bdedc1bc0a66e18, type: 2}
+  - {fileID: 2100000, guid: b82367732794bb84fa0bc647a6ef0b4d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5057730896484600511
+--- !u!114 &6580531886886699714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,9 +115,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6416951119983539817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82e09fbe3110995439a5aa21d2fca142, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ef0b7c83d94e6e4cbf354f97bd96b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
-  activateDuration: 3
-  activeDuration: 1
+  slowDuration: 3
+  slowMultiplier: 7.5
