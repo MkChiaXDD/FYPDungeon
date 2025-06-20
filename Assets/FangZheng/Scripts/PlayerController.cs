@@ -81,11 +81,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             Instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-    }
 
-    
-    void Start()
-    {
         Health = MaxHealth;
         _speed = _normalspeed;
     }
