@@ -107,7 +107,6 @@ namespace RMG
         private Room GetRndRoom(Dir dir, Room parent, RoomSpawn parentSpawn)
         {
             List<Room> validRooms = new List<Room>(sortedRooms[dir]);
-            HashSet<Room> collidedRooms = new HashSet<Room>();
 
             while (validRooms.Count > 0)
             {
@@ -128,10 +127,8 @@ namespace RMG
                         Room newRoom = Instantiate(candidate, transform);
                         newRoom.Init();
                         newRoom.transform.position = newPos;
-
                         newRoom.CloseSpawn(childSpawn, parent);
                         parent.CloseSpawn(parentSpawn, newRoom);
-
                         return newRoom;
                     }
 
@@ -141,45 +138,49 @@ namespace RMG
                 }
             }
 
-            // If failed, try soft-connect overlapping spawns
-            ConnectOverlapSpawns(parent, parentSpawn, collidedRooms);
+            // If no valid placement found, try to connect to existing room
+            ConnectOverlapSpawns(parent, parentSpawn);
             return null;
         }
 
         private List<Room> RoomCollisionCheck(Vector3 pos, Bounds bounds)
         {
             List<Room> collisions = new();
-            Bounds check = new(pos + bounds.center, bounds.size);
+            Vector3 tolerance = new Vector3(0.1f, 0, 0.1f);
+            Vector3 shrunkSize = bounds.size - tolerance;
+            if (shrunkSize.x < 0) shrunkSize.x = 0.01f;
+            if (shrunkSize.z < 0) shrunkSize.z = 0.01f;
+
+            Bounds check = new Bounds(pos + bounds.center, shrunkSize);
+
             foreach (Room room in spawnedRooms)
             {
-                Bounds existing = new(room.bounds.center + room.transform.position, room.bounds.size);
+                Bounds existing = new Bounds(room.transform.position + room.bounds.center, room.bounds.size);
                 if (check.Intersects(existing))
                     collisions.Add(room);
             }
             return collisions;
         }
 
-        // Handles special case: spawn collides with another but can connect logically
-        private void ConnectOverlapSpawns(Room parent, RoomSpawn parentSpawn, HashSet<Room> collidedRooms)
+        private void ConnectOverlapSpawns(Room parent, RoomSpawn parentSpawn)
         {
             Vector3 pos1 = parent.transform.position + parentSpawn.position;
             parent.CloseSpawn(parentSpawn, null);
 
-            foreach (Room room in collidedRooms)
+            foreach (Room room in spawnedRooms)
             {
                 if (room == parent) continue;
 
                 Vector3 basePos = room.transform.position;
                 foreach (RoomSpawn spawn in room.spawns)
                 {
-                    if (basePos + spawn.position == pos1)
+                    if (Vector3.Distance(basePos + spawn.position, pos1) < 0.1f)
                     {
                         room.CloseSpawn(spawn, parent);
                         parent.CloseSpawn(parentSpawn, room);
                         room.AddConnection(parent);
                         parent.AddConnection(room);
 
-                        // Update walls for both rooms
                         room.UpdateAllWalls();
                         parent.UpdateAllWalls();
                         return;
