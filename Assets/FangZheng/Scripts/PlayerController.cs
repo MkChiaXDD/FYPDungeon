@@ -58,6 +58,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask _LayerMaskIgnore;
     [SerializeField] private LayerMask[] _LayerMaskHit;
 
+    [Space, Header("Buff")]
+    [SerializeField] private List<BuffData> _BuffObtain;
+    
     #endregion
 
     #region Private Fields
@@ -84,6 +87,11 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         Health = MaxHealth;
         _speed = _normalspeed;
+    }
+
+    public void AddBuff(BuffData buff)
+    {
+        _BuffObtain.Add(buff);
     }
 
     public void ResetCombo()
