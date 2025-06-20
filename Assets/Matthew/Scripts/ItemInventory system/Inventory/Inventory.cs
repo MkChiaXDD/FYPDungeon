@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory :MonoBehaviour
 {
     public int maxSlots = 28;
     public ItemInstance[] items;

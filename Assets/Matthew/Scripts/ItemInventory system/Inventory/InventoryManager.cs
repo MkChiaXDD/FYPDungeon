@@ -64,7 +64,7 @@ public class InventoryManager : MonoBehaviour
     private void ToggleInventory()
     {
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-        Cursor.lockState = inventoryPanel.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+        Time.timeScale = 0;
         Cursor.visible = inventoryPanel.activeSelf;
     }
 
@@ -83,12 +83,12 @@ public class InventoryManager : MonoBehaviour
         {
             if (inventory.items[i] != null && slots[i].transform.childCount == 0)
             {
-                CreateItem(inventory.items[i], slots[i].transform);
+                CreateItemUISlot(inventory.items[i], slots[i].transform);
             }
         }
     }
 
-    private void CreateItem(ItemInstance item, Transform parent)
+    private void CreateItemUISlot(ItemInstance item, Transform parent)
     {
         GameObject itemObj = Instantiate(itemPrefab, parent);
         Debug.Log("itemname: " + item.ToString());
@@ -108,7 +108,7 @@ public class InventoryManager : MonoBehaviour
         int emptySlotIndex = FindEmptySlot();
         if (emptySlotIndex != -1)
         {
-            CreateItem(itemInstance, slots[emptySlotIndex].transform);
+            CreateItemUISlot(itemInstance, slots[emptySlotIndex].transform);
             UpdateSlot();
         }
     }
