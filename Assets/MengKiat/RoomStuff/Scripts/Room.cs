@@ -19,12 +19,15 @@ namespace RMG
 
         public int distanceFromHome = 0; // Used for pathfinding/distance scoring
 
-        [Header("Walls & Doorways")]
-        public GameObject topWall;
-        public GameObject topDoor;
-        public GameObject bottomWall, bottomDoor;
-        public GameObject leftWall, leftDoor;
-        public GameObject rightWall, rightDoor;
+        [Header("Walls & Doorways (All optional)")]
+        [SerializeField] private GameObject topWall;
+        [SerializeField] private GameObject topDoor;
+        [SerializeField] private GameObject bottomWall;
+        [SerializeField] private GameObject bottomDoor;
+        [SerializeField] private GameObject leftWall;
+        [SerializeField] private GameObject leftDoor;
+        [SerializeField] private GameObject rightWall;
+        [SerializeField] private GameObject rightDoor;
 
         public void Init()
         {
@@ -85,21 +88,29 @@ namespace RMG
             switch (direction)
             {
                 case Dir.top:
-                    topWall.SetActive(!hasConnection);
-                    topDoor.SetActive(hasConnection);
+                    SafeSetActive(topWall, !hasConnection);
+                    SafeSetActive(topDoor, hasConnection);
                     break;
                 case Dir.bottom:
-                    bottomWall.SetActive(!hasConnection);
-                    bottomDoor.SetActive(hasConnection);
+                    SafeSetActive(bottomWall, !hasConnection);
+                    SafeSetActive(bottomDoor, hasConnection);
                     break;
                 case Dir.left:
-                    leftWall.SetActive(!hasConnection);
-                    leftDoor.SetActive(hasConnection);
+                    SafeSetActive(leftWall, !hasConnection);
+                    SafeSetActive(leftDoor, hasConnection);
                     break;
                 case Dir.right:
-                    rightWall.SetActive(!hasConnection);
-                    rightDoor.SetActive(hasConnection);
+                    SafeSetActive(rightWall, !hasConnection);
+                    SafeSetActive(rightDoor, hasConnection);
                     break;
+            }
+        }
+
+        private void SafeSetActive(GameObject obj, bool state)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(state);
             }
         }
 
