@@ -64,7 +64,7 @@ public class InventoryManager : MonoBehaviour
     private void ToggleInventory()
     {
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-        Time.timeScale = 0;
+        Time.timeScale = inventoryPanel.activeSelf ? 0.0f : 1.0f;  
         Cursor.visible = inventoryPanel.activeSelf;
     }
 

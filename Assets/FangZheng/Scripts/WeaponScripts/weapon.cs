@@ -60,6 +60,6 @@ public class weapon : MonoBehaviour
     public void BreakWeapon()
     {
        
-        Destroy(this.gameObject, 10);
+        Destroy(this.gameObject);
     }
 }
