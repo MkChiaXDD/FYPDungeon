@@ -22,10 +22,14 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float _normalspeed = 4;
     [SerializeField] private float _runspeed = 10;
     [SerializeField] private float _turnspeed = 360;
+    [SerializeField] private float _DashSpeed = 30;
+    [SerializeField] private float _NormalDashSpeed = 30;
 
     [Space, Header("Parry & Block")]
     [SerializeField] private float parryThreshold = 0.5f;
+    [SerializeField] private float _NormalparryThreshold = 0.5f;
     [SerializeField] private float _ParryCooldown = 0;
+    [SerializeField] private float _ParryDuationLast = 4.0f;
     [SerializeField] private bool _IsParry;
     [SerializeField] private bool _IsBlock;
     [SerializeField] private bool _IsInv;
@@ -48,7 +52,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private bool CombotContinue;
     [SerializeField] private bool CombotWindow;
     [SerializeField] private bool IsAttack;
-    [SerializeField, Range(0, 100)] private int ThreshholdPercentage; 
+    [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
+    [SerializeField] private int Dmg;
+    [SerializeField] private int OriginalDmg = 5;
 
     [Space, Header("Health")]
     [SerializeField] private int MaxHealth = 100;
@@ -71,6 +77,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     private float _speed = 4 * Mathf.PerlinNoise1D(1);
     private int currentIndex = 0;
 
+    public int DamageBuff = 0;
+    public float SpeedBuff = 0;
+    public float DashBuff = 0;
+    public float ParryTimeBuff = 0;
+    public float ParryThreshholdBuff = 0;
+    public int HealthBuff = 0;
+
     #endregion
     public static PlayerController Instance { get; private set; }
     private void Awake()
@@ -87,11 +100,97 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         Health = MaxHealth;
         _speed = _normalspeed;
+        Dmg = OriginalDmg;
     }
 
     public void AddBuff(BuffData buff)
     {
         _BuffObtain.Add(buff);
+        ApplyModifiers();
+    }
+
+    private void ClearModifiers()
+    {
+        DamageBuff = 0;
+        SpeedBuff = 0;
+        DashBuff = 0;
+        ParryTimeBuff = 0;
+        ParryThreshholdBuff = 0;
+        HealthBuff = 0;
+
+        _speed = _normalspeed;
+        _DashSpeed = _NormalDashSpeed;
+        MaxHealth = 100;
+        parryThreshold = _NormalparryThreshold;
+        _ParryDuationLast = 4.0f;
+
+    }
+
+    public void ApplyModifiers()
+    {
+        ClearModifiers();
+
+        foreach (BuffData buff in _BuffObtain)
+        {
+            foreach (Effect effect in buff.EffectList)
+            {
+                switch (effect.Type)
+                {
+                    case Effect.EffectType.Health:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            HealthBuff += (int)(MaxHealth * effect.ModifierValue) - MaxHealth;
+                        }
+                        else
+                        {
+                            HealthBuff += (int)effect.ModifierValue;
+                        }
+                        break;
+
+                    case Effect.EffectType.MovementSpeed:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            SpeedBuff += (_normalspeed * effect.ModifierValue) - _normalspeed;
+                        }
+                        else
+                        {
+                            SpeedBuff += effect.ModifierValue;
+                        }
+                        break;
+
+                    case Effect.EffectType.DashSpeed:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            DashBuff += (_NormalDashSpeed * effect.ModifierValue) - _NormalDashSpeed;
+                        }
+                        else
+                        {
+                            DashBuff += effect.ModifierValue;
+                        }
+                        break;
+
+                    case Effect.EffectType.ParryCooldown:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            ParryTimeBuff += (_ParryDuationLast * effect.ModifierValue) - _ParryDuationLast;
+                        }
+                        else
+                        {
+                            ParryTimeBuff += effect.ModifierValue;
+                        }
+                        break;
+
+                }
+            }
+        }
+
+        
+        _speed = _normalspeed + SpeedBuff;
+        MaxHealth += HealthBuff;
+        Health = Mathf.Min(Health, MaxHealth); 
+        _DashSpeed += DashBuff;
+        _ParryDuationLast += ParryTimeBuff;
+        parryThreshold += ParryThreshholdBuff;
     }
 
     public void ResetCombo()
@@ -655,7 +754,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     IEnumerator ParryWindow()
     {
-        _ParryCooldown = 4.0f;
+        _ParryCooldown = _ParryDuationLast;
         yield return new WaitForSeconds(0.5f);
         _IsParry = false;
         _parryzone.active = false;
@@ -663,7 +762,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     IEnumerator Dashing()
     {
-        _speed = 30;
+        _speed = _DashSpeed + _normalspeed;
         yield return new WaitForSeconds(0.1f);
         _speed = _normalspeed;
     }
