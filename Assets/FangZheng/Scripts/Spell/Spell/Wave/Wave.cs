@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,21 +11,25 @@ public class Wave : Projectile
     [SerializeField] private float TimeLast = 0.0f;
     [SerializeField] private bool ColliderActive = true;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private Dictionary<IDamageable, float> EnemyHitAlready;
+    [SerializeField] private Dictionary<IDamageable, float> EnemyHitAlready = new Dictionary<IDamageable, float>();
     [SerializeField] private float knockbackForce = 5f;
+    [SerializeField] private Vector3 StartPos;
     public void Modify()
     {
 
         direction = new Vector3 (PlayerController.Instance.GetDirection().x , 0 , PlayerController.Instance.GetDirection().z);
-        //Destroy(this.gameObject, duration);
+        StartPos = this.transform.position;
+        Destroy(this.gameObject, duration);
     }
 
     private void Update()
     {
-        transform.position += direction * Speed * Time.deltaTime;
+        if (Vector3.Distance(StartPos , transform.position) < Range) {
+            transform.position += direction * Speed * Time.deltaTime;
+        }
         TimeLast += Time.deltaTime;
         CheckDmg();
-
+        ConsolelogginList();
     }
 
     private void CheckDmg()
@@ -36,7 +41,7 @@ public class Wave : Projectile
         if (CollisionType == SpellCast.CollisionType.Continues)
         {
             ListChange();
-
+            CheckDictionary(EnemyHitAlready);
             foreach (Collider hit in hits)
             {
                 if (hit.TryGetComponent(out IDamageable damageable))
@@ -49,6 +54,7 @@ public class Wave : Projectile
 
 
                     damageable.TakeDamage(damage);
+                    Debug.Log("hit");
                     EnemyHitAlready.Add(damageable, Time.time);
                     ApplyKnockBack(hit);
                     //ColliderActive = false;
@@ -71,14 +77,46 @@ public class Wave : Projectile
 
     }
 
+    void CheckDictionary(Dictionary<IDamageable, float> objectDictionary)
+    {
+        if (objectDictionary.Values.Any(value => value == null))
+        {
+            objectDictionary.Clear();
+            //Debug.Log("Dictionary cleared due to null reference");
+        }
+    }
+
+    private void ConsolelogginList()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            int i = 1;
+            foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
+            {
+                Debug.Log(i + "." + entry.Value);
+                i++;
+            }
+        }
+    }
+
     public void ListChange()
     {
+        List<IDamageable> keysToRemove = new List<IDamageable>();
+
         foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
         {
-            if (entry.Value + AtkPerSec <= Time.time)
+            if (entry.Key != null && entry.Value != null)
             {
-                EnemyHitAlready.Remove(entry.Key);
+                if (entry.Value + AtkPerSec <= Time.time)
+                {
+                    keysToRemove.Add(entry.Key);
+                }
             }
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            EnemyHitAlready.Remove(key);
         }
     }
 
