@@ -29,14 +29,15 @@ public class SpellCast
     public float AtkPerSec;
     public float Speed;
     public List<Element> ApplyElement;
-    enum CollisionType
+    public CollisionType collisionType;
+    public enum CollisionType
     {
         OneTime,
         Continues
     }
     
 
-    public Animation Animation;
+    //public Animation Animation;
 
     public void Initialize(Transform Object)
     {

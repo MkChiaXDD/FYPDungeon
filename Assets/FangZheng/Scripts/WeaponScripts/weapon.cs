@@ -44,7 +44,7 @@ public class weapon : MonoBehaviour
 
     public void Cast()
     {
-        spellCastList.spell?.Attack();
+        spellCastList.spell?.Attack(spellCastList);
     }
 
     public void ReduceDua(int amount)

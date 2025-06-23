@@ -44,7 +44,7 @@ public class CastEarthShatter : Spell
         //AttackCollider.SetActive(false);
     }
 
-    public override void Attack()
+    public override void Attack(SpellCast spellCastList)
     {
         SummonEarthShatterAttack();
     }

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISpell
 {
-    void Attack();
+    public abstract void Attack();
 }

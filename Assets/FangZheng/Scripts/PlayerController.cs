@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private int DepthOfRange;
 
     [Space, Header("Combat & Weapons")]
+    [SerializeField] private weapon WeaponChoosen;
+    [SerializeField] private NormalSwordAttack BasicCombat;
     [SerializeField] private List<Spell> weapons;
     [SerializeField] private float dot;
     [SerializeField] private Animator animator;
@@ -123,7 +125,21 @@ public class PlayerController : MonoBehaviour, IDamageable
         MaxHealth = 100;
         parryThreshold = _NormalparryThreshold;
         _ParryDuationLast = 4.0f;
+        Dmg = OriginalDmg;
+    }
 
+    public void WeaponAttack()
+    {
+        if (WeaponChoosen != null)
+        {
+            
+            WeaponChoosen.Attack();
+            
+        }
+        else
+        {
+            BasicCombat.SwordAttack();
+        }
     }
 
     public void ApplyModifiers()
@@ -179,7 +195,16 @@ public class PlayerController : MonoBehaviour, IDamageable
                             ParryTimeBuff += effect.ModifierValue;
                         }
                         break;
-
+                    case Effect.EffectType.Damage:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            DamageBuff += (int)(OriginalDmg * effect.ModifierValue) - OriginalDmg;
+                        }
+                        else
+                        {
+                            DamageBuff += (int)effect.ModifierValue;
+                        }
+                        break;
                 }
             }
         }
@@ -191,6 +216,20 @@ public class PlayerController : MonoBehaviour, IDamageable
         _DashSpeed += DashBuff;
         _ParryDuationLast += ParryTimeBuff;
         parryThreshold += ParryThreshholdBuff;
+        Dmg += DamageBuff;
+
+        if (_speed <= 0)
+        {
+            _speed = 0.1f;
+        }
+        if (_DashSpeed <= 0)
+        {
+            _DashSpeed = 0.1f;
+        }
+        if (Dmg <= 0)
+        {
+            Dmg = 1;
+        }
     }
 
     public void ResetCombo()
@@ -220,6 +259,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         CombotWindow = true;
     }
 
+    public int getMaxHealth()
+    {
+        return MaxHealth;
+    }
     public void ActiveAttack()
     {
         if (Input.GetMouseButtonDown(0))
@@ -278,7 +321,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         //HitCooldown -= Time.deltaTime;
 
         if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
-            weapons[currentIndex].Attack();
+            //weapons[currentIndex].Attack();
 
         // Switch weapons with number keys
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectWeapon(0);
@@ -480,9 +523,13 @@ public class PlayerController : MonoBehaviour, IDamageable
 
                 StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
             }
-
-            //StartCoroutine(ActiveHitbox());
+            else
+            {
+                WeaponAttack();
+            }
             
+            //StartCoroutine(ActiveHitbox());
+
         }
     }
     public Vector3 GetPlayerSize()
@@ -511,7 +558,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
         //transform.position = targetPos;
         //StartCoroutine(slowmo());
-        ToggleSlowmo();
+        //ToggleSlowmo();
+        WeaponAttack();
         //HitCooldown = 1.5f;
         //yield return new WaitForSeconds(0.1f);
     }
@@ -762,9 +810,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     IEnumerator Dashing()
     {
-        _speed = _DashSpeed + _normalspeed;
+        _speed = _DashSpeed + _normalspeed + SpeedBuff;
         yield return new WaitForSeconds(0.1f);
-        _speed = _normalspeed;
+        _speed = _normalspeed + SpeedBuff;
     }
 
     public void OnDrawGizmos()
@@ -780,11 +828,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
 
 
-    public void ToggleSlowmo()
-    {
-        HitStop hitstopFX = GetComponent<HitStop>();
-        hitstopFX.TriggerHitStop();
-    }
+    //public void ToggleSlowmo()
+    //{
+    //    HitStop hitstopFX = GetComponent<HitStop>();
+    //    hitstopFX.TriggerHitStop();
+    //}
 
     public IEnumerator slowmo()
     {

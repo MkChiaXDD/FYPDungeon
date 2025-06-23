@@ -11,18 +11,18 @@ public class NormalSwordAttack : MonoBehaviour
     [SerializeField] private float slashRadius = 5;
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(1))
-        {
-            SwordAttack();
-        }
-    }
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(1))
+    //    {
+    //        SwordAttack();
+    //    }
+    //}
 
 
 
-    void SwordAttack()
+    public void SwordAttack()
     {
         slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();

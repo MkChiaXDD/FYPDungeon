@@ -138,7 +138,7 @@ public class WaveAttack : Spell
         }
     }
 
-    public override void Attack()
+    public override void Attack(SpellCast spellCastList)
     {
         StartCoroutine(WaveRoutine());
     }
