@@ -1,140 +1,102 @@
-// InventoryManager.cs
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    [Header("Config")]
-    [SerializeField] private Inventory inventory;
+    public static InventoryManager Instance;
 
-    [Header("Prefabs")]
-    [SerializeField] private GameObject slotPrefab;
-    [SerializeField] private GameObject itemPrefab;
+    [Header("Settings")]
+    [SerializeField] private int totalSlots = 28;
+    [SerializeField] private int hotbarSize = 7;
 
     [Header("UI References")]
     [SerializeField] private Transform hotbarContainer;
     [SerializeField] private Transform inventoryContainer;
     [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject itemPrefab;
 
-    private InventorySlot[] slots;
+    private ItemInstance[] items;
+    private bool isInventoryOpen;
 
     private void Awake()
     {
-        InitializeSlots();
-        inventory.SetManager(this);
-        GetComponentInParent<Canvas>().enabled = true;
+        Instance = this;
+        items = new ItemInstance[totalSlots];
+        InitializeUI();
     }
 
-    private void InitializeSlots()
+    private void InitializeUI()
     {
-        slots = new InventorySlot[inventory.maxSlots];
-
-        for (int i = 0; i < inventory.maxSlots; i++)
+        // Create UI slots
+        for (int i = 0; i < totalSlots; i++)
         {
-            Transform parent = i < Inventory.HotbarSize ? hotbarContainer : inventoryContainer;
-            slots[i] = CreateSlot(parent, i);
+            Transform parent = i < hotbarSize ? hotbarContainer : inventoryContainer;
+            InstantiateSlot(parent);
         }
-        RefreshInventory();
     }
 
-    private InventorySlot CreateSlot(Transform parent, int index)
+    private void InstantiateSlot(Transform parent)
     {
-        GameObject slotObj = Instantiate(slotPrefab, parent);
-        InventorySlot slot = slotObj.GetComponent<InventorySlot>();
-        slot.SetManager(this, index);
-        return slot;
+        GameObject slot = new GameObject("Slot");
+        slot.transform.SetParent(parent);
+        slot.AddComponent<InventorySlot>();
+        slot.AddComponent<Image>().color = new Color(0, 0, 0, 0.2f);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
-        {
             ToggleInventory();
-        }
     }
 
-    private void ToggleInventory()
+    public void ToggleInventory()
     {
-        bool isActive = !inventoryPanel.activeSelf;
-        inventoryPanel.SetActive(isActive);
-        Time.timeScale = isActive ? 0f : 1f;
-        Cursor.visible = isActive;
+        isInventoryOpen = !inventoryPanel.activeSelf;
+        inventoryPanel.SetActive(isInventoryOpen);
+        Time.timeScale = isInventoryOpen ? 0 : 1;
+        Cursor.visible = isInventoryOpen;
     }
 
-    public void RefreshSlot(int index)
+    public void AddToFirstEmptySlot(ItemInstance item)
     {
-        // Clear existing item if any
-        if (slots[index].transform.childCount > 0)
+        for (int i = 0; i < items.Length; i++)
         {
-            Destroy(slots[index].transform.GetChild(0).gameObject);
+            if (items[i] == null)
+            {
+                AddItemToSlot(item, i);
+                return;
+            }
         }
-
-        // Create new item if exists
-        if (inventory.items[index] != null)
-        {
-            CreateItemInSlot(index);
-        }
+        Debug.Log("Inventory full!");
     }
 
-    private void ClearSlot(int index)
+    public void AddItemToSlot(ItemInstance item, int slotIndex)
     {
-        if (slots[index].transform.childCount > 0)
-        {
-            Destroy(slots[index].transform.GetChild(0).gameObject);
-        }
+        items[slotIndex] = item;
+        CreateItemUI(item, GetSlotTransform(slotIndex));
     }
 
-    private void CreateItemInSlot(int index)
+    private Transform GetSlotTransform(int index)
     {
-        if (inventory.items[index] == null) return;
-
-        GameObject itemObj = Instantiate(itemPrefab, slots[index].transform);
-        itemObj.GetComponent<InventoryItem>().Initialize(inventory.items[index]);
+        Transform parent = index < hotbarSize ? hotbarContainer : inventoryContainer;
+        return parent.GetChild(index % hotbarSize);
     }
 
-    public void RefreshInventory()
+    private void CreateItemUI(ItemInstance item, Transform slot)
     {
-        for (int i = 0; i < inventory.items.Length; i++)
-        {
-            RefreshSlot(i);
-        }
+        GameObject itemObj = Instantiate(itemPrefab, slot);
+        itemObj.GetComponent<InventoryItemUI>().Setup(item, slot);
     }
 
-    public void AddItem(ItemSOData itemType, int amount)
+    // Called when items are moved between slots
+    public void MoveItemToSlot(InventoryItemUI item, InventorySlot newSlot)
     {
-        inventory.AddItem(new ItemInstance(itemType), amount);
+        // Update your data model here
     }
 
-    public void UpdateSlotData(int slotIndex, ItemInstance item)
+    // Called when items are swapped
+    public void SwapItems(InventoryItemUI item1, InventoryItemUI item2)
     {
-        // Only update if slot index is valid
-        if (slotIndex >= 0 && slotIndex < inventory.items.Length)
-        {
-            inventory.items[slotIndex] = item;
-        }
-    }
-
-
-
-    public void AddItemToSlot(ItemInstance itemInstance)
-    {
-        int emptySlotIndex = FindEmptySlot();
-        if (emptySlotIndex == -1)
-        {
-            Debug.LogWarning("No empty slot found for new item");
-            return;
-        }
-
-        inventory.items[emptySlotIndex] = itemInstance;
-        RefreshSlot(emptySlotIndex);
-    }
-
-    private int FindEmptySlot()
-    {
-        for (int i = 0; i < inventory.items.Length; i++)
-        {
-            if (inventory.items[i] == null)
-                return i;
-        }
-        return -1;
+        // Update your data model here
     }
 }

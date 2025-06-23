@@ -3,123 +3,77 @@ using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
-    private InventoryManager manager;
-    private int slotIndex;
-
-    public void SetManager(InventoryManager manager, int index)
-    {
-        this.manager = manager;
-        slotIndex = index;
-    }
-
     public void OnDrop(PointerEventData eventData)
     {
-        InventoryItem draggedItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-        if (draggedItem == null) return;
+        InventoryItemUI droppedItem = eventData.pointerDrag.GetComponent<InventoryItemUI>();
+        if (!droppedItem) return;
 
-        HandleItemDropped(draggedItem);
+        HandleDroppedItem(droppedItem);
     }
 
-    public void HandleItemDropped(InventoryItem item)
+    private void HandleDroppedItem(InventoryItemUI item)
     {
-        // Get source slot from the item's original parent
-        InventorySlot sourceSlot = item.OriginalParent.GetComponent<InventorySlot>();
-
-        if (sourceSlot == null) return;
-        if (sourceSlot.slotIndex == slotIndex) return; // Same slot
-
+        // Handle different drop scenarios
         if (transform.childCount == 0)
         {
-            HandleDropToEmptySlot(item, sourceSlot);
+            AcceptDroppedItem(item);
         }
         else
         {
-            HandleStackMergeOrSwap(item, sourceSlot);
+            InventoryItemUI existingItem = GetComponentInChildren<InventoryItemUI>();
+            TryMergeOrSwap(item, existingItem);
         }
     }
 
-    private void HandleDropToEmptySlot(InventoryItem item, InventorySlot sourceSlot)
+    private void AcceptDroppedItem(InventoryItemUI item)
     {
-        // Move item visually
         item.transform.SetParent(transform);
         item.transform.localPosition = Vector3.zero;
-
-        // Update inventory data
-        manager.UpdateSlotData(slotIndex, item.itemInstance);
-        manager.UpdateSlotData(sourceSlot.slotIndex, null);
-
-        // Update item's original parent reference
-        item.OriginalParent = transform;
+        InventoryManager.Instance.MoveItemToSlot(item, this);
     }
 
-    private void HandleStackMergeOrSwap(InventoryItem incomingItem, InventorySlot sourceSlot)
+    private void TryMergeOrSwap(InventoryItemUI incoming, InventoryItemUI existing)
     {
-        InventoryItem currentItem = transform.GetChild(0).GetComponent<InventoryItem>();
-
-        if (currentItem.itemInstance.itemType == incomingItem.itemInstance.itemType)
+        // Same item type - try to merge
+        if (incoming.Instance.itemData == existing.Instance.itemData)
         {
-            MergeStacks(currentItem, incomingItem, sourceSlot);
+            MergeStacks(incoming, existing);
         }
         else
         {
-            SwapItems(currentItem, incomingItem, sourceSlot);
+            SwapItems(incoming, existing);
         }
     }
 
-    private void MergeStacks(InventoryItem target, InventoryItem source, InventorySlot sourceSlot)
+    private void MergeStacks(InventoryItemUI source, InventoryItemUI target)
     {
-        int total = target.itemInstance.itemCount + source.itemInstance.itemCount;
-        int maxStack = target.itemInstance.itemType.maxStack;
+        int total = source.Instance.count + target.Instance.count;
+        int maxStack = target.Instance.itemData.maxStack;
 
         if (total <= maxStack)
         {
-            // Full merge
-            target.itemInstance.itemCount = total;
-            target.RefreshUI();
-
-            // Update inventory data
-            manager.UpdateSlotData(slotIndex, target.itemInstance);
-            manager.UpdateSlotData(sourceSlot.slotIndex, null);
-
-            // Remove source item
+            target.Instance.count = total;
+            target.UpdateUI();
             Destroy(source.gameObject);
         }
         else
         {
-            // Partial merge
-            int overflow = total - maxStack;
-            target.itemInstance.itemCount = maxStack;
-            source.itemInstance.itemCount = overflow;
-
-            // Update both items
-            target.RefreshUI();
-            source.RefreshUI();
-
-            // Update inventory data
-            manager.UpdateSlotData(slotIndex, target.itemInstance);
-            manager.UpdateSlotData(sourceSlot.slotIndex, source.itemInstance);
+            target.Instance.count = maxStack;
+            source.Instance.count = total - maxStack;
+            target.UpdateUI();
+            source.UpdateUI();
         }
     }
 
-    private void SwapItems(InventoryItem current, InventoryItem incoming, InventorySlot sourceSlot)
+    private void SwapItems(InventoryItemUI item1, InventoryItemUI item2)
     {
-        // Swap parents
-        Transform tempParent = current.transform.parent;
-        current.transform.SetParent(sourceSlot.transform);
-        incoming.transform.SetParent(transform);
+        Transform tempParent = item1.originalParent;
+        item1.transform.SetParent(item2.originalParent);
+        item2.transform.SetParent(tempParent);
 
-        // Reset positions
-        current.transform.localPosition = Vector3.zero;
-        incoming.transform.localPosition = Vector3.zero;
+        item1.ReturnToOriginalParent();
+        item2.ReturnToOriginalParent();
 
-        // Update original parents
-        current.OriginalParent = sourceSlot.transform;
-        incoming.OriginalParent = transform;
-
-        // Update inventory data
-        manager.UpdateSlotData(slotIndex, incoming.itemInstance);
-        manager.UpdateSlotData(sourceSlot.slotIndex, current.itemInstance);
+        InventoryManager.Instance.SwapItems(item1, item2);
     }
-
-    public InventoryManager GetManager() => manager;
 }

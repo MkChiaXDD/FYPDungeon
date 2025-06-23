@@ -11,9 +11,10 @@ public class ItemSOData : ScriptableObject
     }
 
     public string itemName;
-    public Sprite icon;
+    public Sprite itemSprite;
 
     public int maxStack = 1;
     public ItemType itemType;
     [TextArea] public string description;
+    
 }

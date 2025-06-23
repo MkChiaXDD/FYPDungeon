@@ -1,13 +1,12 @@
-
 [System.Serializable]
 public class ItemInstance
 {
-    public ItemSOData itemType;
-    public int itemCount;
+    public ItemSOData itemData;
+    public int count;
 
-    public ItemInstance(ItemSOData itemType, int count = 0)
+    public ItemInstance(ItemSOData itemData, int count = 1)
     {
-        this.itemType = itemType;
-        itemCount = count;
+        this.itemData = itemData;
+        this.count = count;
     }
 }
