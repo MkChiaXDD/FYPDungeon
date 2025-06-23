@@ -48,7 +48,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Space, Header("Combat & Weapons")]
     [SerializeField] private weapon WeaponChoosen;
     [SerializeField] private NormalSwordAttack BasicCombat;
-    [SerializeField] private List<Spell> weapons;
+    [SerializeField] private List<Spell> spells;
+    [SerializeField] private weapon[] weapons;
+    [SerializeField] public weapon[] weacockpons;
     [SerializeField] private float dot;
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombotContinue;
@@ -88,6 +90,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     #endregion
     public static PlayerController Instance { get; private set; }
+
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)

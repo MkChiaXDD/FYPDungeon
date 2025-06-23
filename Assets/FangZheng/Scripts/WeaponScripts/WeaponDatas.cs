@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
-public class WeaponDatas : ItemSOData
+public class WeaponDatas : ItemData
 {
     //string WeaponName;
     //string Description;

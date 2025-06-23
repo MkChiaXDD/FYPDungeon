@@ -1,0 +1,69 @@
+using UnityEngine;
+
+public class Pickupable : MonoBehaviour
+{
+    public ItemData drop;
+    [SerializeField] private int dropAmt = 1;
+    [SerializeField] private float timeToObtain = 0f;
+
+    private float timer;
+    private Inventory playerInventory;
+    private const string PlayerTag = "Player";
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (timeToObtain > 0f) return;
+        TryPickup(collision.gameObject);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (timeToObtain <= 0f) return;
+        TryTimedPickup(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag(PlayerTag)) return;
+
+        timer = 0;
+        if (playerInventory != null)
+        {
+            playerInventory.manager.HandPercentage(0, false);
+        }
+    }
+
+    private void TryPickup(GameObject playerObject)
+    {
+        if (!playerObject.CompareTag(PlayerTag)) return;
+
+        //AudioManager.Instance.PlaySFX("Pickup");
+        AddToInventory(playerObject.GetComponent<Inventory>());
+        Destroy(gameObject);
+    }
+
+    private void TryTimedPickup(GameObject playerObject)
+    {
+        if (!playerObject.CompareTag(PlayerTag)) return;
+
+        playerInventory = playerObject.GetComponent<Inventory>();
+        if (timer >= timeToObtain)
+        {
+            playerInventory.manager.HandPercentage(0, false);
+            AddToInventory(playerInventory);
+            Destroy(gameObject);
+        }
+        else
+        {
+            timer += Time.deltaTime;
+            playerInventory.manager.HandPercentage(timer / timeToObtain, true);
+        }
+    }
+
+    private void AddToInventory(Inventory inventory)
+    {
+        ItemInstance newDrop = new ItemInstance(drop);
+        //TextManager.TextInstance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);
+        inventory.AddItem(newDrop, dropAmt);
+    }
+}
