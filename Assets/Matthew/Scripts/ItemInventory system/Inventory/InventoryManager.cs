@@ -62,8 +62,17 @@ public class InventoryManager : MonoBehaviour
 
     public void RefreshSlot(int index)
     {
-        ClearSlot(index);
-        CreateItemInSlot(index);
+        // Clear existing item if any
+        if (slots[index].transform.childCount > 0)
+        {
+            Destroy(slots[index].transform.GetChild(0).gameObject);
+        }
+
+        // Create new item if exists
+        if (inventory.items[index] != null)
+        {
+            CreateItemInSlot(index);
+        }
     }
 
     private void ClearSlot(int index)
@@ -97,8 +106,14 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateSlotData(int slotIndex, ItemInstance item)
     {
-        inventory.items[slotIndex] = item;
+        // Only update if slot index is valid
+        if (slotIndex >= 0 && slotIndex < inventory.items.Length)
+        {
+            inventory.items[slotIndex] = item;
+        }
     }
+
+
 
     public void AddItemToSlot(ItemInstance itemInstance)
     {
