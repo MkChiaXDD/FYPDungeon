@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,38 +11,63 @@ namespace RMG
         [SerializeField] private Room startRoom;
         [SerializeField] private Room[] rooms;
 
-        // Group rooms by which directions they have exits
         private Dictionary<Dir, List<Room>> sortedRooms = new Dictionary<Dir, List<Room>>() {
-            {Dir.bottom, new List<Room>()},
-            {Dir.top, new List<Room>()},
-            {Dir.left, new List<Room>()},
-            {Dir.right, new List<Room>()}
-        };
+      {Dir.bottom, new List<Room>()},
+      {Dir.top, new List<Room>()},
+      {Dir.left, new List<Room>()},
+      {Dir.right, new List<Room>()}
+    };
 
-        public List<Room> spawnedRooms { get; private set; }
-        public System.Random rng { get; private set; }
-        public int seed { get; private set; }
+        public List<Room> spawnedRooms
+        {
+            get; private set;
+        }
+
+        public System.Random rng
+        {
+            get; private set;
+        }
+        public int seed
+        {
+            get; private set;
+        }
 
         private void Awake()
         {
-            // Organize all room prefabs by direction
             foreach (Room room in rooms)
             {
                 room.Init();
-                foreach (Dir dir in sortedRooms.Keys)
+                if (room.HasExit(Dir.top))
                 {
-                    if (room.HasExit(dir))
-                        sortedRooms[dir].Add(room);
+                    sortedRooms[Dir.top].Add(room);
+                }
+                if (room.HasExit(Dir.bottom))
+                {
+                    sortedRooms[Dir.bottom].Add(room);
+                }
+                if (room.HasExit(Dir.left))
+                {
+                    sortedRooms[Dir.left].Add(room);
+                }
+                if (room.HasExit(Dir.right))
+                {
+                    sortedRooms[Dir.right].Add(room);
                 }
             }
             spawnedRooms = new List<Room>();
         }
 
+        private void Start()
+        {
+            Generate();
+        }
+
         private void Update()
         {
-            // Press X to generate new dungeon
             if (Input.GetKeyDown(KeyCode.X))
+            {
                 Generate();
+            }
         }
 
         public void Generate()
@@ -52,168 +78,175 @@ namespace RMG
         public void Generate(int newSeed)
         {
             Clear();
-
             Room start = Instantiate(startRoom, transform);
             start.Init();
-
             seed = newSeed;
-            rng = new System.Random(seed);
+            rng = new System.Random(newSeed);
             int targetNumRooms = rng.Next(minRooms, maxRooms);
-
-            List<Room> openRooms = new List<Room> { start };
+            List<Room> openRooms = new List<Room>();
             spawnedRooms.Add(start);
-
+            openRooms.Add(start);
             while (openRooms.Count > 0 && spawnedRooms.Count < targetNumRooms)
             {
-                Room parent = openRooms[rng.Next(openRooms.Count)];
-                if (parent.openSpawns.Count == 0)
+                Room rndRoom = openRooms[rng.Next(openRooms.Count)];
+                if (rndRoom.openSpawns.Count == 0)
                 {
-                    openRooms.Remove(parent);
+                    openRooms.Remove(rndRoom);
                     continue;
                 }
-
-                RoomSpawn spawn = parent.openSpawns[rng.Next(parent.openSpawns.Count)];
-                Dir dir = Utils.FlipDir(Utils.Vector3ToDir(spawn.position));
-
-                Room newRoom = GetRndRoom(dir, parent, spawn);
+                RoomSpawn rndSpawn = rndRoom.openSpawns[rng.Next(rndRoom.openSpawns.Count)];
+                Dir dir = Utils.FlipDir(Utils.Vector3ToDir(rndSpawn.position));
+                Room newRoom = GetRndRoom(dir, rndRoom, rndSpawn);
                 if (newRoom != null)
                 {
-                    parent.AddConnection(newRoom);
-                    newRoom.AddConnection(parent);
+                    rndRoom.AddConnection(newRoom);
+                    newRoom.AddConnection(rndRoom);
                     spawnedRooms.Add(newRoom);
                     if (newRoom.openSpawns.Count > 0)
+                    {
                         openRooms.Add(newRoom);
+                    }
                 }
             }
-
-            foreach (Room room in spawnedRooms)
-            {
-                room.UpdateAllWalls();
-            }
-
-            CalculateScores(); // BFS scoring from start room
+            CalculateScores();
         }
 
         private void Clear()
         {
-            foreach (Room room in spawnedRooms)
+            foreach (Room spawned in spawnedRooms)
             {
-                Destroy(room.gameObject); // TODO: Replace with pooling
+                spawned.gameObject.SetActive(false);
+                // TODO setup a pool instead of destroying?
+                Destroy(spawned.gameObject);
             }
             spawnedRooms.Clear();
         }
 
-        // Attempts to get a room prefab with matching entrance and no collision
         private Room GetRndRoom(Dir dir, Room parent, RoomSpawn parentSpawn)
         {
+            Room newRoom = null;
             List<Room> validRooms = new List<Room>(sortedRooms[dir]);
-
+            HashSet<Room> collidedRooms = new HashSet<Room>();
             while (validRooms.Count > 0)
             {
-                Room candidate = validRooms[rng.Next(validRooms.Count)];
-                validRooms.Remove(candidate);
-
-                List<RoomSpawn> childSpawns = candidate.sortedSpawns[dir];
-                int i = rng.Next(childSpawns.Count);
-                int startIndex = i;
-
+                int roomI = rng.Next(validRooms.Count);
+                Room curr = validRooms[roomI];
+                validRooms.RemoveAt(roomI);
+                Vector3 pos = parent.transform.position + parentSpawn.position;
+                List<RoomSpawn> validSpawns = new List<RoomSpawn>(curr.sortedSpawns[dir]);
+                bool succeded = false;
+                RoomSpawn childSpawn = null;
+                int spawnI = rng.Next(validSpawns.Count);
+                int spawnIStart = spawnI;
                 while (true)
                 {
-                    RoomSpawn childSpawn = childSpawns[i];
-                    Vector3 newPos = parent.transform.position + parentSpawn.position - childSpawn.position;
-
-                    if (RoomCollisionCheck(newPos, candidate.bounds).Count == 0)
+                    childSpawn = validSpawns[spawnI];
+                    Vector3 pos2 = pos - childSpawn.position;
+                    List<Room> hitRooms = RoomCollisionCheck(pos2, curr.bounds);
+                    foreach (Room hitRoom in hitRooms)
                     {
-                        Room newRoom = Instantiate(candidate, transform);
-                        newRoom.Init();
-                        newRoom.transform.position = newPos;
-                        newRoom.CloseSpawn(childSpawn, parent);
-                        parent.CloseSpawn(parentSpawn, newRoom);
-                        return newRoom;
+                        collidedRooms.Add(hitRoom);
                     }
-
-                    i = (i + 1) % childSpawns.Count;
-                    if (i == startIndex)
+                    if (hitRooms.Count == 0)
+                    {
+                        succeded = true;
+                        pos = pos2;
                         break;
+                    }
+                    spawnI = spawnI == validSpawns.Count - 1 ? 0 : spawnI + 1;
+                    if (spawnI == spawnIStart)
+                    {
+                        break;
+                    }
+                }
+                if (succeded)
+                {
+                    newRoom = Instantiate(curr, transform);
+                    newRoom.Init();
+                    newRoom.transform.position = pos;
+                    newRoom.CloseSpawn(newRoom.sortedSpawns[dir][spawnI], parent);
+                    parent.CloseSpawn(parentSpawn, newRoom);
+                    break;
                 }
             }
-
-            // If no valid placement found, try to connect to existing room
-            ConnectOverlapSpawns(parent, parentSpawn);
-            return null;
+            if (newRoom == null)
+            {
+                ConnectOverlapSpawns(parent, parentSpawn, collidedRooms);
+            }
+            return newRoom;
         }
 
         private List<Room> RoomCollisionCheck(Vector3 pos, Bounds bounds)
         {
-            List<Room> collisions = new();
-            Vector3 tolerance = new Vector3(0.1f, 0, 0.1f);
-            Vector3 shrunkSize = bounds.size - tolerance;
-            if (shrunkSize.x < 0) shrunkSize.x = 0.01f;
-            if (shrunkSize.z < 0) shrunkSize.z = 0.01f;
-
-            Bounds check = new Bounds(pos + bounds.center, shrunkSize);
-
+            // TODO use physics instead?
+            List<Room> rooms = new List<Room>();
+            Bounds bounds1 = new Bounds(bounds.center + pos, bounds.size);
             foreach (Room room in spawnedRooms)
             {
-                Bounds existing = new Bounds(room.transform.position + room.bounds.center, room.bounds.size);
-                if (check.Intersects(existing))
-                    collisions.Add(room);
+                Bounds bounds2 = new Bounds(room.bounds.center + room.transform.position, room.bounds.size);
+                if (bounds1.Intersects(bounds2))
+                {
+                    rooms.Add(room);
+                }
             }
-            return collisions;
+            return rooms;
         }
 
-        private void ConnectOverlapSpawns(Room parent, RoomSpawn parentSpawn)
+        private void ConnectOverlapSpawns(Room parent, RoomSpawn parentSpawn, HashSet<Room> collidedRooms)
         {
             Vector3 pos1 = parent.transform.position + parentSpawn.position;
             parent.CloseSpawn(parentSpawn, null);
-
-            foreach (Room room in spawnedRooms)
+            foreach (Room room in collidedRooms)
             {
-                if (room == parent) continue;
-
-                Vector3 basePos = room.transform.position;
+                if (room == parent)
+                {
+                    continue;
+                }
+                Vector3 pos2 = room.transform.position;
+                bool connected = false;
                 foreach (RoomSpawn spawn in room.spawns)
                 {
-                    if (Vector3.Distance(basePos + spawn.position, pos1) < 0.1f)
+                    if (pos2 + spawn.position == pos1)
                     {
                         room.CloseSpawn(spawn, parent);
                         parent.CloseSpawn(parentSpawn, room);
-                        room.AddConnection(parent);
                         parent.AddConnection(room);
-
-                        room.UpdateAllWalls();
-                        parent.UpdateAllWalls();
-                        return;
+                        room.AddConnection(parent);
+                        break;
                     }
+                }
+                if (connected)
+                {
+                    break;
                 }
             }
         }
 
-        // Assigns distance-from-start scores using BFS
         private void CalculateScores()
         {
-            Queue<Room> open = new();
-            HashSet<Room> visited = new();
-
-            Room start = spawnedRooms[0];
-            start.distanceFromHome = 0;
-            open.Enqueue(start);
-
-            while (open.Count > 0)
+            Queue<Room> openRooms = new Queue<Room>();
+            HashSet<Room> closedRooms = new HashSet<Room>();
+            openRooms.Enqueue(spawnedRooms[0]);
+            spawnedRooms[0].distanceFromHome = 0;
+            while (openRooms.Count > 0)
             {
-                Room current = open.Dequeue();
-                visited.Add(current);
-
-                foreach (Room neighbor in current.connections)
+                Room current = openRooms.Dequeue();
+                closedRooms.Add(current);
+                foreach (Room child in current.connections)
                 {
-                    int newDist = current.distanceFromHome + 1;
-                    if (!visited.Contains(neighbor) || neighbor.distanceFromHome > newDist)
+                    int score = current.distanceFromHome + 1;
+                    bool beenChecked = closedRooms.Contains(child);
+                    if (!beenChecked || (beenChecked && child.distanceFromHome > score))
                     {
-                        neighbor.distanceFromHome = newDist;
-                        open.Enqueue(neighbor);
+                        child.distanceFromHome = score;
+                    }
+                    if (!beenChecked)
+                    {
+                        openRooms.Enqueue(child);
                     }
                 }
             }
         }
+
     }
 }

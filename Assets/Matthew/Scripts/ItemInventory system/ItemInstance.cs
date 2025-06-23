@@ -3,10 +3,11 @@
 public class ItemInstance
 {
     public ItemSOData itemType;
-    public int itemCount = 1;
+    public int itemCount;
 
-    public ItemInstance(ItemSOData itemData)
+    public ItemInstance(ItemSOData itemType, int count = 0)
     {
-        itemType = itemData;
+        this.itemType = itemType;
+        itemCount = count;
     }
 }

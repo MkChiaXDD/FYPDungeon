@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public class Pickupable : MonoBehaviour
 {
     public ItemSOData itemData;
     public int amount = 1;
