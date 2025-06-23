@@ -24,7 +24,7 @@ public class LavaTrap : MonoBehaviour
             if (other.TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(damage);
-                Debug.Log("LAVATRAP: HIT Enemy");
+                Debug.Log("LAVATRAP: HIT Enemy or Player");
 
                 timer = 0;
             }

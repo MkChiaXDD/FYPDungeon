@@ -1,36 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RMG
 {
     public class RoomSpawn : MonoBehaviour
     {
-        [HideInInspector] public Vector3 position; // Local position of the spawn point relative to its room
+        [HideInInspector] public Vector3 position;
+        [SerializeField] private GameObject wall;
+        [SerializeField] private GameObject doorway;
+        public bool spawned
+        {
+            get; private set;
+        }
+        public Room connectedTo
+        {
+            get; private set;
+        }
 
-        // Whether this spawn has been used to connect another room
-        public bool spawned { get; private set; }
-
-        // The room this spawn connects to (can be null if not connected)
-        public Room connectedTo { get; private set; }
-
-        // Resets the spawn's connection
         public void Clear()
         {
             spawned = false;
             connectedTo = null;
+            UpdateWalls();
         }
 
-        // Mark this spawn as used and store the connected room
         public void Connect(Room room)
         {
             spawned = true;
             connectedTo = room;
+            UpdateWalls();
         }
 
-        // Visualize spawn point in editor
         private void OnDrawGizmos()
         {
             Gizmos.color = connectedTo != null ? Color.green : Color.grey;
             Gizmos.DrawSphere(transform.position, 0.5f);
         }
+
+        private void UpdateWalls()
+        {
+            if (doorway == null || wall == null) return;
+
+            bool hasConnection = connectedTo != null;
+            doorway.SetActive(hasConnection);
+            wall.SetActive(!hasConnection);
+        }
+
     }
 }
