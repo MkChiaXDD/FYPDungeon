@@ -1,10 +1,10 @@
+// InventoryManager.cs
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     [Header("Config")]
     [SerializeField] private Inventory inventory;
-    [SerializeField] private int hotbarSize = 7;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject slotPrefab;
@@ -15,40 +15,32 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private Transform inventoryContainer;
     [SerializeField] private GameObject inventoryPanel;
 
-   
-
-    private GameObject[] slots;
+    private InventorySlot[] slots;
 
     private void Awake()
     {
         InitializeSlots();
         inventory.SetManager(this);
-        GetComponentInParent<Canvas>().enabled = true;      
+        GetComponentInParent<Canvas>().enabled = true;
     }
 
     private void InitializeSlots()
     {
-        slots = new GameObject[inventory.maxSlots];
+        slots = new InventorySlot[inventory.maxSlots];
 
-        // Create hotbar slots
-        for (int i = 0; i < hotbarSize; i++)
+        for (int i = 0; i < inventory.maxSlots; i++)
         {
-            slots[i] = CreateSlot(hotbarContainer, i);
+            Transform parent = i < Inventory.HotbarSize ? hotbarContainer : inventoryContainer;
+            slots[i] = CreateSlot(parent, i);
         }
-
-        // Create inventory slots
-        for (int i = hotbarSize; i < inventory.maxSlots; i++)
-        {
-            slots[i] = CreateSlot(inventoryContainer, i);
-        }
-
         RefreshInventory();
     }
 
-    private GameObject CreateSlot(Transform parent, int index)
+    private InventorySlot CreateSlot(Transform parent, int index)
     {
-        GameObject slot = Instantiate(slotPrefab, parent);
-        slot.GetComponent<InventorySlot>().SetManager(this);
+        GameObject slotObj = Instantiate(slotPrefab, parent);
+        InventorySlot slot = slotObj.GetComponent<InventorySlot>();
+        slot.SetManager(this, index);
         return slot;
     }
 
@@ -58,66 +50,74 @@ public class InventoryManager : MonoBehaviour
         {
             ToggleInventory();
         }
-   
     }
 
     private void ToggleInventory()
     {
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-        Time.timeScale = inventoryPanel.activeSelf ? 0.0f : 1.0f;  
-        Cursor.visible = inventoryPanel.activeSelf;
+        bool isActive = !inventoryPanel.activeSelf;
+        inventoryPanel.SetActive(isActive);
+        Time.timeScale = isActive ? 0f : 1f;
+        Cursor.visible = isActive;
     }
 
-    public void UpdateSlot()
+    public void RefreshSlot(int index)
     {
-        for (int i = 0; i < inventory.maxSlots; i++)
+        ClearSlot(index);
+        CreateItemInSlot(index);
+    }
+
+    private void ClearSlot(int index)
+    {
+        if (slots[index].transform.childCount > 0)
         {
-            inventory.items[i] = slots[i].transform.childCount > 0 ?
-                slots[i].transform.GetChild(0).GetComponent<InventoryItem>().itemInstance:null;
+            Destroy(slots[index].transform.GetChild(0).gameObject);
         }
+    }
+
+    private void CreateItemInSlot(int index)
+    {
+        if (inventory.items[index] == null) return;
+
+        GameObject itemObj = Instantiate(itemPrefab, slots[index].transform);
+        itemObj.GetComponent<InventoryItem>().Initialize(inventory.items[index]);
     }
 
     public void RefreshInventory()
     {
         for (int i = 0; i < inventory.items.Length; i++)
         {
-            if (inventory.items[i] != null && slots[i].transform.childCount == 0)
-            {
-                CreateItemUISlot(inventory.items[i], slots[i].transform);
-            }
+            RefreshSlot(i);
         }
-    }
-
-    private void CreateItemUISlot(ItemInstance item, Transform parent)
-    {
-        GameObject itemObj = Instantiate(itemPrefab, parent);
-        Debug.Log("itemname: " + item.ToString());
-        Debug.Log("itemCount: " + item.itemCount);
-        itemObj.GetComponent<InventoryItem>().Initialize(item, item.itemCount);
     }
 
     public void AddItem(ItemSOData itemType, int amount)
     {
         inventory.AddItem(new ItemInstance(itemType), amount);
-        RefreshInventory();
     }
 
-    // Added missing method
+    public void UpdateSlotData(int slotIndex, ItemInstance item)
+    {
+        inventory.items[slotIndex] = item;
+    }
+
     public void AddItemToSlot(ItemInstance itemInstance)
     {
         int emptySlotIndex = FindEmptySlot();
-        if (emptySlotIndex != -1)
+        if (emptySlotIndex == -1)
         {
-            CreateItemUISlot(itemInstance, slots[emptySlotIndex].transform);
-            UpdateSlot();
+            Debug.LogWarning("No empty slot found for new item");
+            return;
         }
+
+        inventory.items[emptySlotIndex] = itemInstance;
+        RefreshSlot(emptySlotIndex);
     }
 
-    public int FindEmptySlot()
+    private int FindEmptySlot()
     {
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < inventory.items.Length; i++)
         {
-            if (slots[i].transform.childCount == 0)
+            if (inventory.items[i] == null)
                 return i;
         }
         return -1;

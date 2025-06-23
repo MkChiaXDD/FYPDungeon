@@ -1,40 +1,51 @@
+// InventorySlot.cs
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
     private InventoryManager manager;
+    private int slotIndex;
 
-    public void OnDrop(PointerEventData eventData)
+    public void SetManager(InventoryManager manager, int index)
+    {
+        this.manager = manager;
+        slotIndex = index;
+    }
+
+    public void OnDrop(PointerEventData eventData) =>
+        HandleItemDropped(eventData.pointerDrag.GetComponent<InventoryItem>());
+
+    public void HandleItemDropped(InventoryItem item)
     {
         if (transform.childCount == 0)
         {
-            HandleDropToEmptySlot(eventData);
+            HandleDropToEmptySlot(item);
         }
         else
         {
-            HandleStackMerge(eventData);
+            HandleStackMerge(item);
         }
     }
 
-    private void HandleDropToEmptySlot(PointerEventData eventData)
+    private void HandleDropToEmptySlot(InventoryItem item)
     {
-        InventoryItem item = eventData.pointerDrag.GetComponent<InventoryItem>();
-        item.parentAfterDrag = transform;
+        item.transform.SetParent(transform);
+        item.transform.localPosition = Vector3.zero;
+        manager.UpdateSlotData(slotIndex, item.itemInstance);
     }
 
-    private void HandleStackMerge(PointerEventData eventData)
+    private void HandleStackMerge(InventoryItem incomingItem)
     {
-        InventoryItem child = transform.GetChild(0).GetComponent<InventoryItem>();
-        InventoryItem heldItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+        InventoryItem currentItem = transform.GetChild(0).GetComponent<InventoryItem>();
 
-        if (child.itemInstance.itemType == heldItem.itemInstance.itemType)
+        if (currentItem.itemInstance.itemType == incomingItem.itemInstance.itemType)
         {
-            MergeStacks(child, heldItem);
+            MergeStacks(currentItem, incomingItem);
         }
         else
         {
-            SwapItems(heldItem, child);
+            SwapItems(currentItem, incomingItem);
         }
     }
 
@@ -47,29 +58,30 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         {
             target.itemInstance.itemCount = total;
             Destroy(source.gameObject);
-            target.UpdateCount();
+            manager.UpdateSlotData(slotIndex, target.itemInstance);
         }
         else
         {
             target.itemInstance.itemCount = maxStack;
             source.itemInstance.itemCount = total - maxStack;
-            target.UpdateCount();
-            source.UpdateCount();
+            manager.UpdateSlotData(slotIndex, target.itemInstance);
         }
-        CallUpdate();
+        target.RefreshUI();
     }
 
-    private void SwapItems(InventoryItem draggedItem, InventoryItem existingItem)
+    private void SwapItems(InventoryItem current, InventoryItem incoming)
     {
-        Transform tempSlot = draggedItem.parentAfterDrag;
+        Transform currentParent = incoming.transform.parent;
+        InventorySlot currentSlot = currentParent.GetComponent<InventorySlot>();
 
-        draggedItem.parentAfterDrag = transform;
-        existingItem.parentAfterDrag = tempSlot;
+        incoming.transform.SetParent(transform);
+        incoming.transform.localPosition = Vector3.zero;
+        current.transform.SetParent(currentParent);
+        current.transform.localPosition = Vector3.zero;
 
-        existingItem.UpdateLocation();
+        manager.UpdateSlotData(slotIndex, incoming.itemInstance);
+        manager.UpdateSlotData(currentSlot.slotIndex, current.itemInstance);
     }
 
     public InventoryManager GetManager() => manager;
-    public void SetManager(InventoryManager manager) => this.manager = manager;
-    public void CallUpdate() => manager.UpdateSlot();
 }

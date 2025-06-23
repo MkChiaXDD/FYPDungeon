@@ -1,48 +1,56 @@
+// Inventory.cs
 using UnityEngine;
 
-public class Inventory :MonoBehaviour
+public class Inventory : MonoBehaviour
 {
+    public const int HotbarSize = 7;
     public int maxSlots = 28;
     public ItemInstance[] items;
 
-    [HideInInspector] public InventoryManager manager;
+    public InventoryManager manager;
 
     private void Awake() => items = new ItemInstance[maxSlots];
 
     public void SetManager(InventoryManager manager) => this.manager = manager;
+
     public bool AddItem(ItemInstance newItem, int amount)
     {
-        // Try stack existing items first
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i] != null && items[i].itemType == newItem.itemType)
-            {
-                int availableSpace = items[i].itemType.maxStack - items[i].itemCount;
-
-                if (availableSpace > 0)
-                {
-                    int addAmount = Mathf.Min(availableSpace, amount);
-                    items[i].itemCount += addAmount;
-                    amount -= addAmount;
-
-                    if (amount <= 0) return true;
-                }
-            }
-        }
+        // Stack on existing items first
+        amount = StackToExistingItems(newItem, amount);
+        if (amount <= 0) return true;
 
         // Add to empty slots
-        for (int i = 0; i < items.Length; i++)
+        return AddToEmptySlots(newItem, amount);
+    }
+
+    private int StackToExistingItems(ItemInstance newItem, int amount)
+    {
+        for (int i = 0; i < items.Length && amount > 0; i++)
         {
-            if (items[i] == null)
-            {
-                items[i] = new ItemInstance(newItem.itemType);
-                items[i].itemCount = Mathf.Min(amount, newItem.itemType.maxStack);
-                amount -= items[i].itemCount;
+            if (items[i] == null || items[i].itemType != newItem.itemType) continue;
 
-                if (amount <= 0) return true;
-            }
+            int availableSpace = items[i].itemType.maxStack - items[i].itemCount;
+            if (availableSpace <= 0) continue;
+
+            int addAmount = Mathf.Min(availableSpace, amount);
+            items[i].itemCount += addAmount;
+            amount -= addAmount;
+            manager?.RefreshSlot(i);
         }
+        return amount;
+    }
 
+    private bool AddToEmptySlots(ItemInstance newItem, int amount)
+    {
+        for (int i = 0; i < items.Length && amount > 0; i++)
+        {
+            if (items[i] != null) continue;
+
+            int addAmount = Mathf.Min(amount, newItem.itemType.maxStack);
+            items[i] = new ItemInstance(newItem.itemType, addAmount);
+            amount -= addAmount;
+            manager?.RefreshSlot(i);
+        }
         return amount <= 0;
     }
 }
