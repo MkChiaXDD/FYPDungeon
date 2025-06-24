@@ -74,7 +74,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Space, Header("Inventory")]
     [SerializeField] private InventoryManager PlayerStorage;
-    [SerializeField] private List<ItemData> Slots;
+    //[SerializeField] private Inv
+    [SerializeField] private ItemData ItemHeld;
+
     #endregion
 
     #region Private Fields
@@ -91,7 +93,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float ParryTimeBuff = 0;
     public float ParryThreshholdBuff = 0;
     public int HealthBuff = 0;
-
+     
     #endregion
     public static PlayerController Instance { get; private set; }
 
@@ -112,6 +114,16 @@ public class PlayerController : MonoBehaviour, IDamageable
         _speed = _normalspeed;
         Dmg = OriginalDmg;
     }
+
+    public void OnEnable()
+    {
+        PlayerStorage.GetInventory().ChangeSlot.AddListener(GetHoldItem);  
+    }
+
+    //public void OnDisable()
+    //{
+
+    //}
 
     public void AddBuff(BuffData buff)
     {
@@ -141,10 +153,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         WeaponChoosen = weapon;
     }
 
-    public void AddSlotList(List<ItemData> Slot)
+    public void GetHoldItem()
     {
-        Slots = Slot;
+        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
     }
+    //public void AddSlotList(List<ItemData> Slot)
+    //{
+    //    Slots = Slot;
+    //}
 
 
     public void WeaponAttack()
