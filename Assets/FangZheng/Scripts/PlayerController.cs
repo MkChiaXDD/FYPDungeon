@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -47,11 +49,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private int DepthOfRange;
 
     [Space, Header("Combat & Weapons")]
-    [SerializeField] private weapon WeaponChoosen;
+    [SerializeField] private GameObject WeaponObj;
+    [SerializeField] private Transform WeaponHolder;
+    [SerializeField] private Weapon WeaponChoosen;
     [SerializeField] private NormalSwordAttack BasicCombat;
     [SerializeField] private List<Spell> spells;
-    [SerializeField] private weapon[] weapons;
-    [SerializeField] public weapon[] weacockpons;
+    [SerializeField] private Weapon[] weapons;
+    [SerializeField] public Weapon[] weacockpons;
     [SerializeField] private float dot;
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombotContinue;
@@ -93,7 +97,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float ParryTimeBuff = 0;
     public float ParryThreshholdBuff = 0;
     public int HealthBuff = 0;
-     
+
+    //public UnityEvent WeaponBreak;
     #endregion
     public static PlayerController Instance { get; private set; }
 
@@ -117,7 +122,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void OnEnable()
     {
-        PlayerStorage.GetInventory().ChangeSlot.AddListener(GetHoldItem);  
+        GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
+        PlayerStorage.ModifySlot.AddListener(GetHoldItem);
+        WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
     }
 
     //public void OnDisable()
@@ -148,7 +155,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         Dmg = OriginalDmg;
     }
 
-    public void SetWeapon(weapon weapon)
+    public void SetWeapon(Weapon weapon)
     {
         WeaponChoosen = weapon;
     }
@@ -156,6 +163,54 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void GetHoldItem()
     {
         ItemHeld = PlayerStorage.GetCurrentHotbarItem();
+        CheckedItemHold();
+    }
+
+    public void RemoveItem()
+    {
+        PlayerStorage.RemoveItem(WeaponChoosen.weaponData, GetComponent<Inventory>().equippedSlotNum);
+    }
+
+    public void EquipWeapon(Weapon WeaponRefrence)
+    {
+        if (WeaponObj != null)
+        {
+            Destroy(WeaponObj);
+        }
+
+        WeaponObj = Instantiate(WeaponRefrence.weaponData.ItemPrefab, WeaponHolder);
+
+        if (WeaponObj.GetComponent<Weapon>() == null)
+        {
+            Weapon CurrentWeapondata = WeaponObj.AddComponent<Weapon>();
+            CurrentWeapondata = WeaponRefrence;
+        }
+
+        WeaponChoosen = WeaponObj.GetComponent<Weapon>();   
+    }
+
+    public void UnEquipWeapon()
+    {
+        if (WeaponObj != null)
+        {
+            Destroy(WeaponObj);
+            WeaponObj = null;
+        }
+    }
+
+    public void CheckedItemHold()
+    {
+        UnEquipWeapon();
+        WeaponChoosen = null;
+        if (ItemHeld.itemType == ItemData.ItemType.Tool)
+        {
+            if (ItemHeld.ItemPrefab.GetComponent<Weapon>() != null)
+            {
+                EquipWeapon(ItemHeld.ItemPrefab.GetComponent<Weapon>());
+            }
+        }
+
+
     }
     //public void AddSlotList(List<ItemData> Slot)
     //{
@@ -314,6 +369,15 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
     }
 
+    public void CheckAvailabilityOfWeapon()
+    {
+        if(WeaponChoosen.broke == true)
+        {
+            PlayerStorage.RemoveCurrentHotbarItem();
+            Destroy(WeaponObj);
+        }
+    }
+
     public int GetHealth()
     {
         return Health;
@@ -350,7 +414,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         CheckDictionary(EnemyInView);
 
         ActiveAttack();
-
+        CheckAvailabilityOfWeapon();
 
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;

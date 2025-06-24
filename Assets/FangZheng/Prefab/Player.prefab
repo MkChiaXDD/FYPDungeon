@@ -43,6 +43,7 @@ Transform:
   - {fileID: 6037596789088329425}
   - {fileID: 1659656489063536493}
   - {fileID: 2656109740244535035}
+  - {fileID: 2700384504741942463}
   m_Father: {fileID: 1877294431466879826}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -304,6 +305,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &2014405073214174774
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2700384504741942463}
+  m_Layer: 7
+  m_Name: Weapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2700384504741942463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014405073214174774}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 822943730535256105}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2200937390344271194
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,6 +686,8 @@ MonoBehaviour:
   EnemyNearby: []
   AngleThreshold: 35
   DepthOfRange: 0
+  WeaponObj: {fileID: 0}
+  WeaponHolder: {fileID: 2700384504741942463}
   WeaponChoosen: {fileID: 0}
   BasicCombat: {fileID: 3477871028112254268}
   spells: []
@@ -786,8 +820,14 @@ MonoBehaviour:
   items: []
   manager: {fileID: 0}
   equippedSlot:
+    itemType: {fileID: 0}
+    name: 
+    icon: {fileID: 0}
+    description: 
+    maxStack: 0
     itemCount: 0
     itemStatus: 0
+    weaponData: {fileID: 0}
   equippedSlotNum: 0
   ChangeSlot:
     m_PersistentCalls:

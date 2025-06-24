@@ -3,15 +3,16 @@ using UnityEngine;
 [System.Serializable]
 public class ItemInstance
 {
-    public readonly ItemData itemType;
-    public readonly string name;
-    public readonly Sprite icon;
-    public readonly string description;
-    public readonly int maxStack;
+    public ItemData itemType;
+    public string name;
+    public Sprite icon;
+    public string description;
+    public int maxStack;
 
     public int itemCount;
     public int itemStatus;
 
+    public WeaponDatas weaponData;
     public ItemInstance(ItemData itemData)
     {
         itemType = itemData;

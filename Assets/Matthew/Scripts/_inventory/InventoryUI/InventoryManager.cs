@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class InventoryManager : MonoBehaviour
     private GameObject[] inventorySlots;
     private Canvas canvas;
 
+    public UnityEvent ModifySlot;
+
     private void Awake()
     {
         canvas = GetComponent<Canvas>();
@@ -27,6 +31,12 @@ public class InventoryManager : MonoBehaviour
 
         InitializeSlots();
         inventory.SetManager(this);
+    }
+
+    private void OnEnable()
+    {
+        Weapon weapon = GetComponent<Weapon>();
+        weapon.WeaponBreak.AddListener(RemoveCurrentHotbarItem);
     }
 
     private void InitializeSlots()
@@ -67,16 +77,16 @@ public class InventoryManager : MonoBehaviour
     {
         bool isActive = !inventoryPage.activeInHierarchy;
         inventoryPage.SetActive(isActive);
-     //   UpdateCursorState(isActive);
-       // AudioManager.Instance.PlaySFX("OpenInventory");
+        //   UpdateCursorState(isActive);
+        // AudioManager.Instance.PlaySFX("OpenInventory");
     }
 
-  public void ChangeSlot(int SlotNumber)
-    {
-        inventory.equippedSlotNum = SlotNumber;
-        HighlightEquippedSlot(inventory.equippedSlotNum);
+    //public void ChangeSlot(int SlotNumber)
+    //  {
+    //      inventory.equippedSlotNum = SlotNumber;
+    //      HighlightEquippedSlot(inventory.equippedSlotNum);
 
-    }
+    //  }
 
     public void UpdateSlot()
     {
@@ -90,7 +100,9 @@ public class InventoryManager : MonoBehaviour
             {
                 inventory.items[i] = null;
             }
+            ModifySlot.Invoke();
         }
+
     }
 
     public void UpdateInventory()
@@ -138,6 +150,29 @@ public class InventoryManager : MonoBehaviour
         UpdateSlot();
     }
 
+    public void RemoveItem(ItemData itemToRemove, int amt)
+    {
+        int remaining = amt;
+        for (int i = 0; i < inventory.items.Length; i++)
+        {
+            if (inventory.items[i] == null || inventory.items[i].itemType != itemToRemove) continue;
+
+            if (inventory.items[i].itemCount > remaining)
+            {
+                inventory.items[i].itemCount -= remaining;
+                inventory.manager.UpdateAllCount();
+                return;
+            }
+            else
+            {
+                remaining -= inventory.items[i].itemCount;
+                inventory.items[i] = null;
+                inventory.manager.UpdateInventoryUI();
+                if (remaining <= 0) return;
+            }
+        }
+    }
+
     public void UpdateAllCount()
     {
         for (int i = 0; i < inventorySlots.Length; i++)
@@ -152,27 +187,41 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Gets the ItemData from the currently selected hotbar slot
     /// </summary>
-        public ItemData GetCurrentHotbarItem()
-        {
-            // Return null if no valid slot is equipped
-            if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
-                return null;
+    public ItemData GetCurrentHotbarItem()
+    {
+        // Return null if no valid slot is equipped
+        if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
+            return null;
 
-            // Get item from equipped slot
-            ItemInstance equippedItem = inventory.GetItem(inventory.equippedSlotNum);
+        // Get item from equipped slot
+        ItemInstance equippedItem = inventory.GetItem(inventory.equippedSlotNum);
 
-        
-            // Return the item data if exists, otherwise null
-            return equippedItem?.itemType;
-        }
+
+        // Return the item data if exists, otherwise null
+        return equippedItem?.itemType;
+    }
+
+    public void RemoveCurrentHotbarItem()
+    {
+        // Return null if no valid slot is equipped
+        if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
+            return ;
+
+        // Get item from equipped slot
+        ItemInstance equippedItem = inventory.GetItem(inventory.equippedSlotNum);
+
+        inventory.items[inventory.equippedSlotNum] = null;
+        inventory.manager.UpdateInventoryUI();
+
+    }
 
     public List<ItemData> GetAllHotbarItem()
     {
-        List < ItemData > items = new List<ItemData>();
-        for (int i = 0;i < hotbarSize; i++)
+        List<ItemData> items = new List<ItemData>();
+        for (int i = 0; i < hotbarSize; i++)
         {
             ItemInstance equippedItem = inventory.GetItem(i);
-            if(equippedItem != null)
+            if (equippedItem != null)
             {
                 items[i] = equippedItem?.itemType;
             }

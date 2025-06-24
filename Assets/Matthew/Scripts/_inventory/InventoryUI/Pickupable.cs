@@ -12,8 +12,10 @@ public class Pickupable : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!collision.transform.CompareTag(PlayerTag)) return;
         if (timeToObtain > 0f) return;
         TryPickup(collision.gameObject);
+        GetComponent<BoxCollider>().isTrigger = true;
     }
 
     private void OnTriggerStay(Collider other)
