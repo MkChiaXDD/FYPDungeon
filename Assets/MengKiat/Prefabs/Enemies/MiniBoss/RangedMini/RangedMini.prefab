@@ -136,7 +136,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7786778049398845702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -223,7 +223,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7786778049398845702}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -255,15 +255,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e1718738874e92947866ccd1e87d0597, type: 2}
+  healthBar: {fileID: 0}
   bulletPrefab: {fileID: 8003819692001746121, guid: 2c2338a92634b10499070cb4173b5c25,
     type: 3}
   fireOffset: 1
   attackRange: 20
   attackCooldown: 2
   repositionRadius: 10
-  feelerLength: 8
-  feelerRadius: 0.2
-  avoidWeight: 5
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 2048
+  repositionDuration: 3
+  rotationSpeed: 5
