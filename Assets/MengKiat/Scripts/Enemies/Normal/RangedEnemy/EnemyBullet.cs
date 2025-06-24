@@ -13,7 +13,7 @@ public class EnemyBullet : MonoBehaviour
         Other
     };
     [SerializeField] private Type _type;
-    [SerializeField] private Renderer renderer;
+    [SerializeField] private new Renderer renderer;
     void Start()
     {
         Destroy(gameObject, lifetime);

@@ -123,6 +123,74 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &1382973754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1382973757}
+  - component: {fileID: 1382973756}
+  - component: {fileID: 1382973755}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1382973755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382973754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b6929e98a8e9b46b80a41093efa8dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  round: 0
+--- !u!114 &1382973756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382973754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb52860c298cf8343a2fcd6d60814fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapGen: {fileID: 1673336369}
+  enemyPrefabs:
+  - {fileID: 51051342774190592, guid: 36279eb15aa7450409291bc7391a9e60, type: 3}
+  enemyParent: {fileID: 1423016580}
+  minAmount: 1
+  maxAmount: 3
+  offSet: 15
+  minibossPrefabs:
+  - {fileID: 7786778049398845702, guid: d00507626db6f914c9ee89ad116456ae, type: 3}
+  - {fileID: 51051342774190592, guid: f08fdbee45023654aa90eb77f93e8c43, type: 3}
+--- !u!4 &1382973757
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382973754}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 34.285187, y: 41.707428, z: -36.77242}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1423016579
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +220,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1459190824
 PrefabInstance:
@@ -165,7 +233,7 @@ PrefabInstance:
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
@@ -252,7 +320,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1673336368}
   - component: {fileID: 1673336369}
-  - component: {fileID: 1673336370}
   m_Layer: 0
   m_Name: MapGeneration
   m_TagString: Untagged
@@ -273,7 +340,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1673336369
 MonoBehaviour:
@@ -294,28 +361,9 @@ MonoBehaviour:
   rooms:
   - {fileID: 114567647249888680, guid: c00b033755c7d324494633d273f7fbe2, type: 3}
   - {fileID: 114205111430257404, guid: 1b981ff1424155541acd454c6d001c84, type: 3}
-  farthestRoomMaterial: {fileID: 2100000, guid: fbc9a10f350d18f49aaf3ad2819efd26,
+  farthestRoomMaterial: {fileID: 2100000, guid: 2e0c4359321589e49b9ea9e46548b55b,
     type: 2}
   roomSizeMultiplier: 3
---- !u!114 &1673336370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673336367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb52860c298cf8343a2fcd6d60814fe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapGen: {fileID: 1673336369}
-  enemyPrefabs:
-  - {fileID: 51051342774190592, guid: 36279eb15aa7450409291bc7391a9e60, type: 3}
-  enemyParent: {fileID: 1423016580}
-  minAmount: 1
-  maxAmount: 3
-  offSet: 0
 --- !u!1 &1953792757
 GameObject:
   m_ObjectHideFlags: 0

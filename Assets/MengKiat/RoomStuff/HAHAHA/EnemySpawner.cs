@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int minAmount = 1;
     [SerializeField] private int maxAmount = 3;
     [SerializeField] private float offSet = 1.5f;
+    [SerializeField] private List<GameObject> minibossPrefabs;
 
     public void GetAllRoomSpawnPoint()
     {
@@ -45,5 +46,12 @@ public class EnemySpawner : MonoBehaviour
                 Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
         }
+    }
+
+    public void ChooseBoss()
+    {
+        GameObject boss = minibossPrefabs[Random.Range(0, minibossPrefabs.Count)];
+        Debug.Log("Boss Selected: " + boss.name);
+        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
     }
 }

@@ -145,6 +145,7 @@ namespace RMG
         /// </summary>
         private void Clear()
         {
+            transform.localScale = Vector3.one;
             foreach (Room spawned in spawnedRooms)
             {
                 spawned.gameObject.SetActive(false);
@@ -326,6 +327,10 @@ namespace RMG
                     renderer.material = farthestRoomMaterial;
                 }
             }
+
+            farthestRoom.gameObject.name = "Farthest Room";
+            farthestRoom.gameObject.AddComponent<FarthestRoom>();
+            FindFirstObjectByType<EnemySpawner>()?.ChooseBoss();
         }
     }
 }
