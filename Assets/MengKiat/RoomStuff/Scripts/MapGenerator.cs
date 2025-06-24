@@ -38,6 +38,7 @@ namespace RMG
         public int seed { get; private set; }
 
         [SerializeField] private Material farthestRoomMaterial;
+        [SerializeField] private float roomSizeMultiplier = 2;
 
         /// <summary>
         /// Called before Start(). It initializes and categorizes all room prefabs
@@ -134,6 +135,9 @@ namespace RMG
             }
 
             CalculateScores(); // Calculate distance from start for each room
+            transform.localScale = Vector3.one * roomSizeMultiplier;
+            var enemySpawner = FindFirstObjectByType<EnemySpawner>();
+            enemySpawner.GetAllRoomSpawnPoint();
         }
 
         /// <summary>
