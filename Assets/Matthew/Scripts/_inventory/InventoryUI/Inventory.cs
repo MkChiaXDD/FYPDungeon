@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Inventory : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class Inventory : MonoBehaviour
     public ItemInstance equippedSlot;
     public int equippedSlotNum;
 
+    public UnityEvent ChangeSlot;
+
     private void Update()
     {
         for (int i = 0; i < 7; i++)
@@ -18,6 +22,7 @@ public class Inventory : MonoBehaviour
                 equippedSlot = items[i];
                 equippedSlotNum = i;
                 manager.HighlightEquippedSlot(i);
+                ChangeSlot.Invoke();
             }
         }
     }
