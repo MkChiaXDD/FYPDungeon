@@ -651,18 +651,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 547040166}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &204165426 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -1811295276367697992, guid: b0fff88db4711834492b6d521fe049f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 547040166}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0b51d8a7280d541a60bfb89f71bee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &233541791 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1702229863192892099, guid: eeaf67645ff7f164f9251cbac4776311,
@@ -2772,11 +2760,11 @@ PrefabInstance:
         type: 3}
       propertyPath: WeaponChoosen
       value: 
-      objectReference: {fileID: 204165426}
+      objectReference: {fileID: 0}
     - target: {fileID: 1169983888321642469, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: weapons.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
@@ -2791,12 +2779,12 @@ PrefabInstance:
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.21
       objectReference: {fileID: 0}
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.41
       objectReference: {fileID: 0}
     - target: {fileID: 1877294431466879826, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
@@ -3656,7 +3644,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1495316843
 Transform:
   m_ObjectHideFlags: 0

@@ -9,6 +9,18 @@ public class Inventory : MonoBehaviour
     public ItemInstance equippedSlot;
     public int equippedSlotNum;
 
+    private void Update()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
+            {
+                equippedSlot = items[i];
+                equippedSlotNum = i;
+                manager.HighlightEquippedSlot(i);
+            }
+        }
+    }
     private void Awake()
     {
         items = new ItemInstance[maxItemSlots];
@@ -100,16 +112,5 @@ public class Inventory : MonoBehaviour
 
     public void SetManager(InventoryManager newManager) => manager = newManager;
 
-    private void Update()
-    {
-        for (int i = 0; i < 7; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
-            {
-                equippedSlot = items[i];
-                equippedSlotNum = i;
-                manager.HighlightEquippedSlot(i);
-            }
-        }
-    }
+    
 }
