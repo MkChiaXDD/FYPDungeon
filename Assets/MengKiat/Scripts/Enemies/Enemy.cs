@@ -5,11 +5,12 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
-    protected int currentHealth;
+    [SerializeField] protected int currentHealth;
 
     protected virtual void Awake()
     {
-        currentHealth = data.maxHealth;
+        int level = FindFirstObjectByType<DifficultyManager>().GetRound();
+        currentHealth = data.maxHealth * level;
         if (healthBar != null)
         {
             InitialiseHealthBar();
