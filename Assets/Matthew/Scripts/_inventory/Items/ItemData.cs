@@ -10,6 +10,6 @@ public class ItemData : ScriptableObject
     [TextArea] public string description;
     public int maxStack = 1;
     public ItemType itemType;
-
+    public GameObject ItemPrefab;
     public virtual float Use() => 0;
 }

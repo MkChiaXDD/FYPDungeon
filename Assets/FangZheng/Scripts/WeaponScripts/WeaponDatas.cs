@@ -9,8 +9,9 @@ public class WeaponDatas : ItemData
     //string WeaponName;
     //string Description;
     //Sprite icon;
+
+    //public GameObject WeaponPrefab;
     public int MaxDurability;
-    public GameObject WeaponPrefab;
     public SpellCast spells;
     //public List<SpellCast> spells;
 

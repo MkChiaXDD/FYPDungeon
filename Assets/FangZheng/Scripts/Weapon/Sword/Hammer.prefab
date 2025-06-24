@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2651902087240180011}
   - component: {fileID: 3591532396007630527}
   - component: {fileID: -1811295276367697992}
-  - component: {fileID: 6480679809127131118}
+  - component: {fileID: 1108761723695327347}
   m_Layer: 0
   m_Name: Hammer
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6729255124254305624
 MeshFilter:
@@ -133,8 +133,8 @@ MonoBehaviour:
     AtkPerSec: 0
     Speed: 0
     ApplyElement: []
-    Animation: {fileID: 0}
---- !u!114 &6480679809127131118
+    collisionType: 0
+--- !u!114 &1108761723695327347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,9 +143,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2559788273133413441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 648ec8afabf14a84da799b34714a8bb8, type: 3}
+  m_Script: {fileID: 11500000, guid: 2abdc2cdab050944a919971c12020282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: b53ec1587f40c764d928088dac46f119, type: 2}
-  amount: 1
-  collectionTime: 0
+  drop: {fileID: 11400000, guid: b53ec1587f40c764d928088dac46f119, type: 2}
+  dropAmt: 1
+  timeToObtain: 0

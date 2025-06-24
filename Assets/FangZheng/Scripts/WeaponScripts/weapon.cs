@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class weapon : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
-    [SerializeField] WeaponDatas weaponData;
-    [SerializeField] private int CurrDurability;
-    [SerializeField] private SpellCast spellCastList;
+    [SerializeField] public WeaponDatas weaponData;
+    [SerializeField] public int CurrDurability;
+    [SerializeField] public SpellCast spellCastList;
     //[SerializeField] private List<SpellCast> spellCastList;
-
+    public bool broke;
+    public  UnityEvent WeaponBreak;
     protected void Start()
     {
 
@@ -59,7 +61,10 @@ public class weapon : MonoBehaviour
 
     public void BreakWeapon()
     {
-       
-        Destroy(this.gameObject);
+        Debug.Log("gae");
+        broke = true;
+        //WeaponBreak.Invoke();
+        //Destroy(this.gameObject);
+        
     }
 }
