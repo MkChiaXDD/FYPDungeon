@@ -14,23 +14,22 @@ public class FarthestRoom : MonoBehaviour
         Debug.Log($"Script Connected to {gameObject.name}");
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Player reach next level");
-            difMgr.IncreaseRound();
-            //mapGen.Generate();
-            //collision.gameObject.transform.position = new Vector3(0, 4, 0);
-        }
-    }
-
     public void SummonBoss(GameObject boss)
     {
         Debug.Log("FARTHESTROOM: Boss Name: " + boss.name);
         Vector3 spawnPoint = transform.Find("EnemySpawnPoint").localPosition;
         GameObject newBoss = Instantiate(boss, spawnPoint, Quaternion.identity, transform);
         newBoss.transform.position = transform.position + new Vector3(0, spawnPoint.y, 0);
+        newBoss.AddComponent<BossCheckDeath>();
         Debug.Log("MiniBoss Spawned");
+    }
+
+    public void NextLevel()
+    {
+        Debug.Log("Player reach next level");
+        difMgr.IncreaseRound();
+        mapGen.Generate();
+        GameObject player = GameObject.FindWithTag("Player");
+        player.transform.position = new Vector3(0, 4, 0);
     }
 }
