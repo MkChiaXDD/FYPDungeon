@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -70,7 +71,10 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Space, Header("Buff")]
     [SerializeField] private List<BuffData> _BuffObtain;
-    
+
+    [Space, Header("Inventory")]
+    [SerializeField] private InventoryManager PlayerStorage;
+    [SerializeField] private List<ItemData> Slots;
     #endregion
 
     #region Private Fields
@@ -131,6 +135,17 @@ public class PlayerController : MonoBehaviour, IDamageable
         _ParryDuationLast = 4.0f;
         Dmg = OriginalDmg;
     }
+
+    public void SetWeapon(weapon weapon)
+    {
+        WeaponChoosen = weapon;
+    }
+
+    public void AddSlotList(List<ItemData> Slot)
+    {
+        Slots = Slot;
+    }
+
 
     public void WeaponAttack()
     {
@@ -324,12 +339,12 @@ public class PlayerController : MonoBehaviour, IDamageable
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;
 
-        if (Input.GetMouseButtonDown(0) && weapons.Count > 0)
-            //weapons[currentIndex].Attack();
+        //if (Input.GetMouseButtonDown(0) && weapons.Count() > 0)
+        //    //weapons[currentIndex].Attack();
 
-        // Switch weapons with number keys
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectWeapon(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
+        //// Switch weapons with number keys
+        //if (Input.GetKeyDown(KeyCode.Alpha1)) SelectWeapon(0);
+        //if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
     //private bool CastARay(GameObject Target)
@@ -596,11 +611,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return _IsBlock;
     }
-    void SelectWeapon(int idx)
-    {
-        if (idx >= 0 && idx < weapons.Count)
-            currentIndex = idx;
-    }
+    //void SelectWeapon(int idx)
+    //{
+    //    if (idx >= 0 && idx < weapons.Count())
+    //        currentIndex = idx;
+    //}
 
     private void FixedUpdate()
     {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,7 +71,12 @@ public class InventoryManager : MonoBehaviour
        // AudioManager.Instance.PlaySFX("OpenInventory");
     }
 
-  
+  public void ChangeSlot(int SlotNumber)
+    {
+        inventory.equippedSlotNum = SlotNumber;
+        HighlightEquippedSlot(inventory.equippedSlotNum);
+
+    }
 
     public void UpdateSlot()
     {
@@ -146,17 +152,33 @@ public class InventoryManager : MonoBehaviour
     /// <summary>
     /// Gets the ItemData from the currently selected hotbar slot
     /// </summary>
-    public ItemData GetCurrentHotbarItem()
+        public ItemData GetCurrentHotbarItem()
+        {
+            // Return null if no valid slot is equipped
+            if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
+                return null;
+
+            // Get item from equipped slot
+            ItemInstance equippedItem = inventory.GetItem(inventory.equippedSlotNum);
+
+        
+            // Return the item data if exists, otherwise null
+            return equippedItem?.itemType;
+        }
+
+    public List<ItemData> GetAllHotbarItem()
     {
-        // Return null if no valid slot is equipped
-        if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
-            return null;
+        List < ItemData > items = new List<ItemData>();
+        for (int i = 0;i < hotbarSize; i++)
+        {
+            ItemInstance equippedItem = inventory.GetItem(i);
+            if(equippedItem != null)
+            {
+                items[i] = equippedItem?.itemType;
+            }
+        }
 
-        // Get item from equipped slot
-        ItemInstance equippedItem = inventory.GetItem(inventory.equippedSlotNum);
-
-        // Return the item data if exists, otherwise null
-        return equippedItem?.itemType;
+        return items;
     }
 
     public void HighlightEquippedSlot(int slotIndex)
