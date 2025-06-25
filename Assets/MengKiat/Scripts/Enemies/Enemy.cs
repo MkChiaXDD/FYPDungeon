@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
 
-        if (healthBar != null)
+        if (healthBar == null)
         {
             InitialiseHealthBar();
         }
@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        //UpdateHealthBar(currentHealth);
+        UpdateHealthBar(currentHealth);
         Debug.Log("Get Hit");
         if (currentHealth <= 0f)
             Die();

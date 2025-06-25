@@ -13,7 +13,7 @@ public class Billboard : MonoBehaviour
         if (mainCamera == null)
         {
             Debug.LogError("Main camera not found! Billboard disabled.", this);
-            enabled = false;
+            //enabled = false;
         }
     }
 
