@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     protected void Start()
     {
 
-        CurrDurability = weaponData.MaxDurability;
+ 
         spellCastList = weaponData.spells;
         spellCastList.Initialize(this.transform); 
         //spellCastList.Reverse();
@@ -35,12 +35,8 @@ public class Weapon : MonoBehaviour
 
     public void Attack()
     {
-        if (CurrDurability <= 0 )
-        {
-            return;
-        }
-        
-        ReduceDua( 1);
+     
+        ReduceDua(1);
         
 
     }

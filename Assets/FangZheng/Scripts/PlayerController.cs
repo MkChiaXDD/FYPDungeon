@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -156,9 +157,11 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void GetHoldItem()
     {
-        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
-        Debug.Log(ItemHeld.name);
+       
+        
+       
         CheckedItemHold();
+        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
         EquipItem(ItemHeld);
         
     }
@@ -170,23 +173,27 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void EquipItem(ItemInstance itemInstance)
     {
+        if (itemInstance == null)
+        {
+            return;
+        }
         //destroy current weapon in hand if any
         if (EquippedObject != null)
         {
             Destroy(EquippedObject);
         }
 
-
+        
         GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
         EquippedObject = Createweapon;
-
+        EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
         if (!itemInstance.ItemPrefab.GetComponent<Weapon>())
         {
-            Debug.Log("ni");
+            
             return;
         }
 
-        Debug.Log("gga");
+        Debug.Log("gg");
         WeaponChoosen = EquippedObject.GetComponent<Weapon>();
     }
 
@@ -197,8 +204,9 @@ public class PlayerController : MonoBehaviour, IDamageable
             Destroy(EquippedObject);
         }
 
+    
         EquippedObject = Instantiate(WeaponRefrence.weaponData.ItemPrefab, itemHolding);
-
+        //EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
         if (EquippedObject.GetComponent<Weapon>() == null)
         {
             Weapon CurrentWeapondata = EquippedObject.AddComponent<Weapon>();
@@ -214,6 +222,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (EquippedObject != null)
         {
             //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = WeaponChoosen.CurrDurability;
+            //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = EquippedObject.GetComponent<Weapon>().CurrDurability;
+           // ItemHeld.Durability = EquippedObject.GetComponent<Weapon>().CurrDurability;
+
             Destroy(EquippedObject);
             EquippedObject = null;
         }
@@ -244,8 +255,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (WeaponChoosen != null)
         {
             
-            WeaponChoosen.Attack();
-            
+            WeaponChoosen.Attack();       
+            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum);
+
+
         }
         else
         {
@@ -433,8 +446,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         LocateTarget();
         Attack();
         Check();
-        CheckDictionary(EnemyNear);
-        CheckDictionary(EnemyInView);
+        //CheckDictionary(EnemyNear);
+        //CheckDictionary(EnemyInView);
 
         ActiveAttack();
         CheckAvailabilityOfWeapon();
@@ -491,14 +504,17 @@ public class PlayerController : MonoBehaviour, IDamageable
         return true;
     }
 
-    void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
-    {
-        if (objectDictionary.Values.Any(value => value == null))
-        {
-            objectDictionary.Clear();
-            //Debug.Log("Dictionary cleared due to null reference");
-        }
-    }
+    //void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
+    //{
+
+        
+
+    //    if (objectDictionary.Values.Any(value => value == null))
+    //    {
+    //        objectDictionary.Clear();
+    //        //Debug.Log("Dictionary cleared due to null reference");
+    //    }
+    //}
 
     private void Check()
     {
@@ -913,7 +929,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (_IsParry) return;
         _IsParry = true;
-        _parryzone.active = true;
+        _parryzone.SetActive(true);
         //Debug.Log("Parry");
         StartCoroutine(ParryWindow());
     }
@@ -927,7 +943,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         _ParryCooldown = _ParryDuationLast;
         yield return new WaitForSeconds(0.5f);
         _IsParry = false;
-        _parryzone.active = false;
+        _parryzone.SetActive(false);
     }
 
     IEnumerator Dashing()
