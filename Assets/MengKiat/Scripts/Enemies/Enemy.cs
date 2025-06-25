@@ -11,12 +11,6 @@ public class Enemy : MonoBehaviour, IDamageable
     protected virtual void Awake()
     {
         var difficulty = FindFirstObjectByType<DifficultyManager>();
-<<<<<<< Updated upstream
-        if (difficulty == null)
-            return;
-        int level = difficulty.GetRound();
-        currentHealth = data.maxHealth * level;
-=======
 
         int round = difficulty.GetRound();
         float multiplier = difficulty.GetDifficultyMultiplier();
@@ -26,15 +20,11 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
 
->>>>>>> Stashed changes
         if (healthBar != null)
         {
             InitialiseHealthBar();
         }
-
-        damage = data.damage;
     }
-
 
     // Shared damage logic
     public virtual void TakeDamage(int amount)
