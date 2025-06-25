@@ -5,12 +5,21 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
-    [SerializeField] protected int currentHealth;
+    protected int currentHealth;
+    protected float damage;
 
     protected virtual void Awake()
     {
-        int level = FindFirstObjectByType<DifficultyManager>().GetRound();
-        currentHealth = data.maxHealth * level;
+        var difficulty = FindFirstObjectByType<DifficultyManager>();
+
+        int round = difficulty.GetRound();
+        float multiplier = difficulty.GetDifficultyMultiplier();
+        int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
+
+        currentHealth = finalHealth;
+
+        Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
+
         if (healthBar != null)
         {
             InitialiseHealthBar();

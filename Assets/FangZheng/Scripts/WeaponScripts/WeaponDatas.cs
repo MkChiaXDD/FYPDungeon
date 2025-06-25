@@ -11,7 +11,6 @@ public class WeaponDatas : ItemData
     //Sprite icon;
 
     //public GameObject WeaponPrefab;
-    public int MaxDurability;
     public SpellCast spells;
     //public List<SpellCast> spells;
 

@@ -1,16 +1,47 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
-    [SerializeField] private int round = 1;
+    [SerializeField] private AnimationCurve difficultyCurve;
 
-    public void IncreaseRound()
+    [SerializeField]
+    private List<Vector2> curvePoints = new List<Vector2>();
+
+    private void Awake()
     {
-        round++;
+        GenerateDifficultyCurve();
+    }
+
+    private void GenerateDifficultyCurve()
+    {
+        difficultyCurve = new AnimationCurve();
+
+        foreach (Vector2 point in curvePoints)
+        {
+            difficultyCurve.AddKey(new Keyframe(point.x, point.y));
+        }
+
+        difficultyCurve.postWrapMode = WrapMode.ClampForever;
+        difficultyCurve.preWrapMode = WrapMode.ClampForever;
+    }
+
+    // Example: called by Enemy scripts
+    public float GetDifficultyMultiplier()
+    {
+        return difficultyCurve.Evaluate(currentRound); // assuming you have a currentRound field
     }
 
     public int GetRound()
     {
-        return round;
+        return currentRound;
+    }
+
+    [SerializeField]
+    private int currentRound = 1;
+
+    public void IncreaseRound()
+    {
+        currentRound++;
     }
 }

@@ -120,7 +120,7 @@ public class SummonerMiniController : Enemy
             Vector2 offset = Random.insideUnitCircle * summonRadius;
             Vector3 spawnPos = transform.position + new Vector3(offset.x, 0, offset.y);
 
-            Instantiate(prefab, spawnPos, Quaternion.identity);
+            Instantiate(prefab, spawnPos, Quaternion.identity, transform);
         }
 
         Debug.Log($"[Summoner] Spawned {amountToSummon} enemies.");

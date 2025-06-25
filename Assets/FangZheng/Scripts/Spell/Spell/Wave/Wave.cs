@@ -9,7 +9,7 @@ public class Wave : Projectile
     [SerializeField] private float Cooldown;
     [SerializeField] private Vector3 direction;
     [SerializeField] private float TimeLast = 0.0f;
-    [SerializeField] private bool ColliderActive = true;
+    //[SerializeField] private bool ColliderActive = true;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Dictionary<IDamageable, float> EnemyHitAlready = new Dictionary<IDamageable, float>();
     [SerializeField] private float knockbackForce = 5f;
@@ -40,8 +40,8 @@ public class Wave : Projectile
 
         if (CollisionType == SpellCast.CollisionType.Continues)
         {
-            ListChange();
-            CheckDictionary(EnemyHitAlready);
+            //ListChange();
+            //CheckDictionary(EnemyHitAlready);
             foreach (Collider hit in hits)
             {
                 if (hit.TryGetComponent(out IDamageable damageable))
@@ -77,14 +77,14 @@ public class Wave : Projectile
 
     }
 
-    void CheckDictionary(Dictionary<IDamageable, float> objectDictionary)
-    {
-        if (objectDictionary.Values.Any(value => value == null))
-        {
-            objectDictionary.Clear();
-            //Debug.Log("Dictionary cleared due to null reference");
-        }
-    }
+    //void CheckDictionary(Dictionary<IDamageable, float> objectDictionary)
+    //{
+    //    if (objectDictionary.Values.Any(value => value == null))
+    //    {
+    //        objectDictionary.Clear();
+    //        //Debug.Log("Dictionary cleared due to null reference");
+    //    }
+    //}
 
     private void ConsolelogginList()
     {
@@ -99,26 +99,26 @@ public class Wave : Projectile
         }
     }
 
-    public void ListChange()
-    {
-        List<IDamageable> keysToRemove = new List<IDamageable>();
+    //public void ListChange()
+    //{
+    //    List<IDamageable> keysToRemove = new List<IDamageable>();
 
-        foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
-        {
-            if (entry.Key != null && entry.Value != null)
-            {
-                if (entry.Value + AtkPerSec <= Time.time)
-                {
-                    keysToRemove.Add(entry.Key);
-                }
-            }
-        }
+    //    foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
+    //    {
+    //        if (entry.Key != null && entry.Value != null)
+    //        {
+    //            if (entry.Value + AtkPerSec <= Time.time)
+    //            {
+    //                keysToRemove.Add(entry.Key);
+    //            }
+    //        }
+    //    }
 
-        foreach (var key in keysToRemove)
-        {
-            EnemyHitAlready.Remove(key);
-        }
-    }
+    //    foreach (var key in keysToRemove)
+    //    {
+    //        EnemyHitAlready.Remove(key);
+    //    }
+    //}
 
     public void ApplyKnockBack(Collider hit)
     {

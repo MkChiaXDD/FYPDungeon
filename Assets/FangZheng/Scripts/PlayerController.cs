@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -49,17 +50,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private int DepthOfRange;
 
     [Space, Header("Combat & Weapons")]
-    [SerializeField] private GameObject WeaponObj;
-    [SerializeField] private Transform WeaponHolder;
+    [SerializeField] private GameObject EquippedObject;
+    [SerializeField] private Transform itemHolding;
     [SerializeField] private Weapon WeaponChoosen;
     [SerializeField] private NormalSwordAttack BasicCombat;
     [SerializeField] private List<Spell> spells;
-    [SerializeField] private Weapon[] weapons;
-    [SerializeField] public Weapon[] weacockpons;
+    
     [SerializeField] private float dot;
     [SerializeField] private Animator animator;
-    [SerializeField] private bool CombotContinue;
-    [SerializeField] private bool CombotWindow;
+    [SerializeField] private bool CombatContinue;
+    [SerializeField] private bool CombatWindow;
     [SerializeField] private bool IsAttack;
     [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
     [SerializeField] private int Dmg;
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Space, Header("Inventory")]
     [SerializeField] private InventoryManager PlayerStorage;
     //[SerializeField] private Inv
-    [SerializeField] private ItemData ItemHeld;
+    [SerializeField] private ItemInstance ItemHeld;
 
     #endregion
 
@@ -124,13 +124,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
         PlayerStorage.ModifySlot.AddListener(GetHoldItem);
-        WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
+        //WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
     }
-
-    //public void OnDisable()
-    //{
-
-    //}
 
     public void AddBuff(BuffData buff)
     {
@@ -162,39 +157,76 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void GetHoldItem()
     {
-        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
+       
+        
+       
         CheckedItemHold();
+        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
+        EquipItem(ItemHeld);
+        
     }
 
     public void RemoveItem()
     {
-        PlayerStorage.RemoveItem(WeaponChoosen.weaponData, GetComponent<Inventory>().equippedSlotNum);
+       // PlayerStorage.RemoveItem(WeaponChoosen.weaponData, GetComponent<Inventory>().equippedSlotNum);
+    }
+
+    public void EquipItem(ItemInstance itemInstance)
+    {
+        if (itemInstance == null)
+        {
+            return;
+        }
+        //destroy current weapon in hand if any
+        if (EquippedObject != null)
+        {
+            Destroy(EquippedObject);
+        }
+
+        
+        GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
+        EquippedObject = Createweapon;
+        EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
+        if (!itemInstance.ItemPrefab.GetComponent<Weapon>())
+        {
+            
+            return;
+        }
+
+        Debug.Log("gg");
+        WeaponChoosen = EquippedObject.GetComponent<Weapon>();
     }
 
     public void EquipWeapon(Weapon WeaponRefrence)
     {
-        if (WeaponObj != null)
+        if (EquippedObject != null)
         {
-            Destroy(WeaponObj);
+            Destroy(EquippedObject);
         }
 
-        WeaponObj = Instantiate(WeaponRefrence.weaponData.ItemPrefab, WeaponHolder);
-
-        if (WeaponObj.GetComponent<Weapon>() == null)
+    
+        EquippedObject = Instantiate(WeaponRefrence.weaponData.ItemPrefab, itemHolding);
+        //EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
+        if (EquippedObject.GetComponent<Weapon>() == null)
         {
-            Weapon CurrentWeapondata = WeaponObj.AddComponent<Weapon>();
+            Weapon CurrentWeapondata = EquippedObject.AddComponent<Weapon>();
             CurrentWeapondata = WeaponRefrence;
         }
 
-        WeaponChoosen = WeaponObj.GetComponent<Weapon>();   
+        WeaponChoosen = EquippedObject.GetComponent<Weapon>();   
     }
 
     public void UnEquipWeapon()
     {
-        if (WeaponObj != null)
+
+        if (EquippedObject != null)
         {
-            Destroy(WeaponObj);
-            WeaponObj = null;
+            //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = WeaponChoosen.CurrDurability;
+            //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = EquippedObject.GetComponent<Weapon>().CurrDurability;
+           // ItemHeld.Durability = EquippedObject.GetComponent<Weapon>().CurrDurability;
+
+            Destroy(EquippedObject);
+            EquippedObject = null;
         }
     }
 
@@ -202,13 +234,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         UnEquipWeapon();
         WeaponChoosen = null;
-        if (ItemHeld.itemType == ItemData.ItemType.Tool)
-        {
-            if (ItemHeld.ItemPrefab.GetComponent<Weapon>() != null)
-            {
-                EquipWeapon(ItemHeld.ItemPrefab.GetComponent<Weapon>());
-            }
-        }
+        //if (ItemHeld.itemType == ItemInstance..Tool)
+        //{
+        //    if (ItemHeld.ItemPrefab.GetComponent<Weapon>() != null)
+        //    {
+        //        EquipWeapon(ItemHeld.ItemPrefab.GetComponent<Weapon>());
+        //    }
+        //}
 
 
     }
@@ -223,8 +255,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (WeaponChoosen != null)
         {
             
-            WeaponChoosen.Attack();
-            
+            WeaponChoosen.Attack();       
+            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum);
+
+
         }
         else
         {
@@ -326,8 +360,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         animator.SetBool("Combo" , false);
         IsAttack = false;
-        CombotContinue = false;
-        CombotWindow = false;
+        CombatContinue = false;
+        CombatWindow = false;
     }
 
     public void CalculateAnimationPercentage(float duration)
@@ -342,11 +376,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         animator.SetBool("Combo", false);
         //IsAttack = false;
-        CombotWindow = false;
+        CombatWindow = false;
         yield return new WaitForSeconds(AwaitTime);
         //IsAttack = false;
         //CombotContinue = false;
-        CombotWindow = true;
+        CombatWindow = true;
     }
 
     public int getMaxHealth()
@@ -357,12 +391,12 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (CombotContinue == false) {
+            if (CombatContinue == false) {
                 animator.SetTrigger("Attack");
-                CombotContinue = true;
+                CombatContinue = true;
             }
 
-            if (CombotWindow == true)
+            if (CombatWindow == true)
             {
                 animator.SetBool("Combo", true);
             }
@@ -371,10 +405,12 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void CheckAvailabilityOfWeapon()
     {
-        if(WeaponChoosen.broke == true)
-        {
-            PlayerStorage.RemoveCurrentHotbarItem();
-            Destroy(WeaponObj);
+        if (WeaponChoosen != null) {
+            if (WeaponChoosen.broke == true)
+            {
+                PlayerStorage.RemoveCurrentHotbarItem();
+                Destroy(EquippedObject);
+            }
         }
     }
 
@@ -410,8 +446,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         LocateTarget();
         Attack();
         Check();
-        CheckDictionary(EnemyNear);
-        CheckDictionary(EnemyInView);
+        //CheckDictionary(EnemyNear);
+        //CheckDictionary(EnemyInView);
 
         ActiveAttack();
         CheckAvailabilityOfWeapon();
@@ -468,14 +504,17 @@ public class PlayerController : MonoBehaviour, IDamageable
         return true;
     }
 
-    void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
-    {
-        if (objectDictionary.Values.Any(value => value == null))
-        {
-            objectDictionary.Clear();
-            //Debug.Log("Dictionary cleared due to null reference");
-        }
-    }
+    //void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
+    //{
+
+        
+
+    //    if (objectDictionary.Values.Any(value => value == null))
+    //    {
+    //        objectDictionary.Clear();
+    //        //Debug.Log("Dictionary cleared due to null reference");
+    //    }
+    //}
 
     private void Check()
     {
@@ -835,7 +874,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(Dashing());
         }
@@ -890,7 +929,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (_IsParry) return;
         _IsParry = true;
-        _parryzone.active = true;
+        _parryzone.SetActive(true);
         //Debug.Log("Parry");
         StartCoroutine(ParryWindow());
     }
@@ -904,7 +943,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         _ParryCooldown = _ParryDuationLast;
         yield return new WaitForSeconds(0.5f);
         _IsParry = false;
-        _parryzone.active = false;
+        _parryzone.SetActive(false);
     }
 
     IEnumerator Dashing()

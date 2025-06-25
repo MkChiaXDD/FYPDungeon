@@ -1,74 +1,33 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Inventory : MonoBehaviour
 {
-    public int maxItemSlots = 28;
+    public int maxItemSlots = 7;
     public int hotbarSize = 7;
-    public ItemInstance[] items;
+    public List<ItemInstance> items = new List<ItemInstance>();
     public InventoryManager manager;
     public ItemInstance equippedSlot;
     public int equippedSlotNum;
-
     public UnityEvent ChangeSlot;
 
-    private void Update()
-    {
-        for (int i = 0; i < 7; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
-            {
-                equippedSlot = items[i];
-                equippedSlotNum = i;
-                manager.HighlightEquippedSlot(i);
-                ChangeSlot.Invoke();
-            }
-        }
-    }
     private void Awake()
     {
-        items = new ItemInstance[maxItemSlots];
+        PopulateList();
     }
-
-    public bool AddItem(ItemInstance newItem, int amt)
+    private void Update()
     {
-        // Try stacking first
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i] != null && items[i].itemType == newItem.itemType)
-            {
-                int spaceLeft = items[i].maxStack - items[i].itemCount;
-                if (spaceLeft > 0)
-                {
-                    int addAmount = Mathf.Min(spaceLeft, amt);
-                    items[i].itemCount += addAmount;
-                    amt -= addAmount;
-                    manager.UpdateAllCount();
-                    if (amt <= 0) return true;
-                }
-            }
-        }
-
-        // Add to empty slots
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i] == null)
-            {
-                items[i] = new ItemInstance(newItem.itemType) { itemCount = amt };
-                manager.UpdateInventory();
-                return true;
-            }
-        }
-        return false;
+        SelectSlot();
     }
-
-    public void RemoveItem(ItemData itemToRemove, int amt)
+ 
+    public void RemoveItem(ItemInstance itemToRemove, int amt)
     {
         int remaining = amt;
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Count; i++)
         {
-            if (items[i] == null || items[i].itemType != itemToRemove) continue;
+            if (items[i] == null || items[i] != itemToRemove) continue;
 
             if (items[i].itemCount > remaining)
             {
@@ -79,13 +38,13 @@ public class Inventory : MonoBehaviour
             else
             {
                 remaining -= items[i].itemCount;
+
                 items[i] = null;
                 manager.UpdateInventoryUI();
                 if (remaining <= 0) return;
             }
         }
     }
-
     public void RemoveItemAtSlot(int slot, int amt)
     {
         if (items[slot].itemCount > amt)
@@ -99,23 +58,49 @@ public class Inventory : MonoBehaviour
             manager.UpdateInventoryUI();
         }
     }
-
     public ItemInstance GetItem(int num) => items[num];
-
-    public int CheckItemCount(ItemData itemType)
+    public int CheckItemCount(ItemInstance itemType)
     {
         int count = 0;
         for (int i = 0; i < maxItemSlots; i++)
         {
-            if (items[i] != null && items[i].itemType == itemType)
+            if (items[i] != null && items[i] == itemType)
             {
                 count += items[i].itemCount;
             }
         }
         return count;
     }
+    public void BreakItem(int itemSlot)
+    {
+        if (items[itemSlot].Durability > 0)
+        {
+            items[itemSlot].Durability--;
+        }
+        else RemoveItemAtSlot(itemSlot, 1);
+
+    }
+    private void SelectSlot()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
+            {
+                equippedSlot = items[i];
+                equippedSlotNum = i;
+                manager.HighlightEquippedSlot(i);
+                ChangeSlot.Invoke();
+            }
+        }
+    }
+    private void PopulateList()
+    {
+        // Initialize the items list with null entries up to maxItemSlots
+        while (items.Count < maxItemSlots)
+        {
+            items.Add(null);
+        }
+    }
 
     public void SetManager(InventoryManager newManager) => manager = newManager;
-
-    
 }

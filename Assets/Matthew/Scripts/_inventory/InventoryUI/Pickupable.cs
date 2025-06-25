@@ -7,40 +7,41 @@ public class Pickupable : MonoBehaviour
     [SerializeField] private float timeToObtain = 0f;
 
     private float timer;
-    private Inventory playerInventory;
+    private InventoryManager InventoryManager;
     private const string PlayerTag = "Player";
 
     private void OnCollisionEnter(Collision collision)
     {
         if (!collision.transform.CompareTag(PlayerTag)) return;
+        if (!collision.transform.GetComponent<Inventory>()) return;
         if (timeToObtain > 0f) return;
         TryPickup(collision.gameObject);
         GetComponent<BoxCollider>().isTrigger = true;
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (timeToObtain <= 0f) return;
-        TryTimedPickup(other.gameObject);
-    }
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (timeToObtain <= 0f) return;
+    //    TryTimedPickup(other.gameObject);
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (!other.CompareTag(PlayerTag)) return;
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (!other.CompareTag(PlayerTag)) return;
 
-        timer = 0;
-        if (playerInventory != null)
-        {
-            playerInventory.manager.HandPercentage(0, false);
-        }
-    }
+    //    timer = 0;
+    //    if (playerInventory != null)
+    //    {
+    //        playerInventory.manager.HandPercentage(0, false);
+    //    }
+    //}
 
     private void TryPickup(GameObject playerObject)
     {
         if (!playerObject.CompareTag(PlayerTag)) return;
 
         //AudioManager.Instance.PlaySFX("Pickup");
-        AddToInventory(playerObject.GetComponent<Inventory>());
+        AddToInventory(FindObjectOfType<InventoryManager>());
         Destroy(gameObject);
     }
 
@@ -48,21 +49,19 @@ public class Pickupable : MonoBehaviour
     {
         if (!playerObject.CompareTag(PlayerTag)) return;
 
-        playerInventory = playerObject.GetComponent<Inventory>();
+        InventoryManager = FindObjectOfType<InventoryManager>();
         if (timer >= timeToObtain)
-        {
-            playerInventory.manager.HandPercentage(0, false);
-            AddToInventory(playerInventory);
+        {         
+            AddToInventory(InventoryManager);
             Destroy(gameObject);
         }
         else
         {
-            timer += Time.deltaTime;
-            playerInventory.manager.HandPercentage(timer / timeToObtain, true);
+            timer += Time.deltaTime;        
         }
     }
 
-    private void AddToInventory(Inventory inventory)
+    private void AddToInventory(InventoryManager inventory)
     {
         ItemInstance newDrop = new ItemInstance(drop);
         //TextManager.TextInstance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);

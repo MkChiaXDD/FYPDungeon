@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Elemental : ScriptableObject
 {
-    public string name;
+   // public string name;
     
 }
