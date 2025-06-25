@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxAmount = 3;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> minibossPrefabs;
+    [SerializeField] private DifficultyManager diffMgr;
 
     public void GetAllRoomSpawnPoint()
     {
@@ -28,6 +29,7 @@ public class EnemySpawner : MonoBehaviour
 
             if (spawnPoint != null)
             {
+                int round = diffMgr.GetRound();
                 int numOfEnemies = Random.Range(minAmount, maxAmount + 1);
 
                 for (int i = 0; i < numOfEnemies; i++)

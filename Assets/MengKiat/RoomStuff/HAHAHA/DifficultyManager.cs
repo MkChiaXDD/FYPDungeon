@@ -32,16 +32,16 @@ public class DifficultyManager : MonoBehaviour
         return difficultyCurve.Evaluate(currentRound); // assuming you have a currentRound field
     }
 
-    public int GetRound()
-    {
-        return currentRound;
-    }
-
     [SerializeField]
     private int currentRound = 1;
 
     public void IncreaseRound()
     {
         currentRound++;
+    }
+
+    public int GetRound()
+    {
+        return currentRound;
     }
 }
