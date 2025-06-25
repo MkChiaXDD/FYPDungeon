@@ -11,6 +11,8 @@ public class ItemInstance
 
     public int itemCount;
     public int itemStatus;
+    public GameObject ItemPrefab;
+    public int Durability;
 
     public WeaponDatas weaponData;
     public ItemInstance(ItemData itemData)
@@ -21,6 +23,8 @@ public class ItemInstance
         description = itemData.description;
         maxStack = itemData.maxStack;
         itemStatus = (int)itemData.itemType;
+        ItemPrefab = itemData.ItemPrefab;
+        Durability = (int)itemData.MaxDurability;
         itemCount = 1;
     }
 }

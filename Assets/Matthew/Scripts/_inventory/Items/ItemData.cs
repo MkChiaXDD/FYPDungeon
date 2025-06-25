@@ -11,5 +11,6 @@ public class ItemData : ScriptableObject
     public int maxStack = 1;
     public ItemType itemType;
     public GameObject ItemPrefab;
+    public int MaxDurability;
     public virtual float Use() => 0;
 }

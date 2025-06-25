@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,11 +7,11 @@ public class Inventory : MonoBehaviour
 {
     public int maxItemSlots = 28;
     public int hotbarSize = 7;
-    public ItemInstance[] items;
+    public List<ItemInstance> items = new List<ItemInstance>();
     public InventoryManager manager;
     public ItemInstance equippedSlot;
     public int equippedSlotNum;
-
+   
     public UnityEvent ChangeSlot;
 
     private void Update()
@@ -28,13 +29,13 @@ public class Inventory : MonoBehaviour
     }
     private void Awake()
     {
-        items = new ItemInstance[maxItemSlots];
+        //items = new ItemInstance[maxItemSlots];
     }
 
     public bool AddItem(ItemInstance newItem, int amt)
     {
         // Try stacking first
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             if (items[i] != null && items[i].itemType == newItem.itemType)
             {
@@ -51,7 +52,7 @@ public class Inventory : MonoBehaviour
         }
 
         // Add to empty slots
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             if (items[i] == null)
             {
@@ -66,7 +67,7 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(ItemData itemToRemove, int amt)
     {
         int remaining = amt;
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Count; i++)
         {
             if (items[i] == null || items[i].itemType != itemToRemove) continue;
 
@@ -79,6 +80,7 @@ public class Inventory : MonoBehaviour
             else
             {
                 remaining -= items[i].itemCount;
+                //Destroy(items[i].);
                 items[i] = null;
                 manager.UpdateInventoryUI();
                 if (remaining <= 0) return;

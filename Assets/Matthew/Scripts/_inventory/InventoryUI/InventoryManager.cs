@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     private void OnEnable()
     {
         Weapon weapon = GetComponent<Weapon>();
-        weapon.WeaponBreak.AddListener(RemoveCurrentHotbarItem);
+        //weapon.WeaponBreak.AddListener(RemoveCurrentHotbarItem);
     }
 
     private void InitializeSlots()

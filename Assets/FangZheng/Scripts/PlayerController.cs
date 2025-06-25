@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
         PlayerStorage.ModifySlot.AddListener(GetHoldItem);
-        WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
+        //WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
     }
 
     //public void OnDisable()
@@ -191,8 +191,10 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void UnEquipWeapon()
     {
+        
         if (WeaponObj != null)
         {
+            ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = WeaponChoosen.CurrDurability;
             Destroy(WeaponObj);
             WeaponObj = null;
         }
@@ -371,10 +373,12 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void CheckAvailabilityOfWeapon()
     {
-        if(WeaponChoosen.broke == true)
-        {
-            PlayerStorage.RemoveCurrentHotbarItem();
-            Destroy(WeaponObj);
+        if (WeaponChoosen != null) {
+            if (WeaponChoosen.broke == true)
+            {
+                PlayerStorage.RemoveCurrentHotbarItem();
+                Destroy(WeaponObj);
+            }
         }
     }
 
@@ -835,7 +839,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(Dashing());
         }
