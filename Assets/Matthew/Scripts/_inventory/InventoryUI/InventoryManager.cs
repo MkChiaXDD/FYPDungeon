@@ -101,6 +101,7 @@ public class InventoryManager : MonoBehaviour
                 CreateItemInSlot(inventory.items[i], i);
             }
         }
+        ModifySlot?.Invoke();
     }
 
     private void CreateItemInSlot(ItemInstance item, int slotIndex)

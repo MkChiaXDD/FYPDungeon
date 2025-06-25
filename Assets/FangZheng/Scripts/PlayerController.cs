@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Space, Header("Movement Settings")]
     [SerializeField] private float _normalspeed = 4;
-    [SerializeField] private float _runspeed = 10;
+    //[SerializeField] private float _runspeed = 10;
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private float _DashSpeed = 30;
     [SerializeField] private float _NormalDashSpeed = 30;
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombatContinue;
     [SerializeField] private bool CombatWindow;
-    [SerializeField] private bool IsAttack;
+    //[SerializeField] private bool IsAttack;
     [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
     [SerializeField] private int Dmg;
     [SerializeField] private int OriginalDmg = 5;
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _MousePos;
     private Vector3 _Input;
     private float _speed = 4 * Mathf.PerlinNoise1D(1);
-    private int currentIndex = 0;
+    
 
     public int DamageBuff = 0;
     public float SpeedBuff = 0;
@@ -359,7 +359,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void ResetCombo()
     {
         animator.SetBool("Combo" , false);
-        IsAttack = false;
+        //IsAttack = false;
         CombatContinue = false;
         CombatWindow = false;
     }
