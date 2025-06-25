@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
-    protected int currentHealth;
+    [SerializeField] protected int currentHealth;
     protected float damage;
 
     protected virtual void Awake()

@@ -11,7 +11,13 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxAmount = 3;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> minibossPrefabs;
+
+    [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
+    [SerializeField] private int RoundToSpawnFast = 2;
+    [SerializeField] private int RoundToSpawnRanged = 3;
+    [SerializeField] private int RoundToSpawnTank = 4;
+    [SerializeField] private int RoundToSpawnBomber = 5;
 
     public void GetAllRoomSpawnPoint()
     {
@@ -35,12 +41,37 @@ public class EnemySpawner : MonoBehaviour
                 for (int i = 0; i < numOfEnemies; i++)
                 {
                     Vector3 spawnOffset = new Vector3(Random.Range(-offSet, offSet), 0, Random.Range(-offSet, offSet));
-
                     Vector3 spawnPos = spawnPoint.position + spawnOffset;
 
-                    GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPos, Quaternion.identity, enemyParent);
+                    // Filter enemy types based on round
+                    List<GameObject> availableEnemies = new List<GameObject>();
 
-                    enemy.transform.parent = room.transform;
+                    foreach (GameObject enemy in enemyPrefabs)
+                    {
+                        string name = enemy.name.ToLower();
+
+                        if (name.Contains("fast") && round >= RoundToSpawnFast)
+                            availableEnemies.Add(enemy);
+                        else if (name.Contains("ranged") && round >= RoundToSpawnRanged)
+                            availableEnemies.Add(enemy);
+                        else if (name.Contains("tank") && round >= RoundToSpawnTank)
+                            availableEnemies.Add(enemy);
+                        else if (name.Contains("bomber") && round >= RoundToSpawnBomber)
+                            availableEnemies.Add(enemy);
+                        else if (!name.Contains("fast") && !name.Contains("ranged") && !name.Contains("tank") && !name.Contains("bomber"))
+                            availableEnemies.Add(enemy); // Basic/default enemy
+                    }
+
+                    // Fallback to first enemy if none are unlocked yet
+                    if (availableEnemies.Count == 0)
+                    {
+                        availableEnemies.Add(enemyPrefabs[0]);
+                        Debug.LogWarning("No enemies unlocked at round " + round + ". Using fallback.");
+                    }
+
+                    GameObject chosenEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
+                    GameObject enemyInstance = Instantiate(chosenEnemy, spawnPos, Quaternion.identity, enemyParent);
+                    enemyInstance.transform.parent = room.transform;
                 }
             }
             else
