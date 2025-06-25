@@ -66,5 +66,6 @@ public class Pickupable : MonoBehaviour
         ItemInstance newDrop = new ItemInstance(drop);
         //TextManager.TextInstance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);
         inventory.AddItem(newDrop, dropAmt);
+        inventory.UpdateInventory();
     }
 }
