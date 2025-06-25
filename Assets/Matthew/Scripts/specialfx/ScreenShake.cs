@@ -112,7 +112,7 @@ public class ScreenShake : MonoBehaviour
           
 
 
-            transform.localRotation = Quaternion.Lerp(
+            transform.localRotation = Quaternion.Slerp(
                 transform.localRotation,
                 _originalLocalRotation,
                 Time.deltaTime * _dampingSpeed

@@ -32,6 +32,7 @@ public class Weapon : MonoBehaviour
             Attack();
         }
     }
+
     public void Attack()
     {
         if (CurrDurability <= 0 )

@@ -9,7 +9,10 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void Awake()
     {
-        int level = FindFirstObjectByType<DifficultyManager>().GetRound();
+        var difficulty = FindFirstObjectByType<DifficultyManager>();
+        if (difficulty == null)
+            return;
+        int level = difficulty.GetRound();
         currentHealth = data.maxHealth * level;
         if (healthBar != null)
         {

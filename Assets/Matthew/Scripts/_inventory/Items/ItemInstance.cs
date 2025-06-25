@@ -13,8 +13,6 @@ public class ItemInstance
     public int itemStatus;
     public GameObject ItemPrefab;
     public int Durability;
-
-    public WeaponDatas weaponData;
     public ItemInstance(ItemData itemData)
     {
         itemType = itemData;
