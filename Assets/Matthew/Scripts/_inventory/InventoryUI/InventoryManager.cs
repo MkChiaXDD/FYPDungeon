@@ -58,7 +58,7 @@ public class InventoryManager : MonoBehaviour
         // Populate with existing items
         for (int i = 0; i < inventory.maxItemSlots; i++)
         {
-            if (i < inventory.items.Length && inventory.items[i] != null)
+            if (i < inventory.items.Count && inventory.items[i] != null)
             {
                 CreateItemInSlot(inventory.items[i], i);
             }
@@ -107,7 +107,7 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventory()
     {
-        for (int i = 0; i < inventory.items.Length; i++)
+        for (int i = 0; i < inventory.items.Count; i++)
         {
             if (inventory.items[i] != null && inventory.items[i].itemType != null &&
                 inventorySlots[i].transform.childCount == 0)
@@ -153,7 +153,7 @@ public class InventoryManager : MonoBehaviour
     public void RemoveItem(ItemData itemToRemove, int amt)
     {
         int remaining = amt;
-        for (int i = 0; i < inventory.items.Length; i++)
+        for (int i = 0; i < inventory.items.Count; i++)
         {
             if (inventory.items[i] == null || inventory.items[i].itemType != itemToRemove) continue;
 
