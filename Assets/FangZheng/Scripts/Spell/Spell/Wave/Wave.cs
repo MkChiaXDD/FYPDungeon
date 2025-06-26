@@ -40,7 +40,7 @@ public class Wave : Projectile
 
         if (CollisionType == SpellCast.CollisionType.Continues)
         {
-            //ListChange();
+            ListChange();
             //CheckDictionary(EnemyHitAlready);
             foreach (Collider hit in hits)
             {
@@ -99,26 +99,26 @@ public class Wave : Projectile
         }
     }
 
-    //public void ListChange()
-    //{
-    //    List<IDamageable> keysToRemove = new List<IDamageable>();
+    public void ListChange()
+    {
+        List<IDamageable> keysToRemove = new List<IDamageable>();
 
-    //    foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
-    //    {
-    //        if (entry.Key != null && entry.Value != null)
-    //        {
-    //            if (entry.Value + AtkPerSec <= Time.time)
-    //            {
-    //                keysToRemove.Add(entry.Key);
-    //            }
-    //        }
-    //    }
+        foreach (KeyValuePair<IDamageable, float> entry in EnemyHitAlready)
+        {
+            if (entry.Key != null )
+            {
+                if (entry.Value + AtkPerSec <= Time.time)
+                {
+                    keysToRemove.Add(entry.Key);
+                }
+            }
+        }
 
-    //    foreach (var key in keysToRemove)
-    //    {
-    //        EnemyHitAlready.Remove(key);
-    //    }
-    //}
+        foreach (var key in keysToRemove)
+        {
+            EnemyHitAlready.Remove(key);
+        }
+    }
 
     public void ApplyKnockBack(Collider hit)
     {
