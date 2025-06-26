@@ -16,10 +16,10 @@ public class DynamicHealthBar : MonoBehaviour
     private float currentVelocity;
     private float targetHealth;
 
-    private void Awake()
+    private void Start()
     {
         healthSlider = GetComponent<Slider>();
-        InitializeHealthBar();
+        InitializeHealthBar(); // FIX: Initialize properly
     }
 
     private void InitializeHealthBar()
@@ -27,13 +27,13 @@ public class DynamicHealthBar : MonoBehaviour
         healthSlider.maxValue = maxHealth;
         healthSlider.value = maxHealth;
         targetHealth = maxHealth;
+        currentHealth = maxHealth; // Ensure consistency
     }
 
     private void Update()
     {
         if (Mathf.Abs(healthSlider.value - targetHealth) > 0.01f)
         {
-            // Smoothly interpolate towards the target health
             healthSlider.value = Mathf.SmoothDamp(
                 current: healthSlider.value,
                 target: targetHealth,
@@ -44,7 +44,6 @@ public class DynamicHealthBar : MonoBehaviour
         }
         else
         {
-            // Snap to target when close enough
             healthSlider.value = targetHealth;
             currentVelocity = 0f;
         }
@@ -53,17 +52,22 @@ public class DynamicHealthBar : MonoBehaviour
     public void SetHealth(float health)
     {
         targetHealth = Mathf.Clamp(health, 0f, maxHealth);
-        currentHealth = health;
+        currentHealth = targetHealth; // Sync currentHealth with clamped value
     }
 
     public void SetMaxHealth(float newMaxHealth)
     {
         maxHealth = newMaxHealth;
+        Debug.Log(healthSlider.maxValue);
         healthSlider.maxValue = maxHealth;
-        targetHealth = Mathf.Clamp(targetHealth, 0f, maxHealth);
+
+      
+       
+        // Clamp both target and current health to new max
+        targetHealth = Mathf.Clamp(targetHealth, 0f, healthSlider.maxValue);     
+        currentHealth = targetHealth;
     }
 
-    // For testing in the editor
     [ContextMenu("Test Damage (25)")]
     private void TestDamage()
     {
