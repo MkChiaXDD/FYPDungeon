@@ -24,6 +24,7 @@ public class BigBossOneController : Enemy
     public int hopCount = 3;
     public float hopDuration = 1f;
     public float hopHeight = 5f;
+    [SerializeField] private GameObject landingZone;
 
     [Header("Hop Knockback")]
     public float knockbackRadius = 1f;
@@ -201,6 +202,14 @@ public class BigBossOneController : Enemy
             Vector3 target = player.position;
             target.y = startPos.y;
 
+            // Show particle at landing position
+            if (landingZone != null)
+            {
+                Vector3 groundTarget = new Vector3(target.x, target.y, target.z); // Adjust Y to match ground level
+                GameObject particleEffect = Instantiate(landingZone, groundTarget, Quaternion.identity);
+                Destroy(particleEffect, hopDuration + 0.2f);
+            }
+
             float t = 0f;
             while (t < hopDuration)
             {
@@ -214,12 +223,13 @@ public class BigBossOneController : Enemy
             }
 
             transform.position = target;
+
             screenShake.Shake();
             ApplyKnockback();
             yield return new WaitForSeconds(dashDelay);
         }
 
-        // return to origin
+        // Return to origin
         float r = 0f;
         Vector3 returnStart = transform.position;
         while (r < hopDuration)
