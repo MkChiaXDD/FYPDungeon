@@ -59,6 +59,17 @@ public class BigBossOneController : Enemy
         StartCoroutine(BossLoop());
     }
 
+    // Custom shake parameters
+    StaticScreenShake.ShakeParams customParams = new StaticScreenShake.ShakeParams
+    {
+        ShakeType = ShakeType.Both,
+        ShakeDuration = 1f,
+        ShakeMagnitude = 10f,
+        TranslationalShakeMagnitude = new Vector3(1f, 1f, 0)
+    };
+
+    
+
     void Update()
     {
         // Always face the player except during spin
@@ -214,7 +225,8 @@ public class BigBossOneController : Enemy
             }
 
             transform.position = target;
-            screenShake.Shake();
+            // Shake specific camera with custom parameters
+            StaticScreenShake.Shake(Camera.main, customParams);
             ApplyKnockback();
             yield return new WaitForSeconds(dashDelay);
         }

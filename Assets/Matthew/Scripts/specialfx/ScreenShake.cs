@@ -14,6 +14,9 @@ public enum ShakeType
 [DisallowMultipleComponent]
 public class ScreenShake : MonoBehaviour
 {
+    
+    
+    
     [Header("Shake Type")]
     [Tooltip("Type of shake to apply")]
     [SerializeField] private ShakeType _shakeType = ShakeType.Rotational;
@@ -57,7 +60,7 @@ public class ScreenShake : MonoBehaviour
     private float _translationalNoiseOffset;
     private bool _isShaking;
 
-    private void Awake()
+    private void  Awake()
     {
         InitializeNoiseOffsets();
     }
