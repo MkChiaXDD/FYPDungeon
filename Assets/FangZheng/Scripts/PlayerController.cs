@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void OnEnable()
     {
         GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
-        PlayerStorage.ModifySlot.AddListener(GetHoldItem);
+       // PlayerStorage.ModifySlot.AddListener(GetHoldItem);
         //WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
     }
 

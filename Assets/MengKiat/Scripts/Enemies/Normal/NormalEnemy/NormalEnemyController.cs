@@ -24,8 +24,12 @@ public class NormalEnemyController : Enemy
     private enum State { Idle, Chase, Attack }
     private State state;
 
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
+    }
+    void  Start()
+    {       
         player = GameObject.FindWithTag("Player").transform;
         state = State.Idle;
         currentDir = transform.forward;

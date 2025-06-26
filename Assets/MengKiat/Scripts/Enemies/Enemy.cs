@@ -11,7 +11,6 @@ public class Enemy : MonoBehaviour, IDamageable
     protected virtual void Awake()
     {
         var difficulty = FindFirstObjectByType<DifficultyManager>();
-
         int round = difficulty.GetRound();
         float multiplier = difficulty.GetDifficultyMultiplier();
         int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
@@ -19,18 +18,23 @@ public class Enemy : MonoBehaviour, IDamageable
         currentHealth = finalHealth;
 
         Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
+        Invoke(nameof(InitialiseHealthBar),1);
 
-        if (healthBar == null)
-        {
-            InitialiseHealthBar();
-        }
+    }
+
+    private void Start()
+    {
+         InitialiseHealthBar();
+        UpdateHealthBar();
+        Debug.Log("sfisdijfsijd");
+
     }
 
     // Shared damage logic
     public virtual void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        UpdateHealthBar(currentHealth);
+        UpdateHealthBar();
         Debug.Log("Get Hit");
         if (currentHealth <= 0f)
             Die();
@@ -50,12 +54,12 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void InitialiseHealthBar()
     {
-        healthBar.SetMaxHealth(data.maxHealth);
-        healthBar.SetHealth(currentHealth);
+        healthBar.SetMaxHealth(currentHealth);
+        UpdateHealthBar();
     }
 
-    private void UpdateHealthBar(int health)
+    private void UpdateHealthBar()
     {
-        healthBar.SetHealth(health);
+        healthBar.SetHealth(currentHealth);
     }
 }
