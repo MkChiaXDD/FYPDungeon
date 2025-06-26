@@ -9,16 +9,16 @@ public static class StaticScreenShake
     public static ShakeParams DefaultParams = new ShakeParams()
     {
         ShakeType = ShakeType.Rotational,
-        ShakeDuration = 0.5f,
-        ShakeMagnitude = 5f,
-        DampingSpeed = 1.5f,
-        RotationalNoiseSpeed = 2f,
-        TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f),
-        TranslationalNoiseSpeed = 2f,
+        ShakeDuration = 0.2f,
+        ShakeMagnitude = 10f,
+        DampingSpeed = 15f,
+        RotationalNoiseSpeed = 20f,
+        TranslationalShakeMagnitude = new Vector3(2.0f, 2.0f, 0f),
+        TranslationalNoiseSpeed = 1000f,
         UseSeparateNoiseForTranslation = true,
         EnableX = true,
         EnableY = true,
-        EnableZ = false
+        EnableZ = true
     };
 
     public class ShakeState
