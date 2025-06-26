@@ -4,39 +4,34 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class DynamicHealthBar : MonoBehaviour
 {
-    [Header("Health Settings")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float currentHealth = 100f;
+    
 
     [Header("Animation Settings")]
-    [SerializeField] private float smoothTime = 0.3f;
-    [SerializeField] private float maxSmoothSpeed = 50f;
+    [SerializeField] private float smoothTime = 1f;
+    [SerializeField] private float maxSmoothSpeed = 500f;
 
     private Slider healthSlider;
     private float currentVelocity;
-    private float targetHealth;
+    [SerializeField] private float currentHealth;
+
+    
 
     private void Start()
     {
         healthSlider = GetComponent<Slider>();
-        InitializeHealthBar(); // FIX: Initialize properly
-    }
-
-    private void InitializeHealthBar()
-    {
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = maxHealth;
-        targetHealth = maxHealth;
-        currentHealth = maxHealth; // Ensure consistency
     }
 
     private void Update()
     {
-        if (Mathf.Abs(healthSlider.value - targetHealth) > 0.01f)
+        if (healthSlider == null)
+        {
+            return;
+        }
+        if (Mathf.Abs(healthSlider.value - currentHealth) > 0.01f)
         {
             healthSlider.value = Mathf.SmoothDamp(
                 current: healthSlider.value,
-                target: targetHealth,
+                target: currentHealth,
                 currentVelocity: ref currentVelocity,
                 smoothTime: smoothTime,
                 maxSpeed: maxSmoothSpeed
@@ -44,39 +39,25 @@ public class DynamicHealthBar : MonoBehaviour
         }
         else
         {
-            healthSlider.value = targetHealth;
+            healthSlider.value = currentHealth;
             currentVelocity = 0f;
         }
     }
 
     public void SetHealth(float health)
     {
-        targetHealth = Mathf.Clamp(health, 0f, maxHealth);
-        currentHealth = targetHealth; // Sync currentHealth with clamped value
+        currentHealth = health; // Sync currentHealth with clamped value
+        Debug.Log("health value set at " + currentHealth);
     }
 
     public void SetMaxHealth(float newMaxHealth)
     {
-        maxHealth = newMaxHealth;
-        Debug.Log(healthSlider.maxValue);
-        healthSlider.maxValue = maxHealth;
 
-      
-       
-        // Clamp both target and current health to new max
-        targetHealth = Mathf.Clamp(targetHealth, 0f, healthSlider.maxValue);     
-        currentHealth = targetHealth;
+        GetComponent<Slider>().maxValue = newMaxHealth;
+        GetComponent<Slider>().value = newMaxHealth;
+        Debug.Log("healthslider max value set at " + healthSlider.maxValue);
+        Debug.Log("healthslider base value set at " + healthSlider.value);
     }
 
-    [ContextMenu("Test Damage (25)")]
-    private void TestDamage()
-    {
-        SetHealth(currentHealth - 25f);
-    }
 
-    [ContextMenu("Test Heal (15)")]
-    private void TestHeal()
-    {
-        SetHealth(currentHealth + 15f);
-    }
 }

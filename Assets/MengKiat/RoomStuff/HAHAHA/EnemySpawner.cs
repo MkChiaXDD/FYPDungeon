@@ -74,7 +74,7 @@ public class EnemySpawner : MonoBehaviour
                     enemyInstance.transform.parent = room.transform;
                 }
             }
-            else
+            else 
             {
                 Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
