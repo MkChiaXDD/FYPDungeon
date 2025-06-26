@@ -144,7 +144,7 @@ Transform:
   - {fileID: 1108911265540865472}
   - {fileID: 8372386334503741186}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2465698252125694780
 MeshFilter:
@@ -231,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 11eedcaf152823843bb33f863c35121f, type: 2}
   healthBar: {fileID: 502489714504685749}
+  currentHealth: 0
   dashDistance: 10
   dashDelay: 0.5
   dashCount: 3
@@ -243,6 +244,8 @@ MonoBehaviour:
   hopCount: 3
   hopDuration: 1
   hopHeight: 5
+  landingZone: {fileID: 475974119716380468, guid: 8854c0bc0b175394c9d0971c05846098,
+    type: 3}
   knockbackRadius: 1
   knockbackForce: 30
   knockbackUpwards: 5

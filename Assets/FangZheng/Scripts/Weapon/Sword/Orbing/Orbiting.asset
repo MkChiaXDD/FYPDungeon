@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8af60670517e12948af4af7635624c64, type: 3}
-  m_Name: Boomerang
+  m_Name: Orbiting
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  itemName: Boom
-  description: Go out and comeback
+  itemIcon: {fileID: 21300000, guid: dedb70fa69722714fa03fefc46666afe, type: 3}
+  itemName: Shuriken
+  description: Orb
   maxStack: 1
-  itemType: 0
-  ItemPrefab: {fileID: 4367096652321051446, guid: fc0e8be2ff504ae45adf0da24a241f83,
+  itemType: 2
+  ItemPrefab: {fileID: 1657680970301162688, guid: 2366700a9996c434f8ce1ae0b9e7a6bf,
     type: 3}
-  MaxDurability: 1
+  MaxDurability: 2
   spells:
-    SpellPrefab: {fileID: 3913909209939181294, guid: 57352e6debe283947bd3d4bc0a299d02,
+    SpellPrefab: {fileID: 6922077395426477944, guid: 6e2364ba5a2f79741ab4b065a5b9bdb9,
       type: 3}
-    dmg: 1
-    Radius: 1
-    Size: {x: 5, y: 5, z: 5}
-    Range: 10
+    dmg: 2
+    Radius: 8
+    Size: {x: 2, y: 2, z: 2}
+    Range: 2
     spell: {fileID: 0}
     duration: 20
-    AtkPerSec: 0
-    Speed: 5
+    AtkPerSec: 2
+    Speed: 20
     ApplyElement: []
     collisionType: 0
