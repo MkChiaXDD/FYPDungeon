@@ -1,72 +1,79 @@
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// TextManager class handles dynamically-created Text
-/// </summary>
 public class TextManager : MonoBehaviour
 {
-    //singleton
-    public static TextManager TextInstance;
+    public static TextManager Instance;
 
-    //Components needed
-    [SerializeField]
-    private GameObject textPrefab;
-    [SerializeField]
-    private RectTransform canvasTransform;
+    [Header("References")]
+    [SerializeField] private GameObject textPrefab;
+    [SerializeField] private RectTransform canvasTransform;
 
-    public bool disableText;
+    [Header("Text Settings")]
+    [SerializeField] private bool disableText;
+    [SerializeField] private float positionRandomRange = 25f;
+    [SerializeField] private int defaultNoiseProfileIndex;
 
-    [SerializeField]
-    private float randomisedRange = 0.1f;
+    private Canvas canvasComponent;
 
     private void Awake()
     {
-        InitialiseSingleton();
+        InitializeSingleton();
+        canvasComponent = canvasTransform.GetComponent<Canvas>();
     }
 
-    /// <summary>
-    /// Creates a text from a prefab
-    /// Call for temporary UI related purposes, fading text. If not, manually create text,
-    /// </summary>
-    public void CreateText(Vector3 position, string text, Color colour)
+    public void CreateText(Vector3 worldPosition, string text, Color color, int noiseProfileIndex = -1)
     {
-        if (disableText == true)
-            return;
-        GameObject _Text = Instantiate(textPrefab, RandomiseOffsetPosition(position), Quaternion.identity);
-        _Text.transform.SetParent(canvasTransform);
-        _Text.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 2);
-        _Text.GetComponent<TMP_Text>().text = text;
-        _Text.GetComponent<TMP_Text>().color = colour;
-    }
+        if (disableText) return;
 
-    private Vector3 RandomiseOffsetPosition(Vector3 position)
-    {
-        Vector3 randomisedOffset = new Vector3(position.x * Random.Range(1 - randomisedRange, 1 + randomisedRange), position.y , position.z) ;
-        return randomisedOffset;
-    }
+        Vector2 screenPosition = Camera.main.WorldToScreenPoint(worldPosition);
+        Vector2 anchoredPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasTransform,
+            screenPosition,
+            canvasComponent.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvasComponent.worldCamera,
+            out anchoredPosition
+        );
 
+        // Apply random position offset
+        anchoredPosition += Random.insideUnitCircle * positionRandomRange;
 
-    /// <summary>
-    /// Create a singleton to have dynamically-created text in scripts needed
-    /// </summary>
-    private void InitialiseSingleton()
-    {
-        if (!TextInstance)
+        GameObject textObj = Instantiate(textPrefab, canvasTransform);
+        RectTransform textRect = textObj.GetComponent<RectTransform>();
+        textRect.anchoredPosition = anchoredPosition;
+        textRect.localScale = Vector3.one * 2;
+
+        TMP_Text tmpComponent = textObj.GetComponent<TMP_Text>();
+        tmpComponent.text = text;
+        tmpComponent.color = color;
+
+        // Set noise profile if specified
+        FadingText fadingText = textObj.GetComponent<FadingText>();
+        if (noiseProfileIndex >= 0)
         {
-            TextInstance = this;
+            fadingText.SetNoiseProfile(noiseProfileIndex);
         }
     }
 
-    public void DisableCreating()
+    private void Update()
     {
-        disableText = true;
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            CreateText(new Vector3(1, 1, 1), "gay nigga", Color.black);
+        }
+    }
+    private void InitializeSingleton()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void EnableCreating()
-    {
-        disableText = false;
-    }
+    public void DisableText() => disableText = true;
+    public void EnableText() => disableText = false;
 }
-
-

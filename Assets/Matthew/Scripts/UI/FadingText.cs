@@ -2,85 +2,194 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// FadingText class fades the Text Instantiated by TextManager
-/// Placed on a Text Prefab to control its speed, direction and fadingTime
-/// Used for the score, giving more awareness on the score given by each punch and enemy defeated
-/// </summary>
 public class FadingText : MonoBehaviour
 {
-    //Text values
     [Header("Text Fading Values")]
-    [SerializeField] private Vector3 direction; //direction in which the text fades in
-    [SerializeField] private float speed;       //speed of the Text as it fades
-    [SerializeField] private float fadingTime;  //Time taken to fade from 100% to 0
+    [SerializeField] private float fadingTime = 1f;
 
-    // Update is called once per frame
-    void Update()
+    [Header("Bouncing Physics")]
+    [SerializeField] private Vector2 initialVelocity = new Vector2(0, 300);
+    [SerializeField] private float gravity = -800f;
+    [SerializeField] private float bounceDamping = 0.7f;
+    [SerializeField] private float horizontalDrag = 0.95f;
+
+    [Header("Noise Maps")]
+    [SerializeField] private NoiseProfile[] noiseProfiles;
+    [SerializeField] private int defaultNoiseProfileIndex = 0;
+
+    private RectTransform rectTransform;
+    private Vector2 currentVelocity;
+    private Vector2 currentAnchoredPosition;
+    private float groundLevel;
+    private NoiseProfile activeNoiseProfile;
+    private TMP_Text textComponent;
+    private bool isInitialized;
+
+    private void Awake()
     {
-        MoveText();      
+        rectTransform = GetComponent<RectTransform>();
+        textComponent = GetComponent<TMP_Text>();
     }
 
     private void OnEnable()
     {
+        InitializeBouncing();
         StartFadeOut();
     }
 
-
-    /// <summary>
-    /// Moves the Text based on direction and speed;
-    /// gives more illusion of fading away
-    /// </summary>
-    private void MoveText()
+    private void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        if (isInitialized)
+        {
+            ApplyBouncingPhysics();
+        }
     }
 
     /// <summary>
-    /// Initialises the variables for the text 
-    /// for fonts, size of fonts and text itself, adjust in inspector
+    /// Sets the active noise profile by index
     /// </summary>
-    public void Initialize(float speed, Vector3 direction, float fadingTime)
+    /// <param name="profileIndex">Index of the noise profile to use</param>
+    public void SetNoiseProfile(int profileIndex)
     {
-
-        //this.speed = speed;
-        //this.fadingTime = fadingTime;
-        //this.direction = direction;
-        //StartCoroutine(nameof(FadeOut));
-
-        //this is unused rn as its being initialised in textmanager
+        if (noiseProfiles != null && profileIndex >= 0 && profileIndex < noiseProfiles.Length)
+        {
+            activeNoiseProfile = noiseProfiles[profileIndex];
+        }
+        else if (noiseProfiles != null && noiseProfiles.Length > 0)
+        {
+            Debug.LogWarning($"Invalid noise profile index: {profileIndex}. Using default.");
+            activeNoiseProfile = noiseProfiles[defaultNoiseProfileIndex];
+        }
+        else
+        {
+            Debug.LogWarning("No noise profiles configured. Using fallback.");
+            activeNoiseProfile = CreateFallbackNoiseProfile();
+        }
     }
 
-    /// <summary>
-    /// helper function to start the fadeout couroutine
-    /// </summary>
+    private void InitializeBouncing()
+    {
+        // Set initial position
+        currentAnchoredPosition = rectTransform.anchoredPosition;
+        groundLevel = currentAnchoredPosition.y;
+
+        // Initialize noise profile
+        if (activeNoiseProfile == null)
+        {
+            if (noiseProfiles != null && noiseProfiles.Length > 0)
+            {
+                activeNoiseProfile = noiseProfiles[defaultNoiseProfileIndex];
+            }
+            else
+            {
+                activeNoiseProfile = CreateFallbackNoiseProfile();
+            }
+        }
+
+        // Apply noise to initial velocity
+        currentVelocity = ApplyNoiseToVector(initialVelocity);
+        isInitialized = true;
+    }
+
+    private NoiseProfile CreateFallbackNoiseProfile()
+    {
+        return new NoiseProfile(
+            "Fallback",
+            new Vector2(0.8f, 1.2f),
+            new Vector2(-0.5f, 0.5f),
+            10f
+        );
+    }
+
+    private Vector2 ApplyNoiseToVector(Vector2 baseVector)
+    {
+        float randomXVelocity = baseVector.x * Random.Range(
+            activeNoiseProfile.horizontalDirectionRange.x,
+            activeNoiseProfile.horizontalDirectionRange.y
+        );
+
+        float randomYVelocity = baseVector.y * Random.Range(
+            activeNoiseProfile.velocityRange.x,
+            activeNoiseProfile.velocityRange.y
+        );
+
+        return new Vector2(randomXVelocity, randomYVelocity);
+    }
+
+    private void ApplyBouncingPhysics()
+    {
+        // Apply gravity
+        currentVelocity.y += gravity * Time.deltaTime;
+
+        // Apply position offset noise
+        Vector2 positionNoise = new Vector2(
+            Random.Range(-activeNoiseProfile.positionOffsetIntensity, activeNoiseProfile.positionOffsetIntensity),
+            Random.Range(-activeNoiseProfile.positionOffsetIntensity, activeNoiseProfile.positionOffsetIntensity)
+        );
+
+        // Update position
+        currentAnchoredPosition += (currentVelocity * Time.deltaTime) + positionNoise;
+
+        // Ground collision and bounce
+        if (currentAnchoredPosition.y < groundLevel)
+        {
+            currentAnchoredPosition.y = groundLevel;
+            currentVelocity.y = -currentVelocity.y * bounceDamping;
+            currentVelocity.x *= horizontalDrag;
+
+            // Stop bouncing if velocity is too low
+            if (Mathf.Abs(currentVelocity.y) < 50f)
+            {
+                currentVelocity = Vector2.zero;
+            }
+        }
+
+        rectTransform.anchoredPosition = currentAnchoredPosition;
+    }
+
     private void StartFadeOut()
     {
-        StartCoroutine(nameof(FadeOut));
+        StartCoroutine(FadeOut());
     }
 
-
-    /// <summary>
-    /// Fades out the Text using alpha when text appears
-    /// animation effect so it doesnt disappear out of nowhere
-    /// destroys the text after finishing
-    /// </summary>
     private IEnumerator FadeOut()
     {
-        float startAlpha = GetComponent<TMP_Text>().color.a;
+        float startAlpha = textComponent.color.a;
+        float elapsedTime = 0f;
 
-        float rate = 1.0f / fadingTime;
-        float percentFinish = 0.0f;
-
-        while (percentFinish < 1.0f)
+        while (elapsedTime < fadingTime)
         {
-            Color TempColour = GetComponent<TMP_Text>().color;
-            GetComponent<TMP_Text>().color = new Color(TempColour.r, TempColour.g, TempColour.b, Mathf.Lerp(startAlpha, 0, percentFinish));
-            percentFinish += rate * Time.deltaTime;
-            
+            float alpha = Mathf.Lerp(startAlpha, 0, elapsedTime / fadingTime);
+            textComponent.color = new Color(
+                textComponent.color.r,
+                textComponent.color.g,
+                textComponent.color.b,
+                alpha
+            );
+
+            Debug.Log("Fading, alpha now at " + alpha);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-       
+
+        Debug.Log("finished fading");
         Destroy(gameObject);
+    }
+}
+
+[System.Serializable]
+public class NoiseProfile
+{
+    public string profileName = "New Profile";
+    public Vector2 velocityRange = new Vector2(0.8f, 1.2f);
+    public Vector2 horizontalDirectionRange = new Vector2(-0.5f, 0.5f);
+    public float positionOffsetIntensity = 10f;
+
+    public NoiseProfile(string name, Vector2 velocityRange, Vector2 horizontalRange, float positionIntensity)
+    {
+        profileName = name;
+        this.velocityRange = velocityRange;
+        horizontalDirectionRange = horizontalRange;
+        positionOffsetIntensity = positionIntensity;
     }
 }
