@@ -149,6 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 31b40d944b99e654bb3322eef28d656b, type: 2}
   healthBar: {fileID: 6942041107600906082}
+  currentHealth: 0
   chaseRange: 15
   attackRange: 2
   attackCooldown: 1
@@ -168,6 +169,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4668915947293116473}
     m_Modifications:
+    - target: {fileID: 644761578603145680, guid: 23c4ccd719258af41a62d9d781cb5d4c,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 644761578603145680, guid: 23c4ccd719258af41a62d9d781cb5d4c,
         type: 3}
       propertyPath: m_AnchorMax.y

@@ -19,12 +19,10 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
         Invoke(nameof(InitialiseHealthBar),1);
-
     }
 
     private void Start()
     {
-         InitialiseHealthBar();
         UpdateHealthBar();
         Debug.Log("sfisdijfsijd");
 
