@@ -13,7 +13,7 @@ public class SpringChest : MonoBehaviour
     [SerializeField] private KeyCode interactKey = KeyCode.Space;
 
     [Header("Interaction")]
-    [SerializeField] private float interactionRadius = 3f;
+    [SerializeField] private float interactionRadius = 1f;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Drop System")]
@@ -22,10 +22,10 @@ public class SpringChest : MonoBehaviour
     private float currentVelocity;
     private float currentAngle;
     private bool isOpen = false;
-   
+
     private void Update()
     {
-        
+
 
         if (CheckPlayerProximity() && Input.GetKeyDown(interactKey) /*&& !isOpen*/)
         {
@@ -38,8 +38,8 @@ public class SpringChest : MonoBehaviour
 
     private bool CheckPlayerProximity()
     {
-        return true;
-            //Physics.CheckSphere(chestBase.position, interactionRadius, playerLayer);
+
+        return Physics.CheckSphere(chestBase.position, interactionRadius, playerLayer);
     }
 
     private void ApplySpringMotion()
