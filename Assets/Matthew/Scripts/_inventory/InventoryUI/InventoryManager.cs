@@ -30,6 +30,7 @@ public class InventoryManager : MonoBehaviour
 
         InitializeSlots();
         inventory.SetManager(this);
+        HighlightEquippedSlot(0);
     }
 
     private void InitializeSlots()

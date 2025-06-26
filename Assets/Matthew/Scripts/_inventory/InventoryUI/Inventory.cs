@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour
     public List<ItemInstance> items = new List<ItemInstance>();
     public InventoryManager manager;
     public ItemInstance equippedSlot;
-    public int equippedSlotNum;
+    public int equippedSlotNum = 0;
     public UnityEvent ChangeSlot;
 
     private void Awake()
@@ -19,7 +19,9 @@ public class Inventory : MonoBehaviour
     }
     private void Update()
     {
+        //equippedSlotNum = 0;
         SelectSlot();
+        
     }
  
     public void RemoveItem(ItemInstance itemToRemove, int amt)
