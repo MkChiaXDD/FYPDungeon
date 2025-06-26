@@ -150,6 +150,11 @@ public class PlayerController : MonoBehaviour, IDamageable
         Dmg = OriginalDmg;
     }
 
+    public Transform GetThisTransform()
+    {
+        return transform;
+    }
+
     public void SetWeapon(Weapon weapon)
     {
         WeaponChoosen = weapon;
