@@ -18,8 +18,8 @@ public class FarthestRoom : MonoBehaviour
     {
         Debug.Log("FARTHESTROOM: Boss Name: " + boss.name);
         Vector3 spawnPoint = transform.Find("EnemySpawnPoint").localPosition;
-        GameObject newBoss = Instantiate(boss, spawnPoint, Quaternion.identity, transform);
-        newBoss.transform.position = transform.position + new Vector3(0, spawnPoint.y, 0);
+        GameObject newBoss = Instantiate(boss, spawnPoint, Quaternion.identity);
+        newBoss.transform.position = transform.position * 4;
         newBoss.AddComponent<BossCheckDeath>();
         Debug.Log("MiniBoss Spawned");
     }
