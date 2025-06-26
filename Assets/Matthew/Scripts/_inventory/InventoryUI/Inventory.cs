@@ -58,6 +58,7 @@ public class Inventory : MonoBehaviour
         {
             items[slot] = null;
             manager.UpdateInventoryUI();
+            ChangeSlot?.Invoke();
         }
     }
     public ItemInstance GetItem(int num) => items[num];

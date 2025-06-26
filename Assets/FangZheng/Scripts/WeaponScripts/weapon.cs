@@ -60,6 +60,7 @@ public class Weapon : MonoBehaviour
     {
         Debug.Log("gae");
         broke = true;
+        //PlayerController.Instance.AddAttackIndicator();
         //WeaponBreak.Invoke();
         //Destroy(this.gameObject);
         

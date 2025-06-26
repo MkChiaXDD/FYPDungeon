@@ -60,10 +60,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombatContinue;
     [SerializeField] private bool CombatWindow;
+
     //[SerializeField] private bool IsAttack;
     [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
     [SerializeField] private int Dmg;
     [SerializeField] private int OriginalDmg = 5;
+
+    [SerializeField] private List<GameObject> WeaponIndicator;
 
     [Space, Header("Health")]
     [SerializeField] private int MaxHealth = 100;
@@ -168,7 +171,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         CheckedItemHold();
         ItemHeld = PlayerStorage.GetCurrentHotbarItem();
         EquipItem(ItemHeld);
-        
+        AddAttackIndicator();
     }
 
     public void RemoveItem()
@@ -202,6 +205,35 @@ public class PlayerController : MonoBehaviour, IDamageable
         WeaponChoosen = EquippedObject.GetComponent<Weapon>();
     }
 
+    public void AddAttackIndicator()
+    {
+        foreach (GameObject indector in WeaponIndicator)
+        {
+            indector.SetActive(false);
+        }
+
+        if (WeaponChoosen != null && EquippedObject != null) {
+
+            Debug.Log("Call");
+
+            if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Range)
+            {
+                WeaponIndicator[0].SetActive(true);
+                WeaponIndicator[0].transform.localScale = new Vector3 (WeaponChoosen.weaponData.spells.Size.x , 1 , WeaponChoosen.weaponData.spells.Size.z);
+            }
+            else if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Aoe)
+            {
+                WeaponIndicator[1].SetActive(true);
+                WeaponIndicator[1].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Radius*2, 1, WeaponChoosen.weaponData.spells.Radius*2);
+            }
+            else
+            {
+                WeaponIndicator[2].SetActive(true);
+            }
+        }
+
+    }
+
     public void EquipWeapon(Weapon WeaponRefrence)
     {
         if (EquippedObject != null)
@@ -232,13 +264,16 @@ public class PlayerController : MonoBehaviour, IDamageable
 
             Destroy(EquippedObject);
             EquippedObject = null;
+            
         }
+
     }
 
     public void CheckedItemHold()
     {
         UnEquipWeapon();
         WeaponChoosen = null;
+        //AddAttackIndicator();
         //if (ItemHeld.itemType == ItemInstance..Tool)
         //{
         //    if (ItemHeld.ItemPrefab.GetComponent<Weapon>() != null)
@@ -262,7 +297,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             
             WeaponChoosen.Attack();       
             PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum);
-
+            //AddAttackIndicator();
 
         }
         else
@@ -456,6 +491,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         ActiveAttack();
         CheckAvailabilityOfWeapon();
+
+        AddAttackIndicator();
 
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;
