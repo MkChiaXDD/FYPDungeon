@@ -35,7 +35,15 @@ public class SpellCast
         OneTime,
         Continues
     }
-    
+
+    public SpellType spellType;
+    public enum SpellType
+    {
+        Range,
+        Aoe,
+        Cast
+    }
+
 
     //public Animation Animation;
 
