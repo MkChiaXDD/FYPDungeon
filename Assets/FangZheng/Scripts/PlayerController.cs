@@ -10,7 +10,7 @@ using UnityEngine.Events;
 public class PlayerController : MonoBehaviour, IDamageable
 {
 
-    #region Serialized Fields
+    #region References (SerializeField)
 
     [Header("Components")]
     [SerializeField] private Rigidbody _rb;
@@ -83,6 +83,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private InventoryManager PlayerStorage;
     //[SerializeField] private Inv
     [SerializeField] private ItemInstance ItemHeld;
+
+    [Space, Header("Animation")]
+    [SerializeField] private MeshTrail meshTrail;
 
     #endregion
 
@@ -918,7 +921,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            meshTrail.HandleTrailActivation();
             StartCoroutine(Dashing());
+            
         }
     }
 

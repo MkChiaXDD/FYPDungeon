@@ -32,8 +32,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        UpdateHealthBar();
-        TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
+        UpdateHealthBar();        TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
         Debug.Log("Get Hit");
         if (currentHealth <= 0f)
             Die();
