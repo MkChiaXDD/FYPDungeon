@@ -30,14 +30,14 @@ Transform:
   m_GameObject: {fileID: 2476117311166538866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 626322114358232779}
   - {fileID: 3575859658004363889}
   - {fileID: 5544457627331124840}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2952238114786236348
 MeshFilter:
@@ -54,7 +54,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2476117311166538866}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -109,7 +109,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2097997255537793489
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -118,8 +118,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2476117311166538866}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 5
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -155,10 +155,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8003819692001746121, guid: 84f935570d842714bbc1a003a01f37d1,
     type: 3}
   fireOffset: 1
-  attackRange: 10
-  attackCooldown: 2
+  attackRange: 30
+  attackCooldown: 3
   repositionRadius: 5
-  roundForScaling: 1
+  roundForScaling: 2
   shootDelay: 0.5
   amountToShoot: 3
 --- !u!1 &4620883622653911077
@@ -485,6 +485,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 011e3487d4ecd214bb7eb4fea5cf2c56,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 011e3487d4ecd214bb7eb4fea5cf2c56,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 011e3487d4ecd214bb7eb4fea5cf2c56,

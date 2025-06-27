@@ -15,6 +15,10 @@ public class BomberEnemyController : Enemy
     [SerializeField] float explodeGrowScale = 2f;
     [SerializeField] private float explosionUpwardModifier = 1f;
 
+    [Header("Diff Scaling Settings")]
+    [SerializeField] private int roundForScaling = 1;
+    [SerializeField] private float explodingSizeMultiplier = 1.5f;
+
     [Header("Roam Settings")]
     [SerializeField] float roamDelay = 3f;
 
@@ -152,11 +156,13 @@ public class BomberEnemyController : Enemy
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<IDamageable>(out var dmg))
-                dmg.TakeDamage(data.damage);
-
             if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
             {
+                if (currentRound >= roundForScaling)
+                {
+                    explosionRadius = explosionRadius * explodingSizeMultiplier;
+                }
+                Debug.Log("Explosion Radius" + explosionRadius);
                 hit.attachedRigidbody.AddExplosionForce(
                     explosionForce,            // base force
                     transform.position,        // origin
@@ -164,6 +170,9 @@ public class BomberEnemyController : Enemy
                     explosionUpwardModifier,   // upwards modifier
                     ForceMode.Impulse          // instant burst
                 );
+
+                if (hit.TryGetComponent<IDamageable>(out var dmg))
+                    dmg.TakeDamage(data.damage);
             }
         }
 
