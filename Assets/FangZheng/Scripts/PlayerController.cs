@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         if (WeaponChoosen != null && EquippedObject != null) {
 
-            Debug.Log("Call");
+            //Debug.Log("Call");
 
             if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Range)
             {
