@@ -18,6 +18,7 @@ public class BomberEnemyController : Enemy
     [Header("Diff Scaling Settings")]
     [SerializeField] private int roundForScaling = 1;
     [SerializeField] private float explodingSizeMultiplier = 1.5f;
+    private float currentExplosionRadius;
 
     [Header("Roam Settings")]
     [SerializeField] float roamDelay = 3f;
@@ -48,6 +49,15 @@ public class BomberEnemyController : Enemy
         state = State.Roam;
         ChooseRoamTarget();
         currentDir = transform.forward;
+
+        if (currentRound < roundForScaling)
+        {
+            currentExplosionRadius = explosionRadius;
+        }
+        else
+        {
+            currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
+        }
     }
 
     void Update()
@@ -158,15 +168,11 @@ public class BomberEnemyController : Enemy
         {
             if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
             {
-                if (currentRound >= roundForScaling)
-                {
-                    explosionRadius = explosionRadius * explodingSizeMultiplier;
-                }
-                Debug.Log("Explosion Radius" + explosionRadius);
+                Debug.Log("Explosion Radius: " + currentExplosionRadius);
                 hit.attachedRigidbody.AddExplosionForce(
                     explosionForce,            // base force
                     transform.position,        // origin
-                    explosionRadius,           // radius
+                    currentExplosionRadius,           // radius
                     explosionUpwardModifier,   // upwards modifier
                     ForceMode.Impulse          // instant burst
                 );
@@ -189,4 +195,21 @@ public class BomberEnemyController : Enemy
             spawnPosition.z + rnd.y
         );
     }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        // Show base explosion radius
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, currentExplosionRadius);
+        }
+#endif
+    }
+
 }
