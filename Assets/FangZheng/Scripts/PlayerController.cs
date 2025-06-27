@@ -1028,7 +1028,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         Time.fixedDeltaTime = 0.02f * 1f;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         Health = Health - damage;
         Debug.Log("ouch");
