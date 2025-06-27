@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 9082412130131180784}
   - component: {fileID: 5306628097022751573}
   - component: {fileID: 7944377688359503775}
+  - component: {fileID: 4215179497803892861}
+  - component: {fileID: 1229520457944711378}
+  - component: {fileID: -2147820696872761682}
   m_Layer: 0
   m_Name: Sword1_Gold
   m_TagString: Untagged
@@ -28,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -51,10 +55,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,3 +85,73 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4215179497803892861
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4077779311563332892, guid: 1af6c9d4792b975498541f34267aefc6, type: 3}
+--- !u!114 &1229520457944711378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0b51d8a7280d541a60bfb89f71bee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 11400000, guid: fab835bd6d20e4e448388e72ff3c5cec, type: 2}
+  CurrDurability: 3
+  spellCastList:
+    SpellPrefab: {fileID: 0}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    collisionType: 0
+    spellType: 0
+  broke: 0
+  WeaponBreak:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-2147820696872761682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abdc2cdab050944a919971c12020282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drop: {fileID: 11400000, guid: fab835bd6d20e4e448388e72ff3c5cec, type: 2}
+  dropAmt: 1
+  timeToObtain: 0
+  PickupAlready: 0
