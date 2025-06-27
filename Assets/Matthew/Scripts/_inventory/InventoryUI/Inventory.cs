@@ -74,11 +74,11 @@ public class Inventory : MonoBehaviour
         }
         return count;
     }
-    public void BreakItem(int itemSlot)
+    public void BreakItem(int itemSlot, int DurabilityUsage = 1)
     {
         if (items[itemSlot].Durability > 0)
         {
-            items[itemSlot].Durability--;
+            items[itemSlot].Durability -= DurabilityUsage;
         }
         else RemoveItemAtSlot(itemSlot, 1);
 

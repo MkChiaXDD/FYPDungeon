@@ -8,6 +8,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] public WeaponDatas weaponData;
     [SerializeField] public int CurrDurability;
     [SerializeField] public SpellCast spellCastList;
+
+    [SerializeField] public int baseDurabilityUsed = 1;
+    [SerializeField] public int skillDurabilityUsed = 3;
     //[SerializeField] private List<SpellCast> spellCastList;
     public bool broke;
     public  UnityEvent WeaponBreak;

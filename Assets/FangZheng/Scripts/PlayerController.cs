@@ -299,13 +299,25 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             
             WeaponChoosen.Attack();       
-            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum);
+            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
             //AddAttackIndicator();
 
         }
         else
         {
             BasicCombat.SwordAttack();
+        }
+    }
+
+    public void SpecialAttack()
+    {
+        if (WeaponChoosen != null)
+        {
+
+            WeaponChoosen.Attack();
+            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.skillDurabilityUsed);
+            //AddAttackIndicator();
+
         }
     }
 
