@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] protected float Speed;
     [SerializeField] protected int damage;
     [SerializeField] protected SpellCast.CollisionType CollisionType;
+    [SerializeField] protected SpellCast spellCast;
     //[SerializeField] protected GameObject Summon;
     //public virtual void Init(float Radius, Vector3 Size, float Range, float duration, float AtkPerSec, float Speed, int dmg , SpellCast.CollisionType Type) 
     //{
@@ -39,6 +40,7 @@ public class Projectile : MonoBehaviour
         CollisionType = spellCastList.collisionType;
         Transform myTransform = gameObject.transform;
         myTransform.localScale = spellCastList.Size;
+        spellCast = spellCastList;
 
         Debug.Log("Inti");
 

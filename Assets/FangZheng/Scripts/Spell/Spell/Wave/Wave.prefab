@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9022520685355766900}
   - component: {fileID: 7694501406891746413}
   - component: {fileID: 3421584295324495297}
+  - component: {fileID: 1708454083247049405}
   m_Layer: 0
   m_Name: Wave
   m_TagString: Untagged
@@ -126,11 +127,52 @@ MonoBehaviour:
   Speed: 5
   damage: 2
   CollisionType: 1
+  spellCast:
+    SpellPrefab: {fileID: 0}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    collisionType: 0
+    spellType: 0
   Cooldown: 0
   direction: {x: 0.9516544, y: 0, z: 0.3060873}
   TimeLast: 0
-  ColliderActive: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
   knockbackForce: 1000
+  StartPos: {x: 0, y: 0, z: 0}
+  ListOfColider: []
+  Hitbox: {fileID: 1708454083247049405}
+--- !u!114 &1708454083247049405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4604734839610057407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd2942035e19fa4dbbf7607892e7551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListOfEnemy: []
+  Attack:
+    SpellPrefab: {fileID: 0}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    collisionType: 0
+    spellType: 0
