@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9101165971967233813}
   - component: {fileID: 5752411857528950754}
   - component: {fileID: 6702364384204051802}
+  - component: {fileID: 6969391341673253450}
   m_Layer: 0
   m_Name: BomerangSpell
   m_TagString: Untagged
@@ -126,6 +127,46 @@ MonoBehaviour:
   Speed: 0
   damage: 0
   CollisionType: 0
+  spellCast:
+    SpellPrefab: {fileID: 0}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    collisionType: 0
+    spellType: 0
   StartPos: {x: 0, y: 0, z: 0}
   IsReturning: 0
   direction: {x: 0, y: 0, z: 0}
+  Hitbox: {fileID: 0}
+--- !u!114 &6969391341673253450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474267386821641075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd2942035e19fa4dbbf7607892e7551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListOfEnemy: []
+  Attack:
+    SpellPrefab: {fileID: 0}
+    dmg: 0
+    Radius: 0
+    Size: {x: 0, y: 0, z: 0}
+    Range: 0
+    spell: {fileID: 0}
+    duration: 0
+    AtkPerSec: 0
+    Speed: 0
+    ApplyElement: []
+    collisionType: 0
+    spellType: 0

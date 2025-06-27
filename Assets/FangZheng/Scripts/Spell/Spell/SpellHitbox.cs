@@ -53,7 +53,7 @@ public class SpellHitbox : MonoBehaviour
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     EnemyHitAlready.Add(enemy, Time.time);
-                    damageable.TakeDamage(10);
+                    damageable.TakeDamage(Attack.dmg);
                     ApplyKnockBack(other);
                 }
             }

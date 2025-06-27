@@ -7,9 +7,16 @@ public class Bomerang : Projectile
     [SerializeField] private Vector3 StartPos;
     [SerializeField] private bool IsReturning;
     [SerializeField] private Vector3 direction;
+    [SerializeField] SpellHitbox Hitbox;
 
     public void Start()
     {
+        if (Hitbox == null)
+        {
+            Hitbox = this.GetComponent<SpellHitbox>();
+        }
+        Hitbox.Initit(spellCast);
+
         direction = new Vector3(PlayerController.Instance.GetDirection().x, 0, PlayerController.Instance.GetDirection().z);
         StartPos = this.transform.position;
         Destroy(this.gameObject, duration);

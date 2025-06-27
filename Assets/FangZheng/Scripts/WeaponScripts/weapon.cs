@@ -16,7 +16,9 @@ public class Weapon : MonoBehaviour
 
  
         spellCastList = weaponData.spells;
-        spellCastList.Initialize(this.transform); 
+        spellCastList.Initialize(this.transform);
+
+        //this.AddComponent<SpellCast>();
         //spellCastList.Reverse();
 
         //for (int i = 0; i < spellCastList.Count; i++)
