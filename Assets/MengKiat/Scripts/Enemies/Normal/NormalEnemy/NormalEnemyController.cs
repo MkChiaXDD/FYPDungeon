@@ -6,6 +6,8 @@ public class NormalEnemyController : Enemy
     [SerializeField] private float chaseRange = 10f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
+
+    [Header("Diff Scaling Settings")]
     [SerializeField] private int roundForScaling = 5;
     [SerializeField] private float backupTime = 2f;
     [SerializeField] private float backupSpeedMultiplier = 2f;

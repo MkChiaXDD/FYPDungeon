@@ -1,3 +1,5 @@
+ï»¿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TankEnemyController : Enemy
@@ -5,6 +7,11 @@ public class TankEnemyController : Enemy
     [SerializeField] private float chaseRange = 10f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
+
+    [Header("Diff Scaling Settings")]
+    [SerializeField] private float rushToBomberSpeedMultiplier = 5f;
+    [SerializeField] private Transform carryZone;
+    private bool isCarrying;
 
     [Header("Avoidance")]
     [SerializeField] private float feelerLength = 2f;
@@ -21,7 +28,12 @@ public class TankEnemyController : Enemy
     private float attackTimer;
     private Vector3 currentDir;
 
-    private enum State { Idle, Chase, Attack }
+    [Header("Throwing Settings")]
+    [SerializeField] private float throwingForce = 25f;
+    private BomberEnemyController carriedBomber;
+    private bool hasThrown = false;
+
+    private enum State { Idle, Chase, Attack, RushToBomber }
     private State state;
 
     void Start()
@@ -43,6 +55,8 @@ public class TankEnemyController : Enemy
         else if (dist <= chaseRange) state = State.Chase;
         else state = State.Idle;
 
+        state = State.RushToBomber;
+        
         switch (state)
         {
             case State.Idle:
@@ -60,9 +74,12 @@ public class TankEnemyController : Enemy
                     attackTimer = attackCooldown;
                 }
                 break;
+            case State.RushToBomber:
+                Debug.Log("TANKENEMY: Rushing to bomber");
+                RushToBomber();
+                break;
         }
     }
-
     private void ChaseWithAvoidance()
     {
         // 1) pure XZ seek
@@ -112,8 +129,110 @@ public class TankEnemyController : Enemy
 
     private void Attack()
     {
-        Debug.Log("NORMALENEMY: Attack!");
-        // …your attack logic…
+        float dist = Vector3.Distance(
+            new Vector3(transform.position.x, 0, transform.position.z),
+            new Vector3(player.position.x, 0, player.position.z)
+        );
+
+        if (dist <= attackRange + 0.5f)
+        {
+            IDamageable damageable = player.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage);
+            }
+        }
+    }
+
+    private void RushToBomber()
+    {
+        if (!isCarrying)
+        {
+            BomberEnemyController[] bombers = FindObjectsOfType<BomberEnemyController>();
+            if (bombers.Length == 0) return;
+
+            Transform closestBomber = null;
+            float closestDist = Mathf.Infinity;
+
+            foreach (BomberEnemyController bomber in bombers)
+            {
+                float dist = Vector3.Distance(transform.position, bomber.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestBomber = bomber.transform;
+                    carriedBomber = bomber;
+                }
+            }
+
+            if (closestBomber == null || carriedBomber == null) return;
+
+            // Move toward the closest bomber
+            Vector3 toBomber = closestBomber.position - transform.position;
+            toBomber.y = 0;
+            Vector3 dir = toBomber.normalized;
+
+            currentDir = Vector3.Slerp(currentDir, dir, smoothing * Time.deltaTime);
+            transform.position += currentDir * (data.moveSpeed * rushToBomberSpeedMultiplier) * Time.deltaTime;
+
+            Quaternion targetRot = Quaternion.LookRotation(currentDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+
+            float distanceToBomber = Vector3.Distance(transform.position, closestBomber.position);
+
+            if (distanceToBomber <= 1f && !hasThrown)
+            {
+                Debug.Log("Tank reached bomber!");
+
+                carriedBomber.transform.position = carryZone.position;
+                carriedBomber.transform.SetParent(carryZone);
+
+                Rigidbody bomberRb = carriedBomber.GetComponent<Rigidbody>();
+                if (bomberRb != null)
+                {
+                    bomberRb.useGravity = false;
+                }
+
+                isCarrying = true;
+                hasThrown = true; // âœ… prevent multiple launches
+
+                StartCoroutine(ThrowBomberAfterDelay(1.5f));
+            }
+
+        }
+    }
+
+    private IEnumerator ThrowBomberAfterDelay(float delay)
+    {
+        carriedBomber.isPickedup = true;
+
+        yield return new WaitForSeconds(delay);
+
+        if (carriedBomber == null) yield break;
+
+        carriedBomber.transform.SetParent(null);
+
+        Rigidbody bomberRb = carriedBomber.GetComponent<Rigidbody>();
+        carriedBomber.isPickedup = false;
+        bomberRb.useGravity = true;
+        if (bomberRb != null)
+        {
+            Vector3 throwDir = (player.position - carryZone.position).normalized;
+
+            bomberRb.AddForce(throwDir * throwingForce, ForceMode.Impulse);
+        }
+
+        Debug.Log("Tank threw the bomber!");
+
+        carriedBomber = null;
+        isCarrying = false;
+        StartCoroutine(thrownTimer());
+    }
+
+    IEnumerator thrownTimer()
+    {
+        yield return new WaitForSeconds(1f);
+        hasThrown = false;
     }
 
     void OnDrawGizmosSelected()

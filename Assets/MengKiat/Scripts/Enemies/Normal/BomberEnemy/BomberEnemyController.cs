@@ -35,6 +35,7 @@ public class BomberEnemyController : Enemy
     Vector3 currentDir;
     State state;
     bool isExploding;
+    public bool isPickedup = false;
 
     void Start()
     {
@@ -47,6 +48,7 @@ public class BomberEnemyController : Enemy
 
     void Update()
     {
+        if (isPickedup) return;
         float distToPlayerXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
