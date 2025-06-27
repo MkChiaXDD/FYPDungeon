@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float _normalspeed = 4;
     //[SerializeField] private float _runspeed = 10;
     [SerializeField] private float _turnspeed = 360;
-    [SerializeField] private float _DashSpeed = 30;
-    [SerializeField] private float _NormalDashSpeed = 30;
+    [SerializeField] private float _CurrentDashSpeed = 30;
+    [SerializeField] private float _OriginalDashSpeed = 30;
 
     [Space, Header("Parry & Block")]
     [SerializeField] private float parryThreshold = 0.5f;
@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private List<GameObject> WeaponIndicator;
 
     [Space, Header("Health")]
-    [SerializeField] private int MaxHealth = 100;
-    [SerializeField] private int Health;
+    [SerializeField] private float MaxHealth = 100;
+    [SerializeField] private float Health;
 
     [Space, Header("Layers & Masks")]
     [SerializeField] private LayerMask _LayerMaskIgnore;
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float DashBuff = 0;
     public float ParryTimeBuff = 0;
     public float ParryThreshholdBuff = 0;
-    public int HealthBuff = 0;
+    public float HealthBuff = 0;
 
     //public UnityEvent WeaponBreak;
     #endregion
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         HealthBuff = 0;
 
         _speed = _normalspeed;
-        _DashSpeed = _NormalDashSpeed;
+        _CurrentDashSpeed = _OriginalDashSpeed;
         MaxHealth = 100;
         parryThreshold = _NormalparryThreshold;
         _ParryDuationLast = 4.0f;
@@ -322,11 +322,11 @@ public class PlayerController : MonoBehaviour, IDamageable
                     case Effect.EffectType.Health:
                         if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
                         {
-                            HealthBuff += (int)(MaxHealth * effect.ModifierValue) - MaxHealth;
+                            HealthBuff += (MaxHealth * effect.ModifierValue) - MaxHealth;
                         }
                         else
                         {
-                            HealthBuff += (int)effect.ModifierValue;
+                            HealthBuff += effect.ModifierValue;
                         }
                         break;
 
@@ -344,7 +344,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                     case Effect.EffectType.DashSpeed:
                         if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
                         {
-                            DashBuff += (_NormalDashSpeed * effect.ModifierValue) - _NormalDashSpeed;
+                            DashBuff += (_OriginalDashSpeed * effect.ModifierValue) - _OriginalDashSpeed;
                         }
                         else
                         {
@@ -380,7 +380,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         _speed = _normalspeed + SpeedBuff;
         MaxHealth += HealthBuff;
         Health = Mathf.Min(Health, MaxHealth); 
-        _DashSpeed += DashBuff;
+        _CurrentDashSpeed += DashBuff;
         _ParryDuationLast += ParryTimeBuff;
         parryThreshold += ParryThreshholdBuff;
         Dmg += DamageBuff;
@@ -389,9 +389,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             _speed = 0.1f;
         }
-        if (_DashSpeed <= 0)
+        if (_CurrentDashSpeed <= 0)
         {
-            _DashSpeed = 0.1f;
+            _CurrentDashSpeed = 0.1f;
         }
         if (Dmg <= 0)
         {
@@ -426,7 +426,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         CombatWindow = true;
     }
 
-    public int getMaxHealth()
+    public float getMaxHealth()
     {
         return MaxHealth;
     }
@@ -457,7 +457,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
     }
 
-    public int GetHealth()
+    public float GetHealth()
     {
         return Health;
     }
@@ -995,7 +995,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     IEnumerator Dashing()
     {
-        _speed = _DashSpeed + _normalspeed + SpeedBuff;
+        _speed = _CurrentDashSpeed + _normalspeed + SpeedBuff;
         yield return new WaitForSeconds(0.1f);
         _speed = _normalspeed + SpeedBuff;
     }
