@@ -5,6 +5,7 @@ public class NormalEnemyController : Enemy
     [SerializeField] private float chaseRange = 10f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private int roundForScaling = 5;
 
     [Header("Avoidance")]
     [SerializeField] private float feelerLength = 2f;
@@ -28,7 +29,7 @@ public class NormalEnemyController : Enemy
     {
         base.Awake();
     }
-    void  Start()
+    void Start()
     {       
         player = GameObject.FindWithTag("Player").transform;
         state = State.Idle;
@@ -118,8 +119,21 @@ public class NormalEnemyController : Enemy
 
     private void Attack()
     {
-        Debug.Log("NORMALENEMY: Attack!");
-        // …your attack logic…
+        Debug.Log("NORMALENEMY: Attacking player");
+
+        float dist = Vector3.Distance(
+            new Vector3(transform.position.x, 0, transform.position.z),
+            new Vector3(player.position.x, 0, player.position.z)
+        );
+
+        if (dist <= attackRange + 0.5f)
+        {
+            IDamageable damageable = player.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage);
+            }
+        }
     }
 
     void OnDrawGizmosSelected()
