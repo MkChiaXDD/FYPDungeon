@@ -5,31 +5,45 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
-    [SerializeField] protected int currentHealth;
+    [SerializeField] protected float currentHealth;
+    protected int currentRound;
     protected float damage;
 
     protected virtual void Awake()
     {
-        var difficulty = FindFirstObjectByType<DifficultyManager>();
-        int round = difficulty.GetRound();
-        float multiplier = difficulty.GetDifficultyMultiplier();
-        int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
+        DifficultyManager difficulty = FindFirstObjectByType<DifficultyManager>();
 
+        float multiplier = 1f; // default multiplier
+        currentRound = 1;      // default round
+
+        if (difficulty != null)
+        {
+            currentRound = difficulty.GetRound();
+            multiplier = difficulty.GetDifficultyMultiplier();
+        }
+        else
+        {
+            Debug.LogWarning("[Enemy] No DifficultyManager found. Using default values.");
+        }
+
+        int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
         currentHealth = finalHealth;
 
-        Debug.Log($"[Enemy] ROUND: {round} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
-        Invoke(nameof(InitialiseHealthBar),1);
+        Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
+
+        Invoke(nameof(InitialiseHealthBar), 1f);
+        damage = data.damage;
     }
+
 
     private void Start()
     {
         UpdateHealthBar();
         Debug.Log("sfisdijfsijd");
-
     }
 
     // Shared damage logic
-    public virtual void TakeDamage(int amount)
+    public virtual void TakeDamage(float amount)
     {
         currentHealth -= amount;
         UpdateHealthBar();        

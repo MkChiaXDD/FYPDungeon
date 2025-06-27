@@ -68,7 +68,7 @@ public class Breakable : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int damage) => Die();
+    public void TakeDamage(float damage) => Die();
     public void Die() => StartCoroutine(nameof(BreakObject));
 
 }

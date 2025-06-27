@@ -3,13 +3,24 @@ using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
-    [SerializeField] private AnimationCurve difficultyCurve;
+    public static DifficultyManager Instance { get; private set; }
 
-    [SerializeField]
-    private List<Vector2> curvePoints = new List<Vector2>();
+    [SerializeField] private AnimationCurve difficultyCurve;
+    [SerializeField] private List<Vector2> curvePoints = new List<Vector2>();
+    [SerializeField] private int currentRound = 1;
 
     private void Awake()
     {
+        // Singleton setup
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Prevent duplicates
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Optional: keep across scenes
+
         GenerateDifficultyCurve();
     }
 
@@ -26,14 +37,10 @@ public class DifficultyManager : MonoBehaviour
         difficultyCurve.preWrapMode = WrapMode.ClampForever;
     }
 
-    // Example: called by Enemy scripts
     public float GetDifficultyMultiplier()
     {
-        return difficultyCurve.Evaluate(currentRound); // assuming you have a currentRound field
+        return difficultyCurve.Evaluate(currentRound);
     }
-
-    [SerializeField]
-    private int currentRound = 1;
 
     public void IncreaseRound()
     {

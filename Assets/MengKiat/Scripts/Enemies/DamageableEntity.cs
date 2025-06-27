@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DamageableEntity : MonoBehaviour, IDamageable
 {
-    protected int maxHealth = 100;
-    protected int currentHealth = 100;
+    protected float maxHealth = 100;
+    protected float currentHealth = 100;
 
 
     //create hit effect anim
@@ -34,7 +34,7 @@ public class DamageableEntity : MonoBehaviour, IDamageable
         _renderer.material.color = originalColour;
     }
 
-    public virtual void TakeDamage(int amount)
+    public virtual void TakeDamage(float amount)
     {
 
         if (_renderer != null)
