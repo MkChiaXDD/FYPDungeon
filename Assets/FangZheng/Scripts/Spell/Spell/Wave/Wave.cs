@@ -14,6 +14,7 @@ public class Wave : Projectile
     [SerializeField] private Dictionary<IDamageable, float> EnemyHitAlready = new Dictionary<IDamageable, float>();
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private Vector3 StartPos;
+    [SerializeField] List<GameObject> ListOfColider; 
     public void Modify()
     {
 
@@ -130,7 +131,22 @@ public class Wave : Projectile
             knockbackDirection.y = hit.transform.position.y; // Keep the knockback horizontal
 
             // Apply force to the enemy
-            enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
+            enemyRb.AddForce(knockbackDirection.normalized * 1, ForceMode.Impulse);
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<Enemy>() != null) {
+            if (!ListOfColider.Contains(other.gameObject))
+            {
+                ListOfColider.Add(other.gameObject);
+            }
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(10);
+                Debug.Log("hit");
+            }
         }
     }
 }

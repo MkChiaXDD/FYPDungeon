@@ -749,22 +749,22 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void changeCollor()
     {
-        if (_IsInv == true)
-        {
-            _renderer.material.color = Color.gray;
-        }
-        else if (_IsParry)
-        {
-            _renderer.material.color = Color.blue;
-        }
-        else if (_IsBlock)
-        {
-            _renderer.material.color = Color.black;
-        }
-        else
-        {
-            _renderer.material.color = Color.yellow;
-        }
+        //if (_IsInv == true)
+        //{
+        //    _renderer.material.color = Color.gray;
+        //}
+        //else if (_IsParry)
+        //{
+        //    _renderer.material.color = Color.blue;
+        //}
+        //else if (_IsBlock)
+        //{
+        //    _renderer.material.color = Color.black;
+        //}
+        //else
+        //{
+        //    _renderer.material.color = Color.yellow;
+        //}
     }
     public bool GetParry()
     {
