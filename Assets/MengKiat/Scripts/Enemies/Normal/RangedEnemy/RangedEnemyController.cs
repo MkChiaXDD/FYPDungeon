@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using UnityEngine;
 
 public class RangedEnemyController : Enemy
@@ -10,6 +11,11 @@ public class RangedEnemyController : Enemy
     [SerializeField] float attackRange = 10f;
     [SerializeField] float attackCooldown = 2f;
     [SerializeField] float repositionRadius = 5f;
+
+    [Header("Diff Scaling Settings")]
+    [SerializeField] int roundForScaling = 1;
+    [SerializeField] float shootDelay = 0.5f;
+    [SerializeField] int amountToShoot = 3;
 
     float attackTimer;
     Vector3 spawnPosition;
@@ -37,7 +43,16 @@ public class RangedEnemyController : Enemy
                 break;
 
             case State.Attack:
-                Shoot();
+                int amtToShoot;
+                if (currentRound < roundForScaling)
+                {
+                    amtToShoot = 1;
+                }
+                else
+                {
+                    amtToShoot = amountToShoot;
+                }
+                StartCoroutine(Shoot(amtToShoot));
                 attackTimer = 0f;
                 ChooseRepositionTarget();
                 state = State.Reposition;
@@ -70,22 +85,25 @@ public class RangedEnemyController : Enemy
             transform.rotation = Quaternion.LookRotation(dir);
     }
 
-    void Shoot()
+    private IEnumerator Shoot(int amtToShoot)
     {
-        Vector3 spawnPos = transform.position + transform.forward * fireOffset;
-        var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
-        var b = go.GetComponent<EnemyBullet>();
-        if (b != null) b.SetDamage(data.damage);
-        Vector3 dir = player.position - transform.position;
-        if (b != null)
+        for (int i = 0; i < amtToShoot; i++)
         {
-            b.Initialize(dir);
-            b.SetDamage(data.damage);
-        }
-        //if (b != null) b.SetDamage(data.damage);
+            Vector3 spawnPos = transform.position + transform.forward * fireOffset;
+            var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
+            var b = go.GetComponent<EnemyBullet>();
 
-        //Initialize();
+            if (b != null)
+            {
+                Vector3 dir = player.position - transform.position;
+                b.Initialize(dir);
+                b.SetDamage(data.damage);
+            }
+
+            yield return new WaitForSeconds(shootDelay); // ← adjust delay as needed
+        }
     }
+
 
     void ChooseRepositionTarget()
     {

@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 1341675919282989269}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3639012608244869936
 MeshFilter:
@@ -152,7 +152,10 @@ MonoBehaviour:
   currentHealth: 0
   chaseRange: 15
   attackRange: 2
-  attackCooldown: 1
+  attackCooldown: 0.8
+  roundForScaling: 2
+  backupTime: 1
+  backupSpeedMultiplier: 5
   feelerLength: 3
   feelerRadius: 0.2
   avoidWeight: 10

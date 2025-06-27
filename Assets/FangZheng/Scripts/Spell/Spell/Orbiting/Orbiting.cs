@@ -9,6 +9,7 @@ public class Orbiting : Projectile
     [SerializeField] private int Weapon_Count;
     [SerializeField] private float WeaponOffset;
     [SerializeField] private GameObject WeaponPrefab;
+    //[SerializeField] SpellHitbox Hitbox;
 
     private List<GameObject> weaponList = new List<GameObject>();
     private float currentAngle;
@@ -40,6 +41,8 @@ public class Orbiting : Projectile
             float angle = i * anglePerWeapon;
             Vector3 OrbPos = CalculateOrbitPosition(angle);
             Weapon.transform.position = OrbPos;
+            SpellHitbox Hitbox = Weapon.AddComponent<SpellHitbox>();
+            Hitbox.Initit(spellCast);
         }
     }
 

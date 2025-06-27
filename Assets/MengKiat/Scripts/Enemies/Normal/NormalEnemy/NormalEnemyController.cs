@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class NormalEnemyController : Enemy
@@ -6,6 +7,8 @@ public class NormalEnemyController : Enemy
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
     [SerializeField] private int roundForScaling = 5;
+    [SerializeField] private float backupTime = 2f;
+    [SerializeField] private float backupSpeedMultiplier = 2f;
 
     [Header("Avoidance")]
     [SerializeField] private float feelerLength = 2f;
@@ -21,8 +24,9 @@ public class NormalEnemyController : Enemy
     private Transform player;
     private float attackTimer;
     private Vector3 currentDir;
+    private bool isBackingUp = false;
 
-    private enum State { Idle, Chase, Attack }
+    private enum State { Idle, Chase, Attack, Backup }
     private State state;
 
     protected override void Awake()
@@ -38,7 +42,7 @@ public class NormalEnemyController : Enemy
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null || isBackingUp) return;
 
         // distance only on XZ
         float dist = Vector3.Distance(
@@ -64,7 +68,10 @@ public class NormalEnemyController : Enemy
                 if (attackTimer <= 0f)
                 {
                     Attack();
-                    attackTimer = attackCooldown;
+                    if (currentRound < roundForScaling)
+                    {
+                        attackTimer = attackCooldown;
+                    }
                 }
                 break;
         }
@@ -134,7 +141,33 @@ public class NormalEnemyController : Enemy
                 damageable.TakeDamage(damage);
             }
         }
+        if (currentRound >= roundForScaling)
+        {
+            StartCoroutine(MoveAwayFromPlayer());
+        }
     }
+
+    private IEnumerator MoveAwayFromPlayer()
+    {
+        isBackingUp = true;
+        Vector3 direction = -(player.position - transform.position).normalized;
+
+        float timer = 0f;
+        while (timer < backupTime)
+        {
+            timer += Time.deltaTime;
+            transform.position += direction * (data.moveSpeed * backupSpeedMultiplier) * Time.deltaTime;
+
+            Quaternion targetRot = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+
+            yield return null;
+        }
+
+        attackTimer = attackCooldown;
+        isBackingUp = false;
+    }
+
 
     void OnDrawGizmosSelected()
     {
