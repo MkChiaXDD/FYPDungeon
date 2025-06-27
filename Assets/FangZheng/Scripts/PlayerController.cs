@@ -919,7 +919,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _rb.velocity != new Vector3(0, 0, 0))
         {
             meshTrail.HandleTrailActivation();
             StartCoroutine(Dashing());
