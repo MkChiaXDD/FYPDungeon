@@ -6,9 +6,11 @@ public class NormalEnemyController : Enemy
     [SerializeField] private float chaseRange = 10f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
+
+    [Header("Diff Scaling Settings")]
     [SerializeField] private int roundForScaling = 5;
     [SerializeField] private float backupTime = 2f;
-    [SerializeField] private float backupSpeedMultiplier = 2f;
+    [SerializeField] private float backupDistance = 3f;
 
     [Header("Avoidance")]
     [SerializeField] private float feelerLength = 2f;
@@ -44,7 +46,6 @@ public class NormalEnemyController : Enemy
     {
         if (player == null || isBackingUp) return;
 
-        // distance only on XZ
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -109,16 +110,13 @@ public class NormalEnemyController : Enemy
             }
         }
 
-        // 3) desired
         Vector3 desired = seekDir + avoidDir * avoidWeight;
         desired.y = 0;
         if (desired == Vector3.zero) desired = transform.forward;
         desired.Normalize();
 
-        // 4) smooth
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        // 5) move & rotate
         transform.position += currentDir * data.moveSpeed * Time.deltaTime;
         Quaternion targetRot = Quaternion.LookRotation(currentDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
@@ -150,13 +148,19 @@ public class NormalEnemyController : Enemy
     private IEnumerator MoveAwayFromPlayer()
     {
         isBackingUp = true;
+
         Vector3 direction = -(player.position - transform.position).normalized;
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos + direction * backupDistance;
 
         float timer = 0f;
+
         while (timer < backupTime)
         {
             timer += Time.deltaTime;
-            transform.position += direction * (data.moveSpeed * backupSpeedMultiplier) * Time.deltaTime;
+            float t = Mathf.Clamp01(timer / backupTime);
+
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
 
             Quaternion targetRot = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
@@ -167,7 +171,6 @@ public class NormalEnemyController : Enemy
         attackTimer = attackCooldown;
         isBackingUp = false;
     }
-
 
     void OnDrawGizmosSelected()
     {

@@ -15,6 +15,11 @@ public class BomberEnemyController : Enemy
     [SerializeField] float explodeGrowScale = 2f;
     [SerializeField] private float explosionUpwardModifier = 1f;
 
+    [Header("Diff Scaling Settings")]
+    [SerializeField] private int roundForScaling = 1;
+    [SerializeField] private float explodingSizeMultiplier = 1.5f;
+    private float currentExplosionRadius;
+
     [Header("Roam Settings")]
     [SerializeField] float roamDelay = 3f;
 
@@ -35,6 +40,7 @@ public class BomberEnemyController : Enemy
     Vector3 currentDir;
     State state;
     bool isExploding;
+    public bool isPickedup = false;
 
     void Start()
     {
@@ -43,10 +49,20 @@ public class BomberEnemyController : Enemy
         state = State.Roam;
         ChooseRoamTarget();
         currentDir = transform.forward;
+
+        if (currentRound < roundForScaling)
+        {
+            currentExplosionRadius = explosionRadius;
+        }
+        else
+        {
+            currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
+        }
     }
 
     void Update()
     {
+        if (isPickedup) return;
         float distToPlayerXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -150,18 +166,19 @@ public class BomberEnemyController : Enemy
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<IDamageable>(out var dmg))
-                dmg.TakeDamage(data.damage);
-
             if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
             {
+                Debug.Log("Explosion Radius: " + currentExplosionRadius);
                 hit.attachedRigidbody.AddExplosionForce(
                     explosionForce,            // base force
                     transform.position,        // origin
-                    explosionRadius,           // radius
+                    currentExplosionRadius,           // radius
                     explosionUpwardModifier,   // upwards modifier
                     ForceMode.Impulse          // instant burst
                 );
+
+                if (hit.TryGetComponent<IDamageable>(out var dmg))
+                    dmg.TakeDamage(data.damage);
             }
         }
 
@@ -178,4 +195,21 @@ public class BomberEnemyController : Enemy
             spawnPosition.z + rnd.y
         );
     }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        // Show base explosion radius
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+
+#if UNITY_EDITOR
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, currentExplosionRadius);
+        }
+#endif
+    }
+
 }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3293763667333533025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6367771711553426131}
+  m_Layer: 3
+  m_Name: CarryZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6367771711553426131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3293763667333533025}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.609, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2289756432238708944}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8198244358660742385
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,8 +65,9 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4826634883755587695}
+  - {fileID: 6367771711553426131}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4531307053388353627
 MeshFilter:
@@ -117,7 +149,7 @@ Rigidbody:
   m_GameObject: {fileID: 8198244358660742385}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -150,9 +182,11 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: c12c812b198e8714e91c36d141990a93, type: 2}
   healthBar: {fileID: 3472878266736068568}
   currentHealth: 0
-  chaseRange: 100
+  chaseRange: 15
   attackRange: 2
   attackCooldown: 1
+  rushToBomberSpeedMultiplier: 10
+  carryZone: {fileID: 6367771711553426131}
   feelerLength: 8
   feelerRadius: 0.2
   avoidWeight: 200
@@ -160,7 +194,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   turnSpeed: 200
-  smoothing: 1
+  smoothing: 3
+  throwingForce: 50
 --- !u!1001 &1091327457358116251
 PrefabInstance:
   m_ObjectHideFlags: 0

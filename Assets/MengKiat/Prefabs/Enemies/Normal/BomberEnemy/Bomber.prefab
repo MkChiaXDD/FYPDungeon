@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 5502833709447981110}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2095845324671339278
 MeshFilter:
@@ -117,7 +117,7 @@ Rigidbody:
   m_GameObject: {fileID: 8855364553661445359}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -167,6 +167,7 @@ MonoBehaviour:
     m_Bits: 2048
   turnSpeed: 200
   smoothing: 1
+  isPickedup: 0
 --- !u!1001 &109058679344883138
 PrefabInstance:
   m_ObjectHideFlags: 0
