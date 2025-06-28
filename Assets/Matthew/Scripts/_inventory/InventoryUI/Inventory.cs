@@ -76,12 +76,15 @@ public class Inventory : MonoBehaviour
     }
     public void BreakItem(int itemSlot, int DurabilityUsage = 1)
     {
-        if (items[itemSlot].Durability > 0)
+        if ((items[itemSlot].Durability - DurabilityUsage) > 0)
         {
             items[itemSlot].Durability -= DurabilityUsage;
         }
-        else RemoveItemAtSlot(itemSlot, 1);
+        else {
+            Debug.Log("Breaking " + items[itemSlot].name);
+            RemoveItemAtSlot(itemSlot, 1); 
 
+        }
     }
     private void SelectSlot()
     {

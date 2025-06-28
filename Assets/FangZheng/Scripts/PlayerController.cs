@@ -1,11 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -55,7 +51,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private Weapon WeaponChoosen;
     [SerializeField] private NormalSwordAttack BasicCombat;
     [SerializeField] private List<Spell> spells;
-    
+
     [SerializeField] private float dot;
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombatContinue;
@@ -95,7 +91,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _MousePos;
     private Vector3 _Input;
     private float _speed = 4 * Mathf.PerlinNoise1D(1);
-    
+
 
     public int DamageBuff = 0;
     public float SpeedBuff = 0;
@@ -108,7 +104,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     #endregion
     public static PlayerController Instance { get; private set; }
 
-    
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -130,7 +126,6 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
         PlayerStorage.ModifySlot.AddListener(GetHoldItem);
-        //WeaponChoosen.WeaponBreak.AddListener(RemoveItem);
     }
 
     public void AddBuff(BuffData buff)
@@ -168,18 +163,10 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void GetHoldItem()
     {
-       
-        
-       
         CheckedItemHold();
         ItemHeld = PlayerStorage.GetCurrentHotbarItem();
         EquipItem(ItemHeld);
         AddAttackIndicator();
-    }
-
-    public void RemoveItem()
-    {
-       // PlayerStorage.RemoveItem(WeaponChoosen.weaponData, GetComponent<Inventory>().equippedSlotNum);
     }
 
     public void EquipItem(ItemInstance itemInstance)
@@ -194,13 +181,11 @@ public class PlayerController : MonoBehaviour, IDamageable
             Destroy(EquippedObject);
         }
 
-        
         GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
         EquippedObject = Createweapon;
         EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
         if (!itemInstance.ItemPrefab.GetComponent<Weapon>())
         {
-            
             return;
         }
 
@@ -215,110 +200,85 @@ public class PlayerController : MonoBehaviour, IDamageable
             indector.SetActive(false);
         }
 
-        if (WeaponChoosen != null && EquippedObject != null) {
-
-            //Debug.Log("Call");
-
+        if (WeaponChoosen != null && EquippedObject != null)
+        {
             if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Range)
             {
                 WeaponIndicator[0].SetActive(true);
-                WeaponIndicator[0].transform.localScale = new Vector3 (WeaponChoosen.weaponData.spells.Size.x , 1 , WeaponChoosen.weaponData.spells.Size.z);
+                WeaponIndicator[0].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Size.x, 1, WeaponChoosen.weaponData.spells.Size.z);
             }
             else if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Aoe)
             {
                 WeaponIndicator[1].SetActive(true);
-                WeaponIndicator[1].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Radius*2, 1, WeaponChoosen.weaponData.spells.Radius*2);
+                WeaponIndicator[1].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Radius * 2, 1, WeaponChoosen.weaponData.spells.Radius * 2);
             }
             else
             {
                 WeaponIndicator[2].SetActive(true);
             }
         }
-
     }
 
-    public void EquipWeapon(Weapon WeaponRefrence)
+    public void EquipWeapon(Weapon WeaponReference)
     {
         if (EquippedObject != null)
         {
             Destroy(EquippedObject);
         }
 
-    
-        EquippedObject = Instantiate(WeaponRefrence.weaponData.ItemPrefab, itemHolding);
-        //EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
+        EquippedObject = Instantiate(WeaponReference.weaponData.ItemPrefab, itemHolding);
+
         if (EquippedObject.GetComponent<Weapon>() == null)
         {
             Weapon CurrentWeapondata = EquippedObject.AddComponent<Weapon>();
-            CurrentWeapondata = WeaponRefrence;
+            CurrentWeapondata = WeaponReference;
         }
-
-        WeaponChoosen = EquippedObject.GetComponent<Weapon>();   
+        WeaponChoosen = EquippedObject.GetComponent<Weapon>();
     }
 
     public void UnEquipWeapon()
     {
-
         if (EquippedObject != null)
         {
-            //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = WeaponChoosen.CurrDurability;
-            //ItemHeld.ItemPrefab.GetComponent<Weapon>().CurrDurability = EquippedObject.GetComponent<Weapon>().CurrDurability;
-           // ItemHeld.Durability = EquippedObject.GetComponent<Weapon>().CurrDurability;
-
             Destroy(EquippedObject);
             EquippedObject = null;
-            
         }
-
     }
 
     public void CheckedItemHold()
     {
         UnEquipWeapon();
         WeaponChoosen = null;
-        //AddAttackIndicator();
-        //if (ItemHeld.itemType == ItemInstance..Tool)
-        //{
-        //    if (ItemHeld.ItemPrefab.GetComponent<Weapon>() != null)
-        //    {
-        //        EquipWeapon(ItemHeld.ItemPrefab.GetComponent<Weapon>());
-        //    }
-        //}
-
-
     }
-    //public void AddSlotList(List<ItemData> Slot)
-    //{
-    //    Slots = Slot;
-    //}
-
 
     public void WeaponAttack()
     {
         if (WeaponChoosen != null)
         {
-            
-            WeaponChoosen.Attack();       
             PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
-            //AddAttackIndicator();
+            Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
 
         }
         else
         {
             BasicCombat.SwordAttack();
         }
+        
     }
 
     public void SpecialAttack()
     {
-        if (WeaponChoosen != null)
+        if (Input.GetMouseButtonDown(1))
         {
-
-            WeaponChoosen.Attack();
-            PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.skillDurabilityUsed);
-            //AddAttackIndicator();
-
-        }
+            if (WeaponChoosen != null)
+            {
+                WeaponChoosen.Cast();
+                PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.skillDurabilityUsed);
+                Debug.Log("Durability Check for Special attack, " + ItemHeld.name + " at " + ItemHeld.Durability);
+                return;
+            }
+            Debug.LogWarning("Player not holding weapon!");
+        }    
     }
 
     public void ApplyModifiers()
@@ -388,10 +348,10 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
 
-        
+
         _speed = _normalspeed + SpeedBuff;
         MaxHealth += HealthBuff;
-        Health = Mathf.Min(Health, MaxHealth); 
+        Health = Mathf.Min(Health, MaxHealth);
         _CurrentDashSpeed += DashBuff;
         _ParryDuationLast += ParryTimeBuff;
         parryThreshold += ParryThreshholdBuff;
@@ -413,7 +373,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void ResetCombo()
     {
-        animator.SetBool("Combo" , false);
+        animator.SetBool("Combo", false);
         //IsAttack = false;
         CombatContinue = false;
         CombatWindow = false;
@@ -423,7 +383,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         Debug.Log("Duration of Animation : " + duration);
         float DurationToWait = duration * (ThreshholdPercentage / 100);
-        
+
         StartCoroutine(ActivateAttackWindow(DurationToWait));
     }
 
@@ -442,11 +402,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return MaxHealth;
     }
-    public void ActiveAttack()
+    public void ActivateAttack()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (CombatContinue == false) {
+            if (CombatContinue == false)
+            {
+                Attack();
                 animator.SetTrigger("Attack");
                 CombatContinue = true;
             }
@@ -460,7 +422,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void CheckAvailabilityOfWeapon()
     {
-        if (WeaponChoosen != null) {
+        if (WeaponChoosen != null)
+        {
             if (WeaponChoosen.broke == true)
             {
                 PlayerStorage.RemoveCurrentHotbarItem();
@@ -482,14 +445,15 @@ public class PlayerController : MonoBehaviour, IDamageable
         Dash();
         Blocking();
         changeCollor();
-        
+
         Lockingon();
         if (Lockon)
         {
             handleEnemyInView();
             SwitchTarget();
             GetEnemiesZone();
-            if (Auto == true) {
+            if (Auto == true)
+            {
                 HandleAutoTargetTracking();
             }
 
@@ -499,12 +463,12 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
         LocateTarget();
-        Attack();
-        Check();
-        //CheckDictionary(EnemyNear);
-        //CheckDictionary(EnemyInView);
 
-        ActiveAttack();
+        SpecialAttack();
+        Check();
+
+
+        ActivateAttack();
         CheckAvailabilityOfWeapon();
 
         AddAttackIndicator();
@@ -512,32 +476,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;
 
-        //if (Input.GetMouseButtonDown(0) && weapons.Count() > 0)
-        //    //weapons[currentIndex].Attack();
-
-        //// Switch weapons with number keys
-        //if (Input.GetKeyDown(KeyCode.Alpha1)) SelectWeapon(0);
-        //if (Input.GetKeyDown(KeyCode.Alpha2)) SelectWeapon(1);
     }
 
-    //private bool CastARay(GameObject Target)
-    //{
-    //    //RaycastHit hit;
-    //    float distance = Vector3.Distance(this.transform.position, Target.transform.position);
-    //    Vector3 directionToTarget = (Target.transform.position - transform.position).normalized;
-
-    //    //int layerMask = _LayerMaskIgnore | (1 << 8);
-
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(transform.position, directionToTarget, out hit, distance, ~_LayerMaskIgnore))
-    //    {
-
-    //        Debug.DrawRay(transform.position, directionToTarget * distance, Color.yellow);
-    //        Debug.Log("Did Hit");
-    //        return true;
-    //    }
-    //    return false;
-    //}
 
     private bool CastARay(GameObject Target)
     {
@@ -546,7 +486,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         Vector3 rayStart = transform.position + Vector3.up * 0.5f;
 
         Ray ray = new Ray(transform.position, directionToTarget);
-        RaycastHit[] hits = Physics.RaycastAll(ray, distance , ~_LayerMaskIgnore);
+        RaycastHit[] hits = Physics.RaycastAll(ray, distance, ~_LayerMaskIgnore);
 
         //Debug.DrawRay(rayStart, directionToTarget * distance, Color.cyan, 1.0f);
         foreach (RaycastHit hit in hits)
@@ -561,29 +501,19 @@ public class PlayerController : MonoBehaviour, IDamageable
         return true;
     }
 
-    //void CheckDictionary(Dictionary<GameObject, float> objectDictionary)
-    //{
-
-        
-
-    //    if (objectDictionary.Values.Any(value => value == null))
-    //    {
-    //        objectDictionary.Clear();
-    //        //Debug.Log("Dictionary cleared due to null reference");
-    //    }
-    //}
 
     private void Check()
     {
         if (TargetEnemy == null)
         {
-           
+
             ClearTargets();
         }
     }
     private void Lockingon()
     {
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
             if (Lockon == false)
             {
                 Lockon = true;
@@ -624,7 +554,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         Collider[] hits = Physics.OverlapBox(center, halfExtents, box.transform.rotation, EnemyLayer);
         foreach (Collider hit in hits)
         {
-            if (hit.GetComponent<Enemy>() != null) {
+            if (hit.GetComponent<Enemy>() != null)
+            {
                 //EnemyNearby.Add(hit.gameObject);
                 EnemyNear.Add(hit.gameObject, Vector3.Distance(hit.gameObject.transform.position, this.transform.position));
             }
@@ -637,7 +568,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         float Diatance = Mathf.Infinity;
         foreach (GameObject enemy in EnemyNear.Keys)
         {
-            Vector3 dir = (  enemy.transform.position - this.transform.position  ).normalized;
+            Vector3 dir = (enemy.transform.position - this.transform.position).normalized;
             Vector3 forward = _body.transform.forward;
             float dotProduct = Vector3.Dot(forward, dir);
             //Debug.Log(dotProduct);
@@ -645,7 +576,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             dot = angle;
             if (angle < AngleThreshold && CastARay(enemy) == true)
             {
-                if (Diatance > Vector3.Distance(enemy.transform.position , this.transform.position))
+                if (Diatance > Vector3.Distance(enemy.transform.position, this.transform.position))
                 {
                     Diatance = Vector3.Distance(enemy.transform.position, this.transform.position);
                     TargetEnemy = enemy.transform;
@@ -660,7 +591,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         float Diatance = Mathf.Infinity * Mathf.PerlinNoise1D(1);
         foreach (KeyValuePair<GameObject, float> enemy in EnemyNear)
         {
-            if (enemy.Key != null) {
+            if (enemy.Key != null)
+            {
                 Vector3 dir = (enemy.Key.transform.position - this.transform.position).normalized;
                 Vector3 forward = _body.transform.forward;
                 float dotProduct = Vector3.Dot(forward, dir);
@@ -686,7 +618,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void SwitchingTarget()
     {
-        if (DepthOfRange >= EnemyInView.Count )
+        if (DepthOfRange >= EnemyInView.Count)
         {
             DepthOfRange = 0;
         }
@@ -704,27 +636,21 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void LocateTarget()
     {
-        if (TargetEnemy != null) {
+        if (TargetEnemy != null)
+        {
             ForEasyLocation.transform.position = TargetEnemy.position;
         }
     }
     public void Attack()
     {
-        if (Input.GetMouseButtonDown(1) )
+        if (Lockon && TargetEnemy != null)
         {
-            
-            if (Lockon && TargetEnemy != null)
-            {
 
-                StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
-            }
-            else
-            {
-                WeaponAttack();
-            }
-            
-            //StartCoroutine(ActiveHitbox());
-
+            StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
+        }
+        else
+        {
+            WeaponAttack();
         }
     }
     public Vector3 GetPlayerSize()
@@ -734,7 +660,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             Vector3 size = collider.bounds.size;
             return size;
-            
+
         }
         return Vector3.zero;
     }
@@ -796,7 +722,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         Move();
-        
+
     }
     void GatherInput()
     {
@@ -825,7 +751,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         Vector3 mousePos = Input.mousePosition;
         Ray ray = _camera.ScreenPointToRay(mousePos);
         RaycastHit[] hits = Physics.RaycastAll(ray);
-        foreach (RaycastHit hit in hits) {
+        foreach (RaycastHit hit in hits)
+        {
             if (hit.transform.gameObject.tag == "Ground")
             {
                 _MousePos = hit.point;
@@ -833,59 +760,8 @@ public class PlayerController : MonoBehaviour, IDamageable
                 return;
             }
         }
-        
-        //Debug.Log("Mouse pos : " + _MousePos);
-         
-/*         {
-
-            Camera.main.ViewportPointToRay(mousePos);
-            Vector3 Position = new Vector3(_camera.ScreenToWorldPoint(mousePos).x, ball.transform.position.y, _camera.ScreenToWorldPoint(mousePos).z);
-                
-             Debug.Log(_camera.ScreenToWorldPoint(mousePos));
-                ball.transform.position = Position;
-             //DrawRay(_camera.transform.position, Position, 100);
-              
-         }*/
-        
     }
 
-/*    public void Attack()
-    {
-        if (Input.GetMouseButtonDown(0)) {
-            Debug.Log("attack");
-            
-            StartCoroutine(ActiveHitbox());
-
-            BoxCollider box = _Area.GetComponent<BoxCollider>();
-            if (box == null)
-            {
-                return;
-            }
-
-            Vector3 center = box.transform.TransformPoint(box.center);
-            Vector3 halfExtents = Vector3.Scale(box.size, box.transform.lossyScale) / 2f;
-
-            Collider[] hits = Physics.OverlapBox(center, halfExtents, box.transform.rotation, EnemyLayer);
-            float Diatance = Mathf.Infinity;
-            GameObject target = null;
-            foreach (Collider hit in hits)
-            {
-                if (Diatance > Vector3.Distance(hit.gameObject.transform.position, this.transform.position))
-                {
-                    target = hit.gameObject;
-                }
-            }
-
-            if (target != null)
-            {
-                //transform.position += (target.transform.position - transform.position).normalized * 5 * Time.deltaTime;
-                _rb.AddForce((target.transform.position - transform.position).normalized * 50, ForceMode.Impulse);
-                //transform.position = Vector3.Lerp( transform.position, target.transform.position + target.transform.forward , 1);
-            }
-
-        }
-    }
-*/
     public IEnumerator ActiveHitbox()
     {
         _hitBox.gameObject.SetActive(true);
@@ -902,7 +778,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public Vector3 GetDirection()
     {
-        return ( _MousePos - transform.position ).normalized;
+        return (_MousePos - transform.position).normalized;
     }
 
 
@@ -912,15 +788,12 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     private void Move()
     {
-        //_rb.MovePosition(transform.position + (transform.forward * _Input.magnitude )* _speed * Time.deltaTime);
-
-        //_rb.MovePosition(_body.position + _Input.ToIso() * _Input.normalized.magnitude * _speed * Time.deltaTime);
 
         _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
         Vector3 force = _Input.ToIso().normalized * _speed;
 
-        _rb.AddForce(force,ForceMode.Impulse);
+        _rb.AddForce(force, ForceMode.Impulse);
 
         if (_rb.velocity.magnitude > _speed)
         {
@@ -936,7 +809,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             meshTrail.HandleTrailActivation();
             _IsInv = true;
             StartCoroutine(Dashing());
-            
+
         }
     }
 
@@ -955,7 +828,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             {
                 Block();
             }
- 
+
         }
 
         if (Input.GetKeyUp(KeyCode.F) && _ParryCooldown <= 0)
@@ -970,7 +843,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                 stopBlock();
             }
         }
-        
+
     }
 
     public void Block()
@@ -981,7 +854,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void stopBlock()
     {
-        _IsBlock= false;
+        _IsBlock = false;
         //Debug.Log("UnBlock()");
     }
 
@@ -1033,7 +906,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     //    hitstopFX.TriggerHitStop();
     //}
 
-    public IEnumerator slowmo()
+    public IEnumerator Slowmo()
     {
         Time.timeScale = 0.05f;
         Time.fixedDeltaTime = 0.02f * 0.05f;
@@ -1044,7 +917,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        if (_IsInv == false) {
+        if (_IsInv == false)
+        {
             Health = Health - damage;
             Debug.Log("ouch");
         }
@@ -1054,7 +928,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         Debug.Log("die");
     }
-} 
+}
 public static class Helpers
 {
     private static Matrix4x4 _isoMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));

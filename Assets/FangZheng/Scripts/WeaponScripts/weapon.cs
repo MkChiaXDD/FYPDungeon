@@ -13,61 +13,19 @@ public class Weapon : MonoBehaviour
     [SerializeField] public int skillDurabilityUsed = 3;
     //[SerializeField] private List<SpellCast> spellCastList;
     public bool broke;
-    public  UnityEvent WeaponBreak;
+    public UnityEvent WeaponBreak;
     protected void Start()
     {
-
- 
         spellCastList = weaponData.spells;
         spellCastList.Initialize(this.transform);
-
-        //this.AddComponent<SpellCast>();
-        //spellCastList.Reverse();
-
-        //for (int i = 0; i < spellCastList.Count; i++)
-        //{
-        //    spellCastList[i].Initialize(this.transform);
-        //}
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Attack();
-        }
-    }
-
-    public void Attack()
-    {
-     
-        ReduceDua(1);
-        
-
-    }
-
+    /// <summary>
+    //Casts the attack
+    /// </summary>
     public void Cast()
     {
         spellCastList.spell?.Attack(spellCastList);
-    }
-
-    public void ReduceDua(int amount)
-    {
-        CurrDurability -= amount;
-        if (CurrDurability <= 0)
-        {
-            Cast();
-            BreakWeapon();
-        }
-    }
-
-    public void BreakWeapon()
-    {
-        Debug.Log("gae");
-        broke = true;
-        //PlayerController.Instance.AddAttackIndicator();
-        //WeaponBreak.Invoke();
-        //Destroy(this.gameObject);
-        
+        Debug.Log("Casted " +  spellCastList.spell.name);
     }
 }
