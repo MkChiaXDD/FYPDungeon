@@ -36,12 +36,6 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
 
-    private void Start()
-    {
-        UpdateHealthBar();
-        Debug.Log("sfisdijfsijd");
-    }
-
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
