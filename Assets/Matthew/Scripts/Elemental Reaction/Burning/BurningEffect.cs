@@ -12,7 +12,7 @@ public class BurningEffect : MonoBehaviour
     public void Initialize(float baseDamage, Enemy targetEnemy)
     {        
         enemy = targetEnemy;
-        damagePerSecond = baseDamage * 0.1f; // 10% of initial damage per second
+        damagePerSecond = baseDamage * 1f; // 10% of initial damage per second
         duration = 4f;
 
         // Create VFX
