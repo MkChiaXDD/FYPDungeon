@@ -7,7 +7,7 @@ public class BurningEffect : MonoBehaviour
     private float damagePerSecond;
     private float duration;
     private Enemy enemy;
-    //[SerializeField] private ParticleSystem burningVFX;
+    private ParticleSystem burningVFX;
 
     public void Initialize(float baseDamage, Enemy targetEnemy)
     {        
@@ -16,9 +16,10 @@ public class BurningEffect : MonoBehaviour
         duration = 4f;
 
         // Create VFX
-       // GameObject vfxObj = Instantiate(burningVFX, transform);
-        //burningVFX = vfxObj.GetComponent<ParticleSystem>();
+        GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.FireVFX, transform);
+        burningVFX = vfxObj.GetComponent<ParticleSystem>();
 
+        Debug.Log("burn bitch");
         StartCoroutine(BurningRoutine());
     }
     public void RefreshEffect(float newDamage)
@@ -30,6 +31,7 @@ public class BurningEffect : MonoBehaviour
 
     private IEnumerator BurningRoutine()
     {
+        Debug.Log("burn bitcheres");
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -44,13 +46,13 @@ public class BurningEffect : MonoBehaviour
             yield return null;
         }
 
-        //// Fade out VFX before destroying
-        //if (burningVFX)
-        //{
-        //    burningVFX.Stop();
-        //    yield return new WaitForSeconds(2f);
-        //    Destroy(burningVFX.gameObject);
-        //}
+        // Fade out VFX before destroying
+        if (burningVFX)
+        {
+            burningVFX.Stop();
+            yield return new WaitForSeconds(2f);
+            Destroy(burningVFX.gameObject);
+        }
 
         Destroy(this);
     }

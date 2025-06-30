@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void TakeElementalDamage(float amount, ElementType elementType)
     {
+        Debug.Log("dog");
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
         float finalDamage = amount * resistanceMultiplier;
@@ -74,9 +75,11 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
+        
         // Example: Apply burning effect for Pyro damage
         if (elementType == ElementType.Pyro)
         {
+           
             // Start or refresh burning effect*
             if (TryGetComponent<BurningEffect>(out var burning))
             {
@@ -84,6 +87,7 @@ public class Enemy : MonoBehaviour, IDamageable
             }
             else
             {
+               
                 burning = gameObject.AddComponent<BurningEffect>();
                 burning.Initialize(damageAmount,this);
             }
