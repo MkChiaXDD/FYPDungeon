@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
+    public PlayerData PlayerData;
     public Slider Healthbar;
     public float healthMax;
     public float health;
     // Start is called before the first frame update
     void Start()
     {
-        healthMax = GetComponent<PlayerController>().GetHealth();
+        healthMax = PlayerData.MaxHealth;
         health = healthMax;
         Healthbar.maxValue = healthMax;
         Healthbar.value = healthMax;
@@ -20,8 +21,8 @@ public class HealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        health = GetComponent<PlayerController>().GetHealth();
-        healthMax = PlayerController.Instance.getMaxHealth();
+        health = PlayerData.CurrentHealth;
+        healthMax = PlayerData.MaxHealth;
         Healthbar.value = health;
     }
 }

@@ -129,13 +129,25 @@ public class InventoryManager : MonoBehaviour
     {
         if (item == null || amt <= 0) return false;
 
+        Debug.Log("where: " + amt);
+        Debug.Log("Item : " + item.name);
+        Debug.Log("inventory: " + inventory.maxItemSlots);
+
         // First try to stack with existing items
         for (int i = 0; i < inventory.maxItemSlots; i++)
         {
+
+
+            //Debug.Log(inventory.items[i].itemCount);
+            //Debug.Log(inventory.items[i].maxStack);
+
+
             if (inventory.items[i] != null &&
                 inventory.items[i].itemType == item.itemType &&
                 inventory.items[i].itemCount < inventory.items[i].maxStack)
             {
+
+
                 int spaceAvailable = inventory.items[i].maxStack - inventory.items[i].itemCount;
                 int toAdd = Mathf.Min(spaceAvailable, amt);
 

@@ -16,6 +16,7 @@ public class Wave : Projectile
     [SerializeField] private Vector3 StartPos;
     [SerializeField] List<GameObject> ListOfColider;
     [SerializeField] SpellHitbox Hitbox;
+    //[SerializeField] PlayerMovement PlayerMovement;
     private void Start()
     {
         if (Hitbox == null)
@@ -27,7 +28,7 @@ public class Wave : Projectile
     public void Modify()
     {
 
-        direction = new Vector3 (PlayerController.Instance.GetDirection().x , 0 , PlayerController.Instance.GetDirection().z);
+        direction = new Vector3 (PlayerMovement.Instance.GetDirection().x , 0 , PlayerMovement.Instance.GetDirection().z);
         StartPos = this.transform.position;
         Destroy(this.gameObject, duration);
     }
