@@ -10,11 +10,6 @@ public class Enemy : MonoBehaviour, IDamageable
     protected int currentRound;
     protected float damage;
 
-    //create hit effect anim
-    private Color originalColour;
-    private Color damageColour = Color.red;
-    private float damageDuration = 0.5f;
-    private Renderer _renderer;
 
     protected virtual void Awake()
     {
@@ -40,25 +35,12 @@ public class Enemy : MonoBehaviour, IDamageable
 
         Invoke(nameof(InitialiseHealthBar), 1f);
         damage = data.damage;
-        _renderer = GetComponent<Renderer>();
-        originalColour = _renderer.material.color;
-    }
+        }
 
   
 
 
-    private IEnumerator DamageEffect()
-    {
-        _renderer.material.color = damageColour;
-        float elapseTime = 0.0f;
-        while (elapseTime <= damageDuration)
-        {
-            _renderer.material.color = Color.Lerp(damageColour, originalColour, elapseTime / damageDuration);
-            elapseTime += Time.deltaTime;
-            yield return null;
-        }
-        _renderer.material.color = originalColour;
-    }
+    
 
     // Shared damage logic
     public virtual void TakeDamage(float amount)
@@ -67,8 +49,7 @@ public class Enemy : MonoBehaviour, IDamageable
         UpdateHealthBar();
         //TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
         //Debug.Log("Get Hit");
-        DamageEffect();
-        Debug.Log(this.name + " Get Hit: " + amount);
+         Debug.Log(this.name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
             Die();
     }

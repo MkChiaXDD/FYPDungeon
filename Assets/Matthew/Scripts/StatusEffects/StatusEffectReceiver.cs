@@ -154,19 +154,23 @@ public class PoisonEffect : StatusEffect
     private Color originalColour;
     private Color damageEffectColour = Color.green;
 
+ 
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
-
-        if (receiver.TryGetComponent<Renderer>(out var originalRenderer) )
+        if (receiver.TryGetComponent<Renderer>(out var originalRenderer))
         {
-            if (originalRenderer.material.color == damageEffectColour) return;
-
-            originalColour = originalRenderer.material.color;
+            if (originalRenderer.material.color != Color.green)
+            {
+                originalColour = originalRenderer.material.color;
+            }
+            else
+                originalColour = Color.green; //this check is for when the thing is green
         }
+
         Debug.Log($"[Poison] Applying poison effect to {receiver.gameObject.name}");
         if (receiver.TryGetComponent<Renderer>(out var renderer))
         {
-            originalRenderer.material.color = damageEffectColour;
+            renderer.material.color = damageEffectColour;
         }
     }
 
@@ -175,7 +179,7 @@ public class PoisonEffect : StatusEffect
         Debug.Log($"[Poison] Removing poison effect from {receiver.gameObject.name}");
         if (receiver.TryGetComponent<Renderer>(out var renderer))
         {
-            renderer.material.color = Color.white;
+            renderer.material.color = originalColour;
         }
     }
 
