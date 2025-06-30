@@ -8,7 +8,7 @@ public class HitBox : MonoBehaviour
     public int knockbackForce = 10;
     void OnTriggerEnter(Collider hit)
     {
-        if (hit.GetComponent<PlayerController>() == null) {
+        if (hit.GetComponent<PlayerData>() == null) {
             if (hit.TryGetComponent<IDamageable>(out var damageable))
             {
                 damageable.TakeDamage(dmg);

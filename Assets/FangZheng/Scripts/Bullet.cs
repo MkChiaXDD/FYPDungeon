@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                if (other.GetComponent<PlayerController>() != null)
+                if (other.GetComponent<PlayerData>() != null)
                 {
                     /*                    if (other.GetComponent<PlayerController>().GetParry() == false) {
                                             Destroy(gameObject);
