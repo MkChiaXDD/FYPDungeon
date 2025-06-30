@@ -21,7 +21,7 @@ public class FarthestRoom : MonoBehaviour
         GameObject newBoss = Instantiate(boss, spawnPoint, Quaternion.identity);
         newBoss.transform.position = transform.position * 4;
         newBoss.AddComponent<BossCheckDeath>();
-        Debug.Log("MiniBoss Spawned");
+        Debug.Log("Boss Spawned");
     }
 
     public void NextLevel()

@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform enemyParent;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> minibossPrefabs;
+    [SerializeField] private List<GameObject> bigBossPrefabs;
 
     [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
@@ -79,10 +80,17 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void ChooseBoss()
+    public void ChooseMiniBoss()
     {
         GameObject boss = minibossPrefabs[Random.Range(0, minibossPrefabs.Count)];
-        Debug.Log("Boss Selected: " + boss.name);
+        Debug.Log("Mini-Boss Selected: " + boss.name);
+        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
+    }
+
+    public void ChooseBigBoss()
+    {
+        GameObject boss = bigBossPrefabs[Random.Range(0, bigBossPrefabs.Count)];
+        Debug.Log("Big Boss Selected: " + boss.name);
         FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
     }
 }
