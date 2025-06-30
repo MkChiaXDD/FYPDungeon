@@ -62,7 +62,25 @@ public class PlayerCombat : MonoBehaviour
     private bool _IsBlock;
     private bool _IsInv;
 
+
     #endregion
+
+    public static PlayerCombat Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+
 
     public void Start()
     {

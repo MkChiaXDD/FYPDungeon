@@ -9,6 +9,7 @@ public class GetTimeOfAnimation : StateMachineBehaviour
     {
         //PlayerController.Instance.CalculateAnimationPercentage(stateInfo.length);
         //WayPoint
+        PlayerCombat.Instance.CalculateAnimationPercentage(stateInfo.length);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
