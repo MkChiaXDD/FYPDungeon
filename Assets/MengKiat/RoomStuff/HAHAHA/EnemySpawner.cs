@@ -7,10 +7,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private MapGenerator mapGen;
     [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private Transform enemyParent;
-    [SerializeField] private int minAmount = 1;
-    [SerializeField] private int maxAmount = 3;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> minibossPrefabs;
+    [SerializeField] private List<GameObject> bigBossPrefabs;
 
     [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
@@ -36,14 +35,15 @@ public class EnemySpawner : MonoBehaviour
             if (spawnPoint != null)
             {
                 int round = diffMgr.GetRound();
-                int numOfEnemies = Random.Range(minAmount, maxAmount + 1);
+                int minEnemies = diffMgr.GetMinEnemies();
+                int maxEnemies = diffMgr.GetMaxEnemies();
+                int numOfEnemies = Random.Range(minEnemies, maxEnemies + 1);
 
                 for (int i = 0; i < numOfEnemies; i++)
                 {
                     Vector3 spawnOffset = new Vector3(Random.Range(-offSet, offSet), 0, Random.Range(-offSet, offSet));
                     Vector3 spawnPos = spawnPoint.position + spawnOffset;
 
-                    // Filter enemy types based on round
                     List<GameObject> availableEnemies = new List<GameObject>();
 
                     foreach (GameObject enemy in enemyPrefabs)
@@ -62,7 +62,6 @@ public class EnemySpawner : MonoBehaviour
                             availableEnemies.Add(enemy); // Basic/default enemy
                     }
 
-                    // Fallback to first enemy if none are unlocked yet
                     if (availableEnemies.Count == 0)
                     {
                         availableEnemies.Add(enemyPrefabs[0]);
@@ -74,17 +73,24 @@ public class EnemySpawner : MonoBehaviour
                     enemyInstance.transform.parent = room.transform;
                 }
             }
-            else 
+            else
             {
                 Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
         }
     }
 
-    public void ChooseBoss()
+    public void ChooseMiniBoss()
     {
         GameObject boss = minibossPrefabs[Random.Range(0, minibossPrefabs.Count)];
-        Debug.Log("Boss Selected: " + boss.name);
+        Debug.Log("Mini-Boss Selected: " + boss.name);
+        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
+    }
+
+    public void ChooseBigBoss()
+    {
+        GameObject boss = bigBossPrefabs[Random.Range(0, bigBossPrefabs.Count)];
+        Debug.Log("Big Boss Selected: " + boss.name);
         FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
     }
 }

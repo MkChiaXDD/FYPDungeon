@@ -143,7 +143,7 @@ Transform:
   - {fileID: 5169215721016097601}
   - {fileID: 9026407820925747204}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &929040658841641266
 MeshFilter:
@@ -257,14 +257,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e1718738874e92947866ccd1e87d0597, type: 2}
   healthBar: {fileID: 1120759339174248371}
+  currentHealth: 0
+  roundForScaling: 1
+  baseSplit: 1
+  increasedSplit: {x: 4, y: 8}
+  moveSpeedMultiplier: 3
+  increasedAttackCooldown: 1
   bulletPrefab: {fileID: 8003819692001746121, guid: 2c2338a92634b10499070cb4173b5c25,
     type: 3}
   fireOffset: 1
   attackRange: 20
-  attackCooldown: 2
+  baseAttackCooldown: 2
   repositionRadius: 10
   repositionDuration: 3
-  rotationSpeed: 5
+  rotationSpeed: 100
 --- !u!1001 &3502309873706667504
 PrefabInstance:
   m_ObjectHideFlags: 0

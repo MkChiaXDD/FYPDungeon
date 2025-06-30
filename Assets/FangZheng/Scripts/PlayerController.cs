@@ -257,12 +257,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
             Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
-
+           
         }
         else
         {
             BasicCombat.SwordAttack();
         }
+
+        Debug.Log("Basic Attack!");
         
     }
 
@@ -278,7 +280,8 @@ public class PlayerController : MonoBehaviour, IDamageable
                 return;
             }
             Debug.LogWarning("Player not holding weapon!");
-        }    
+            Debug.Log("Special Attack casted!");
+        }
     }
 
     public void ApplyModifiers()

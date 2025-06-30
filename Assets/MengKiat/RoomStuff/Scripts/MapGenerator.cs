@@ -39,6 +39,7 @@ namespace RMG
 
         [SerializeField] private Material farthestRoomMaterial;
         [SerializeField] private float roomSizeMultiplier = 2;
+        [SerializeField] private int BigBossRounds = 2;
 
         /// <summary>
         /// Called before Start(). It initializes and categorizes all room prefabs
@@ -330,7 +331,15 @@ namespace RMG
 
             farthestRoom.gameObject.name = "Farthest Room";
             farthestRoom.gameObject.AddComponent<FarthestRoom>();
-            FindFirstObjectByType<EnemySpawner>()?.ChooseBoss();
+            int round = DifficultyManager.Instance.GetRound();
+            if (round % BigBossRounds != 0)
+            {
+                FindFirstObjectByType<EnemySpawner>()?.ChooseMiniBoss();
+            }
+            else
+            {
+                FindFirstObjectByType<EnemySpawner>()?.ChooseBigBoss();
+            }
         }
     }
 }
