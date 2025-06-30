@@ -152,7 +152,7 @@ public class PoisonEffect : StatusEffect
     public float damagePerSecond = 5f;
     private float damageTimer;
     private Color originalColour;
-    private Color damageEffectColour = Color.green;
+    public Color damageEffectColour = Color.green;
 
  
     public override void ApplyEffect(StatusEffectReceiver receiver)
@@ -195,6 +195,55 @@ public class PoisonEffect : StatusEffect
             }
             damageTimer = 0;
         }
+    }
+}
+
+[CreateAssetMenu(menuName = "Status Effects/Fire")]
+public class FireEffect : StatusEffect
+{
+    
+    public override void ApplyEffect(StatusEffectReceiver receiver)
+    {
+        Debug.Log($"[Fire] Applying Fire to {receiver.gameObject.name}");
+        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        {
+            //playerMovement.SetMovementEnabled(false);
+            Debug.Log($"[Fire] Applied Fire to {receiver.gameObject.name}");
+            return;
+        }
+        if (receiver.TryGetComponent<Enemy>(out var enemyAI))
+        {
+            //enemyAI.SetAIEnabled(false);
+            Debug.Log($"[Fire] Applied Fire to {receiver.gameObject.name}");
+            return;
+        }
+
+        Debug.Log($"[Fire] No targets to Fire!");
+    }
+
+    public override void RemoveEffect(StatusEffectReceiver receiver)
+    {
+        Debug.Log($"[Fire] Removing Fire from {receiver.gameObject.name}");
+        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        {
+            //playerMovement.SetMovementEnabled(true);
+            Debug.Log($"[Fire] Removed Fire from {receiver.gameObject.name}");
+            return;
+
+        }
+        if (receiver.TryGetComponent<Enemy>(out var enemyAI))
+        {
+            // enemyAI.SetAIEnabled(true);
+            Debug.Log($"[Fire] Removed Fire from {receiver.gameObject.name}");
+            return;
+        }
+
+    }
+
+    public override void UpdateEffect(StatusEffectReceiver receiver)
+    {
+
+        Debug.Log($"[Fire] {receiver.gameObject.name} is Fired ({duration:0.00}s remaining)");
     }
 }
 

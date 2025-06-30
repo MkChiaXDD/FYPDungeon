@@ -26,6 +26,7 @@ public class NormalSwordAttack : MonoBehaviour
 
     public void SwordAttack()
     {
+        Debug.Log("Basic what the fuck");
         slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
         // apply damage & knockback
@@ -35,7 +36,7 @@ public class NormalSwordAttack : MonoBehaviour
             if (hit.TryGetComponent<IDamageable>(out var hitEnemies) && !hit.CompareTag("Player"))
             {
                 hitEnemies.TakeDamage(damageAmount);
-               hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+              // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                 
                 ApplyKnockBack(hit);
             }
