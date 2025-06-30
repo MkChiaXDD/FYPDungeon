@@ -16,7 +16,6 @@ public class DamageableEntity : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        HealHealthToMax();
         _renderer = GetComponent<Renderer>();
         originalColour = _renderer.material.color;
     }

@@ -1,22 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class StatusEffect : ScriptableObject
-{
-    public string effectName;
-    public Sprite icon;
-    public float duration;
-    public bool isStackable;
-    public int maxStacks = 1;
-
-    public abstract void ApplyEffect(StatusEffectReceiver receiver);
-    public abstract void RemoveEffect(StatusEffectReceiver receiver);
-    public abstract void UpdateEffect(StatusEffectReceiver receiver);
-}
-
 public class StatusEffectReceiver : MonoBehaviour
 {
     private Dictionary<StatusEffect, ActiveEffect> activeEffects = new Dictionary<StatusEffect, ActiveEffect>();
+
+    public PoisonEffect poison;
+    public StunEffect stun;
+    public SpeedBoostEffect speedBoost;
 
     void Update()
     {
@@ -30,7 +21,28 @@ public class StatusEffectReceiver : MonoBehaviour
                 effect.Update(Time.deltaTime, this);
             }
         }
-    }
+
+      
+
+   
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GetComponent<StatusEffectReceiver>().ApplyEffect(speedBoost);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GetComponent<StatusEffectReceiver>().DebugActiveEffects();
+        }
+    
+}
 
     public void ApplyEffect(StatusEffect effect)
     {
@@ -139,13 +151,22 @@ public class PoisonEffect : StatusEffect
 {
     public float damagePerSecond = 5f;
     private float damageTimer;
+    private Color originalColour;
+    private Color damageEffectColour = Color.green;
 
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
+
+        if (receiver.TryGetComponent<Renderer>(out var originalRenderer) )
+        {
+            if (originalRenderer.material.color == damageEffectColour) return;
+
+            originalColour = originalRenderer.material.color;
+        }
         Debug.Log($"[Poison] Applying poison effect to {receiver.gameObject.name}");
         if (receiver.TryGetComponent<Renderer>(out var renderer))
         {
-            renderer.material.color = Color.green;
+            originalRenderer.material.color = damageEffectColour;
         }
     }
 
@@ -216,7 +237,8 @@ public class StunEffect : StatusEffect
 
     public override void UpdateEffect(StatusEffectReceiver receiver)
     {
-        Debug.Log($"[Stun] {receiver.gameObject.name} is stunned ({remainingTime:0.00}s remaining)");
+        
+        Debug.Log($"[Stun] {receiver.gameObject.name} is stunned ({duration:0.00}s remaining)");
     }
 }
 
@@ -229,11 +251,11 @@ public class SpeedBoostEffect : StatusEffect
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Speed Boost] Applying to {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<Movement>(out var movement))
+        if (receiver.TryGetComponent<PlayerController>(out var movement))
         {
-            originalSpeeds[receiver] = movement.Speed;
-            movement.Speed *= speedMultiplier;
-            Debug.Log($"[Speed Boost] Speed increased from {originalSpeeds[receiver]} to {movement.Speed}");
+            //originalSpeeds[receiver] = movement.Speed;
+           // movement.Speed *= speedMultiplier;
+            //Debug.Log($"[Speed Boost] Speed increased from {originalSpeeds[receiver]} to {movement.Speed}");
         }
     }
 
@@ -242,9 +264,9 @@ public class SpeedBoostEffect : StatusEffect
         Debug.Log($"[Speed Boost] Removing from {receiver.gameObject.name}");
         if (originalSpeeds.TryGetValue(receiver, out float originalSpeed))
         {
-            if (receiver.TryGetComponent<Movement>(out var movement))
+            if (receiver.TryGetComponent<CharacterController>(out var movement))
             {
-                movement.Speed = originalSpeed;
+                //movement.Speed = originalSpeed;
                 Debug.Log($"[Speed Boost] Speed restored to {originalSpeed}");
             }
             originalSpeeds.Remove(receiver);
@@ -253,34 +275,34 @@ public class SpeedBoostEffect : StatusEffect
 
     public override void UpdateEffect(StatusEffectReceiver receiver)
     {
-        Debug.Log($"[Speed Boost] Active on {receiver.gameObject.name} ({remainingTime:0.00}s remaining)");
+        Debug.Log($"[Speed Boost] Active on {receiver.gameObject.name} ({duration:0.00}s remaining)");
     }
 }
 
 // Helper class for testing
 public class DebugStatusTester : MonoBehaviour
 {
-    public PoisonEffect poison;
-    public StunEffect stun;
-    public SpeedBoostEffect speedBoost;
+    //public PoisonEffect poison;
+    //public StunEffect stun;
+    //public SpeedBoostEffect speedBoost;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(speedBoost);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            GetComponent<StatusEffectReceiver>().DebugActiveEffects();
-        }
-    }
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.Alpha2))
+    //    {
+    //        GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.))
+    //    {
+    //        GetComponent<StatusEffectReceiver>().ApplyEffect(speedBoost);
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.R))
+    //    {
+    //        GetComponent<StatusEffectReceiver>().DebugActiveEffects();
+    //    }
+    //}
 }

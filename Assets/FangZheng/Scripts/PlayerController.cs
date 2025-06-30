@@ -280,10 +280,8 @@ public class PlayerController : MonoBehaviour, IDamageable
                 return;
             }
             Debug.LogWarning("Player not holding weapon!");
+            Debug.Log("Special Attack casted!");
         }
-
-        Debug.Log("Special Attack!");
-
     }
 
     public void ApplyModifiers()

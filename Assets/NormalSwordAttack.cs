@@ -10,6 +10,8 @@ public class NormalSwordAttack : MonoBehaviour
     [SerializeField] private int knockbackForce = 5;
     [SerializeField] private float slashRadius = 5;
 
+    public PoisonEffect poison;
+
 
     //// Update is called once per frame
     //void Update()
@@ -30,9 +32,11 @@ public class NormalSwordAttack : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<IDamageable>(out var dmg) && !hit.CompareTag("Player"))
+            if (hit.TryGetComponent<IDamageable>(out var hitEnemies) && !hit.CompareTag("Player"))
             {
-                dmg.TakeDamage(damageAmount);
+                hitEnemies.TakeDamage(damageAmount);
+               hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+                
                 ApplyKnockBack(hit);
             }
         }

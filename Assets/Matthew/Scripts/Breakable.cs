@@ -42,7 +42,10 @@ public class Breakable : MonoBehaviour, IDamageable
     {
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
         Explode();
-        dropSystem.SpawnDropItem();      
+        if (!dropSystem)
+        { 
+            dropSystem.SpawnDropItem();
+        }     
         Destroy(gameObject);
     }
 
@@ -70,5 +73,7 @@ public class Breakable : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage) => Die();
     public void Die() => StartCoroutine(nameof(BreakObject));
+
+    public void DropItem() => dropSystem.SpawnDropItem();
 
 }
