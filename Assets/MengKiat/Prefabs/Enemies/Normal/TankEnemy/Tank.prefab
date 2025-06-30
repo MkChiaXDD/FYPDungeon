@@ -67,7 +67,7 @@ Transform:
   - {fileID: 4826634883755587695}
   - {fileID: 6367771711553426131}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4531307053388353627
 MeshFilter:
@@ -183,8 +183,11 @@ MonoBehaviour:
   healthBar: {fileID: 3472878266736068568}
   currentHealth: 0
   chaseRange: 15
-  attackRange: 2
+  attackRange: 4
   attackCooldown: 1
+  roundForScaling: 1
+  chanceToGoThrow: 1
+  detectionRange: 10
   rushToBomberSpeedMultiplier: 10
   carryZone: {fileID: 6367771711553426131}
   feelerLength: 8
