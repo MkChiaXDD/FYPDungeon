@@ -4,29 +4,52 @@ using UnityEngine;
 
 public class NormalSwordAttack : MonoBehaviour
 {
-    [SerializeField] private GameObject slashGO;
-    [SerializeField] private ParticleSystem slashVFX;
+    [Header("Combat Settings")]
+    public ElementType attackElement = ElementType.Pyro;
+    [SerializeField] private float elementalDuration;
+    
     [SerializeField] private int damageAmount = 1;
     [SerializeField] private int knockbackForce = 5;
     [SerializeField] private float slashRadius = 5;
 
+
+
     public PoisonEffect poison;
 
+    [Header("Visual effects")]
+    [SerializeField] private GameObject slashGO;
+    [SerializeField] private ParticleSystem slashVFX;
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(1))
-    //    {
-    //        SwordAttack();
-    //    }
-    //}
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            attackElement = ElementType.Hydro;
+            Debug.Log("Element type switched to " + attackElement);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            attackElement = ElementType.Electro;
+            Debug.Log("Element type switched to " + attackElement);
 
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            attackElement = ElementType.Cryo;
+            Debug.Log("Element type switched to " + attackElement);
 
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            attackElement = ElementType.Pyro;
+            Debug.Log("Element type switched to " + attackElement);
+
+        }
+    }
 
     public void SwordAttack()
     {
-        Debug.Log("Basic what the fuck");
+       
         slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
         // apply damage & knockback
@@ -36,10 +59,27 @@ public class NormalSwordAttack : MonoBehaviour
             if (hit.TryGetComponent<IDamageable>(out var hitEnemies) && !hit.CompareTag("Player"))
             {
                 hitEnemies.TakeDamage(damageAmount);
+                ApplyElementalEffects(hit.gameObject);
               // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                 
                 ApplyKnockBack(hit);
             }
+        }
+    }
+
+    private void ApplyElementalEffects(GameObject target)
+    {
+        // Apply elemental effect
+        if (target.TryGetComponent<ElementalStatus>(out var status))
+        {
+            status.ApplyElement(attackElement, elementalDuration);
+            ElementalReactionManager.Instance.CheckReactions(
+                status,
+                attackElement,
+                transform.position,
+                damageAmount
+            );
+            Debug.Log("dealt " + attackElement + "element");
         }
     }
 
@@ -56,5 +96,8 @@ public class NormalSwordAttack : MonoBehaviour
             enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
         }
     }
+
+
+
 
 }

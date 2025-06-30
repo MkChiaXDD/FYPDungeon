@@ -25,22 +25,22 @@ public class StatusEffectReceiver : MonoBehaviour
       
 
    
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GetComponent<StatusEffectReceiver>().ApplyEffect(speedBoost);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            GetComponent<StatusEffectReceiver>().DebugActiveEffects();
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    GetComponent<StatusEffectReceiver>().ApplyEffect(speedBoost);
+        //}
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    GetComponent<StatusEffectReceiver>().DebugActiveEffects();
+        //}
     
 }
 
