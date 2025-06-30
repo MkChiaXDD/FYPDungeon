@@ -280,7 +280,7 @@ public class PlayerCombat : MonoBehaviour
             if (WeaponChoosen != null)
             {
                 PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
-                Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
+                //Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
 
             }
             else
@@ -327,7 +327,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 WeaponChoosen.Cast();
                 PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.skillDurabilityUsed);
-                Debug.Log("Durability Check for Special attack, " + ItemHeld.name + " at " + ItemHeld.Durability);
+                //Debug.Log("Durability Check for Special attack, " + ItemHeld.name + " at " + ItemHeld.Durability);
                 return;
             }
             Debug.LogWarning("Player not holding weapon!");

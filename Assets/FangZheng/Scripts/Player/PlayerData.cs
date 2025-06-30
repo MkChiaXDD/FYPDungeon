@@ -28,8 +28,21 @@ public class PlayerData : MonoBehaviour, IDamageable
     public float ParryThreshhold { get; private set; }
     public float Health{ get; private set; }
 
+    public static PlayerData Instance { get; private set; }
+
+
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
+
         CurrentHealth = _MaxHealth;
         ResetToBaseStats();
     }

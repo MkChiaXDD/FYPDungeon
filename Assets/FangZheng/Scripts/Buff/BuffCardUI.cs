@@ -24,7 +24,7 @@ public class BuffCardUI : MonoBehaviour
         Button.onClick.AddListener(() =>
         {
             //PlayerController.Instance.AddBuff(buffdata);
-            PlayerData.AddBuff(buffdata);
+            PlayerData.Instance.AddBuff(buffdata);
             Container.GetComponentInParent<BuffSelectionUI>().ClearCard();                    
         });
     }

@@ -127,7 +127,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1043436150043576918}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!114 &7479874388746679057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +357,7 @@ Transform:
   - {fileID: 7838890130775570900}
   - {fileID: 9184871880152392983}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2022823436330820578
 Rigidbody:
@@ -512,7 +512,10 @@ MonoBehaviour:
   ThreshholdPercentage: 70
   Dmg: 5
   OriginalDmg: 5
-  WeaponIndicator: []
+  WeaponIndicator:
+  - {fileID: 2245619860988400924}
+  - {fileID: 3791467970956166789}
+  - {fileID: 6614592273162167851}
   PlayerStorage: {fileID: 0}
   ItemHeld:
     itemType: {fileID: 0}
@@ -545,6 +548,7 @@ MonoBehaviour:
   _dashSpeed: 30
   _gravityScale: 1
   playerData: {fileID: 3427247751852364457}
+  _currentSpeed: 0
 --- !u!1 &1810935251312697680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,7 +1095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _MaxHealth: 100
   _Dmg: 5
-  _Speed: 20
+  _Speed: 10
   _Dash: 40
   _ParryDuration: 4
   _ParryThreshold: 0.5
