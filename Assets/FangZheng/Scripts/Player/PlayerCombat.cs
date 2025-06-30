@@ -311,12 +311,31 @@ public class PlayerCombat : MonoBehaviour
                 else
                 {
                     BasicCombat.SwordAttack();
+                    ActivateAttack();
+                    //animator.SetTrigger("Attack");
                 }
                 //StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
                 //BasicCombat.SwordAttack();
             }
         }
 
+    }
+
+    public void ActivateAttack()
+    {
+
+            if (CombatContinue == false)
+            {
+                //Attack();
+                animator.SetTrigger("Attack");
+                CombatContinue = true;
+            }
+
+            if (CombatWindow == true)
+            {
+                animator.SetBool("Combo", true);
+            }
+        
     }
 
     private IEnumerator FFCombat(Vector3 targetPos)
