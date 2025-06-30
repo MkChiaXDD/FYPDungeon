@@ -8,15 +8,16 @@ public class RangedMiniBullet : MonoBehaviour
     public int damage;
     public Vector3 direction;
     public GameObject minibulletPrefab; // Renamed for clarity
-    public int splitAmount;
+    private int splitAmount;
     public float minibulletSpeed = 15f; // Separate speed for minibullets
     public int minibulletDamage = 5; // Separate damage for minibullets
 
 
-    public void Initialize(Vector3 dir)
+    public void Initialize(Vector3 dir, int splitAmount)
     {
         dir = new Vector3(dir.x, 0, dir.z);
         direction = dir.normalized;
+        this.splitAmount = splitAmount;
 
         // Make bullet face its direction
         if (direction != Vector3.zero)
