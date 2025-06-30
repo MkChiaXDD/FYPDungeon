@@ -442,13 +442,14 @@ public class PlayerController : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
+        //Movment
         GatherInput();
         look();
         MousePosition();
         Dash();
-        Blocking();
-        changeCollor();
 
+        //Combat
+        Blocking();
         Lockingon();
         if (Lockon)
         {
@@ -466,15 +467,15 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
         LocateTarget();
-
         SpecialAttack();
         Check();
-
-
         ActivateAttack();
         CheckAvailabilityOfWeapon();
-
         AddAttackIndicator();
+
+        //Misc
+        changeCollor();
+
 
         _ParryCooldown -= Time.deltaTime;
         //HitCooldown -= Time.deltaTime;
@@ -931,9 +932,4 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         Debug.Log("die");
     }
-}
-public static class Helpers
-{
-    private static Matrix4x4 _isoMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
-    public static Vector3 ToIso(this Vector3 input) => _isoMatrix.MultiplyPoint3x4(input);
 }

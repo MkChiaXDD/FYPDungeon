@@ -8,6 +8,7 @@ public class Bomerang : Projectile
     [SerializeField] private bool IsReturning;
     [SerializeField] private Vector3 direction;
     [SerializeField] SpellHitbox Hitbox;
+    //[SerializeField] PlayerMovement PlayerMovement;
 
     public void Start()
     {
@@ -17,7 +18,7 @@ public class Bomerang : Projectile
         }
         Hitbox.Initit(spellCast);
 
-        direction = new Vector3(PlayerController.Instance.GetDirection().x, 0, PlayerController.Instance.GetDirection().z);
+        direction = new Vector3(PlayerMovement.Instance.GetDirection().x, 0, PlayerMovement.Instance.GetDirection().z);
         StartPos = this.transform.position;
         Destroy(this.gameObject, duration);
         StartCoroutine(BoomerangMove());

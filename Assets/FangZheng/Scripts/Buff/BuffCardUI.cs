@@ -13,6 +13,7 @@ public class BuffCardUI : MonoBehaviour
     [SerializeField] private BuffData buffdata;
     [SerializeField] private Transform Transform;
     [SerializeField] private Button Button;
+    [SerializeField] private PlayerData PlayerData;
     public void Init(Transform Container , BuffData Data)
     {
         buffdata = Data;
@@ -22,7 +23,8 @@ public class BuffCardUI : MonoBehaviour
         this.transform.SetParent(Container);
         Button.onClick.AddListener(() =>
         {
-            PlayerController.Instance.AddBuff(buffdata);
+            //PlayerController.Instance.AddBuff(buffdata);
+            PlayerData.Instance.AddBuff(buffdata);
             Container.GetComponentInParent<BuffSelectionUI>().ClearCard();                    
         });
     }
