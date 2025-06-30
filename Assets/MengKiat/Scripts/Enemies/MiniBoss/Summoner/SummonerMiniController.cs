@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +5,9 @@ public class SummonerMiniController : Enemy
 {
     public enum State { Idle, Summon, RunAround }
     private State currentState;
+
+    [Header("Diff Scaling Settings")]
+    [SerializeField] private int roundForScaling = 1;
 
     [Header("References")]
     public Transform player;
@@ -112,19 +114,42 @@ public class SummonerMiniController : Enemy
 
     void SummonEnemies()
     {
-        for (int i = 0; i < amountToSummon; i++)
-        {
-            if (summonEnemyPrefabs.Count == 0) return;
+        // Filter prefabs based on difficulty
+        List<GameObject> filteredPrefabs;
 
-            GameObject prefab = summonEnemyPrefabs[Random.Range(0, summonEnemyPrefabs.Count)];
+        if (currentRound < roundForScaling)
+        {
+            filteredPrefabs = summonEnemyPrefabs
+                .FindAll(p => p.name.ToLower().Contains("normal") || p.name.ToLower().Contains("fast"));
+        }
+        else
+        {
+            // Allow all types of enemies in higher rounds
+            filteredPrefabs = summonEnemyPrefabs;
+        }
+
+        // If no suitable prefabs found, do nothing
+        if (filteredPrefabs.Count == 0)
+        {
+            Debug.LogWarning("[Summoner] No suitable enemies found to summon.");
+            return;
+        }
+
+        int RandomNumToSummon = Random.Range(1, amountToSummon);
+
+        // Summon the enemies
+        for (int i = 0; i < RandomNumToSummon; i++)
+        {
+            GameObject prefab = filteredPrefabs[Random.Range(0, filteredPrefabs.Count)];
             Vector2 offset = Random.insideUnitCircle * summonRadius;
             Vector3 spawnPos = transform.position + new Vector3(offset.x, 0, offset.y);
 
             Instantiate(prefab, spawnPos, Quaternion.identity, transform);
         }
 
-        Debug.Log($"[Summoner] Spawned {amountToSummon} enemies.");
+        Debug.Log($"[Summoner] Spawned {RandomNumToSummon} enemies.");
     }
+
 
     private void PlaySummonVFX()
     {
