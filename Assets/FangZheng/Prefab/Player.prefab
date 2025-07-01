@@ -696,7 +696,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1877294431466879826}
-  - component: {fileID: 1169983888321642469}
   - component: {fileID: 1875158068303767876}
   - component: {fileID: 4451461748955918733}
   - component: {fileID: 285015545900473403}
@@ -732,20 +731,8 @@ Transform:
   - {fileID: 822943730535256105}
   - {fileID: 8490074505272622348}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1169983888321642469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3023764888954098219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84f64d881cd1c6d45a753b8041152338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1875158068303767876
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -881,7 +868,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 450010975989994624}
-  playmove: {fileID: 3662928567122677748}
   _LayerMaskIgnore:
     serializedVersion: 2
     m_Bits: 128
@@ -892,11 +878,12 @@ MonoBehaviour:
   Lockon: 0
   Auto: 1
   TargetEnemy: {fileID: 162275341234693603}
-  TargetEnemyDebug: {fileID: 6524607705378156062}
   EnemyNearby: []
   AngleThreshold: 35
   DepthOfRange: 0
+  playmove: {fileID: 3662928567122677748}
   _Area: {fileID: 5474241478317407359}
+  ForEasyLocation: {fileID: 0}
   _parryThreshold: 0.5
   _parryDuration: 4
   _parryCooldown: 0

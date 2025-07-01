@@ -83,11 +83,11 @@ public class ScreenShake : MonoBehaviour
             SmoothlyResetTransform();
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("Press F to test Shake() in ScreenShake.cs");
-            Shake();
-        }
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    Debug.Log("Press F to test Shake() in ScreenShake.cs");
+        //    Shake();
+        //}
     }
 
     private bool NeedsRotationReset()
