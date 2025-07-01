@@ -8,7 +8,6 @@ public class RangedEnemyController : Enemy
 
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float fireOffset = 1f;
-    [SerializeField] float attackRange = 10f;
     [SerializeField] float attackCooldown = 2f;
     [SerializeField] float repositionRadius = 5f;
 
@@ -39,7 +38,7 @@ public class RangedEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
-                if (Vector3.Distance(transform.position, player.position) <= attackRange
+                if (Vector3.Distance(transform.position, player.position) <= data.attackRange
                     && attackTimer >= attackCooldown)
                     state = State.Attack;
                 break;

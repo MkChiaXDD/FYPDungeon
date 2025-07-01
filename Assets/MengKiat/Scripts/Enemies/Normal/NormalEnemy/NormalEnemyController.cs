@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class NormalEnemyController : Enemy
 {
-    [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
 
     [Header("Diff Scaling Settings")]
@@ -52,8 +50,8 @@ public class NormalEnemyController : Enemy
             new Vector3(player.position.x, 0, player.position.z)
         );
 
-        if (dist <= attackRange) state = State.Attack;
-        else if (dist <= chaseRange) state = State.Chase;
+        if (dist <= data.attackRange) state = State.Attack;
+        else if (dist <= data.detectionRange) state = State.Chase;
         else state = State.Idle;
 
         switch (state)
@@ -132,7 +130,7 @@ public class NormalEnemyController : Enemy
             new Vector3(player.position.x, 0, player.position.z)
         );
 
-        if (dist <= attackRange + 0.5f)
+        if (dist <= data.attackRange)
         {
             IDamageable damageable = player.GetComponent<IDamageable>();
             if (damageable != null)

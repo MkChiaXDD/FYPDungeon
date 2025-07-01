@@ -5,7 +5,7 @@ public class RangedMiniBullet : MonoBehaviour
     public float speed = 20f;
     private float timer = 0f;
     public float lifetime = 5f;
-    public int damage;
+    public float damage;
     public Vector3 direction;
     public GameObject minibulletPrefab; // Renamed for clarity
     private int splitAmount;
@@ -34,7 +34,7 @@ public class RangedMiniBullet : MonoBehaviour
         }
     }
 
-    public void SetDamage(int dmg)
+    public void SetDamage(float dmg)
     {
         damage = dmg;
     }

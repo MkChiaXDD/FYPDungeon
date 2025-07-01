@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class FastEnemyController : Enemy
 {
-    [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
 
     [Header("Avoidance")]
@@ -40,8 +38,8 @@ public class FastEnemyController : Enemy
             new Vector3(player.position.x, 0, player.position.z)
         );
 
-        if (dist <= attackRange) state = State.Attack;
-        else if (dist <= chaseRange) state = State.Chase;
+        if (dist <= data.attackRange) state = State.Attack;
+        else if (dist <= data.detectionRange) state = State.Chase;
         else state = State.Idle;
 
         switch (state)
@@ -113,8 +111,21 @@ public class FastEnemyController : Enemy
 
     private void Attack()
     {
-        Debug.Log("NORMALENEMY: Attack!");
-        // …your attack logic…
+        Debug.Log("FASTENEMY: Attacking player");
+
+        float dist = Vector3.Distance(
+            new Vector3(transform.position.x, 0, transform.position.z),
+            new Vector3(player.position.x, 0, player.position.z)
+        );
+
+        if (dist <= data.attackRange)
+        {
+            IDamageable damageable = player.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage);
+            }
+        }
     }
 
     void OnDrawGizmosSelected()

@@ -7,8 +7,6 @@ public class BomberEnemyController : Enemy
 
     [Header("Ranges & Forces")]
     [SerializeField] float roamRadius = 5f;
-    [SerializeField] float chaseRange = 7f;
-    [SerializeField] float explodeRange = 1.5f;
     [SerializeField] float explosionRadius = 3f;
     [SerializeField] float explosionForce = 500f;
     [SerializeField] float explosionGrowDuration = 1f;
@@ -71,8 +69,8 @@ public class BomberEnemyController : Enemy
 
         if (state != State.Attack)
         {
-            if (distToPlayerXZ <= explodeRange) state = State.Attack;
-            else if (distToPlayerXZ <= chaseRange) state = State.Chase;
+            if (distToPlayerXZ <= data.attackRange) state = State.Attack;
+            else if (distToPlayerXZ <= data.detectionRange) state = State.Chase;
             else state = State.Roam;
         }
 
@@ -199,11 +197,6 @@ public class BomberEnemyController : Enemy
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-
-        // Show base explosion radius
-        Gizmos.DrawWireSphere(transform.position, explosionRadius);
-
 #if UNITY_EDITOR
         if (Application.isPlaying)
         {
@@ -212,5 +205,4 @@ public class BomberEnemyController : Enemy
         }
 #endif
     }
-
 }
