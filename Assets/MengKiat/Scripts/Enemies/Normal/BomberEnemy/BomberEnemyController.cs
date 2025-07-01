@@ -62,6 +62,7 @@ public class BomberEnemyController : Enemy
 
     void Update()
     {
+        if (player == null || isStunned) return;
         if (isPickedup) return;
         float distToPlayerXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),

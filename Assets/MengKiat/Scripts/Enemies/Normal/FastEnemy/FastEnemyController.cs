@@ -33,6 +33,7 @@ public class FastEnemyController : Enemy
 
     void Update()
     {
+        if (player == null || isStunned) return;
         // distance only on XZ
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),

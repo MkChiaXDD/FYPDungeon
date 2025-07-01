@@ -31,6 +31,8 @@ public class RangedEnemyController : Enemy
 
     void Update()
     {
+        if (player == null || isStunned) return;
+
         FacePlayer();
         attackTimer += Time.deltaTime;
 
