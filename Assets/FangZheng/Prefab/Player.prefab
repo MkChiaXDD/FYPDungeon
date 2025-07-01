@@ -703,6 +703,9 @@ GameObject:
   - component: {fileID: 443870184575702677}
   - component: {fileID: 6726983338258277720}
   - component: {fileID: 8216651104596569007}
+  - component: {fileID: 7740907624236579539}
+  - component: {fileID: 450010975989994624}
+  - component: {fileID: 3662928567122677748}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -743,75 +746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f64d881cd1c6d45a753b8041152338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb: {fileID: 1875158068303767876}
-  _body: {fileID: 822943730535256105}
-  _camera: {fileID: 2182614598770188383}
-  _renderer: {fileID: 0}
-  _parryzone: {fileID: 2653683474674355295}
-  _hitBox: {fileID: 5465491715549223167}
-  _Area: {fileID: 5474241478317407359}
-  ForEasyLocation: {fileID: 6524607705378156062}
-  _normalspeed: 4
-  _turnspeed: 1453.2
-  _CurrentDashSpeed: 30
-  _OriginalDashSpeed: 30
-  parryThreshold: 0.2
-  _NormalparryThreshold: 0.5
-  _ParryCooldown: 0
-  _ParryDuationLast: 4
-  _IsParry: 0
-  _IsBlock: 0
-  _IsInv: 0
-  EnemyLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  Lockon: 0
-  Auto: 1
-  TargetEnemy: {fileID: 0}
-  EnemyNearby: []
-  AngleThreshold: 35
-  DepthOfRange: 0
-  EquippedObject: {fileID: 0}
-  itemHolding: {fileID: 5756828072230524705}
-  WeaponChoosen: {fileID: 0}
-  BasicCombat: {fileID: 3477871028112254268}
-  spells: []
-  dot: 0
-  animator: {fileID: 6072418435860255704}
-  CombatContinue: 0
-  CombatWindow: 0
-  ThreshholdPercentage: 59
-  Dmg: 0
-  OriginalDmg: 0
-  WeaponIndicator:
-  - {fileID: 3533023566222870150}
-  - {fileID: 3950920874685585953}
-  - {fileID: 2451004625684021601}
-  MaxHealth: 100
-  Health: 100
-  _LayerMaskIgnore:
-    serializedVersion: 2
-    m_Bits: 128
-  _LayerMaskHit: []
-  _BuffObtain: []
-  PlayerStorage: {fileID: 0}
-  ItemHeld:
-    itemType: {fileID: 0}
-    name: 
-    icon: {fileID: 0}
-    description: 
-    maxStack: 0
-    itemCount: 0
-    itemStatus: 0
-    ItemPrefab: {fileID: 0}
-    Durability: 0
-  meshTrail: {fileID: 7364192355005753547}
-  DamageBuff: 0
-  SpeedBuff: 0
-  DashBuff: 0
-  ParryTimeBuff: 0
-  ParryThreshholdBuff: 0
-  HealthBuff: 0
 --- !u!54 &1875158068303767876
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -885,6 +819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d7ace158189f6b459ce07cb4effdca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerData: {fileID: 450010975989994624}
   Healthbar: {fileID: 7780194144597427707}
   healthMax: 100
   health: 100
@@ -925,7 +860,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3023764888954098219}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c636e97cc4217394a910e3477e7885e7, type: 3}
   m_Name: 
@@ -933,6 +868,111 @@ MonoBehaviour:
   poison: {fileID: 11400000, guid: 5e155ddd92350714d819fec51c1f7f3c, type: 2}
   stun: {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
   speedBoost: {fileID: 11400000, guid: 4d4c15d4d91cb6b47a3f9403fe8226e7, type: 2}
+--- !u!114 &7740907624236579539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3023764888954098219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a7f08b9b919e7438e786f5924aae18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 450010975989994624}
+  playmove: {fileID: 3662928567122677748}
+  _LayerMaskIgnore:
+    serializedVersion: 2
+    m_Bits: 128
+  _LayerMaskHit: []
+  EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  Lockon: 0
+  Auto: 1
+  TargetEnemy: {fileID: 162275341234693603}
+  TargetEnemyDebug: {fileID: 6524607705378156062}
+  EnemyNearby: []
+  AngleThreshold: 35
+  DepthOfRange: 0
+  _Area: {fileID: 5474241478317407359}
+  _parryThreshold: 0.5
+  _parryDuration: 4
+  _parryCooldown: 0
+  _parryzone: {fileID: 2653683474674355295}
+  _hitBox: {fileID: 5465491715549223167}
+  EquippedObject: {fileID: 0}
+  itemHolding: {fileID: 0}
+  WeaponChoosen: {fileID: 0}
+  BasicCombat: {fileID: 3477871028112254268}
+  spells: []
+  dot: 0
+  animator: {fileID: 6072418435860255704}
+  CombatContinue: 0
+  CombatWindow: 0
+  ThreshholdPercentage: 0
+  Dmg: 0
+  OriginalDmg: 5
+  WeaponIndicator:
+  - {fileID: 3533023566222870150}
+  - {fileID: 3950920874685585953}
+  - {fileID: 2451004625684021601}
+  PlayerStorage: {fileID: 0}
+  ItemHeld:
+    itemType: {fileID: 0}
+    name: 
+    icon: {fileID: 0}
+    description: 
+    maxStack: 0
+    itemCount: 0
+    itemStatus: 0
+    ItemPrefab: {fileID: 0}
+    Durability: 0
+--- !u!114 &450010975989994624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3023764888954098219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92967eaca333dae428804917e760299a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _MaxHealth: 100
+  _Dmg: 5
+  _Speed: 10
+  _Dash: 35
+  _ParryDuration: 4
+  _ParryThreshold: 0.5
+  _BuffObtain: []
+  DataChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3662928567122677748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3023764888954098219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54addb1bfa2022042a71d026b293356f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 1875158068303767876}
+  _body: {fileID: 822943730535256105}
+  _camera: {fileID: 2182614598770188383}
+  _meshTrail: {fileID: 7364192355005753547}
+  _normalspeed: 4
+  _turnspeed: 360
+  _dashSpeed: 30
+  _gravityScale: 1
+  playerData: {fileID: 450010975989994624}
+  _currentSpeed: 0
 --- !u!1 &3533023566222870150
 GameObject:
   m_ObjectHideFlags: 0

@@ -127,6 +127,19 @@ public class PlayerMovement : MonoBehaviour
         _currentSpeed = playerData.Speed;
     }
 
+    public void Stun()
+    {
+        _normalspeed = 0;
+        _dashSpeed = 0;      
+    }
+
+    public void Unstun()
+    {
+        _normalspeed = playerData.Speed;
+        _dashSpeed = playerData.Dash;
+        _currentSpeed = _normalspeed;
+    }
+
     private void Move()
     {
 

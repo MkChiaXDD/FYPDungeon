@@ -205,7 +205,7 @@ public class FireEffect : StatusEffect
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Fire] Applying Fire to {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        if (receiver.TryGetComponent<PlayerData>(out var playerMovement))
         {
             //playerMovement.SetMovementEnabled(false);
             Debug.Log($"[Fire] Applied Fire to {receiver.gameObject.name}");
@@ -224,7 +224,7 @@ public class FireEffect : StatusEffect
     public override void RemoveEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Fire] Removing Fire from {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        if (receiver.TryGetComponent<PlayerData>(out var playerMovement))
         {
             //playerMovement.SetMovementEnabled(true);
             Debug.Log($"[Fire] Removed Fire from {receiver.gameObject.name}");
@@ -253,9 +253,9 @@ public class StunEffect : StatusEffect
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Stun] Applying stun to {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        if (receiver.TryGetComponent<PlayerMovement>(out var playerMovement))
         {
-            //playerMovement.SetMovementEnabled(false);
+            playerMovement.Stun();
             Debug.Log($"[Stun] Applied stun to {receiver.gameObject.name}");
             return;
         }
@@ -272,9 +272,9 @@ public class StunEffect : StatusEffect
     public override void RemoveEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Stun] Removing stun from {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<PlayerController>(out var playerMovement))
+        if (receiver.TryGetComponent<PlayerMovement>(out var playerMovement))
         {
-            //playerMovement.SetMovementEnabled(true);
+            playerMovement.Unstun();
             Debug.Log($"[Stun] Removed stun from {receiver.gameObject.name}");
             return ;
 
@@ -304,7 +304,7 @@ public class SpeedBoostEffect : StatusEffect
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Speed Boost] Applying to {receiver.gameObject.name}");
-        if (receiver.TryGetComponent<PlayerController>(out var movement))
+        if (receiver.TryGetComponent<PlayerMovement>(out var movement))
         {
             //originalSpeeds[receiver] = movement.Speed;
            // movement.Speed *= speedMultiplier;
