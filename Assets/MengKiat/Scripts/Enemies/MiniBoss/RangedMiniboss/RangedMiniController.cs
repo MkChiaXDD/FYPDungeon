@@ -8,6 +8,7 @@ public class RangedMiniController : Enemy
     [Header("Diff Scaling Settings")]
     [SerializeField] private int roundForScaling = 1;
     [SerializeField] private int baseSplit;
+    [Tooltip("X is the lowest amount of bullets split, Y is the maximum amount")]
     [SerializeField] private Vector2Int increasedSplit;
     [SerializeField] private int moveSpeedMultiplier;
     [SerializeField] private float increasedAttackCooldown = 1f;

@@ -39,6 +39,10 @@ public class BigBossOneController : Enemy
     [Tooltip("Height offset for ray origin and target")]
     [SerializeField] private float eyeHeight = 1f;
 
+    [Header("Detection Settings")]
+    [SerializeField] private float detectionRange = 20f;
+    public bool hasDetectedPlayer = false;
+
     [SerializeField] private ScreenShake screenShake;
     [SerializeField] private BoxCollider Collider;
     [SerializeField] private BoxCollider PlsceHolderCollider;
@@ -59,7 +63,6 @@ public class BigBossOneController : Enemy
         StartCoroutine(BossLoop());
     }
 
-    // Custom shake parameters
     StaticScreenShake.ShakeParams customParams = new StaticScreenShake.ShakeParams
     {
         ShakeType = ShakeType.Both,
@@ -68,12 +71,11 @@ public class BigBossOneController : Enemy
         TranslationalShakeMagnitude = new Vector3(1f, 1f, 0)
     };
 
-    
-
     void Update()
     {
-        // Always face the player except during spin
-        if (state != State.SpinShoot && player != null)
+        CheckPlayerDetection();
+
+        if (state != State.SpinShoot && player != null && hasDetectedPlayer)
         {
             Vector3 lookDir = player.position - transform.position;
             lookDir.y = 0;
@@ -86,13 +88,23 @@ public class BigBossOneController : Enemy
         }
     }
 
+    private void CheckPlayerDetection()
+    {
+        if (hasDetectedPlayer || player == null) return;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= detectionRange)
+        {
+            hasDetectedPlayer = true;
+        }
+    }
+
     private IEnumerator BossLoop()
     {
         while (true)
         {
             yield return new WaitUntil(() => !isBusy);
 
-            // Every 3rd attack do a roam
             if (attackCounter >= 2)
             {
                 attackCounter = 0;
@@ -104,8 +116,7 @@ public class BigBossOneController : Enemy
                 state = (State)Random.Range(1, 4); // 1=Dash,2=SpinShoot,3=Hop
                 attackCounter++;
 
-                // only allow Dash or Hop if boss can see the player
-                if ((state == State.Dash || state == State.Hop) && !HasLineOfSight())
+                if (!hasDetectedPlayer)
                 {
                     state = State.Roam;
                 }
@@ -127,22 +138,6 @@ public class BigBossOneController : Enemy
                 }
             }
         }
-    }
-
-    private bool HasLineOfSight()
-    {
-        if (player == null) return false;
-
-        Vector3 origin = transform.position + Vector3.up * eyeHeight;
-        Vector3 target = player.position + Vector3.up * eyeHeight;
-        Vector3 dir = target - origin;
-        float dist = dir.magnitude;
-
-        // if any obstruction in the way, LOS is blocked
-        if (Physics.Raycast(origin, dir.normalized, out RaycastHit hit, dist, obstructionMask))
-            return false;
-
-        return true;
     }
 
     private IEnumerator DoDash()
@@ -225,13 +220,11 @@ public class BigBossOneController : Enemy
             }
 
             transform.position = target;
-            // Shake specific camera with custom parameters
             StaticScreenShake.Shake(Camera.main, customParams);
             ApplyKnockback();
             yield return new WaitForSeconds(dashDelay);
         }
 
-        // return to origin
         float r = 0f;
         Vector3 returnStart = transform.position;
         while (r < hopDuration)
@@ -301,5 +294,8 @@ public class BigBossOneController : Enemy
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, knockbackRadius);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }
