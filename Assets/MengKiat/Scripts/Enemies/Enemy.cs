@@ -164,4 +164,14 @@ public class Enemy : MonoBehaviour, IDamageable
         stunCoroutine = null;
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawWireSphere(transform.position, data.detectionRange);
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireSphere(transform.position, data.attackRange);
+    }
 }

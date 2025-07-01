@@ -40,7 +40,6 @@ public class BigBossOneController : Enemy
     [SerializeField] private float eyeHeight = 1f;
 
     [Header("Detection Settings")]
-    [SerializeField] private float detectionRange = 20f;
     public bool hasDetectedPlayer = false;
 
     [SerializeField] private ScreenShake screenShake;
@@ -93,7 +92,7 @@ public class BigBossOneController : Enemy
         if (hasDetectedPlayer || player == null) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
-        if (dist <= detectionRange)
+        if (dist <= data.detectionRange)
         {
             hasDetectedPlayer = true;
         }
@@ -288,14 +287,5 @@ public class BigBossOneController : Enemy
             transform.position.y,
             spawnPosition.z + rnd.y
         );
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, knockbackRadius);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }

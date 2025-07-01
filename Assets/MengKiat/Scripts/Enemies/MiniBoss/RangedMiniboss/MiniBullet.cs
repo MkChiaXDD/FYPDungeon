@@ -3,7 +3,7 @@ using UnityEngine;
 public class MiniBullet : MonoBehaviour
 {
     public float speed;
-    public int damage;
+    public float damage;
     public Vector3 direction;
     public float lifetime = 3f;
 
@@ -12,7 +12,7 @@ public class MiniBullet : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    public void Initialize(Vector3 dir, float spd, int dmg)
+    public void Initialize(Vector3 dir, float spd, float dmg)
     {
         direction = dir.normalized;
         speed = spd;

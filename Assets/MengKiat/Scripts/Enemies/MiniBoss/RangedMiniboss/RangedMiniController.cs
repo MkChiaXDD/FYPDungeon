@@ -16,7 +16,6 @@ public class RangedMiniController : Enemy
     [Header("Attack Settings")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float fireOffset = 1f;
-    [SerializeField] private float attackRange = 10f;
     [SerializeField] private float baseAttackCooldown = 2f;
     private float attackCooldown;
     private int bulletSplitAmt;
@@ -60,7 +59,7 @@ public class RangedMiniController : Enemy
         switch (state)
         {
             case State.Idle:
-                if (Vector3.Distance(transform.position, player.position) <= attackRange
+                if (Vector3.Distance(transform.position, player.position) <= data.attackRange
                     && attackTimer >= attackCooldown)
                 {
                     state = State.Attack;

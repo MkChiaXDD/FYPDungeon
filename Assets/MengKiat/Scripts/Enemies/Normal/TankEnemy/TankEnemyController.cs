@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TankEnemyController : Enemy
 {
-    [SerializeField] private float chaseRange = 10f;
-    [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 1f;
 
     [Header("Diff Scaling Settings")]
@@ -50,6 +48,8 @@ public class TankEnemyController : Enemy
 
     void Update()
     {
+        if (player == null || isStunned) return;
+
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -57,8 +57,8 @@ public class TankEnemyController : Enemy
 
         if (state != State.RushToBomber)
         {
-            if (dist <= attackRange) state = State.Attack;
-            else if (dist <= chaseRange) state = State.Chase;
+            if (dist <= data.attackRange) state = State.Attack;
+            else if (dist <= data.detectionRange) state = State.Chase;
             else state = State.Idle;
 
             if (state != State.Attack)
@@ -157,7 +157,7 @@ public class TankEnemyController : Enemy
             new Vector3(player.position.x, 0, player.position.z)
         );
 
-        if (dist <= attackRange + 0.5f)
+        if (dist <= data.attackRange)
         {
             IDamageable damageable = player.GetComponent<IDamageable>();
             if (damageable != null)
@@ -274,11 +274,5 @@ public class TankEnemyController : Enemy
             dir.Normalize();
             Gizmos.DrawLine(transform.position, transform.position + dir * feelerLength);
         }
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

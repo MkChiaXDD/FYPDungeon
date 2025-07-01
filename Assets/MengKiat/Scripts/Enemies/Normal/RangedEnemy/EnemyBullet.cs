@@ -4,7 +4,7 @@ public class EnemyBullet : MonoBehaviour
 {
     public float speed = 20f;
     public float lifetime = 5f;
-    public int damage;
+    public float damage;
     public Vector3 direction;
     public enum Type
     {
@@ -34,7 +34,7 @@ public class EnemyBullet : MonoBehaviour
         transform.position += speed * Time.deltaTime * direction;
     }
 
-    public void SetDamage(int dmg)
+    public void SetDamage(float dmg)
     {
         damage = dmg;
     }

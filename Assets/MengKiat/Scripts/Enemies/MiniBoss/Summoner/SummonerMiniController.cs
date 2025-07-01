@@ -20,9 +20,6 @@ public class SummonerMiniController : Enemy
     public float summonCooldown = 5f;
     private float summonTimer;
 
-    [Header("Detection")]
-    public float detectionRange = 10f;
-
     [Header("RunAround Settings")]
     public float runDuration = 2f;
     public float moveSpeed = 3f;
@@ -43,10 +40,21 @@ public class SummonerMiniController : Enemy
 
     void Update()
     {
+        float dist = Vector3.Distance(
+            new Vector3(transform.position.x, 0, transform.position.z),
+            new Vector3(player.position.x, 0, player.position.z)
+        );
+
+        // Only enter Summon state once the player is in range
+        if (currentState == State.Idle && dist <= data.detectionRange)
+        {
+            currentState = State.Summon;
+        }
+
         switch (currentState)
         {
             case State.Idle:
-                HandleIdle();
+                // Idle logic (optional animation or idle movement)
                 break;
 
             case State.Summon:
@@ -56,17 +64,6 @@ public class SummonerMiniController : Enemy
             case State.RunAround:
                 HandleRunAround();
                 break;
-        }
-    }
-
-    void HandleIdle()
-    {
-        if (player == null) return;
-
-        float dist = Vector3.Distance(transform.position, player.position);
-        if (dist <= detectionRange)
-        {
-            currentState = State.Summon;
         }
     }
 
@@ -90,14 +87,12 @@ public class SummonerMiniController : Enemy
         runTimer -= Time.deltaTime;
         directionTimer -= Time.deltaTime;
 
-        // Change direction occasionally
         if (directionTimer <= 0f)
         {
             PickNewDirection();
             directionTimer = changeDirectionInterval;
         }
 
-        // Move in direction
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
         if (runTimer <= 0f)
@@ -114,7 +109,6 @@ public class SummonerMiniController : Enemy
 
     void SummonEnemies()
     {
-        // Filter prefabs based on difficulty
         List<GameObject> filteredPrefabs;
 
         if (currentRound < roundForScaling)
@@ -124,20 +118,17 @@ public class SummonerMiniController : Enemy
         }
         else
         {
-            // Allow all types of enemies in higher rounds
             filteredPrefabs = summonEnemyPrefabs;
         }
 
-        // If no suitable prefabs found, do nothing
         if (filteredPrefabs.Count == 0)
         {
             Debug.LogWarning("[Summoner] No suitable enemies found to summon.");
             return;
         }
 
-        int RandomNumToSummon = Random.Range(1, amountToSummon);
+        int RandomNumToSummon = Random.Range(1, amountToSummon + 1);
 
-        // Summon the enemies
         for (int i = 0; i < RandomNumToSummon; i++)
         {
             GameObject prefab = filteredPrefabs[Random.Range(0, filteredPrefabs.Count)];
@@ -150,9 +141,11 @@ public class SummonerMiniController : Enemy
         Debug.Log($"[Summoner] Spawned {RandomNumToSummon} enemies.");
     }
 
-
     private void PlaySummonVFX()
     {
-        SummonVFX.Play();      
+        if (SummonVFX != null && !SummonVFX.isPlaying)
+        {
+            SummonVFX.Play();
+        }
     }
 }
