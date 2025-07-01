@@ -101,9 +101,9 @@ public class NormalSwordAttack : MonoBehaviour
         }
     }
 
-    public void ApplyStatusEffects(GameObject target, StunEffect stun)
+    public void ApplyStatusEffects(GameObject target, StatusEffect effect)
     {
-        target.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
+        target.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(effect);
     }
 
 
