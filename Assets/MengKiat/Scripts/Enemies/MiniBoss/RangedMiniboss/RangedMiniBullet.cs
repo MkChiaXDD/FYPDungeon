@@ -10,7 +10,6 @@ public class RangedMiniBullet : MonoBehaviour
     public GameObject minibulletPrefab; // Renamed for clarity
     private int splitAmount;
     public float minibulletSpeed = 15f; // Separate speed for minibullets
-    public int minibulletDamage = 5; // Separate damage for minibullets
 
 
     public void Initialize(Vector3 dir, int splitAmount)
@@ -89,7 +88,7 @@ public class RangedMiniBullet : MonoBehaviour
             Debug.Log("Instantiated bullet");
 
             MiniBullet controller = minibullet.GetComponent<MiniBullet>();
-            controller.Initialize(minibulletDir, minibulletSpeed, minibulletDamage);
+            controller.Initialize(minibulletDir, minibulletSpeed, damage / 2);
         }
 
         Destroy(gameObject);
