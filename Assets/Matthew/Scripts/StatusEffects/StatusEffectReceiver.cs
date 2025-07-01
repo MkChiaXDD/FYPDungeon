@@ -250,18 +250,20 @@ public class FireEffect : StatusEffect
 [CreateAssetMenu(menuName = "Status Effects/Stun")]
 public class StunEffect : StatusEffect
 {
+    public float StunDuration = 5f;
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Stun] Applying stun to {receiver.gameObject.name}");
         if (receiver.TryGetComponent<PlayerMovement>(out var playerMovement))
         {
+
             playerMovement.Stun();
             Debug.Log($"[Stun] Applied stun to {receiver.gameObject.name}");
             return;
         }
         if (receiver.TryGetComponent<Enemy>(out var enemyAI))
         {
-            //enemyAI.SetAIEnabled(false);
+            enemyAI.ApplyStun(StunDuration);
             Debug.Log($"[Stun] Applied stun to {receiver.gameObject.name}");
             return;
         }
@@ -280,8 +282,7 @@ public class StunEffect : StatusEffect
 
         }
         if (receiver.TryGetComponent<Enemy>(out var enemyAI))
-        {
-           // enemyAI.SetAIEnabled(true);
+        {           
             Debug.Log($"[Stun] Removed stun from {receiver.gameObject.name}");
             return;
         }
