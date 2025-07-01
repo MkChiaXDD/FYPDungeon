@@ -148,6 +148,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void ApplyStun(float duration)
     {
+        if (data.enemyType == EnemyData.EnemyType.notNormalEnemy) return;
+                
         if (stunCoroutine != null)
             StopCoroutine(stunCoroutine);
 
