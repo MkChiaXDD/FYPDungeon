@@ -7,6 +7,7 @@ public class SpellHitbox : MonoBehaviour
     [SerializeField] private Dictionary<GameObject, float> EnemyHitAlready = new Dictionary<GameObject, float>();
     [SerializeField] private List<GameObject> ListOfEnemy;
     [SerializeField] private SpellCast Attack;
+    public ElementType attackElement = ElementType.Pyro;
 
     public void Initit(SpellCast attack)
     {
@@ -19,12 +20,12 @@ public class SpellHitbox : MonoBehaviour
         if (Attack != null) {
             if (Attack.collisionType == SpellCast.CollisionType.Continues)
             {
-                ResetEnemyHitTine();
+                ResetEnemyHitTime();
             }
         }
     }
 
-    public void ResetEnemyHitTine()
+    public void ResetEnemyHitTime()
     {
         List<GameObject> StuffToClear = new List<GameObject>();
         foreach (KeyValuePair<GameObject, float> entry in EnemyHitAlready)
@@ -53,7 +54,7 @@ public class SpellHitbox : MonoBehaviour
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     EnemyHitAlready.Add(enemy, Time.time);
-                    damageable.TakeDamage(Attack.dmg);
+                    damageable.TakeElementalDamage(Attack.dmg,ElementType.Pyro);
                     ApplyKnockBack(other);
                 }
             }
