@@ -22,16 +22,40 @@ public class Effect
         MovementSpeed,
         DashSpeed,
         ParryCooldown,
-        Health
+        Health,
+
+        LifeSteal,
+        DamageStore,
+        CritChance,
+        StatusEffectSpread,
+        Evade,
+        Sacrifice, //Sacrifice Health To get buff
+        Mimic, //Copy move
+        Influence, // temp turn enemy to friend
+        Link, // 
+        Perfection,// Do more dmg whem max hp
+        MimicDuration,
+        MimicDmgBuff,
+        MimicCastChance,
     }
 
     public enum ModifierType
     {
         MultiplierValue,
-        FlatValue
+        FlatValue,
+        TimedEffect,
+        ChanceBased,
+
     }
 
     public EffectType Type;
     public ModifierType ValueModifierType;
     public float ModifierValue;
+    public float Duration;
+    public float Chance;
+
+    [Header("Dependencies")]
+    public List<BuffData> RequiredBuffs; 
+    public bool IsHiddenIfLocked = true;
+    public bool OneTimeUnlock = false;
 }

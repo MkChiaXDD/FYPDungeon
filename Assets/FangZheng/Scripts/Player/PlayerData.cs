@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,18 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private float _Dash = 40;
     [SerializeField] private float _ParryDuration = 4;
     [SerializeField] private float _ParryThreshold = 0.5f;
+
+    public float _LifeStealAmount;
+    public float _DmgStoreAmount;
+    public float _CritChance;
+    public float _EvadeChance;
+    public bool _Sacrifice;
+    public bool _Mimic;
+    public bool _Influence;
+    public bool _Link;
+    public bool _Perfection;
+
+    public MimicClone mimic;
 
     [Space, Header("Buffs")]
     [SerializeField] private List<BuffData> _BuffObtain;
@@ -26,7 +39,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     public float Dash { get; private set; }
     public float ParryTime { get; private set; }
     public float ParryThreshhold { get; private set; }
-    public float Health{ get; private set; }
+    public float Health { get; private set; }
 
     public static PlayerData Instance { get; private set; }
 
@@ -75,6 +88,15 @@ public class PlayerData : MonoBehaviour, IDamageable
         Dash = _Dash;
         ParryTime = _ParryDuration;
         ParryThreshhold = _ParryThreshold;
+
+        _LifeStealAmount = 0f;
+        _CritChance = 0f;
+        _EvadeChance = 0f;
+        _Sacrifice = false;
+        _Mimic = false;
+        _Influence = false;
+        _Link = false;
+        _Perfection = false;
     }
 
     public void AddBuff(BuffData buff)
@@ -146,6 +168,31 @@ public class PlayerData : MonoBehaviour, IDamageable
                         {
                             ParryTime += effect.ModifierValue;
                         }
+                        break;
+                    case Effect.EffectType.LifeSteal:
+                        _LifeStealAmount += effect.ModifierValue;
+                        break;
+                    case Effect.EffectType.Evade:
+                        _EvadeChance = Mathf.Clamp(_EvadeChance + effect.ModifierValue, 0f, 0.9f);
+                        break;
+                    case Effect.EffectType.CritChance:
+                        _CritChance = Mathf.Clamp(_CritChance + effect.ModifierValue, 0f, 1f);
+                        break;
+                    case Effect.EffectType.Sacrifice:
+                        _Sacrifice = true;
+                        break;
+                    case Effect.EffectType.Mimic:
+                        _Mimic = true;
+                        mimic = this.AddComponent<MimicClone>();
+                        break;
+                    case Effect.EffectType.Influence:
+                        _Influence = true;
+                        break;
+                    case Effect.EffectType.Link:
+                        _Link = true;
+                        break;
+                    case Effect.EffectType.Perfection:
+                        _Perfection = true;
                         break;
                 }
             }

@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 873071644417707706}
   - component: {fileID: 1297823893701241915}
   - component: {fileID: 1888671951395281216}
+  - component: {fileID: 6309548070800726026}
   m_Layer: 7
   m_Name: NewPlayer
   m_TagString: Player
@@ -357,7 +358,7 @@ Transform:
   - {fileID: 7838890130775570900}
   - {fileID: 9184871880152392983}
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2022823436330820578
 Rigidbody:
@@ -506,7 +507,7 @@ MonoBehaviour:
   BasicCombat: {fileID: 4827805256808150024}
   spells: []
   dot: 0
-  animator: {fileID: 0}
+  animator: {fileID: 4633031981640272784}
   CombatContinue: 0
   CombatWindow: 0
   ThreshholdPercentage: 70
@@ -527,6 +528,9 @@ MonoBehaviour:
     itemStatus: 0
     ItemPrefab: {fileID: 0}
     Durability: 0
+  _mimicSpawner: {fileID: 6309548070800726026}
+  Mimicclone: {fileID: 2372583028561593353, guid: dfd7c71cc0e4b254a8ba7f5341ba7f86,
+    type: 3}
 --- !u!114 &1888671951395281216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,6 +553,24 @@ MonoBehaviour:
   _gravityScale: 1
   playerData: {fileID: 3427247751852364457}
   _currentSpeed: 0
+--- !u!114 &6309548070800726026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464344499410152795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9e4cabf00ccf2488415bd63023c793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mimicClonePrefab: {fileID: 2372583028561593353, guid: dfd7c71cc0e4b254a8ba7f5341ba7f86,
+    type: 3}
+  _lifetime: 3
+  _damageMultiplier: 0.2
+  SpawnAmount: 1
+  _spawnChance: 1
 --- !u!1 &1810935251312697680
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,11 +1019,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb4e932c08038249bdbcee7e91e3dc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slashGO: {fileID: 3059035967814831664}
-  slashVFX: {fileID: 8649864425702279066}
+  attackElement: 0
+  elementalDuration: 0
   damageAmount: 1
   knockbackForce: 10
   slashRadius: 5
+  poison: {fileID: 0}
+  slashGO: {fileID: 3059035967814831664}
+  slashVFX: {fileID: 8649864425702279066}
 --- !u!65 &5933871300746797563
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1099,6 +1124,16 @@ MonoBehaviour:
   _Dash: 40
   _ParryDuration: 4
   _ParryThreshold: 0.5
+  _LifeStealAmount: 0
+  _DmgStoreAmount: 0
+  _CritChance: 0
+  _EvadeChance: 0
+  _Sacrifice: 0
+  _Mimic: 0
+  _Influence: 0
+  _Link: 0
+  _Perfection: 0
+  mimic: {fileID: 0}
   _BuffObtain: []
   DataChange:
     m_PersistentCalls:
@@ -2053,6 +2088,12 @@ PrefabInstance:
 --- !u!4 &1633675124996346346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f88c5465d1282274e9b6084a4504b452,
+    type: 3}
+  m_PrefabInstance: {fileID: 1234342142943557121}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4633031981640272784 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f88c5465d1282274e9b6084a4504b452,
     type: 3}
   m_PrefabInstance: {fileID: 1234342142943557121}
   m_PrefabAsset: {fileID: 0}

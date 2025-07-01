@@ -37,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
     [Space, Header("Combat & Weapons")]
     [SerializeField] private GameObject EquippedObject;
     [SerializeField] private Transform itemHolding;
-    [SerializeField] private Weapon WeaponChoosen;
+    [SerializeField] public Weapon WeaponChoosen;
     [SerializeField] private NormalSwordAttack BasicCombat;
     [SerializeField] private List<Spell> spells;
 
@@ -56,6 +56,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private InventoryManager PlayerStorage;
     [SerializeField] private ItemInstance ItemHeld;
 
+    [Header("Mimic")]
+    [SerializeField] private MimicSpawner _mimicSpawner;
+    [SerializeField] private GameObject Mimicclone;
 
     private float BlockHoldTime;
     private bool _IsParry;
@@ -93,6 +96,11 @@ public class PlayerCombat : MonoBehaviour
         playerData.DataChange.AddListener(Addmodifier);
     }
 
+    public void SetUpMimic(MimicSpawner mimic)
+    {
+        _mimicSpawner = mimic;
+        _mimicSpawner._mimicClonePrefab = Mimicclone;
+    }
     private void Update()
     {
 
@@ -241,12 +249,17 @@ public class PlayerCombat : MonoBehaviour
         {
             return;
         }
+
+        if (itemInstance.ItemPrefab == null)
+        {
+            return;
+        }
         //destroy current weapon in hand if any
         if (EquippedObject != null)
         {
             Destroy(EquippedObject);
         }
-
+        
         GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
 
         EquippedObject = Createweapon;
@@ -302,6 +315,11 @@ public class PlayerCombat : MonoBehaviour
         {
             if (WeaponChoosen != null)
             {
+                if (_mimicSpawner != null)
+                {
+                    _mimicSpawner.TrySpawnMimic();
+                }
+
                 PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
                 //Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
 
