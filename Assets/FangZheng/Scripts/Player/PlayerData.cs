@@ -154,4 +154,9 @@ public class PlayerData : MonoBehaviour, IDamageable
         DataChange?.Invoke();
 
     }
+
+    public void TakeElementalDamage(float damage, ElementType element)
+    {
+        TakeDamage(damage);
+    }
 }

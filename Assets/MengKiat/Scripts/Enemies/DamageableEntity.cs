@@ -67,4 +67,8 @@ public class DamageableEntity : MonoBehaviour, IDamageable
         maxHealth = MaxHealthAmount;
     }
 
+    public void TakeElementalDamage(float damage, ElementType element)
+    {
+        throw new System.NotImplementedException();
+    }
 }

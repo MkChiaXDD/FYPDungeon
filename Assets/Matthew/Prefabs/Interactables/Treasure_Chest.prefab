@@ -157,7 +157,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954099580479441716}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -195,8 +195,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 1.25, z: 2}
-  m_Center: {x: 0, y: -0.9, z: -0.2}
+  m_Size: {x: 3, y: 2.5, z: 2}
+  m_Center: {x: 0, y: -0.2, z: -0.2}
 --- !u!114 &7885599997690331124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +233,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dropItem:
-  - _dropItemPrefab: {fileID: 1504246983715362148, guid: 8696bee30d6a5ee4aac005432c05dc81,
+  - _dropItemPrefab: {fileID: 8287556163088967160, guid: fc86f60f98afa1d4d8c031002cbbb9d8,
+      type: 3}
+    _dropRate: 100
+  - _dropItemPrefab: {fileID: 4367096652321051446, guid: fc0e8be2ff504ae45adf0da24a241f83,
+      type: 3}
+    _dropRate: 100
+  - _dropItemPrefab: {fileID: 8449004803641222730, guid: 283dced21787f2549a3092b952a9fcfa,
+      type: 3}
+    _dropRate: 100
+  - _dropItemPrefab: {fileID: 1657680970301162688, guid: 2366700a9996c434f8ce1ae0b9e7a6bf,
       type: 3}
     _dropRate: 100
   _dropHeight: 3.5

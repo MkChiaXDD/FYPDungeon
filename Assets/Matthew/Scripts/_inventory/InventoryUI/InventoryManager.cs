@@ -24,7 +24,7 @@ public class InventoryManager : MonoBehaviour
     private void Awake()
     {
         canvas = GetComponent<Canvas>();
-        canvas.enabled = true;
+        //canvas.enabled = true;
         inventorySlots = new GameObject[inventory.maxItemSlots];
         hotbarSize = inventory.hotbarSize;
 

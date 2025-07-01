@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpringChest : MonoBehaviour
+public class SpringChest : MonoBehaviour, IDamageable
 {
     [Header("Chest Parts")]
     [SerializeField] private Transform chestTop;    // Assign the top part in Inspector
@@ -22,11 +22,24 @@ public class SpringChest : MonoBehaviour
     private float currentVelocity;
     private float currentAngle;
     private bool isOpen = false;
+    private bool isOpening = false;
+
+    private void Awake()
+    {
+        isOpen = false;
+    }
 
     private void Update()
     {
+        // InteractMode();
+         ApplySpringMotion();
+    }
 
-
+    /// <summary>
+    /// player manually interact to open
+    /// </summary>
+    private void InteractMode()
+    {
         if (CheckPlayerProximity() && Input.GetKeyDown(interactKey) /*&& !isOpen*/)
         {
             isOpen = !isOpen;
@@ -34,6 +47,25 @@ public class SpringChest : MonoBehaviour
         }
 
         ApplySpringMotion();
+    }
+
+    /// <summary>
+    /// player hit the chest to open
+    /// </summary>
+    public void Die()
+    {
+        OpenChest();
+        Debug.Log("free loot");
+    }
+
+    private void OpenChest()
+    {
+        if (isOpen || isOpening) return;
+        isOpening = true;
+        ApplySpringMotion();
+        dropSystem.SpawnDropItem();
+        isOpen = true;
+        
     }
 
     private bool CheckPlayerProximity()
@@ -44,6 +76,7 @@ public class SpringChest : MonoBehaviour
 
     private void ApplySpringMotion()
     {
+        if (!isOpen) return;
         float targetAngle = isOpen ? openAngle : 0f;
 
         // Spring physics calculation
@@ -55,12 +88,19 @@ public class SpringChest : MonoBehaviour
 
         // Apply rotation to top part (X-axis only)
         chestTop.localRotation = Quaternion.Euler(currentAngle, 0f, 0f);
+        
     }
 
+
+    
     // Visualize interaction radius in editor
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(chestBase.position, interactionRadius);
     }
+
+    public void TakeDamage(float damage) => Die();
+    public void TakeElementalDamage(float damage, ElementType element) => Die();
+
 }

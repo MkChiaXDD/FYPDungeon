@@ -72,8 +72,11 @@ public class Breakable : MonoBehaviour, IDamageable
     }
 
     public void TakeDamage(float damage) => Die();
+    public void TakeElementalDamage(float damage, ElementType element) => Die();
     public void Die() => StartCoroutine(nameof(BreakObject));
 
     public void DropItem() => dropSystem.SpawnDropItem();
 
+ 
+ 
 }

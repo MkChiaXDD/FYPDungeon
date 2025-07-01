@@ -10,6 +10,7 @@ public class OrbitingCast : Spell
     [SerializeField] private GameObject Player;
     [SerializeField] private int Amount;
     //[SerializeField] private PlayerMovement playerMovement;
+
     public override void Attack(SpellCast spellCastList)
     {
         SummonOrbs(spellCastList);

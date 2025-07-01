@@ -119,7 +119,7 @@ public class PlayerCombat : MonoBehaviour
 
         SpecialAttack();
         Attack();
-        
+
 
         _parryCooldown -= Time.deltaTime;
     }
@@ -248,7 +248,12 @@ public class PlayerCombat : MonoBehaviour
         }
 
         GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
+
         EquippedObject = Createweapon;
+        if (EquippedObject.GetComponent<BoxCollider>())
+            EquippedObject.GetComponent<BoxCollider>().isTrigger = true;
+        if (EquippedObject.GetComponent<Rigidbody>())
+            EquippedObject.GetComponent<Rigidbody>().isKinematic = true;
         EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
         if (!itemInstance.ItemPrefab.GetComponent<Weapon>())
         {
@@ -301,22 +306,21 @@ public class PlayerCombat : MonoBehaviour
                 //Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
 
             }
+
+            if (Lockon && TargetEnemy != null)
+            {
+
+                StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
+            }
             else
             {
-                if (Lockon && TargetEnemy != null)
-                {
-
-                    StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
-                }
-                else
-                {
-                    BasicCombat.SwordAttack();
-                    ActivateAttack();
-                    //animator.SetTrigger("Attack");
-                }
-                //StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
-                //BasicCombat.SwordAttack();
+                BasicCombat.SwordAttack();
+                ActivateAttack();
+                //animator.SetTrigger("Attack");
             }
+            //StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
+            //BasicCombat.SwordAttack();
+
         }
 
     }
@@ -324,18 +328,18 @@ public class PlayerCombat : MonoBehaviour
     public void ActivateAttack()
     {
 
-            if (CombatContinue == false)
-            {
-                //Attack();
-                animator.SetTrigger("Attack");
-                CombatContinue = true;
-            }
+        if (CombatContinue == false)
+        {
+            //Attack();
+            animator.SetTrigger("Attack");
+            CombatContinue = true;
+        }
 
-            if (CombatWindow == true)
-            {
-                animator.SetBool("Combo", true);
-            }
-        
+        if (CombatWindow == true)
+        {
+            animator.SetBool("Combo", true);
+        }
+
     }
 
     private IEnumerator FFCombat(Vector3 targetPos)

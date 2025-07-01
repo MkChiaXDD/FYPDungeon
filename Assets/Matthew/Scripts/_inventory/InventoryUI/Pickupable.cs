@@ -14,36 +14,36 @@ public class Pickupable : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (PickupAlready == false) {
-            if (!collision.transform.CompareTag(PlayerTag)) return;
+        if (PickupAlready == false)
+        {
             if (!collision.transform.GetComponent<Inventory>()) return;
             if (timeToObtain > 0f) return;
             TryPickup(collision.gameObject);
-            
+
         }
     }
 
-        //private void OnTriggerStay(Collider other)
-        //{
-        //    if (timeToObtain <= 0f) return;
-        //    TryTimedPickup(other.gameObject);
-        //}
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (timeToObtain <= 0f) return;
+    //    TryTimedPickup(other.gameObject);
+    //}
 
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    if (!other.CompareTag(PlayerTag)) return;
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (!other.CompareTag(PlayerTag)) return;
 
-        //    timer = 0;
-        //    if (playerInventory != null)
-        //    {
-        //        playerInventory.manager.HandPercentage(0, false);
-        //    }
-        //}
+    //    timer = 0;
+    //    if (playerInventory != null)
+    //    {
+    //        playerInventory.manager.HandPercentage(0, false);
+    //    }
+    //}
 
-        private void TryPickup(GameObject playerObject)
+    private void TryPickup(GameObject playerObject)
     {
         if (!playerObject.CompareTag(PlayerTag)) return;
-        
+
         //AudioManager.Instance.PlaySFX("Pickup");
         AddToInventory(FindObjectOfType<InventoryManager>());
         Destroy(gameObject);
@@ -55,13 +55,13 @@ public class Pickupable : MonoBehaviour
 
         InventoryManager = FindObjectOfType<InventoryManager>();
         if (timer >= timeToObtain)
-        {         
+        {
             AddToInventory(InventoryManager);
             Destroy(gameObject);
         }
         else
         {
-            timer += Time.deltaTime;        
+            timer += Time.deltaTime;
         }
     }
 

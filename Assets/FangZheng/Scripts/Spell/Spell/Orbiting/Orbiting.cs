@@ -18,14 +18,9 @@ public class Orbiting : Projectile
         Player = PLayerPos;
         Weapon_Count = WeaponCount;
         this.WeaponPrefab = WeaponPrefab;
-        Destroy(this.gameObject , duration);
+        Destroy(this.gameObject, duration);
         Create();
     }
-
-    //private void Start()
-    //{
-    //    Create();
-    //}
 
     private void Create()
     {

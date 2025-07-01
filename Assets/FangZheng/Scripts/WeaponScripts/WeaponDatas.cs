@@ -51,7 +51,8 @@ public class SpellCast
     {
         if (SpellPrefab != null)
         {
-            GameObject instance = GameObject.Instantiate(SpellPrefab, Object);
+
+            GameObject instance = GameObject.Instantiate(SpellPrefab, Object.transform.position, GameObject.FindGameObjectWithTag("PlayerBody").transform.rotation,Object);
             spell = instance.GetComponent<Spell>();
         }
         else

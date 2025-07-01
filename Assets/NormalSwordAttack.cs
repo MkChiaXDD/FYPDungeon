@@ -56,7 +56,7 @@ public class NormalSwordAttack : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<Enemy>(out var hitEnemies) && !hit.CompareTag("Player"))
+            if (hit.TryGetComponent<IDamageable>(out var hitEnemies) && !hit.CompareTag("Player"))
             {
                 //hitEnemies.TakeDamage(damageAmount);
                 ApplyElementalEffects(hit.gameObject);
@@ -64,7 +64,7 @@ public class NormalSwordAttack : MonoBehaviour
                 hitEnemies.TakeElementalDamage(damageAmount, attackElement);
               // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                 
-                ApplyKnockBack(hitEnemies);
+                ApplyKnockBack(hit.gameObject);
             }
         }
     }
@@ -85,7 +85,7 @@ public class NormalSwordAttack : MonoBehaviour
         }
     }
 
-    public void ApplyKnockBack(Enemy hit)
+    public void ApplyKnockBack(GameObject hit)
     {
         Rigidbody enemyRb = hit.GetComponent<Rigidbody>();
         if (enemyRb != null)
