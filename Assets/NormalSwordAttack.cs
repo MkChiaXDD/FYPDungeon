@@ -15,6 +15,7 @@ public class NormalSwordAttack : MonoBehaviour
 
 
     public PoisonEffect poison;
+    public StunEffect stun;
 
     [Header("Visual effects")]
     [SerializeField] private GameObject slashGO;
@@ -62,6 +63,7 @@ public class NormalSwordAttack : MonoBehaviour
                 ApplyElementalEffects(hit.gameObject);
 
                 hitEnemies.TakeElementalDamage(damageAmount, attackElement);
+                ApplyStatusEffects(hit.gameObject, stun);
               // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                 
                 ApplyKnockBack(hit.gameObject);
@@ -97,6 +99,11 @@ public class NormalSwordAttack : MonoBehaviour
             // Apply force to the enemy
             enemyRb.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
         }
+    }
+
+    public void ApplyStatusEffects(GameObject target, StunEffect stun)
+    {
+        target.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(stun);
     }
 
 

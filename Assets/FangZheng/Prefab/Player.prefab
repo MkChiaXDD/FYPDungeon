@@ -200,6 +200,7 @@ MonoBehaviour:
   knockbackForce: 10
   slashRadius: 5
   poison: {fileID: 11400000, guid: 5e155ddd92350714d819fec51c1f7f3c, type: 2}
+  stun: {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
   slashGO: {fileID: 1066712663172131563}
   slashVFX: {fileID: 7207448430502091016}
 --- !u!65 &1831337485476781551
@@ -2985,6 +2986,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 822943730535256105}
     m_Modifications:
+    - target: {fileID: 1344294708111461908, guid: b96641527e3db5944a8cf0e195221832,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1922742496077487141, guid: b96641527e3db5944a8cf0e195221832,
         type: 3}
       propertyPath: m_RootOrder
