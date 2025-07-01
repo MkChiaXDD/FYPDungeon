@@ -22,11 +22,9 @@ public class Enemy : MonoBehaviour, IDamageable
     // Elemental status effects
     private Dictionary<ElementType, float> activeElementalEffects = new Dictionary<ElementType, float>();
 
-    
-
-
-    
-
+    [SerializeField] protected float stunDuration = 1f;
+    protected bool isStunned = false;
+    protected Coroutine stunCoroutine;
 
     protected virtual void Awake()
     {
@@ -58,8 +56,6 @@ public class Enemy : MonoBehaviour, IDamageable
 
         TakeDamage(finalDamage);
     }
-
- 
 
     private float GetResistanceMultiplier(ElementType elementType)
     {
@@ -149,4 +145,21 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         healthBar.SetHealth(currentHealth);
     }
+
+    public virtual void ApplyStun(float duration)
+    {
+        if (stunCoroutine != null)
+            StopCoroutine(stunCoroutine);
+
+        stunCoroutine = StartCoroutine(StunRoutine(duration));
+    }
+
+    private IEnumerator StunRoutine(float duration)
+    {
+        isStunned = true;
+        yield return new WaitForSeconds(duration);
+        isStunned = false;
+        stunCoroutine = null;
+    }
+
 }

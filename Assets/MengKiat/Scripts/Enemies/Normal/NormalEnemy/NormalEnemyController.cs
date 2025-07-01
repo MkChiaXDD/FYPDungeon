@@ -45,6 +45,7 @@ public class NormalEnemyController : Enemy
     void Update()
     {
         if (player == null || isBackingUp) return;
+        if (isStunned) return;
 
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
