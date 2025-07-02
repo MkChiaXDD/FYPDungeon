@@ -5,11 +5,12 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private MapGenerator mapGen;
-    [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private Transform enemyParent;
     [SerializeField] private float offSet = 1.5f;
+    [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private List<GameObject> minibossPrefabs;
     [SerializeField] private List<GameObject> bigBossPrefabs;
+    [SerializeField] private float healerSpawnChance = 0.001f;
 
     [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
@@ -44,34 +45,55 @@ public class EnemySpawner : MonoBehaviour
                     Vector3 spawnOffset = new Vector3(Random.Range(-offSet, offSet), 0, Random.Range(-offSet, offSet));
                     Vector3 spawnPos = spawnPoint.position + spawnOffset;
 
-                    List<GameObject> availableEnemies = new List<GameObject>();
+                    GameObject chosenEnemy = null;
 
-                    foreach (GameObject enemy in enemyPrefabs)
+                    // Try to spawn a healer with low chance (independent of scaling)
+                    if (Random.value <= healerSpawnChance)
                     {
-                        string name = enemy.name.ToLower();
-
-                        if (name.Contains("fast") && round >= RoundToSpawnFast)
-                            availableEnemies.Add(enemy);
-                        else if (name.Contains("ranged") && round >= RoundToSpawnRanged)
-                            availableEnemies.Add(enemy);
-                        else if (name.Contains("tank") && round >= RoundToSpawnTank)
-                            availableEnemies.Add(enemy);
-                        else if (name.Contains("bomber") && round >= RoundToSpawnBomber)
-                            availableEnemies.Add(enemy);
-                        else if (!name.Contains("fast") && !name.Contains("ranged") && !name.Contains("tank") && !name.Contains("bomber"))
-                            availableEnemies.Add(enemy); // Basic/default enemy
+                        foreach (GameObject enemy in enemyPrefabs)
+                        {
+                            if (enemy.name.ToLower().Contains("healer"))
+                            {
+                                chosenEnemy = enemy;
+                                break;
+                            }
+                        }
                     }
 
-                    if (availableEnemies.Count == 0)
+                    // If not healer, pick based on round-scaling
+                    if (chosenEnemy == null)
                     {
-                        availableEnemies.Add(enemyPrefabs[0]);
-                        Debug.LogWarning("No enemies unlocked at round " + round + ". Using fallback.");
+                        List<GameObject> availableEnemies = new List<GameObject>();
+
+                        foreach (GameObject enemy in enemyPrefabs)
+                        {
+                            string name = enemy.name.ToLower();
+
+                            if (name.Contains("fast") && round >= RoundToSpawnFast)
+                                availableEnemies.Add(enemy);
+                            else if (name.Contains("ranged") && round >= RoundToSpawnRanged)
+                                availableEnemies.Add(enemy);
+                            else if (name.Contains("tank") && round >= RoundToSpawnTank)
+                                availableEnemies.Add(enemy);
+                            else if (name.Contains("bomber") && round >= RoundToSpawnBomber)
+                                availableEnemies.Add(enemy);
+                            else if (!name.Contains("fast") && !name.Contains("ranged") && !name.Contains("tank") && !name.Contains("bomber") && !name.Contains("healer"))
+                                availableEnemies.Add(enemy); // Basic/default enemies only (not healer)
+                        }
+
+                        if (availableEnemies.Count == 0)
+                        {
+                            availableEnemies.Add(enemyPrefabs[0]);
+                            Debug.LogWarning("No enemies unlocked at round " + round + ". Using fallback.");
+                        }
+
+                        chosenEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
                     }
 
-                    GameObject chosenEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
                     GameObject enemyInstance = Instantiate(chosenEnemy, spawnPos, Quaternion.identity, enemyParent);
                     enemyInstance.transform.parent = room.transform;
                 }
+
             }
             else
             {
