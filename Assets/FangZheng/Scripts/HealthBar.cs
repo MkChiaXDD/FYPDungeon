@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +20,7 @@ public class HealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Healthbar.maxValue = healthMax;
         health = PlayerData.CurrentHealth;
         healthMax = PlayerData.MaxHealth;
         Healthbar.value = health;

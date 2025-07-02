@@ -890,7 +890,6 @@ MonoBehaviour:
   CombatWindow: 0
   ThreshholdPercentage: 0
   Dmg: 0
-  OriginalDmg: 5
   WeaponIndicator:
   - {fileID: 3533023566222870150}
   - {fileID: 3950920874685585953}
@@ -924,7 +923,7 @@ MonoBehaviour:
   _MaxHealth: 100
   _Dmg: 5
   _Speed: 15
-  _Dash: 35
+  _Dash: 15
   _ParryDuration: 4
   _ParryThreshold: 0.5
   _LifeStealAmount: 0
@@ -960,7 +959,6 @@ MonoBehaviour:
   _normalspeed: 4
   _turnspeed: 360
   _dashSpeed: 30
-  _gravityScale: 1
   playerData: {fileID: 450010975989994624}
   _currentSpeed: 0
 --- !u!114 &1252184399909569629
@@ -978,8 +976,6 @@ MonoBehaviour:
   _mimicClonePrefab: {fileID: 2372583028561593353, guid: dfd7c71cc0e4b254a8ba7f5341ba7f86,
     type: 3}
   _lifetime: 3
-  _damageMultiplier: 0.2
-  SpawnAmount: 1
   _spawnChance: 0.2
 --- !u!1 &3533023566222870150
 GameObject:
@@ -2730,7 +2726,7 @@ PrefabInstance:
     - target: {fileID: 7395303845046577387, guid: 8d6620a86a13a2c409554c46fbbf6ef9,
         type: 3}
       propertyPath: ListOfBuffs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7395303845046577387, guid: 8d6620a86a13a2c409554c46fbbf6ef9,
         type: 3}
@@ -2749,6 +2745,12 @@ PrefabInstance:
       propertyPath: ListOfBuffs.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 681cfedd82eac4f4e83f5ab2b7fa754a,
+        type: 2}
+    - target: {fileID: 7395303845046577387, guid: 8d6620a86a13a2c409554c46fbbf6ef9,
+        type: 3}
+      propertyPath: ListOfBuffs.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 41c2a9998bf493846ada9d8650e3a753,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2951,8 +2953,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5091540028360248078, guid: 9a1b6da3db159de419aeea7df83ccc38,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5091540028360248078, guid: 9a1b6da3db159de419aeea7df83ccc38,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -706.00006
+      value: -770
       objectReference: {fileID: 0}
     - target: {fileID: 5091540028360248078, guid: 9a1b6da3db159de419aeea7df83ccc38,
         type: 3}

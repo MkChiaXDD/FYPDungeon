@@ -59,7 +59,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void TakeElementalDamage(float amount, ElementType elementType)
     {
-        Debug.Log("dog");
+    
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
         float finalDamage = amount * resistanceMultiplier;
@@ -104,15 +104,15 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             {
                 // Start or refresh burning effect*
-                if (TryGetComponent<ElectroEffect>(out var burning))
+                if (TryGetComponent<ElectroEffect>(out var electro))
                 {
-                    burning.RefreshEffect(damageAmount);
+                    electro.RefreshEffect(damageAmount);
                 }
                 else
                 {
 
-                    burning = gameObject.AddComponent<ElectroEffect>();
-                    burning.Initialize(damageAmount, this);
+                    electro = gameObject.AddComponent<ElectroEffect>();
+                    electro.Initialize(damageAmount, this);
                 }
             }
 

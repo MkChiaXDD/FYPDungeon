@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.Windows;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _normalspeed = 4;
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private float _dashSpeed = 30;
-    [SerializeField] private float _gravityScale = 1.0f;
+    //[SerializeField] private float _gravityScale = 1.0f;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
