@@ -14,12 +14,13 @@ public class ElementalReactionManager : MonoBehaviour
     [SerializeField] private float _superconductDuration = 5f;
 
     void Awake() => Instance = this;
-
+    
     // Check for possible reactions
     public void CheckReactions(ElementalStatus target, ElementType triggerElement, Vector3 position, float baseDamage)
     {
         foreach (var existingElement in target.GetActiveElements())
         {
+            Debug.Log("GOt " + existingElement);
             ReactionType reaction = GetReactionType(triggerElement, existingElement.Key);
 
             if (reaction != ReactionType.None)
