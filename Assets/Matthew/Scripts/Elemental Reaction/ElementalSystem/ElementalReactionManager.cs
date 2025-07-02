@@ -6,6 +6,7 @@ public class ElementalReactionManager : MonoBehaviour
     public static ElementalReactionManager Instance;
 
     public GameObject FireVFX;
+    public GameObject ElectricVFX;
 
     [Header("Reaction Multipliers")]
     [SerializeField] private float _vaporizeMultiplier = 1.5f;
