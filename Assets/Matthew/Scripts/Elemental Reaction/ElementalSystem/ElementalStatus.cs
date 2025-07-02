@@ -14,6 +14,8 @@ public class ElementalStatus : MonoBehaviour
             _elementGauges[element] = 0f;
 
         _elementGauges[element] = Mathf.Clamp(_elementGauges[element] + duration, 0, 2f);
+
+        Debug.Log("applied element " + _elementGauges[element]);
     }
 
     // Get all active elements
@@ -25,9 +27,12 @@ public class ElementalStatus : MonoBehaviour
     {
         foreach (var element in _elementGauges.Keys.ToList())
         {
-            _elementGauges[element] -= Time.deltaTime * 0.3f; // Decay rate
+            _elementGauges[element] -= Time.deltaTime * 0.01f; // Decay rate
             if (_elementGauges[element] <= 0.01f)
+            {
                 _elementGauges.Remove(element);
+                Debug.Log("removed element: " + element);
+            }
         }
     }
 

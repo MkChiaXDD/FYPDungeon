@@ -2,12 +2,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class BurningEffect : MonoBehaviour
+public class ElectroEffect : MonoBehaviour
 {
     private float damagePerSecond;
     private float duration;
     private Enemy enemy;
-    private ParticleSystem burningVFX;
+    private ParticleSystem ElectroVFX;
 
     public void Initialize(float baseDamage, Enemy targetEnemy)
     {
@@ -16,11 +16,11 @@ public class BurningEffect : MonoBehaviour
         duration = 4f;
 
         // Create VFX
-        GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.FireVFX, transform);
-        burningVFX = vfxObj.GetComponent<ParticleSystem>();
+        GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.ElectricVFX, transform);
+        ElectroVFX = vfxObj.GetComponent<ParticleSystem>();
 
-        Debug.Log("burn bitch");
-        StartCoroutine(BurningRoutine());
+        Debug.Log("electro attack ");
+        StartCoroutine(ElectricRoutine());
     }
     public void RefreshEffect(float newDamage)
     {
@@ -29,17 +29,19 @@ public class BurningEffect : MonoBehaviour
 
     }
 
-    private IEnumerator BurningRoutine()
+    private IEnumerator ElectricRoutine()
     {
-        Debug.Log("burn bitcheres");
+        Debug.Log("electrocuted bitcheres");
         float elapsed = 0f;
+
+        enemy.ApplyStun(0.5f);
 
         while (elapsed < duration)
         {
             // Apply damage every 0.5 seconds
             if (elapsed % 0.5f < Time.deltaTime)
             {
-                enemy.TakeElementalDamage(damagePerSecond * 0.5f, ElementType.Pyro);
+                enemy.TakeElementalDamage(damagePerSecond * 0.5f, ElementType.Electro);
             }
 
             elapsed += Time.deltaTime;
@@ -47,13 +49,12 @@ public class BurningEffect : MonoBehaviour
         }
 
         // Fade out VFX before destroying
-        if (burningVFX)
+        if (ElectroVFX)
         {
-            burningVFX.Stop();
+            ElectroVFX.Stop();
             yield return new WaitForSeconds(2f);
-            Destroy(burningVFX.gameObject);
+            Destroy(ElectroVFX.gameObject);
         }
-
         Destroy(this);
     }
 }
