@@ -42,6 +42,8 @@ public class PlayerData : MonoBehaviour, IDamageable
     public float Health { get; private set; }
 
     public static PlayerData Instance { get; private set; }
+    // Elemental status effects
+    private Dictionary<ElementType, float> activeElementalEffects = new Dictionary<ElementType, float>();
 
 
     private void Awake()
@@ -218,8 +220,42 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     }
 
-    public void TakeElementalDamage(float damage, ElementType element)
+  
+
+
+
+    public void TakeElementalDamage(float damage, ElementType elementType)
     {
+        // Apply elemental effect (burning, electrocution, etc.)
+        ApplyElementalEffect(elementType, damage);
         TakeDamage(damage);
+    }
+
+    private void ApplyElementalEffect(ElementType elementType, float damageAmount)
+    {
+
+        // Example: Apply burning effect for Pyro damage
+        if (elementType == ElementType.Pyro)
+        {
+            // Start or refresh burning effect*
+            if (TryGetComponent<BurningEffect>(out var burning))
+            {
+                burning.RefreshEffect(damageAmount);
+            }
+            else
+            {
+
+                burning = gameObject.AddComponent<BurningEffect>();
+                burning.Initialize(damageAmount, this);
+            }
+        }
+
+        // Add similar effects for other elements:
+        // - Hydro: Wet status (increased Electro damage)
+        // - Electro: Stun effect
+        // - Cryo: Slow movement
+
+        // Track elemental effect for visual feedback
+        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
     }
 }
