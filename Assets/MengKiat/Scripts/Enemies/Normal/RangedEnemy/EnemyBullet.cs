@@ -23,8 +23,6 @@ public class EnemyBullet : MonoBehaviour
     {
         direction = dir.normalized;
         _type = type;
-        //speed = spd;
-        //damage = dmg;
 
         Destroy(gameObject, lifetime);
     }
@@ -49,15 +47,12 @@ public class EnemyBullet : MonoBehaviour
                 damageable.TakeDamage(damage);
             }
             Destroy(gameObject);
-            //Destroy(gameObject);
         }
         if (other.CompareTag("Parry"))
         {
-            //other.transform.parent.gameObject.transform.parent.GetComponent<PlayerController>().GetDirection();
             BounceBack(other.transform.parent.gameObject.transform.parent.GetComponent<PlayerMovement>().GetDirection());
             other.transform.parent.gameObject.transform.parent.GetComponent<PlayerCombat>().resetParryCooldown();
             Debug.Log("Parry");
-            //return;
         }
 
         if (other.CompareTag("Bullet") && other.GetComponent<EnemyBullet>() != null)
@@ -71,7 +66,6 @@ public class EnemyBullet : MonoBehaviour
         }
         if (other.CompareTag("Enemy") && _type == Type.Player)
         {
-            //Debug.Log("RANGEDENEMY: HIT Enemy");
             if (other.TryGetComponent(out IDamageable damageable))
             {
 
@@ -80,9 +74,6 @@ public class EnemyBullet : MonoBehaviour
                 Debug.Log("RANGEDENEMY: HIT Enemy");
             }
         }
-/*            damageable.TakeDamage(damage);
-        Debug.Log("RANGEDENEMY: HIT Something");*/
-        //Destroy(gameObject);
     }
 
     public void BounceBack(Vector3 dir)

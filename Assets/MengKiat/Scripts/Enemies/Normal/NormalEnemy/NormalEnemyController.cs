@@ -171,26 +171,26 @@ public class NormalEnemyController : Enemy
         isBackingUp = false;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Vector3[] feelers = new Vector3[]
-        {
-            transform.forward,
-            (transform.forward + transform.right).normalized,
-            (transform.forward - transform.right).normalized
-        };
+    //void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Vector3[] feelers = new Vector3[]
+    //    {
+    //        transform.forward,
+    //        (transform.forward + transform.right).normalized,
+    //        (transform.forward - transform.right).normalized
+    //    };
 
-        foreach (var f in feelers)
-        {
-            Vector3 dir = f;
-            dir.y = 0;
-            dir.Normalize();
-            Gizmos.DrawLine(transform.position, transform.position + dir * feelerLength);
-        }
+    //    foreach (var f in feelers)
+    //    {
+    //        Vector3 dir = f;
+    //        dir.y = 0;
+    //        dir.Normalize();
+    //        Gizmos.DrawLine(transform.position, transform.position + dir * feelerLength);
+    //    }
 
-        // draw a little sphere at origin to show radius
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, feelerRadius);
-    }
+    //    // draw a little sphere at origin to show radius
+    //    Gizmos.color = Color.cyan;
+    //    Gizmos.DrawWireSphere(transform.position, feelerRadius);
+    //}
 }

@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
     [SerializeField] public float currentHealth;
+    public float maxHealth => data.maxHealth;
     protected int currentRound;
     protected float damage;
 
@@ -42,6 +43,18 @@ public class Enemy : MonoBehaviour, IDamageable
         Debug.Log(this.name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
             Die();
+    }
+
+    public virtual void Heal(float healAmount)
+    {
+        if (currentHealth < data.maxHealth)
+        {
+            currentHealth += healAmount;
+            if (currentHealth > data.maxHealth)
+            {
+                currentHealth = data.maxHealth;
+            }
+        }
     }
 
     public void TakeElementalDamage(float amount, ElementType elementType)
@@ -181,7 +194,7 @@ public class Enemy : MonoBehaviour, IDamageable
         stunCoroutine = null;
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
 

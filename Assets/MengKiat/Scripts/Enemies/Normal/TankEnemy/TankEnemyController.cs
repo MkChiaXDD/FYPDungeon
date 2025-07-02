@@ -152,6 +152,7 @@ public class TankEnemyController : Enemy
 
     private void Attack()
     {
+        Debug.Log("TANKENEMY: Attack");
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)

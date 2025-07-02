@@ -72,6 +72,9 @@ public class Breakable : MonoBehaviour, IDamageable
     }
 
     public void TakeDamage(float damage) => Die();
+
+    public virtual void Heal(float healAmount) { }
+
     public void TakeElementalDamage(float damage, ElementType element) => Die();
     public void Die() => StartCoroutine(nameof(BreakObject));
 

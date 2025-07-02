@@ -70,6 +70,18 @@ public class PlayerData : MonoBehaviour, IDamageable
         }
     }
 
+    public virtual void Heal(float healAmount)
+    {
+        if (CurrentHealth < MaxHealth)
+        {
+            CurrentHealth += healAmount;
+            if (CurrentHealth > MaxHealth)
+            {
+                CurrentHealth = MaxHealth;
+            }
+        }
+    }
+
     public void Die()
     {
         Debug.Log("die");
