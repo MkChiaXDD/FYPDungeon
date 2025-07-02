@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEngine.Rendering.DebugUI;
 
-public class Boom : Projectile , IDamageable
+
+public class Boom : Projectile, IDamageable
 {
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private SpellHitbox Hitbox;
@@ -112,4 +109,8 @@ public class Boom : Projectile , IDamageable
         Gizmos.DrawWireSphere(transform.position, Radius);
     }
 
+    public void Heal(float healAmoount)
+    {
+        throw new NotImplementedException();
+    }
 }
