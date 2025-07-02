@@ -28,6 +28,7 @@ public class TankEnemyController : Enemy
     private Transform player;
     private float attackTimer;
     private Vector3 currentDir;
+    private float originalSmoothing;
 
     [Header("Throwing Settings")]
     [SerializeField] private float throwingForce = 25f;
@@ -44,6 +45,7 @@ public class TankEnemyController : Enemy
         player = GameObject.FindWithTag("Player").transform;
         state = State.Idle;
         currentDir = transform.forward;
+        originalSmoothing = smoothing;
     }
 
     void Update()
@@ -172,6 +174,8 @@ public class TankEnemyController : Enemy
     {
         if (chosenBomber == null || isCarrying) return;
 
+        smoothing = 15f;
+
         Transform bomberPos = chosenBomber.transform;
 
         Vector3 toBomber = bomberPos.position - transform.position;
@@ -201,6 +205,7 @@ public class TankEnemyController : Enemy
 
             isCarrying = true;
             hasThrown = true;
+            smoothing = originalSmoothing;
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
         }
     }
