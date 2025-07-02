@@ -24,10 +24,10 @@ public class PlayerData : MonoBehaviour, IDamageable
     public bool _Link;
     public bool _Perfection;
 
-    public MimicClone mimic;
+    public MimicSpawner mimic;
 
     [Space, Header("Buffs")]
-    [SerializeField] private List<BuffData> _BuffObtain;
+    [SerializeField] public List<BuffData> _BuffObtain;
 
     public UnityEvent DataChange;
 
@@ -195,7 +195,11 @@ public class PlayerData : MonoBehaviour, IDamageable
                         break;
                     case Effect.EffectType.Mimic:
                         _Mimic = true;
-                        mimic = this.AddComponent<MimicClone>();
+                        //PlayerCombat.Instance.EnableMimic(_Mimic);
+                        if (mimic == null) {
+                            mimic = this.AddComponent<MimicSpawner>();
+                            PlayerCombat.Instance.SetUpMimic(mimic);
+                        }
                         break;
                     case Effect.EffectType.Influence:
                         _Influence = true;

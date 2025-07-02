@@ -45,7 +45,7 @@ public class Effect
         FlatValue,
         TimedEffect,
         ChanceBased,
-
+        Ability,
     }
 
     public EffectType Type;

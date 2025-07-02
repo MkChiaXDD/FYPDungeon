@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class BuffSelectionUI : MonoBehaviour
@@ -9,6 +10,13 @@ public class BuffSelectionUI : MonoBehaviour
     [SerializeField] GameObject CardPrefab;
     [SerializeField] List<BuffData> SelectedBuffs;
     [SerializeField] Transform CardStorage;
+    [SerializeField] float DelayTime = 1;
+    public UnityEvent Spawn;
+    public void Awake()
+    {
+        Spawn?.Invoke();
+    }
+
 
     public void Update()
     {
@@ -42,17 +50,49 @@ public class BuffSelectionUI : MonoBehaviour
             SelectedBuffs.Add(ListOfBuffs[i]);
         }
     }
-    
+
     public void CreateBuffCardUI()
     {
-        foreach (BuffData data in SelectedBuffs) {
+        StartCoroutine(CreateCardsWithDelay());
+    }
+
+    public IEnumerator CreateCardsWithDelay()
+    {
+        List<Button> cardButtons = new List<Button>();
+
+        foreach (BuffData data in SelectedBuffs)
+        {
             GameObject card = GameObject.Instantiate(CardPrefab, CardStorage);
             if (card.GetComponent<BuffCardUI>() != null)
             {
                 card.GetComponent<BuffCardUI>().Init(CardStorage, data);
             }
+
+            Button button = card.GetComponent<Button>();
+            if (button != null)
+            {
+                button.interactable = false;
+                cardButtons.Add(button);
+            }
+        }
+
+        yield return new WaitForSeconds(DelayTime);
+
+        foreach (Button button in cardButtons)
+        {
+            button.interactable = true;
         }
     }
+    //public void CreateBuffCardUI()
+    //{
+    //    foreach (BuffData data in SelectedBuffs) {
+    //        GameObject card = GameObject.Instantiate(CardPrefab, CardStorage);
+    //        if (card.GetComponent<BuffCardUI>() != null)
+    //        {
+    //            card.GetComponent<BuffCardUI>().Init(CardStorage, data);
+    //        }
+    //    }
+    //}
 
     public void ClearCard()
     {
@@ -61,4 +101,6 @@ public class BuffSelectionUI : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+    
 }

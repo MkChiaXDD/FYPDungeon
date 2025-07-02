@@ -122,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator Dashing()
     {
         _meshTrail.HandleTrailActivation();
-        _currentSpeed = playerData.Dash;
+        _currentSpeed = playerData.Dash + playerData.Speed;
         yield return new WaitForSeconds(0.1f);
         _currentSpeed = playerData.Speed;
     }

@@ -96,6 +96,10 @@ public class PlayerCombat : MonoBehaviour
         playerData.DataChange.AddListener(Addmodifier);
     }
 
+    //public void EnableMimic(bool enable)
+    //{
+    //    _mimicSpawner.enabled = enable;
+    //}
     public void SetUpMimic(MimicSpawner mimic)
     {
         _mimicSpawner = mimic;
