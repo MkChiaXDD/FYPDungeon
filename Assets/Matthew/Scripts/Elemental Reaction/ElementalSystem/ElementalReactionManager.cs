@@ -5,8 +5,11 @@ public class ElementalReactionManager : MonoBehaviour
 {
     public static ElementalReactionManager Instance;
 
+    [Header("Elemental VFX References")]
     public GameObject FireVFX;
     public GameObject ElectricVFX;
+    [Header("Elemental Reaction VFX References")]
+    public GameObject OverloadedVFX;
 
     [Header("Reaction Multipliers")]
     [SerializeField] private float _vaporizeMultiplier = 1.5f;
@@ -71,8 +74,8 @@ public class ElementalReactionManager : MonoBehaviour
                                Vector3 position, float baseDamage)
     {
         // Consume elements
-        target.ApplyElement(existing, -1f);
-        target.ApplyElement(trigger, -0.5f);
+        target.ApplyElement(existing, -4f);
+        target.ApplyElement(trigger, -4f);
 
         // Apply reaction effects
         switch (reaction)
@@ -88,6 +91,7 @@ public class ElementalReactionManager : MonoBehaviour
                 break;
 
             case ReactionType.Overload:
+                Instantiate(OverloadedVFX, target.gameObject.transform);
                 ApplyDamage(target, baseDamage * _overloadMultiplier, ElementType.Pyro);
                 Debug.Log("Overload, Dealt: " + (baseDamage * _meltMultiplier) + " Damage");
                 ApplyAOE(position, 3f, baseDamage * 0.7f);

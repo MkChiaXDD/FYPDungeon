@@ -47,7 +47,7 @@ public class DynamicHealthBar : MonoBehaviour
     public void SetHealth(float health)
     {
         currentHealth = health; // Sync currentHealth with clamped value
-        Debug.Log("health value set at " + currentHealth);
+      //  Debug.Log("health value set at " + currentHealth);
     }
 
     public void SetMaxHealth(float newMaxHealth)
