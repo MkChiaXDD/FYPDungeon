@@ -18,7 +18,7 @@ public class OrbitingCast : Spell
 
     public void SummonOrbs(SpellCast spellCastList)
     {
-        GameObject SpawnedOrb = Instantiate(Orb, transform.position, transform.rotation);
+        GameObject SpawnedOrb = Instantiate(Orb, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
         
         SpawnedOrb.GetComponent<Orbiting>().Init(spellCastList);
         SpawnedOrb.GetComponent<Orbiting>().Intitialize(PlayerMovement.Instance.GetThisTransform() , Amount, OrbAttack);

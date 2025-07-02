@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b967536fe9ac7914fb4c3302f59c7b17, type: 3}
+  m_Name: MimicChance
+  m_EditorClassIdentifier: 
+  rarity: 0
+  Name: Mimic Up Chance
+  Description: Chances of Spawning the mimic Increase
+  Icon: {fileID: 0}
+  EffectList:
+  - Type: 18
+    ValueModifierType: 1
+    ModifierValue: 0.1
+    Duration: 0
+    Chance: 0
+  RequiredBuffs:
+  - {fileID: 11400000, guid: 41c2a9998bf493846ada9d8650e3a753, type: 2}
+  IsHiddenIfLocked: 1
+  OneTimeUnlock: 0

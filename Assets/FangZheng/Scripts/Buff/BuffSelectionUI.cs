@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static BuffData;
 
 public class BuffSelectionUI : MonoBehaviour
 {
     [SerializeField] List<BuffData> ListOfBuffs;
     [SerializeField] GameObject CardPrefab;
     [SerializeField] List<BuffData> SelectedBuffs;
+
     [SerializeField] List<BuffData> ObtainAbleBuffs;
+
     [SerializeField] Transform CardStorage;
     [SerializeField] float DelayTime = 1;
     public UnityEvent Spawn;
@@ -122,5 +125,28 @@ public class BuffSelectionUI : MonoBehaviour
             }
         }
         return true;
+    }
+
+    private Rarity GetRarity(int Value){
+        if (Value < 5)
+        {
+            return Rarity.Legendary;
+        }
+        else if (Value > 15)
+        {
+            return Rarity.Epic;
+        }
+        else if (Value > 30)
+        {
+            return Rarity.Rare;
+        }
+        else if (Value > 50)
+        {
+            return Rarity.UnCommon;
+        }
+        else
+        {
+            return Rarity.Common;
+        }
     }
 }
