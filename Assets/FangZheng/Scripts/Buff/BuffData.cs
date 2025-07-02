@@ -9,6 +9,12 @@ public class BuffData : ScriptableObject
     public string Description;
     public Sprite Icon;
     public List<Effect> EffectList;
+
+    [Header("Dependencies")]
+    public List<BuffData> RequiredBuffs;
+    public bool IsHiddenIfLocked = true;
+    public bool OneTimeUnlock = false;
+
 }
 
 
@@ -54,8 +60,4 @@ public class Effect
     public float Duration;
     public float Chance;
 
-    [Header("Dependencies")]
-    public List<BuffData> RequiredBuffs; 
-    public bool IsHiddenIfLocked = true;
-    public bool OneTimeUnlock = false;
 }

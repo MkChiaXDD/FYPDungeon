@@ -9,6 +9,7 @@ public class BuffSelectionUI : MonoBehaviour
     [SerializeField] List<BuffData> ListOfBuffs;
     [SerializeField] GameObject CardPrefab;
     [SerializeField] List<BuffData> SelectedBuffs;
+    [SerializeField] List<BuffData> ObtainAbleBuffs;
     [SerializeField] Transform CardStorage;
     [SerializeField] float DelayTime = 1;
     public UnityEvent Spawn;
@@ -29,8 +30,18 @@ public class BuffSelectionUI : MonoBehaviour
     public void Select()
     {
         SelectedBuffs.Clear();
+        ObtainAbleBuffs.Clear();
+
+        foreach (BuffData item in ListOfBuffs)
+        {
+            if (CheckCanShow(item) == true)
+            {
+                ObtainAbleBuffs.Add(item);
+            }
+        }
+
         List<int> list = new List<int>();
-        for(int i = 0; i < ListOfBuffs.Count; i++)
+        for(int i = 0; i < ObtainAbleBuffs.Count; i++)
         {
             list.Add(i);
         }
@@ -47,7 +58,7 @@ public class BuffSelectionUI : MonoBehaviour
 
         foreach(int i in result)
         {
-            SelectedBuffs.Add(ListOfBuffs[i]);
+            SelectedBuffs.Add(ObtainAbleBuffs[i]);
         }
     }
 
@@ -83,16 +94,7 @@ public class BuffSelectionUI : MonoBehaviour
             button.interactable = true;
         }
     }
-    //public void CreateBuffCardUI()
-    //{
-    //    foreach (BuffData data in SelectedBuffs) {
-    //        GameObject card = GameObject.Instantiate(CardPrefab, CardStorage);
-    //        if (card.GetComponent<BuffCardUI>() != null)
-    //        {
-    //            card.GetComponent<BuffCardUI>().Init(CardStorage, data);
-    //        }
-    //    }
-    //}
+
 
     public void ClearCard()
     {
@@ -102,5 +104,23 @@ public class BuffSelectionUI : MonoBehaviour
         }
     }
 
-    
+    public bool CheckCanShow(BuffData Buff)
+    {
+        if (Buff.OneTimeUnlock == true)
+        {
+            if (PlayerData.Instance._BuffObtain.Contains(Buff))
+            {
+                return false;
+            }
+        }
+
+        foreach (BuffData BuffReq in Buff.RequiredBuffs)
+        {
+            if (!PlayerData.Instance._BuffObtain.Contains(BuffReq))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
