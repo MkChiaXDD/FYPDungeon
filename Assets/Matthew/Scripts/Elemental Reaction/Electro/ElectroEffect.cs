@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ElectroEffect : MonoBehaviour
+public class BurningEffect : MonoBehaviour
 {
     private float damagePerSecond;
     private float duration;
