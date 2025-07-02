@@ -48,7 +48,7 @@ public class PlayerCombat : MonoBehaviour
 
     [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
     [SerializeField] private int Dmg;
-    [SerializeField] private int OriginalDmg = 5;
+    //[SerializeField] private int OriginalDmg = 5;
 
     [SerializeField] private List<GameObject> WeaponIndicator;
 

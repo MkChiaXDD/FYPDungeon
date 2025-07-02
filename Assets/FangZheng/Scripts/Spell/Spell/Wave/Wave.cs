@@ -1,18 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Wave : Projectile
 {
     [SerializeField] private float Cooldown;
     [SerializeField] private Vector3 direction;
-    [SerializeField] private float TimeLast = 0.0f;
+    //[SerializeField] private float TimeLast = 0.0f;
     //[SerializeField] private bool ColliderActive = true;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Dictionary<IDamageable, float> EnemyHitAlready = new Dictionary<IDamageable, float>();
-    [SerializeField] private float knockbackForce = 5f;
+   // [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private Vector3 StartPos;
     [SerializeField] List<GameObject> ListOfColider;
     [SerializeField] SpellHitbox Hitbox;
