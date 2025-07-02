@@ -8,7 +8,9 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Vefects_Extra_Grid_01
-  m_Shader: {fileID: 4800000, guid: bdec76083a39a714aa7f996f954d5c23, type: 3}
+  m_Shader: {fileID: 4800000, guid: afc88c13245710248b55c78313efb6a6, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -17,11 +19,20 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Masks:
+        m_Texture: {fileID: 2800000, guid: da13cff96126c2142a4282f9b0b912f2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: a6c07b142c14fe64097eb43b7eb9ea05, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture:
-        m_Texture: {fileID: 2800000, guid: 7e86780f8818d774781e18cdb159f2f7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 42d8d36a2bc0d624d97c7aa3fcd8a8db, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -44,11 +55,26 @@ Material:
     m_Floats:
     - _AlphaCutoff: 0.5
     - _EnvironmentReflections: 1
+    - _MasksTileOverall: 1
+    - _NormalIntensity: 1
+    - _ParallaxScale: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RandomTileColorsMax: 1
     - _ReceiveShadows: 1
+    - _RoughnessMax: 1
+    - _RoughnessMin: 0
+    - _Specular: 0.01
     - _SpecularHighlights: 1
+    - _TextureTileOverall: 1
+    - _TileOverall: 200
+    - _TileX: 1
+    - _TileY: 1
+    - __dirty: 0
     m_Colors:
     - _Color: {r: 0.22, g: 0.22, b: 0.22, a: 0}
+    - _Color01: {r: 1, g: 1, b: 1, a: 0}
+    - _Color02: {r: 1, g: 1, b: 1, a: 0}
+    - _ColorOverall: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

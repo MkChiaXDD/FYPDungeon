@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BurningEffect : MonoBehaviour
+public class ElectroEffect : MonoBehaviour
 {
     private float damagePerSecond;
     private float duration;
@@ -55,9 +55,6 @@ public class BurningEffect : MonoBehaviour
             yield return new WaitForSeconds(2f);
             Destroy(ElectroVFX.gameObject);
         }
-
-
-
         Destroy(this);
     }
 }
