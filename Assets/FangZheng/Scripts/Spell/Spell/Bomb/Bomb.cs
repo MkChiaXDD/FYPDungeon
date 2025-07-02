@@ -20,7 +20,7 @@ public class Boom : Projectile, IDamageable
         _rb = GetComponent<Rigidbody>();
         Debug.Log("Ignite: " + duration);
         StartCoroutine(FuseCountdown(duration));
-        _rb.AddForce(PlayerMovement.Instance.GetDirection() * 20, ForceMode.Impulse);
+
     }
 
     private IEnumerator FuseCountdown(float Duration)
