@@ -8,13 +8,16 @@ public class ShockSpawn : Spell
     
     public override void Attack(SpellCast spellCastList)
     {
-        SummonWave(spellCastList);
+        SummonShock(spellCastList);
     }
 
-    public void SummonWave(SpellCast spellCastList)
+    public void SummonShock(SpellCast spellCastList)
     {
-        GameObject SpawnedWave = Instantiate(Lightning, transform.position, transform.rotation);
-        //SpawnedWave.GetComponent<Bomerang>().Init(spellCastList);
+
+        GameObject SpawnedShock = Instantiate(Lightning, transform.position, transform.rotation);
+        SpawnedShock.GetComponent<Shock>().Init(spellCastList);
+
         //SpawnedWave.GetComponent<Bomerang>().Modify();
+
     }
 }

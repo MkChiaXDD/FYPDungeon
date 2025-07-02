@@ -30,6 +30,7 @@ public class SpellCast
     public float Speed;
     public List<Element> ApplyElement;
     public CollisionType collisionType;
+    public LayerMask enemyLayer;
     public enum CollisionType
     {
         OneTime,
