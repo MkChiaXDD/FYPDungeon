@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         InitialiseDifficulty();
         Invoke(nameof(InitialiseHealthBar), 1f);
-       transform.AddComponent<ElementalStatus>();
+        transform.AddComponent<ElementalStatus>();
     }
 
     // Shared damage logic
@@ -71,11 +71,10 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
-        
+
         // Example: Apply burning effect for Pyro damage
         if (elementType == ElementType.Pyro)
         {
-           
             // Start or refresh burning effect*
             if (TryGetComponent<BurningEffect>(out var burning))
             {
@@ -83,12 +82,30 @@ public class Enemy : MonoBehaviour, IDamageable
             }
             else
             {
-               
+
                 burning = gameObject.AddComponent<BurningEffect>();
-                burning.Initialize(damageAmount,this);
+                burning.Initialize(damageAmount, this);
             }
         }
+        if (elementType == ElementType.Electro)
+        {
+            {
+                // Start or refresh burning effect*
+                if (TryGetComponent<ElectroEffect>(out var burning))
+                {
+                    burning.RefreshEffect(damageAmount);
+                }
+                else
+                {
 
+                    burning = gameObject.AddComponent<ElectroEffect>();
+                    burning.Initialize(damageAmount, this);
+                }
+            }
+
+            
+
+        }
         // Add similar effects for other elements:
         // - Hydro: Wet status (increased Electro damage)
         // - Electro: Stun effect
@@ -149,7 +166,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void ApplyStun(float duration)
     {
         if (data.enemyType == EnemyData.EnemyType.notNormalEnemy) return;
-                
+
         if (stunCoroutine != null)
             StopCoroutine(stunCoroutine);
 
