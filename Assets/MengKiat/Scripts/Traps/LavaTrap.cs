@@ -5,6 +5,7 @@ public class LavaTrap : MonoBehaviour
     [SerializeField] private int damage = 1;
     [SerializeField] private float tickrate = 1f;
     private float timer;
+    ElementType elementType = ElementType.Pyro;
 
     // Update is called once per frame
     void Update()
@@ -23,7 +24,7 @@ public class LavaTrap : MonoBehaviour
         {
             if (other.TryGetComponent(out IDamageable damageable))
             {
-                damageable.TakeDamage(damage);
+                damageable.TakeElementalDamage(damage, elementType);
                 Debug.Log("LAVATRAP: HIT Enemy or Player");
 
                 timer = 0;
