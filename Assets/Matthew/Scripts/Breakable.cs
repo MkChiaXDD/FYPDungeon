@@ -21,10 +21,10 @@ public class Breakable : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(nameof(BreakObject));
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    StartCoroutine(nameof(BreakObject));
+        //}
     }
 
     // Using OnTriggerEnter (for trigger collisions)
@@ -42,7 +42,7 @@ public class Breakable : MonoBehaviour, IDamageable
     {
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
         Explode();
-        if (!dropSystem)
+        if (dropSystem)
         { 
             dropSystem.SpawnDropItem();
         }     

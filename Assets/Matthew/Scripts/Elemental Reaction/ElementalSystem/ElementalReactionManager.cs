@@ -9,6 +9,7 @@ public class ElementalReactionManager : MonoBehaviour
     [Header("Elemental VFX References")]
     public GameObject FireVFX;
     public GameObject ElectricVFX;
+    public GameObject WaterVFX;
     [Header("Elemental Reaction VFX References")]
     public GameObject OverloadedVFX;
 

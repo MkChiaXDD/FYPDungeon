@@ -2,23 +2,23 @@
 using System.Collections;
 using UnityEngine;
 
-public class ElectroEffect : MonoBehaviour
+public class WaterEffect : MonoBehaviour
 {
     private float damagePerSecond;
     public float duration = 4f;
     private Enemy enemy;
-    private ParticleSystem ElectroVFX;
+    private ParticleSystem WaterVFX;
 
     public void Initialize(float baseDamage, Enemy targetEnemy)
     {
         enemy = targetEnemy;
         damagePerSecond = baseDamage * 1f; // 10% of initial damage per second
         duration = 4f;
-        
+
 
         // Create VFX
-        GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.ElectricVFX, transform);
-        ElectroVFX = vfxObj.GetComponent<ParticleSystem>();
+        GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.WaterVFX, transform);
+        WaterVFX = vfxObj.GetComponent<ParticleSystem>();
 
         Debug.Log("electro attack ");
         StartCoroutine(ElectricRoutine());
@@ -32,19 +32,15 @@ public class ElectroEffect : MonoBehaviour
 
     private IEnumerator ElectricRoutine()
     {
-       
+
         float elapsed = 0f;
-
-        
-
         while (elapsed < duration)
         {
             // Apply damage every 0.5 seconds
             if (elapsed % 0.5f < Time.deltaTime)
             {
-                enemy.ApplyStun(0.1f);
-                enemy.TakeElementalDamage(damagePerSecond * 0.5f, ElementType.Electro);
-                Debug.Log("electrocuted ");
+                enemy.TakeElementalDamage(damagePerSecond * 0.5f, ElementType.Hydro);
+                Debug.Log("apply water");
             }
 
             elapsed += Time.deltaTime;
@@ -52,11 +48,11 @@ public class ElectroEffect : MonoBehaviour
         }
 
         // Fade out VFX before destroying
-        if (ElectroVFX)
+        if (WaterVFX)
         {
-            ElectroVFX.Stop();
+            WaterVFX.Stop();
             yield return new WaitForSeconds(2f);
-            Destroy(ElectroVFX.gameObject);
+            Destroy(WaterVFX.gameObject);
         }
         Destroy(this);
     }
