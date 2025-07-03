@@ -6,7 +6,7 @@ using UnityEngine;
 public class BurningEffect : MonoBehaviour
 {
     private float damagePerSecond;
-    private float duration;
+    private float duration = 4;
     private IDamageable target;
     private ParticleSystem burningVFX;
 

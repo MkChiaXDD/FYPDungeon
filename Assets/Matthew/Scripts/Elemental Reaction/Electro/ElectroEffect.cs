@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElectroEffect : MonoBehaviour
 {
     private float damagePerSecond;
-    private float duration;
+    public float duration = 4f;
     private Enemy enemy;
     private ParticleSystem ElectroVFX;
 
@@ -14,6 +14,7 @@ public class ElectroEffect : MonoBehaviour
         enemy = targetEnemy;
         damagePerSecond = baseDamage * 1f; // 10% of initial damage per second
         duration = 4f;
+        
 
         // Create VFX
         GameObject vfxObj = Instantiate(ElementalReactionManager.Instance.ElectricVFX, transform);
@@ -31,7 +32,7 @@ public class ElectroEffect : MonoBehaviour
 
     private IEnumerator ElectricRoutine()
     {
-        Debug.Log("electrocuted bitcheres");
+       
         float elapsed = 0f;
 
         enemy.ApplyStun(0.5f);
@@ -42,6 +43,7 @@ public class ElectroEffect : MonoBehaviour
             if (elapsed % 0.5f < Time.deltaTime)
             {
                 enemy.TakeElementalDamage(damagePerSecond * 0.5f, ElementType.Electro);
+                Debug.Log("electrocuted bitcheres");
             }
 
             elapsed += Time.deltaTime;

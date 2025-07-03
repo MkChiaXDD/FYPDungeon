@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackElement: 0
-  elementalDuration: 0
+  elementalDuration: 5
   damageAmount: 1
   knockbackForce: 10
   slashRadius: 5
@@ -483,7 +483,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2200937390344271194}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!114 &7027349072501143880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1567,7 +1567,6 @@ GameObject:
   - component: {fileID: 3970158124022636448}
   - component: {fileID: 827697755132406376}
   - component: {fileID: 7412554578000250052}
-  - component: {fileID: 3287531041360756307}
   m_Layer: 7
   m_Name: Vfx Cam
   m_TagString: Untagged
@@ -1685,29 +1684,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &3287531041360756307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6613408038798656618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da19248fd597ba449b46d20dc63a0f0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shakeType: 2
-  _shakeDuration: 0.2
-  _shakeMagnitude: 10
-  _dampingSpeed: 15
-  _rotationalNoiseSpeed: 20
-  _translationalShakeMagnitude: {x: 2, y: 2, z: 0}
-  _translationalNoiseSpeed: 1000
-  _useSeparateNoiseForTranslation: 1
-  _enableX: 1
-  _enableY: 1
-  _enableZ: 1
 --- !u!1 &7192276496966966932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,6 +1900,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FireVFX: {fileID: 8829451551789304542, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
   ElectricVFX: {fileID: 0}
+  OverloadedVFX: {fileID: 9121785925235969624, guid: 9902a1e514a90d84d977f1cfd9b96d18,
+    type: 3}
   _vaporizeMultiplier: 1.5
   _meltMultiplier: 2
   _overloadMultiplier: 1.2

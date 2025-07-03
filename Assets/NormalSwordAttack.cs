@@ -1,10 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NormalSwordAttack : MonoBehaviour
 {
     [Header("Combat Settings")]
     public ElementType attackElement = ElementType.Pyro;
-    [SerializeField] private float elementalDuration;
+    [SerializeField] private float elementalDuration = 5;
     
     [SerializeField] private int damageAmount = 1;
     [SerializeField] private int knockbackForce = 5;
@@ -61,7 +62,7 @@ public class NormalSwordAttack : MonoBehaviour
                 ApplyElementalEffects(hit.gameObject);
 
                 hitEnemies.TakeElementalDamage(damageAmount, attackElement);
-                ApplyStatusEffects(hit.gameObject, stun);
+               // ApplyStatusEffects(hit.gameObject, stun);
               // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                 
                 ApplyKnockBack(hit.gameObject);
@@ -81,7 +82,21 @@ public class NormalSwordAttack : MonoBehaviour
                 transform.position,
                 damageAmount
             );
-            Debug.Log("dealt " + attackElement + "element");
+            Debug.Log("dealt " + attackElement + "element to " + target);
+        }
+        else
+        {
+
+            
+            target.AddComponent<ElementalStatus>().ApplyElement(attackElement, elementalDuration);
+            ElementalReactionManager.Instance.CheckReactions(
+                status,
+                attackElement,
+                transform.position,
+                damageAmount
+            );
+            Debug.Log("dealt " + attackElement + "element to " + target);
+
         }
     }
 

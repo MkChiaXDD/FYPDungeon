@@ -62,9 +62,8 @@ Transform:
   - {fileID: 1501431283009902958}
   - {fileID: 5367297160047356673}
   - {fileID: 2447173818579347224}
-  - {fileID: 8761049929042688097}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7687157471341733323
 GameObject:
@@ -116,59 +115,11 @@ MonoBehaviour:
     type: 3}
   rooms:
   - {fileID: 114567647249888680, guid: efb2f383f64b6db429f689012b593bfa, type: 3}
+  - {fileID: 114205111430257404, guid: 1b981ff1424155541acd454c6d001c84, type: 3}
   farthestRoomMaterial: {fileID: 2100000, guid: 2e0c4359321589e49b9ea9e46548b55b,
     type: 2}
   roomSizeMultiplier: 4
-  BigBossRounds: 2
---- !u!1 &7976446420160552243
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8761049929042688097}
-  - component: {fileID: 7997937421046488028}
-  m_Layer: 0
-  m_Name: ElementalManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8761049929042688097
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7976446420160552243}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.3828974, y: 0.32435638, z: -1.1556506}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3248574731143389060}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7997937421046488028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7976446420160552243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d42e0c3aedb11847b912e30d4cb0c4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FireVFX: {fileID: 8829451551789304542, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
-  _vaporizeMultiplier: 1.5
-  _meltMultiplier: 2
-  _overloadMultiplier: 1.2
-  _superconductDuration: 5
+  BigBossRounds: 5
 --- !u!1 &9105909926050582623
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,23 +166,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGen: {fileID: 5852643766391408839}
+  enemyParent: {fileID: 1501431283009902958}
+  offSet: 15
   enemyPrefabs:
   - {fileID: 51051342774190592, guid: 36279eb15aa7450409291bc7391a9e60, type: 3}
   - {fileID: 8198244358660742385, guid: 95e8f75edcb3ddc42a2a87809afc5c42, type: 3}
   - {fileID: 2476117311166538866, guid: 1fc8ae5927b505a43b6c8e8ec3173523, type: 3}
   - {fileID: 7610768472859191230, guid: 38ad0e40c5720e54e850f265aa94a583, type: 3}
   - {fileID: 8855364553661445359, guid: bbd62b28f8c4bee42862c93dadafb16e, type: 3}
-  enemyParent: {fileID: 1501431283009902958}
-  offSet: 15
   minibossPrefabs:
   - {fileID: 7786778049398845702, guid: d00507626db6f914c9ee89ad116456ae, type: 3}
   - {fileID: 51051342774190592, guid: f08fdbee45023654aa90eb77f93e8c43, type: 3}
-  bigBossPrefabs: []
+  bigBossPrefabs:
+  - {fileID: 1986831957268146228, guid: ed79f415e028f7d41b1e7cd6caf58e39, type: 3}
+  healerSpawnChance: 0.001
   diffMgr: {fileID: 2680024654600473551}
-  RoundToSpawnFast: 2
-  RoundToSpawnRanged: 3
-  RoundToSpawnTank: 4
-  RoundToSpawnBomber: 6
+  RoundToSpawnFast: 1
+  RoundToSpawnRanged: 1
+  RoundToSpawnTank: 1
+  RoundToSpawnBomber: 1
 --- !u!114 &2680024654600473551
 MonoBehaviour:
   m_ObjectHideFlags: 0
