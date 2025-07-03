@@ -60,7 +60,7 @@ public class NormalSwordAttack : MonoBehaviour
             {
                 if (hit.CompareTag("Object"))
                 {
-                    hitTargets.TakeDamage(damageAmount);
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
                 }
                 else
                 {
