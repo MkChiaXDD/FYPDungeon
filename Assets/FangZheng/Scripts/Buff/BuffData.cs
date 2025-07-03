@@ -5,6 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Buff", menuName = "Buffs")]
 public class BuffData : ScriptableObject
 {
+    public enum Rarity
+    {
+        Common,
+        UnCommon,
+        Rare,
+        Epic,
+        Legendary
+    }
+    public Rarity rarity;
+
     public string Name;
     public string Description;
     public Sprite Icon;
@@ -41,7 +51,7 @@ public class Effect
         Link, // 
         Perfection,// Do more dmg whem max hp
         MimicDuration,
-        MimicDmgBuff,
+        MimicCastAmount,
         MimicCastChance,
     }
 

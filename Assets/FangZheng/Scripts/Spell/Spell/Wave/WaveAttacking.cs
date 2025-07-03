@@ -11,7 +11,7 @@ public class WaveAttacking : Spell
 
     public void SummonWave(SpellCast spellCastList)
     {
-        GameObject SpawnedWave =  Instantiate(Wave, transform.position, transform.rotation);
+        GameObject SpawnedWave =  Instantiate(Wave, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
         SpawnedWave.GetComponent<Wave>().Init(spellCastList);
         SpawnedWave.GetComponent<Wave>().Modify();
     }

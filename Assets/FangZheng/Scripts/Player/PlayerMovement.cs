@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Start()
     {
-        _currentSpeed = playerData.Speed;
+        Addmodifier();
     }
     public void OnEnable()
     {

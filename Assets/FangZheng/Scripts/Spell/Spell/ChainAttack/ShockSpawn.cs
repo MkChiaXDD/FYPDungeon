@@ -13,7 +13,7 @@ public class ShockSpawn : Spell
     public void SummonShock(SpellCast spellCastList)
     {
 
-        GameObject SpawnedShock = Instantiate(Lightning, transform.position, transform.rotation);
+        GameObject SpawnedShock = Instantiate(Lightning, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
         SpawnedShock.GetComponent<Shock>().Init(spellCastList);
 
         //SpawnedWave.GetComponent<Bomerang>().Modify();

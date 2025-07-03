@@ -14,12 +14,18 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private float _ParryDuration = 4;
     [SerializeField] private float _ParryThreshold = 0.5f;
 
+    [SerializeField] private int _MimicAmount = 1;
+    [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
+
     public float _LifeStealAmount;
     public float _DmgStoreAmount;
     public float _CritChance;
     public float _EvadeChance;
     public bool _Sacrifice;
+
     public bool _Mimic;
+
+    
     public bool _Influence;
     public bool _Link;
     public bool _Perfection;
@@ -40,7 +46,8 @@ public class PlayerData : MonoBehaviour, IDamageable
     public float ParryTime { get; private set; }
     public float ParryThreshhold { get; private set; }
     public float Health { get; private set; }
-
+    public float MimicSpawnChance { get; private set; }
+    public int MimicCount { get; private set; }
     public static PlayerData Instance { get; private set; }
     // Elemental status effects
     private Dictionary<ElementType, float> activeElementalEffects = new Dictionary<ElementType, float>();
@@ -102,6 +109,8 @@ public class PlayerData : MonoBehaviour, IDamageable
         Dash = _Dash;
         ParryTime = _ParryDuration;
         ParryThreshhold = _ParryThreshold;
+        MimicSpawnChance = _MimicSpawnChance;
+        MimicCount = _MimicAmount;
 
         _LifeStealAmount = 0f;
         _CritChance = 0f;
@@ -134,12 +143,12 @@ public class PlayerData : MonoBehaviour, IDamageable
                         if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
                         {
                             MaxHealth += (_MaxHealth * effect.ModifierValue) - _MaxHealth;
-                            CurrentHealth += (_MaxHealth * effect.ModifierValue) - _MaxHealth;
+                            //CurrentHealth += (_MaxHealth * effect.ModifierValue) - _MaxHealth;
                         }
                         else
                         {
                             MaxHealth += effect.ModifierValue;
-                            CurrentHealth += effect.ModifierValue;
+                            //CurrentHealth += effect.ModifierValue;
                         }
                         break;
                     case Effect.EffectType.Damage:
@@ -212,10 +221,56 @@ public class PlayerData : MonoBehaviour, IDamageable
                     case Effect.EffectType.Perfection:
                         _Perfection = true;
                         break;
+                    case Effect.EffectType.MimicCastChance:
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            MimicSpawnChance += (_MimicSpawnChance * effect.ModifierValue) - _MimicSpawnChance;
+                        }
+                        else
+                        {
+                            MimicSpawnChance += effect.ModifierValue;
+                        }
+
+                        break;
+                    case Effect.EffectType.MimicCastAmount:
+                    MimicCount += (int)effect.ModifierValue;
+                        break;
                 }
             }
         }
+        if (MaxHealth <= 0 ) {
+            MaxHealth = 1;
+            
+        }
 
+        if(CurrentHealth > MaxHealth)
+        {
+            CurrentHealth = MaxHealth;
+        }
+
+        if (Damage <= 0 )
+        {
+            Damage = 1;
+        }
+
+        if (Speed <= 0) {
+            Speed = 0.1f;
+        }
+
+        if (Dash <= 0)
+        {
+            Dash = 1;
+        }
+
+        if (ParryTime <= 0)
+        {
+            ParryTime = 0.1f;
+        }
+
+        //if (MimicSpawnChance > 0.75f)
+        //{
+        //    MimicSpawnChance = 0.75f;
+        //}
         DataChange?.Invoke();
 
     }

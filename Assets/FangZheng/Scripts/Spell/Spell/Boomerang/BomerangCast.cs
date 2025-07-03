@@ -11,7 +11,7 @@ public class BomerangCast : Spell
 
     public void SummonWave(SpellCast spellCastList)
     {
-        GameObject SpawnedWave = Instantiate(Boom, transform.position, transform.rotation);
+        GameObject SpawnedWave = Instantiate(Boom, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
         SpawnedWave.GetComponent<Bomerang>().Init(spellCastList);
         //SpawnedWave.GetComponent<Bomerang>().Modify();
     }
