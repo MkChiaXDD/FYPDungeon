@@ -33,12 +33,7 @@ public class ElementalStatus : MonoBehaviour
         float oldValue = _elementGauges[element];
         _elementGauges[element] = Mathf.Clamp(_elementGauges[element] + gaugeUnits, 0, 2f);
 
-        // Validate elementalGuage value
-        if (_elementGauges[element] <= 0)
-        {
-            Debug.LogError($"Invalid gauge value: {_elementGauges[element]}. Must be positive!");
-            return;
-        }
+       
 
         DebugLogGauge($"{element} gauge changed: {oldValue} → {_elementGauges[element]} " +
                      $"(Δ: {gaugeUnits})", element);

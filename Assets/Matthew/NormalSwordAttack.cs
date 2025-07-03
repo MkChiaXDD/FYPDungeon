@@ -6,7 +6,7 @@ public class NormalSwordAttack : MonoBehaviour
     [Header("Combat Settings")]
     public ElementType attackElement = ElementType.Pyro;
     [SerializeField] private float elementalDuration = 5;
-    
+
     [SerializeField] private int damageAmount = 1;
     [SerializeField] private int knockbackForce = 5;
     [SerializeField] private float slashRadius = 5;
@@ -49,25 +49,36 @@ public class NormalSwordAttack : MonoBehaviour
 
     public void SwordAttack()
     {
-       
+
         //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
         // apply damage & knockback
         Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<IDamageable>(out var hitEnemies) && !hit.CompareTag("Player"))
+            if (hit.TryGetComponent<IDamageable>(out var hitTargets) && !hit.CompareTag("Player"))
             {
-                //hitEnemies.TakeDamage(damageAmount);
-                ApplyElementalEffects(hit.gameObject);
+                if (hit.CompareTag("Object"))
+                {
+                    hitTargets.TakeDamage(damageAmount);
+                }
+                else
+                {
+                    //hitEnemies.TakeDamage(damageAmount);
+                    ApplyElementalEffects(hit.gameObject);
 
-                hitEnemies.TakeElementalDamage(damageAmount, attackElement);
-               // ApplyStatusEffects(hit.gameObject, stun);
-              // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
-                
-                ApplyKnockBack(hit.gameObject);
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                    // ApplyStatusEffects(hit.gameObject, stun);
+                    // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+                    ApplyKnockBack(hit.gameObject);
+                }
+
+
             }
+
+
         }
+
     }
 
     private void ApplyElementalEffects(GameObject target)
@@ -87,7 +98,7 @@ public class NormalSwordAttack : MonoBehaviour
         else
         {
 
-            
+
             target.AddComponent<ElementalStatus>().ApplyElement(attackElement, elementalDuration);
             ElementalReactionManager.Instance.CheckReactions(
                 status,
