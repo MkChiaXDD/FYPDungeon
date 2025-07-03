@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class ElementalReactionManager : MonoBehaviour
@@ -10,6 +11,9 @@ public class ElementalReactionManager : MonoBehaviour
     public GameObject ElectricVFX;
     [Header("Elemental Reaction VFX References")]
     public GameObject OverloadedVFX;
+
+    [Header("OverloadConfig")]
+    [SerializeField] private float OverloadAOERange = 10;
 
     [Header("Reaction Multipliers")]
     [SerializeField] private float _vaporizeMultiplier = 1.5f;
@@ -124,7 +128,7 @@ public class ElementalReactionManager : MonoBehaviour
 
                 float aoeDamage = baseDamage * 0.7f;
                 Debug.Log($"[Overload] Applying AOE damage: {aoeDamage} in 3m radius");
-                ApplyAOE(position, 3f, aoeDamage);
+                ApplyAOE(position, OverloadAOERange, aoeDamage);
                 break;
 
             case ReactionType.ElectroCharged:
