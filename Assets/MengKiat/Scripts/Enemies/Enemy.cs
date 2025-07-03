@@ -84,6 +84,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
+      
 
         // Example: Apply burning effect for Pyro damage
         if (elementType == ElementType.Pyro)
@@ -126,6 +127,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         // Track elemental effect for visual feedback
         activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
+
     }
 
     // Shared death logic

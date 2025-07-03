@@ -65,6 +65,7 @@ public class SpringChest : MonoBehaviour, IDamageable
         ApplySpringMotion();
         dropSystem.SpawnDropItem();
         isOpen = true;
+        GetComponent<Collider>().isTrigger = true;
         
     }
 

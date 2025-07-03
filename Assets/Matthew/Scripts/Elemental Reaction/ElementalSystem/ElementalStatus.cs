@@ -1,21 +1,54 @@
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class ElementalStatus : MonoBehaviour
 {
     // Tracks active elements and their gauges
     private Dictionary<ElementType, float> _elementGauges = new();
 
+    [Header("Debug Settings")]
+    [SerializeField] private bool _logGaugeChanges = true;
+
     // Apply element to target
-    public void ApplyElement(ElementType element, float duration)
+    public void ApplyElement(ElementType element, float gaugeUnits)
     {
+
+       
+
+        // Initialize if needed
         if (!_elementGauges.ContainsKey(element))
-            _elementGauges[element] = 0f;
+        {
+            DebugLogGauge($"Initializing {element} gauge", element);
+            _elementGauges[element] = gaugeUnits;
 
-        _elementGauges[element] = Mathf.Clamp(_elementGauges[element] + duration, 0, 2f);
+           
 
-        Debug.Log("applied element " + _elementGauges[element]);
+        }
+
+        Debug.LogWarning(gaugeUnits);
+
+
+
+        float oldValue = _elementGauges[element];
+        _elementGauges[element] = Mathf.Clamp(_elementGauges[element] + gaugeUnits, 0, 2f);
+
+        // Validate elementalGuage value
+        if (_elementGauges[element] <= 0)
+        {
+            Debug.LogError($"Invalid gauge value: {_elementGauges[element]}. Must be positive!");
+            return;
+        }
+
+        DebugLogGauge($"{element} gauge changed: {oldValue} → {_elementGauges[element]} " +
+                     $"(Δ: {gaugeUnits})", element);
+
+        // Immediately remove if gauge depletes
+        if (_elementGauges[element] <= 0.1f)
+        {
+            DebugLogGauge($"Removing depleted {element} gauge", element);
+            _elementGauges.Remove(element);
+        }
     }
 
     // Get all active elements
@@ -27,23 +60,37 @@ public class ElementalStatus : MonoBehaviour
     {
         foreach (var element in _elementGauges.Keys.ToList())
         {
-            _elementGauges[element] -= Time.deltaTime * 0.01f; // Decay rate
+            float oldValue = _elementGauges[element];
+            _elementGauges[element] -= Time.deltaTime * 0.3f; // Decay rate
+
+            DebugLogGauge($"{element} decay: {oldValue} → {_elementGauges[element]} " +
+                         $"(Δ: {Time.deltaTime * -0.3f})", element);
+
+            // Remove when gauge depletes
             if (_elementGauges[element] <= 0.01f)
             {
+                DebugLogGauge($"Removing decayed {element} gauge", element);
                 _elementGauges.Remove(element);
-                Debug.Log("removed element: " + element);
             }
         }
     }
 
-    //Add debug view
-    void OnDrawGizmos()
+    // Debug visualization
+    void OnDrawGizmosSelected()
     {
+        int i = 0;
         foreach (var element in _elementGauges)
         {
             Color color = GetElementColor(element.Key);
             Gizmos.color = color;
-            Gizmos.DrawWireSphere(transform.position + Vector3.up * 2, element.Value);
+            Vector3 position = transform.position + Vector3.up * (1 + i * 0.3f);
+            Gizmos.DrawWireSphere(position, element.Value * 0.2f);
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(position, $"{element.Key}: {element.Value:F1}");
+#endif
+
+            i++;
         }
     }
 
@@ -58,5 +105,16 @@ public class ElementalStatus : MonoBehaviour
             _ => Color.white
         };
     }
-}
 
+    private void DebugLogGauge(string message, ElementType element)
+    {
+        if (!_logGaugeChanges) return;
+
+        string fullMessage = $"[{name}] {message}";
+        Debug.Log(fullMessage);
+
+        // Add color-coded console messages
+        string colorTag = ColorUtility.ToHtmlStringRGB(GetElementColor(element));
+        Debug.Log($"<color=#{colorTag}>{fullMessage}</color>");
+    }
+}
