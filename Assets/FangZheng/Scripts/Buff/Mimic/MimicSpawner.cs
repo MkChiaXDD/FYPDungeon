@@ -17,6 +17,15 @@ public class MimicSpawner : MonoBehaviour
 
     public void OnEnable()
     {
+        //if (PlayerData.Instance != null)
+        //{
+        //    PlayerData.Instance.DataChange.AddListener(Addmodifier);
+        //}
+        //else
+        //{
+        //    FindFirstObjectByType<PlayerData>().DataChange.AddListener(Addmodifier);
+        //}
+
         PlayerData.Instance.DataChange.AddListener(Addmodifier);
     }
 
