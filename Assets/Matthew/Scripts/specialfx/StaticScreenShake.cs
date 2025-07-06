@@ -69,7 +69,7 @@ public static class StaticScreenShake
     public static void Shake(Camera camera = null, ShakeParams? parameters = null)
     {
         Initialize();
-        camera = camera ?? Camera.main;
+        camera = camera != null ? camera : Camera.main;
 
         ShakeParams finalParams = parameters ?? DefaultParams;
 

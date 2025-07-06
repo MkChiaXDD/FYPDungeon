@@ -191,6 +191,8 @@ public class BigBossOneController : Enemy
         isBusy = false;
     }
 
+    
+
     private IEnumerator DoHop()
     {
         Vector3 origin = transform.position;

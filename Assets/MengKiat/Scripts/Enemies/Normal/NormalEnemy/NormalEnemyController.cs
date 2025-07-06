@@ -75,6 +75,14 @@ public class NormalEnemyController : Enemy
                 }
                 break;
         }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            StaticScreenShake.Shake(Camera.main, customParams);
+
+
+            Debug.LogWarning(Camera.main);
+        }
     }
 
     private void ChaseWithAvoidance()

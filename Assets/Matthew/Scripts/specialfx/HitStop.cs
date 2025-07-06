@@ -22,7 +22,7 @@ public class HitStop : MonoBehaviour
     //helper function to trigger hitstop
     //to ensure that each hitstop ends properly 
     //<summary>
-    public void TriggerHitStop()
+    public void TriggerHitStop(float defaultDuration, float targetTimeScale)
     {
         if (currentHitStop != null)
         {
@@ -31,14 +31,19 @@ public class HitStop : MonoBehaviour
           
         }
 
-        currentHitStop = StartCoroutine(DoHitStop(defaultDuration));
+        currentHitStop = StartCoroutine(DoHitStop(defaultDuration, targetTimeScale));
+    }
+
+    private void OnDestroy()
+    {
+        Time.timeScale = originalTimeScale;
     }
 
 
     //<summary>
     //Triggers a short time stop, keep the duration small (below 0.5s)
     //<summary>
-    private IEnumerator DoHitStop(float duration)
+    private IEnumerator DoHitStop(float duration,float targetTimeScale)
     {
         float elapsed = 0f;
         Time.timeScale = targetTimeScale;
