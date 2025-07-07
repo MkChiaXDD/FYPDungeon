@@ -28,26 +28,8 @@ public class Enemy : MonoBehaviour, IDamageable
     protected bool isStunned = false;
     protected Coroutine stunCoroutine;
 
-    protected StaticScreenShake.ShakeParams customParams = new()
-    {
-        ShakeType = ShakeType.Both,
-        ShakeDuration = 0.25f,      // A quarter of a second
-        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
-        DampingSpeed = 10f,          // Damping speed to return to normal
-        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
-        TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f), // Shake in X and Y equally
-        TranslationalNoiseSpeed = 50f,
-        UseSeparateNoiseForTranslation = true,
-        EnableX = true,
-        EnableY = true,
-        EnableZ = false              // No Z for 2D
-    };
 
 
-    private void Update()
-    {
-       
-    }
     protected virtual void Awake()
     {
         InitialiseDifficulty();
@@ -60,7 +42,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         currentHealth -= amount;
         UpdateHealthBar();
-        HitStopVFX();
+        PlayDamageVFX();
         //TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
         Debug.Log(this.name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
@@ -159,7 +141,7 @@ public class Enemy : MonoBehaviour, IDamageable
             Debug.Log("BOSS DIES");
         }
 
-        StaticScreenShake.Shake(Camera.main, customParams);
+        StaticScreenShake.Shake(Camera.main, deathParams);
         Destroy(gameObject);
     }
 
@@ -228,8 +210,44 @@ public class Enemy : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, data.attackRange);
     }
 
+    private void PlayDamageVFX()
+    {
+        HitStopVFX();
+    }
     private void HitStopVFX()
     {
-        this.AddComponent<HitStop>().TriggerHitStop(0.1f,0.01f);       
+        HitStopManager.ActivateHitStopGlobal();
     }
+
+    protected StaticScreenShake.ShakeParams deathParams = new()
+    {
+
+        ShakeType = ShakeType.Translational,
+        ShakeDuration = 0.25f,      // A quarter of a second
+        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
+        DampingSpeed = 10f,          // Damping speed to return to normal
+        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
+        TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f), // Shake in X and Y equally
+        TranslationalNoiseSpeed = 50f,
+        UseSeparateNoiseForTranslation = true,
+        EnableX = true,
+        EnableY = true,
+        EnableZ = false              // No Z for 2D
+    };
+
+    protected StaticScreenShake.ShakeParams damageParams = new()
+    {
+
+        ShakeType = ShakeType.Translational,
+        ShakeDuration = 0.25f,      // A quarter of a second
+        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
+        DampingSpeed = 10f,          // Damping speed to return to normal
+        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
+        TranslationalShakeMagnitude = new Vector3(0.25f, 0.25f, 0f), // Shake in X and Y equally
+        TranslationalNoiseSpeed = 50f,
+        UseSeparateNoiseForTranslation = true,
+        EnableX = true,
+        EnableY = true,
+        EnableZ = false              // No Z for 2D
+    };
 }

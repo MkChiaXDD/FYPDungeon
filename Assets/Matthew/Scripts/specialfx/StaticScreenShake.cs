@@ -56,6 +56,7 @@ public static class StaticScreenShake
     {
         if (runner != null) return;
 
+       
         GameObject obj = new GameObject("ScreenShakeRunner");
         runner = obj.AddComponent<ScreenShakeRunner>();
         Object.DontDestroyOnLoad(obj);
@@ -90,8 +91,8 @@ public static class StaticScreenShake
         // Initialize state
         state.Camera = camera;
         state.Params = finalParams;
-        state.OriginalRotation = camera.transform.localRotation;
-        state.OriginalPosition = camera.transform.localPosition;
+        state.OriginalRotation = Quaternion.Euler(0,0,0);
+        state.OriginalPosition = new Vector3(0,0,-10);
         state.RotationalNoiseOffset = Random.Range(0f, 100f);
         state.TranslationalNoiseOffset = finalParams.UseSeparateNoiseForTranslation
             ? Random.Range(0f, 100f)

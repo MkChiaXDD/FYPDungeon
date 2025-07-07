@@ -78,7 +78,7 @@ public class NormalEnemyController : Enemy
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            StaticScreenShake.Shake(Camera.main, customParams);
+            StaticScreenShake.Shake(Camera.main, deathParams);
 
 
             Debug.LogWarning(Camera.main);
