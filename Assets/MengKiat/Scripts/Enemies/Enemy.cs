@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         currentHealth -= amount;
         UpdateHealthBar();
-        PlayDamageVFX();
+        //PlayDamageVFX();
         //TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
         Debug.Log(this.name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
@@ -230,24 +230,10 @@ public class Enemy : MonoBehaviour, IDamageable
         TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f), // Shake in X and Y equally
         TranslationalNoiseSpeed = 50f,
         UseSeparateNoiseForTranslation = true,
-        EnableX = true,
+        EnableX = false,
         EnableY = true,
         EnableZ = false              // No Z for 2D
     };
 
-    protected StaticScreenShake.ShakeParams damageParams = new()
-    {
 
-        ShakeType = ShakeType.Translational,
-        ShakeDuration = 0.25f,      // A quarter of a second
-        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
-        DampingSpeed = 10f,          // Damping speed to return to normal
-        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
-        TranslationalShakeMagnitude = new Vector3(0.25f, 0.25f, 0f), // Shake in X and Y equally
-        TranslationalNoiseSpeed = 50f,
-        UseSeparateNoiseForTranslation = true,
-        EnableX = true,
-        EnableY = true,
-        EnableZ = false              // No Z for 2D
-    };
 }

@@ -71,7 +71,10 @@ public class NormalSwordAttack : MonoBehaviour
                     // ApplyStatusEffects(hit.gameObject, stun);
                     // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                     ApplyKnockBack(hit.gameObject);
+                    PlayDmgVFX();
                 }
+
+               
 
 
             }
@@ -130,6 +133,30 @@ public class NormalSwordAttack : MonoBehaviour
         target.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(effect);
     }
 
+    public void PlayDmgVFX()
+    {
+        //screen shake when damaging enemy
+       // StaticScreenShake.Shake(Camera.main, damageParams);
+
+        //hit stop when hit the enemy
+        HitStopManager.ActivateHitStopGlobal(0.25f,0.01f);
+    }
+
+    protected StaticScreenShake.ShakeParams damageParams = new()
+    {
+
+        ShakeType = ShakeType.Translational,
+        ShakeDuration = 0.25f,      // A quarter of a second
+        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
+        DampingSpeed = 10f,          // Damping speed to return to normal
+        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
+        TranslationalShakeMagnitude = new Vector3(0.25f, 0.25f, 0f), // Shake in X and Y equally
+        TranslationalNoiseSpeed = 50f,
+        UseSeparateNoiseForTranslation = true,
+        EnableX = true,
+        EnableY = true,
+        EnableZ = false              // No Z for 2D
+    };
 
 
 
