@@ -31,6 +31,11 @@ public class BomberEnemyController : Enemy
     [SerializeField] float turnSpeed = 10f;
     [SerializeField] float smoothing = 5f;
 
+    [Header("Particle")]
+    [SerializeField] private ParticleSystem explodingParticle;
+    [SerializeField] private GameObject model;
+    private bool boutaDie = false;
+
     Vector3 spawnPosition;
     Vector3 roamTarget;
     float roamTimer;
@@ -56,11 +61,16 @@ public class BomberEnemyController : Enemy
         {
             currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
         }
+
+        if (explodingParticle != null)
+        {
+            explodingParticle.Stop();
+        }
     }
 
     void Update()
     {
-        if (player == null || isStunned) return;
+        if (player == null || isStunned || boutaDie) return;
         if (isPickedup) return;
         float distToPlayerXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
@@ -69,7 +79,7 @@ public class BomberEnemyController : Enemy
 
         if (state != State.Attack)
         {
-            if (distToPlayerXZ <= data.attackRange) state = State.Attack;
+            if (distToPlayerXZ <= data.attackRange - 1) state = State.Attack;
             else if (distToPlayerXZ <= data.detectionRange) state = State.Chase;
             else state = State.Roam;
         }
@@ -144,19 +154,20 @@ public class BomberEnemyController : Enemy
 
     IEnumerator ExplosionSequence()
     {
+        boutaDie = true;
         isExploding = true;
         float t = 0f;
-        Vector3 initialScale = transform.localScale;
+        Vector3 initialScale = model.transform.localScale;
         Vector3 targetScale = initialScale * explodeGrowScale;
 
         while (t < explosionGrowDuration)
         {
-            transform.localScale = Vector3.Lerp(initialScale, targetScale, t / explosionGrowDuration);
+            model.transform.localScale = Vector3.Lerp(initialScale, targetScale, t / explosionGrowDuration);
             t += Time.deltaTime;
             yield return null;
         }
 
-        transform.localScale = targetScale;
+        model.transform.localScale = targetScale;
         Explode();
     }
 
@@ -181,7 +192,20 @@ public class BomberEnemyController : Enemy
             }
         }
 
-        Destroy(gameObject);
+        PlayExplosionParticle();
+    }
+
+    private void PlayExplosionParticle()
+    {
+        model.SetActive(false);
+        if (explodingParticle != null)
+        {
+            explodingParticle.Play();
+        }
+        float duration = explodingParticle.main.duration;
+
+        StaticScreenShake.Shake(Camera.main, strongerShake);
+        Destroy(gameObject, duration);
     }
 
 

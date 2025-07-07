@@ -235,5 +235,19 @@ public class Enemy : MonoBehaviour, IDamageable
         EnableZ = false              // No Z for 2D
     };
 
+    protected StaticScreenShake.ShakeParams strongerShake = new()
+    {
 
+        ShakeType = ShakeType.Translational,
+        ShakeDuration = 0.25f,      // A quarter of a second
+        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
+        DampingSpeed = 10f,          // Damping speed to return to normal
+        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
+        TranslationalShakeMagnitude = new Vector3(1f, 1f, 0f), // Shake in X and Y equally
+        TranslationalNoiseSpeed = 50f,
+        UseSeparateNoiseForTranslation = true,
+        EnableX = false,
+        EnableY = true,
+        EnableZ = false              // No Z for 2D
+    };
 }
