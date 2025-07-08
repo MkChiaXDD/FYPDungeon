@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected float damage;
 
     [Header("Elemental Resistances")]
-    [Tooltip("1 = Normal, <1 = Resistant, >1 = Weak")]
+    [Tooltip("1 = Normal, >1 = Resistant, <1 = Weak")]
     [Range(0, 2)] public float pyroResistance = 1f;
     [Range(0, 2)] public float hydroResistance = 1f;
     [Range(0, 2)] public float electroResistance = 1f;
@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour, IDamageable
         currentHealth -= amount;
         UpdateHealthBar();
         //PlayDamageVFX();
-        TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
+        //TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
         Debug.Log(name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
             Die();
@@ -65,7 +65,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {  
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
-        float finalDamage = amount * resistanceMultiplier;
+        float finalDamage = amount / resistanceMultiplier;
 
         // Apply elemental effect (burning, electrocution, etc.)
         ApplyElementalEffect(elementType, finalDamage);
@@ -172,6 +172,18 @@ public class Enemy : MonoBehaviour, IDamageable
         Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
 
         damage = data.damage;
+
+
+
+        InitialiseResistance();
+    }
+
+    private void InitialiseResistance()
+    {
+        pyroResistance = data.pyroResistance;
+        cryoResistance = data.cryoResistance;
+        electroResistance = data.electroResistance;
+        hydroResistance = data.hydroResistance;
     }
 
     private void UpdateHealthBar()
