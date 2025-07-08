@@ -10,6 +10,9 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
     [SerializeField] public float currentHealth;
+    [SerializeField] private GameObject shieldPrefab;
+    private GameObject enemyShield;
+    [SerializeField] private float shieldHp;
     public float maxHealth => data.maxHealth;
     protected int currentRound;
     protected float damage;
@@ -28,18 +31,48 @@ public class Enemy : MonoBehaviour, IDamageable
     protected bool isStunned = false;
     protected Coroutine stunCoroutine;
 
-
-
     protected virtual void Awake()
     {
         InitialiseDifficulty();
+        InitialiseShield();
         Invoke(nameof(InitialiseHealthBar), 1f);
         transform.AddComponent<ElementalStatus>();
     }
 
+    public void InitialiseShield()
+    {
+        if (shieldPrefab != null && enemyShield == null)
+        {
+            enemyShield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
+
+            enemyShield.transform.SetParent(transform);
+
+            enemyShield.transform.localPosition = new Vector3(0, 1.5f, 0);
+
+            // Initialize the shield's HP
+            EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
+            if (shield != null)
+            {
+                shield.Init(shieldHp);
+            }
+            else
+            {
+                Debug.LogWarning("Spawned shield is missing EnemyShield component.");
+            }
+        }
+    }
+
+
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
+        EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
+        float currHp = shield.GetShieldHp();
+        if (currHp > 0)
+        {
+            shield.HitShield(amount);
+            return;
+        }
         currentHealth -= amount;
         UpdateHealthBar();
         //PlayDamageVFX();
