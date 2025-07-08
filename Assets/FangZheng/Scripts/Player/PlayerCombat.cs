@@ -116,7 +116,7 @@ public class PlayerCombat : MonoBehaviour
         Lockingon();
         if (Lockon)
         {
-            handleEnemyInView();
+            HandleEnemyInView();
             SwitchTarget();
             GetEnemiesZone();
             if (Auto == true)
@@ -460,14 +460,12 @@ public class PlayerCombat : MonoBehaviour
     {
         DepthOfRange = 0;
         Auto = true;
-
     }
 
     private void Check()
     {
         if (TargetEnemy == null)
         {
-
             ClearTargets();
         }
     }
@@ -540,7 +538,7 @@ public class PlayerCombat : MonoBehaviour
         return true;
     }
 
-    public void handleEnemyInView()
+    public void HandleEnemyInView()
     {
         EnemyInView.Clear();
         float Diatance = Mathf.Infinity * Mathf.PerlinNoise1D(1);
