@@ -5,7 +5,8 @@ public class NormalSwordAttack : MonoBehaviour
 {
     [Header("Combat Settings")]
     public ElementType attackElement = ElementType.Pyro;
-    public PhysicalAttackType attackType = PhysicalAttackType.Sharp;
+    public PhysicalAttackType SharpAttackType = PhysicalAttackType.Sharp;
+    public PhysicalAttackType BluntAttackType = PhysicalAttackType.Blunt;
     [SerializeField] private float elementalDuration = 5;
 
     [SerializeField] private int damageAmount = 1;
@@ -129,12 +130,11 @@ public class NormalSwordAttack : MonoBehaviour
 
                 if (hit.CompareTag("Object"))
                 {
-                    hitTargets.TakeElementalDamage(scaledDamage, attackElement);
+                    hitTargets.TakePhysicalDamage(scaledDamage, BluntAttackType);
                 }
                 else
                 {
-                    ApplyElementalEffects(hit.gameObject);
-                    hitTargets.TakeElementalDamage(scaledDamage, attackElement);
+                    hitTargets.TakePhysicalDamage(scaledDamage, BluntAttackType);
                     ApplyKnockBack(hit.gameObject, scaledKnockback);
 
                     // Apply stun effect to all enemies hit by heavy attack
