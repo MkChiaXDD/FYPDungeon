@@ -62,17 +62,25 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
+    private void ShieldTakeDamage(float amount)
+    {    
+            EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
+            float currentShieldHealth = shield.GetShieldHp();
+            if (currentShieldHealth > 0)
+            {
+                shield.HitShield(amount);
+                return;
+            }
+        
+    }
+
 
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
-        EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
-        float currHp = shield.GetShieldHp();
-        if (currHp > 0)
-        {
-            shield.HitShield(amount);
-            return;
-        }
+        if (enemyShield.GetComponent<EnemyShield>())        
+            ShieldTakeDamage(amount);
+
         currentHealth -= amount;
         UpdateHealthBar();
         //PlayDamageVFX();
@@ -82,17 +90,7 @@ public class Enemy : MonoBehaviour, IDamageable
             Die();
     }
 
-    public virtual void Heal(float healAmount)
-    {
-        if (currentHealth < data.maxHealth)
-        {
-            currentHealth += healAmount;
-            if (currentHealth > data.maxHealth)
-            {
-                currentHealth = data.maxHealth;
-            }
-        }
-    }
+  
 
     public void TakeElementalDamage(float amount, ElementType elementType)
     {  
@@ -102,6 +100,15 @@ public class Enemy : MonoBehaviour, IDamageable
 
         // Apply elemental effect (burning, electrocution, etc.)
         ApplyElementalEffect(elementType, finalDamage);
+        TakeDamage(finalDamage);
+    }
+
+    public void TakePhysicalDamage(float damage, AttackType attackType)
+    {
+        // Calculate resistance multiplier
+        float resistanceMultiplier = GetResistanceMultiplier(attackType);
+        float finalDamage = damage / resistanceMultiplier;
+   
         TakeDamage(finalDamage);
     }
 
@@ -117,50 +124,18 @@ public class Enemy : MonoBehaviour, IDamageable
         };
     }
 
-    private void ApplyElementalEffect(ElementType elementType, float damageAmount)
+    private float GetResistanceMultiplier(AttackType elementType)
     {
-      
-
-        // Example: Apply burning effect for Pyro damage
-        if (elementType == ElementType.Pyro)
+        return elementType switch
         {
-            // Start or refresh burning effect*
-            if (TryGetComponent<BurningEffect>(out var burning))
-            {
-                burning.RefreshEffect(damageAmount);
-            }
-            else
-            {
-
-                burning = gameObject.AddComponent<BurningEffect>();
-                burning.Initialize(damageAmount, this);
-            }
-        }
-        if (elementType == ElementType.Electro)
-        {
-            {
-                // Start or refresh burning effect*
-                if (TryGetComponent<ElectroEffect>(out var electro))
-                {
-                    electro.RefreshEffect(damageAmount);
-                }
-                else
-                {
-
-                    electro = gameObject.AddComponent<ElectroEffect>();
-                    electro.Initialize(damageAmount, this);
-                }
-            }
-        }
-        // Add similar effects for other elements:
-        // - Hydro: Wet status (increased Electro damage)
-        // - Electro: Stun effect
-        // - Cryo: Slow movement
-
-        // Track elemental effect for visual feedback
-        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
-
+            AttackType.Sharp => pyroResistance,
+            AttackType.Blunt => hydroResistance,      
+            _ => 1f
+        };
     }
+
+
+
 
     // Shared death logic
     public virtual void Die()
@@ -223,7 +198,49 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         healthBar.SetHealth(currentHealth);
     }
+    private void ApplyElementalEffect(ElementType elementType, float damageAmount)
+    {
 
+        // Example: Apply burning effect for Pyro damage
+        if (elementType == ElementType.Pyro)
+        {
+            // Start or refresh burning effect*
+            if (TryGetComponent<BurningEffect>(out var burning))
+            {
+                burning.RefreshEffect(damageAmount);
+            }
+            else
+            {
+
+                burning = gameObject.AddComponent<BurningEffect>();
+                burning.Initialize(damageAmount, this);
+            }
+        }
+        if (elementType == ElementType.Electro)
+        {
+            {
+                // Start or refresh burning effect*
+                if (TryGetComponent<ElectroEffect>(out var electro))
+                {
+                    electro.RefreshEffect(damageAmount);
+                }
+                else
+                {
+
+                    electro = gameObject.AddComponent<ElectroEffect>();
+                    electro.Initialize(damageAmount, this);
+                }
+            }
+        }
+        // Add similar effects for other elements:
+        // - Hydro: Wet status (increased Electro damage)
+        // - Electro: Stun effect
+        // - Cryo: Slow movement
+
+        // Track elemental effect for visual feedback
+        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
+
+    }
     public virtual void ApplyStun(float duration)
     {
         if (data.enemyType == EnemyData.EnemyType.notNormalEnemy) return;
@@ -240,6 +257,18 @@ public class Enemy : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(duration);
         isStunned = false;
         stunCoroutine = null;
+    }
+
+    public virtual void Heal(float healAmount)
+    {
+        if (currentHealth < data.maxHealth)
+        {
+            currentHealth += healAmount;
+            if (currentHealth > data.maxHealth)
+            {
+                currentHealth = data.maxHealth;
+            }
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -261,6 +290,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         HitStopManager.ActivateHitStopGlobal();
     }
+
+
 
     protected StaticScreenShake.ShakeParams deathParams = new()
     {
