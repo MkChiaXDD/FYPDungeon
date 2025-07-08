@@ -313,4 +313,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         // Track elemental effect for visual feedback
         activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
     }
+
+    public void TakePhysicalDamage(float damage, AttackType attackType) => TakeDamage(damage);
+ 
 }
