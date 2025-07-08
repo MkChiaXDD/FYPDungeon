@@ -63,7 +63,9 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     private void ShieldTakeDamage(float amount)
-    {    
+    {
+        if (shieldPrefab != null)
+        {
             EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
             float currentShieldHealth = shield.GetShieldHp();
             if (currentShieldHealth > 0)
@@ -71,6 +73,7 @@ public class Enemy : MonoBehaviour, IDamageable
                 shield.HitShield(amount);
                 return;
             }
+        }
         
     }
 
@@ -78,7 +81,7 @@ public class Enemy : MonoBehaviour, IDamageable
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
-        if (enemyShield.GetComponent<EnemyShield>())        
+              
             ShieldTakeDamage(amount);
 
         currentHealth -= amount;

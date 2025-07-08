@@ -185,7 +185,7 @@ public class PlayerCombat : MonoBehaviour
             // Calculate heavy attack damage and AOE based on charge time
             float chargePercent = Mathf.Clamp01((chargeTime - _minChargeTime) / (_maxChargeTime - _minChargeTime));
             float damageMultiplier = 1f + chargePercent;
-            float aoeRadius = Mathf.Lerp(1f, 3f, chargePercent);
+            float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
 
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
@@ -244,8 +244,9 @@ public class PlayerCombat : MonoBehaviour
         else
         {
             // Attack in facing direction
-            Vector3 attackDirection = transform.forward;
-            Vector3 attackPosition = transform.position + attackDirection * 2f;
+            Vector3 attackDirection = _playerMovement.GetDirection();
+            Vector3 attackPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z) + attackDirection * 2f;
+            
             _basicAttack.ExecuteHeavyAttack(
                 attackPosition,
                 damageMultiplier,
@@ -366,6 +367,11 @@ public class PlayerCombat : MonoBehaviour
         _isParrying = true;
         _parryZone.SetActive(true);
         StartCoroutine(ParryDuration());
+    }
+
+    public void ResetParryCooldown()
+    {
+        _parryCooldown = _playerData.ParryDuration;
     }
 
     private IEnumerator ParryDuration()

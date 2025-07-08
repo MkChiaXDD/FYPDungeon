@@ -51,7 +51,7 @@ public class EnemyBullet : MonoBehaviour
         if (other.CompareTag("Parry"))
         {
             BounceBack(other.transform.parent.gameObject.transform.parent.GetComponent<PlayerMovement>().GetDirection());
-            other.transform.parent.gameObject.transform.parent.GetComponent<PlayerCombat>().resetParryCooldown();
+            other.transform.parent.gameObject.transform.parent.GetComponent<PlayerCombat>().ResetParryCooldown();
             Debug.Log("Parry");
         }
 

@@ -53,11 +53,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_isMovementLocked) return;
-
+        MousePosition();
         GatherInput();
         look();
-        MousePosition();
+        if (_isMovementLocked) return;
         Dash();
     }
 
