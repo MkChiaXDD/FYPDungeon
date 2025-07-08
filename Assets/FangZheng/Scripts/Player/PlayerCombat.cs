@@ -45,6 +45,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private bool CombatContinue;
     [SerializeField] private bool CombatWindow;
+    // Add these variables at the class level
+    [SerializeField] private float attackCooldown = 0.5f; // Adjust in Inspector
+    private float lastAttackTime = -1f; // Initialize to allow first attack
 
     [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
     [SerializeField] private int Dmg;
@@ -263,7 +266,7 @@ public class PlayerCombat : MonoBehaviour
         {
             Destroy(EquippedObject);
         }
-        
+
         GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
 
         EquippedObject = Createweapon;
@@ -315,10 +318,19 @@ public class PlayerCombat : MonoBehaviour
 
     public void Attack()
     {
+
+        // Check if we're still in cooldown
+        if (Time.time < lastAttackTime + attackCooldown)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
+            lastAttackTime = Time.time;
+
             if (WeaponChoosen != null)
             {
+
+              
                 if (_mimicSpawner != null)
                 {
                     _mimicSpawner.TrySpawnMimic();

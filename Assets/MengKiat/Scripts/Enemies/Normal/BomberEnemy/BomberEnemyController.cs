@@ -191,9 +191,20 @@ public class BomberEnemyController : Enemy
                     dmg.TakeDamage(data.damage);
             }
         }
-
-        PlayExplosionParticle();
+        PlayExplosionVFX();
     }
+
+    private void PlayExplosionVFX()
+    {
+        PlayExplosionParticle(); //explosion particles
+        ExplosionScreenShake(); // screenshake
+    }
+
+    private void ExplosionScreenShake()
+    {
+        StaticScreenShake.Shake(Camera.main, strongerShake);
+    }
+
 
     private void PlayExplosionParticle()
     {
@@ -204,7 +215,6 @@ public class BomberEnemyController : Enemy
         }
         float duration = explodingParticle.main.duration;
 
-        StaticScreenShake.Shake(Camera.main, strongerShake);
         Destroy(gameObject, duration);
     }
 

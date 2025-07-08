@@ -43,8 +43,8 @@ public class Enemy : MonoBehaviour, IDamageable
         currentHealth -= amount;
         UpdateHealthBar();
         //PlayDamageVFX();
-        //TextManager.Instance.CreateText(this.transform.position, amount.ToString(), Color.black);
-        Debug.Log(this.name + " Get Hit: " + amount);
+        TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
+        Debug.Log(name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
             Die();
     }
@@ -62,15 +62,13 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     public void TakeElementalDamage(float amount, ElementType elementType)
-    {
-    
+    {  
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
         float finalDamage = amount * resistanceMultiplier;
 
         // Apply elemental effect (burning, electrocution, etc.)
         ApplyElementalEffect(elementType, finalDamage);
-
         TakeDamage(finalDamage);
     }
 

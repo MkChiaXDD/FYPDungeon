@@ -49,7 +49,35 @@ public class NormalSwordAttack : MonoBehaviour
 
     public void SwordAttack()
     {
+        //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
+        slashVFX.Play();
+        // apply damage & knockback
+        Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<IDamageable>(out var hitTargets) && !hit.CompareTag("Player"))
+            {
+                if (hit.CompareTag("Object"))
+                {
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                }
+                else
+                {
+                    //hitEnemies.TakeDamage(damageAmount);
+                    ApplyElementalEffects(hit.gameObject);
 
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                    // ApplyStatusEffects(hit.gameObject, stun);
+                    // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+                    ApplyKnockBack(hit.gameObject);
+                    PlayDmgVFX();
+                }            
+            }
+        }
+    }
+
+    public void ElementalSwordAttack() //rememeber to swap elemental with normal
+    {
         //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
         // apply damage & knockback
@@ -73,15 +101,18 @@ public class NormalSwordAttack : MonoBehaviour
                     ApplyKnockBack(hit.gameObject);
                     PlayDmgVFX();
                 }
-
-               
-
-
             }
-
-
         }
+    }
 
+    private void DamageEnemy(GameObject enemyTarget)
+    {
+        // When hitting an enemy
+        DamageTypeManager.Instance.ApplyDamage(
+            enemyTarget.GetComponent<ResistanceProfile>(),
+        DamageType.Sharp,
+        50f
+    );
     }
 
     private void ApplyElementalEffects(GameObject target)
