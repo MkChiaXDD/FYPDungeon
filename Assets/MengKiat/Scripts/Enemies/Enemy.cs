@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour, IDamageable
         TakeDamage(finalDamage);
     }
 
-    public void TakePhysicalDamage(float damage, AttackType attackType)
+    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
     {
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(attackType);
@@ -124,12 +124,12 @@ public class Enemy : MonoBehaviour, IDamageable
         };
     }
 
-    private float GetResistanceMultiplier(AttackType elementType)
+    private float GetResistanceMultiplier(PhysicalAttackType elementType)
     {
         return elementType switch
         {
-            AttackType.Sharp => pyroResistance,
-            AttackType.Blunt => hydroResistance,      
+            PhysicalAttackType.Sharp => pyroResistance,
+            PhysicalAttackType.Blunt => hydroResistance,      
             _ => 1f
         };
     }

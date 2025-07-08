@@ -17,14 +17,6 @@ public class MimicSpawner : MonoBehaviour
 
     public void OnEnable()
     {
-        //if (PlayerData.Instance != null)
-        //{
-        //    PlayerData.Instance.DataChange.AddListener(Addmodifier);
-        //}
-        //else
-        //{
-        //    FindFirstObjectByType<PlayerData>().DataChange.AddListener(Addmodifier);
-        //}
 
         PlayerData.Instance.DataChange.AddListener(Addmodifier);
     }
@@ -47,12 +39,12 @@ public class MimicSpawner : MonoBehaviour
             MimicClone mimicClone = Mimic.GetComponent<MimicClone>();
             if (mimicClone != null)
             {
-                mimicClone.Initialize(PlayerCombat.Instance.WeaponChoosen, PlayerMovement.Instance._body, _lifetime, 1);
+                mimicClone.Initialize(PlayerCombat.Instance._currentWeapon, PlayerMovement.Instance._body, _lifetime, 1);
             }
             else
             {
                 mimicClone.AddComponent<MimicClone>();
-                mimicClone.Initialize(PlayerCombat.Instance.WeaponChoosen, PlayerMovement.Instance._body, _lifetime, 1);
+                mimicClone.Initialize(PlayerCombat.Instance._currentWeapon, PlayerMovement.Instance._body, _lifetime, 1);
             }
         }
     }

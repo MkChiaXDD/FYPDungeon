@@ -3,590 +3,594 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum AttackType { Light, Heavy }
+
 public class PlayerCombat : MonoBehaviour
 {
-    #region State
-    [Space, Header("PlayerData")]
-    [SerializeField] private PlayerData playerData;
+    [Header("Player Data")]
+    [SerializeField] private PlayerData _playerData;
 
-    [Space, Header("Layers & Masks")]
-    [SerializeField] private LayerMask _LayerMaskIgnore;
-    [SerializeField] private LayerMask[] _LayerMaskHit;
+    [Header("Layers & Masks")]
+    [SerializeField] private LayerMask _ignoreLayerMask;
+    [SerializeField] private LayerMask[] _hitLayerMasks;
+    [SerializeField] private LayerMask _enemyLayer;
 
-    [Space, Header("Targeting & Lock-On")]
-    [SerializeField] private LayerMask EnemyLayer;
-    [SerializeField] private bool Lockon = false;
-    [SerializeField] private bool Auto = true;
-    [SerializeField] private Transform TargetEnemy = null;
-    [SerializeField] private List<GameObject> EnemyNearby;
-    [SerializeField] private float AngleThreshold = 35f;
-    [SerializeField] private Dictionary<GameObject, float> EnemyNear = new Dictionary<GameObject, float>();
-    [SerializeField] private Dictionary<GameObject, float> EnemyInView = new Dictionary<GameObject, float>();
-    [SerializeField] private int DepthOfRange;
-    [SerializeField] private PlayerMovement playmove;
-    [SerializeField] private GameObject _Area;
-    [SerializeField] private GameObject ForEasyLocation;
+    [Header("Targeting & Lock-On")]
+    [SerializeField] private float _lockOnAngleThreshold = 35f;
+    [SerializeField] private Transform _targetEnemy;
+    [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField] private GameObject _targetIndicator;
+    private bool _isLockedOn = false;
+    private bool _autoTargeting = true;
+    private int _currentTargetIndex;
+    private Dictionary<GameObject, float> _nearbyEnemies = new Dictionary<GameObject, float>();
+    private Dictionary<GameObject, float> _visibleEnemies = new Dictionary<GameObject, float>();
 
-    [Space, Header("Blocking & Parry")]
+    [Header("Blocking & Parry")]
     [SerializeField] private float _parryThreshold = 0.5f;
     [SerializeField] private float _parryDuration = 4f;
     [SerializeField] private float _parryCooldown;
-    [SerializeField] private GameObject _parryzone;
-    [SerializeField] private GameObject _hitBox;
+    [SerializeField] private GameObject _parryZone;
+    private float _blockHoldStartTime;
+    private bool _isParrying;
+    private bool _isBlocking;
 
-    [Space, Header("Combat & Weapons")]
-    [SerializeField] private GameObject EquippedObject;
-    [SerializeField] private Transform itemHolding;
-    [SerializeField] public Weapon WeaponChoosen;
-    [SerializeField] private NormalSwordAttack BasicCombat;
-    [SerializeField] private List<Spell> spells;
+    [Header("Combat & Weapons")]
+    [SerializeField] private Transform _weaponHoldPoint;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private NormalSwordAttack _basicAttack;
+    private GameObject _equippedWeapon;
+    public Weapon _currentWeapon;
+    private float _lastAttackTime;
 
-    [SerializeField] private float dot;
-    [SerializeField] private Animator animator;
-    [SerializeField] private bool CombatContinue;
-    [SerializeField] private bool CombatWindow;
-    // Add these variables at the class level
-    [SerializeField] private float attackCooldown = 0.5f; // Adjust in Inspector
-    private float lastAttackTime = -1f; // Initialize to allow first attack
+    [Header("Attack Settings")]
+    [SerializeField] private float _lightAttackCooldown = 0.5f;
+    [SerializeField] private float _heavyAttackCooldown = 1.5f;
+    [SerializeField] private float _minChargeTime = 0.5f;
+    [SerializeField] private float _maxChargeTime = 2f;
+    [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
+    [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
+    [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
 
-    [SerializeField, Range(0, 100)] private int ThreshholdPercentage;
-    [SerializeField] private int Dmg;
-    //[SerializeField] private int OriginalDmg = 5;
+    private float _currentAttackCooldown;
+    private float _chargeStartTime;
+    private bool _isCharging;
+    private AttackType _lastAttackType;
+    private bool _canComboContinue;
+    private bool _isInComboWindow;
 
-    [SerializeField] private List<GameObject> WeaponIndicator;
-
-    [Space, Header("Inventory")]
-    [SerializeField] private InventoryManager PlayerStorage;
-    [SerializeField] private ItemInstance ItemHeld;
+    [Header("Inventory")]
+    [SerializeField] private InventoryManager _inventoryManager;
+    private ItemInstance _currentItem;
 
     [Header("Mimic")]
     [SerializeField] private MimicSpawner _mimicSpawner;
-    [SerializeField] private GameObject Mimicclone;
-
-    private float BlockHoldTime;
-    private bool _IsParry;
-    private bool _IsBlock;
-    private bool _IsInv;
-
-
-    #endregion
+    [SerializeField] private GameObject _mimicClonePrefab;
 
     public static PlayerCombat Instance { get; private set; }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-
-
-    public void Start()
+    private void Start()
     {
-        playmove = this.GetComponent<PlayerMovement>();
-    }
-    public void OnEnable()
-    {
-        GetComponent<Inventory>().ChangeSlot.AddListener(GetHoldItem);
-        PlayerStorage.ModifySlot.AddListener(GetHoldItem);
-        playerData.DataChange.AddListener(Addmodifier);
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
-    //public void EnableMimic(bool enable)
-    //{
-    //    _mimicSpawner.enabled = enable;
-    //}
-    public void SetUpMimic(MimicSpawner mimic)
+    private void OnEnable()
     {
-        _mimicSpawner = mimic;
-        _mimicSpawner._mimicClonePrefab = Mimicclone;
+        GetComponent<Inventory>().ChangeSlot.AddListener(UpdateEquippedItem);
+        _inventoryManager.ModifySlot.AddListener(UpdateEquippedItem);
+        _playerData.DataChange.AddListener(ApplyPlayerStats);
     }
+
+    private void OnDisable()
+    {
+        GetComponent<Inventory>().ChangeSlot.AddListener(UpdateEquippedItem);
+        _inventoryManager.ModifySlot.AddListener(UpdateEquippedItem);
+        _playerData.DataChange.AddListener(ApplyPlayerStats);
+    }
+
     private void Update()
     {
+        HandleBlocking();
+        HandleLockOn();
 
-
-        Blocking();
-        Lockingon();
-        if (Lockon)
+        if (_isLockedOn)
         {
-            HandleEnemyInView();
-            SwitchTarget();
-            GetEnemiesZone();
-            if (Auto == true)
+            UpdateVisibleEnemies();
+            HandleTargetSwitching();
+
+            if (_autoTargeting)
             {
-                HandleAutoTargetTracking();
+                FindNearestVisibleEnemy();
             }
 
-            if (EnemyInView.Count == 0)
+            if (_visibleEnemies.Count == 0)
             {
-                ClearTargets();
+                ClearTargeting();
             }
         }
-        LocateTarget();
-        Check();
 
-        SpecialAttack();
-        Attack();
-
-
+        UpdateTargetIndicator();
+        HandleAttacks();
         _parryCooldown -= Time.deltaTime;
     }
 
-    public void Addmodifier()
+    #region Combat Core
+    private void HandleAttacks()
     {
-        Dmg = playerData.Damage;
-        _parryDuration = playerData.ParryTime;
+        HandleChargedAttack();
+        HandleSpecialAttack();
     }
 
-    #region Handle Blocking
-    public void Blocking()
+    private void HandleChargedAttack()
     {
-        stopBlock();
-        if (Input.GetKeyDown(KeyCode.F))
+        // Start charging heavy attack
+        if (Input.GetMouseButtonDown(0) && Time.time > _lastAttackTime + _currentAttackCooldown)
         {
-            BlockHoldTime = Time.time;
-            //Debug.Log("F");
+            _isCharging = true;
+            _chargeStartTime = Time.time;
+            _playerMovement.SetMovementLock(true); // Lock movement during charge
         }
 
-        if (Input.GetKey(KeyCode.F))
+        // Execute attack on release
+        if (Input.GetMouseButtonUp(0) && _isCharging)
         {
-            if (!_IsBlock && Time.time - BlockHoldTime > _parryThreshold)
-            {
-                Block();
-            }
+            _isCharging = false;
+            _playerMovement.SetMovementLock(false); // Unlock movement
 
+            float chargeTime = Time.time - _chargeStartTime;
+            ExecuteAttack(chargeTime);
         }
 
-        if (Input.GetKeyUp(KeyCode.F) && _parryCooldown <= 0)
+        // Cancel charge if moving during charge time
+        if (_isCharging && _playerMovement.IsMoving)
         {
-            float heldTime = Time.time - BlockHoldTime;
-            if (heldTime <= _parryThreshold)
-            {
-                Parry();
-            }
-            else
-            {
-                stopBlock();
-            }
-        }
-
-    }
-
-    public void Block()
-    {
-        _IsBlock = true;
-        //Debug.Log("Block");
-    }
-
-    public void stopBlock()
-    {
-        _IsBlock = false;
-        //Debug.Log("UnBlock()");
-    }
-
-    public void Parry()
-    {
-        if (_IsParry) return;
-        _IsParry = true;
-        _parryzone.SetActive(true);
-        //Debug.Log("Parry");
-        StartCoroutine(ParryWindow());
-    }
-
-    public void resetParryCooldown()
-    {
-        _parryCooldown = 0;
-    }
-
-    IEnumerator ParryWindow()
-    {
-        _parryCooldown = _parryDuration;
-        yield return new WaitForSeconds(0.5f);
-        _IsParry = false;
-        _parryzone.SetActive(false);
-    }
-    #endregion
-
-    #region Handle Combat
-
-    public void GetHoldItem()
-    {
-        CheckedItemHold();
-        ItemHeld = PlayerStorage.GetCurrentHotbarItem();
-        EquipItem(ItemHeld);
-        AddAttackIndicator();
-    }
-
-    public void AddAttackIndicator()
-    {
-        foreach (GameObject indector in WeaponIndicator)
-        {
-            indector.SetActive(false);
-        }
-
-        if (WeaponChoosen != null && EquippedObject != null)
-        {
-            if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Range)
-            {
-                WeaponIndicator[0].SetActive(true);
-                WeaponIndicator[0].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Size.x, 1, WeaponChoosen.weaponData.spells.Size.z);
-            }
-            else if (WeaponChoosen.weaponData.spells.spellType == SpellCast.SpellType.Aoe)
-            {
-                WeaponIndicator[1].SetActive(true);
-                WeaponIndicator[1].transform.localScale = new Vector3(WeaponChoosen.weaponData.spells.Radius * 2, 1, WeaponChoosen.weaponData.spells.Radius * 2);
-            }
-            else
-            {
-                WeaponIndicator[2].SetActive(true);
-            }
+            _isCharging = false;
+            _playerMovement.SetMovementLock(false);
         }
     }
 
-    public void EquipItem(ItemInstance itemInstance)
+
+    private void HandleSpecialAttack()
     {
-        if (itemInstance == null)
+        if (Input.GetMouseButtonDown(1) && _currentWeapon != null)
         {
-            return;
-        }
+            _currentWeapon.Cast();
 
-        if (itemInstance.ItemPrefab == null)
-        {
-            return;
-        }
-        //destroy current weapon in hand if any
-        if (EquippedObject != null)
-        {
-            Destroy(EquippedObject);
-        }
-
-        GameObject Createweapon = Instantiate(itemInstance.ItemPrefab, itemHolding);
-
-        EquippedObject = Createweapon;
-        if (EquippedObject.GetComponent<BoxCollider>())
-            EquippedObject.GetComponent<BoxCollider>().isTrigger = true;
-        if (EquippedObject.GetComponent<Rigidbody>())
-            EquippedObject.GetComponent<Rigidbody>().isKinematic = true;
-        EquippedObject.GetComponent<Weapon>().CurrDurability = ItemHeld.Durability;
-        if (!itemInstance.ItemPrefab.GetComponent<Weapon>())
-        {
-            return;
-        }
-
-        Debug.Log("gg");
-        WeaponChoosen = EquippedObject.GetComponent<Weapon>();
-    }
-
-    public void EquipWeapon(Weapon WeaponReference)
-    {
-        if (EquippedObject != null)
-        {
-            Destroy(EquippedObject);
-        }
-
-        EquippedObject = Instantiate(WeaponReference.weaponData.ItemPrefab, itemHolding);
-
-        if (EquippedObject.GetComponent<Weapon>() == null)
-        {
-            Weapon CurrentWeapondata = EquippedObject.AddComponent<Weapon>();
-            CurrentWeapondata = WeaponReference;
-        }
-        WeaponChoosen = EquippedObject.GetComponent<Weapon>();
-    }
-
-    public void UnEquipWeapon()
-    {
-        if (EquippedObject != null)
-        {
-            Destroy(EquippedObject);
-            EquippedObject = null;
+            GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, _currentWeapon.skillDurabilityCost);
         }
     }
 
-    public void CheckedItemHold()
+
+    private void ExecuteAttack(float chargeTime)
     {
-        UnEquipWeapon();
-        WeaponChoosen = null;
-    }
+        _lastAttackTime = Time.time;
 
-    public void Attack()
-    {
-
-        // Check if we're still in cooldown
-        if (Time.time < lastAttackTime + attackCooldown)
-            return;
-
-        if (Input.GetMouseButtonDown(0))
+        if (chargeTime >= _minChargeTime)
         {
-            lastAttackTime = Time.time;
+            // Heavy attack
+            _currentAttackCooldown = _heavyAttackCooldown;
+            _lastAttackType = AttackType.Heavy;
 
-            if (WeaponChoosen != null)
-            {
+            // Calculate heavy attack damage and AOE based on charge time
+            float chargePercent = Mathf.Clamp01((chargeTime - _minChargeTime) / (_maxChargeTime - _minChargeTime));
+            float damageMultiplier = 1f + chargePercent;
+            float aoeRadius = Mathf.Lerp(1f, 3f, chargePercent);
 
-              
-                if (_mimicSpawner != null)
-                {
-                    _mimicSpawner.TrySpawnMimic();
-                }
-
-                PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.baseDurabilityUsed);
-                //Debug.Log("Durability Check for basic attack, " + ItemHeld.name + " now at " + ItemHeld.Durability);
-
-            }
-
-            if (Lockon && TargetEnemy != null)
-            {
-
-                StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
-            }
-            else
-            {
-                BasicCombat.SwordAttack();
-                ActivateAttack();
-                //animator.SetTrigger("Attack");
-            }
-            //StartCoroutine(FFCombat(TargetEnemy.position + (TargetEnemy.forward * 1f)));
-            //BasicCombat.SwordAttack();
-
+            ExecuteHeavyAttack(damageMultiplier, aoeRadius);
+            StartCoroutine(HeavyAttackMovement());
+        }
+        else
+        {
+            // Light attack
+            _currentAttackCooldown = _lightAttackCooldown;
+            _lastAttackType = AttackType.Light;
+            ExecuteLightAttack();
         }
 
+        // Apply durability cost
+        if (_currentWeapon != null)
+        {
+            int durabilityCost = _lastAttackType == AttackType.Light ?
+                _currentWeapon.baseDurabilityCost :
+                _currentWeapon.baseDurabilityCost * 2;
+
+
+            GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, durabilityCost);
+        }
+
+        // Spawn mimic if applicable
+        if (_mimicSpawner != null)
+        {
+            _mimicSpawner.TrySpawnMimic();
+        }
     }
 
-    public void ActivateAttack()
+    private void ExecuteLightAttack()
     {
-
-        if (CombatContinue == false)
+        if (_isLockedOn && _targetEnemy != null)
         {
-            //Attack();
-            animator.SetTrigger("Attack");
-            CombatContinue = true;
+            Vector3 attackPosition = _targetEnemy.position + (_targetEnemy.forward * 1f);
+            StartCoroutine(DashToAttack(attackPosition, true));
         }
-
-        if (CombatWindow == true)
+        else
         {
-            animator.SetBool("Combo", true);
+            _basicAttack.ExecuteAttack(AttackType.Light);
+            TriggerAttackAnimation("LightAttack");
         }
-
     }
 
-    private IEnumerator FFCombat(Vector3 targetPos)
+    private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
+    {
+        if (_isLockedOn && _targetEnemy != null)
+        {
+            // Attack in locked direction
+            _basicAttack.ExecuteHeavyAttack(
+                _targetEnemy.position,
+                damageMultiplier,
+                aoeRadius
+            );
+        }
+        else
+        {
+            // Attack in facing direction
+            Vector3 attackDirection = transform.forward;
+            Vector3 attackPosition = transform.position + attackDirection * 2f;
+            _basicAttack.ExecuteHeavyAttack(
+                attackPosition,
+                damageMultiplier,
+                aoeRadius
+            );
+        }
+        TriggerAttackAnimation("HeavyAttack");
+    }
+
+
+
+    private IEnumerator HeavyAttackMovement()
     {
         float elapsed = 0;
         Vector3 startPos = transform.position;
+        Vector3 moveDirection = _isLockedOn && _targetEnemy != null ?
+            (_targetEnemy.position - transform.position).normalized :
+            transform.forward;
 
-        Vector3 EndPos = new Vector3(targetPos.x, transform.position.y, targetPos.z);
+        Vector3 endPos = startPos + moveDirection * _heavyAttackMoveDistance;
+
+        while (elapsed < _heavyAttackMoveDuration)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / _heavyAttackMoveDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator DashToAttack(Vector3 targetPosition, bool isLightAttack)
+    {
+        float elapsed = 0;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
+
         while (elapsed < 0.2f)
         {
-            transform.position = Vector3.Lerp(startPos, EndPos, elapsed / 0.15f);
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / 0.15f);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        BasicCombat.SwordAttack();
-
+        if (isLightAttack)
+        {
+            _basicAttack.ExecuteAttack(AttackType.Light);
+        }
+        TriggerAttackAnimation(isLightAttack ? "LightAttack" : "HeavyAttack");
     }
 
-
-    public void SpecialAttack()
+    private void TriggerAttackAnimation(string triggerName)
     {
-        if (Input.GetMouseButtonDown(1))
+        if (triggerName == "LightAttack")
         {
-            if (WeaponChoosen != null)
+            if (!_canComboContinue)
             {
-                WeaponChoosen.Cast();
-                PlayerStorage.GetInventory().BreakItem(GetComponent<Inventory>().equippedSlotNum, WeaponChoosen.skillDurabilityUsed);
-                //Debug.Log("Durability Check for Special attack, " + ItemHeld.name + " at " + ItemHeld.Durability);
-                return;
+                _animator.SetTrigger("LightAttack");
+                _canComboContinue = true;
             }
-            Debug.LogWarning("Player not holding weapon!");
+
+            if (_isInComboWindow)
+            {
+                _animator.SetBool("Combo", true);
+            }
+        }
+        else
+        {
+            // Heavy attacks reset combo
+            ResetCombo();
+            _animator.SetTrigger("HeavyAttack");
+        }
+    }
+    #endregion
+
+    #region Blocking & Parry
+    private void HandleBlocking()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _blockHoldStartTime = Time.time;
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            if (!_isBlocking && Time.time - _blockHoldStartTime > _parryThreshold)
+            {
+                StartBlocking();
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            if (_parryCooldown <= 0)
+            {
+                float heldDuration = Time.time - _blockHoldStartTime;
+                if (heldDuration <= _parryThreshold)
+                {
+                    AttemptParry();
+                }
+            }
+            StopBlocking();
         }
     }
 
-    public void ResetCombo()
+    private void StartBlocking()
     {
-        animator.SetBool("Combo", false);
-        //IsAttack = false;
-        CombatContinue = false;
-        CombatWindow = false;
+        _isBlocking = true;
     }
 
-    public void CalculateAnimationPercentage(float duration)
+    private void StopBlocking()
     {
-        Debug.Log("Duration of Animation : " + duration);
-        float DurationToWait = duration * (ThreshholdPercentage / 100);
-
-        StartCoroutine(ActivateAttackWindow(DurationToWait));
+        _isBlocking = false;
     }
 
-    IEnumerator ActivateAttackWindow(float AwaitTime)
+    private void AttemptParry()
     {
-        animator.SetBool("Combo", false);
-        //IsAttack = false;
-        CombatWindow = false;
-        yield return new WaitForSeconds(AwaitTime);
-        //IsAttack = false;
-        //CombotContinue = false;
-        CombatWindow = true;
+        if (_isParrying) return;
+
+        _isParrying = true;
+        _parryZone.SetActive(true);
+        StartCoroutine(ParryDuration());
     }
 
+    private IEnumerator ParryDuration()
+    {
+        _parryCooldown = _parryDuration;
+        yield return new WaitForSeconds(0.5f);
+
+        _isParrying = false;
+        _parryZone.SetActive(false);
+    }
     #endregion
 
-    #region Targeting
+    #region Equipment
+    private void UpdateEquippedItem()
+    {
+        ClearWeapon();
+        _currentItem = _inventoryManager.GetCurrentHotbarItem();
+        EquipItem(_currentItem);
+    }
 
-    private void Lockingon()
+    private void EquipItem(ItemInstance item)
+    {
+        if (item?.ItemPrefab == null) return;
+
+        _equippedWeapon = Instantiate(item.ItemPrefab, _weaponHoldPoint);
+        ConfigureWeaponPhysics(_equippedWeapon);
+
+        _currentWeapon = _equippedWeapon.GetComponent<Weapon>();
+        if (_currentWeapon != null)
+        {
+            _currentWeapon.CurrDurability = item.Durability;
+        }
+    }
+
+    private void ConfigureWeaponPhysics(GameObject weapon)
+    {
+        Collider weaponCollider = weapon.GetComponent<Collider>();
+        if (weaponCollider != null) weaponCollider.isTrigger = true;
+
+        Rigidbody weaponRb = weapon.GetComponent<Rigidbody>();
+        if (weaponRb != null) weaponRb.isKinematic = true;
+    }
+
+    private void ClearWeapon()
+    {
+        if (_equippedWeapon != null)
+        {
+            Destroy(_equippedWeapon);
+        }
+        _currentWeapon = null;
+    }
+    #endregion
+
+    #region Targeting System
+    private void HandleLockOn()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (Lockon == false)
+            _isLockedOn = !_isLockedOn;
+            if (!_isLockedOn) ClearTargeting();
+        }
+    }
+
+    private void UpdateVisibleEnemies()
+    {
+        _visibleEnemies.Clear();
+        ScanForNearbyEnemies();
+
+        foreach (var enemy in _nearbyEnemies)
+        {
+            if (enemy.Key == null) continue;
+
+            if (IsEnemyVisible(enemy.Key))
             {
-                Lockon = true;
+                _visibleEnemies.Add(enemy.Key, enemy.Value);
+            }
+        }
+    }
+
+
+    private void ScanForNearbyEnemies()
+    {
+        _nearbyEnemies.Clear();
+
+        // Define detection parameters
+        float detectionRadius = 15f;
+        Vector3 detectionCenter = transform.position + Vector3.up * 1f;
+
+        // Detect all enemies in radius
+        Collider[] hitColliders = Physics.OverlapSphere(
+            detectionCenter,
+            detectionRadius,
+            _enemyLayer
+        );
+
+        // Process detected enemies
+        foreach (var hitCollider in hitColliders)
+        {
+            GameObject enemy = hitCollider.gameObject;
+
+            // Skip if enemy is null or already dead
+            if (enemy == null) continue;
+
+            // Calculate distance to player
+            float distance = Vector3.Distance(
+                transform.position,
+                enemy.transform.position
+            );
+
+            // Add to nearby enemies dictionary
+            if (!_nearbyEnemies.ContainsKey(enemy))
+            {
+                _nearbyEnemies.Add(enemy, distance);
             }
             else
             {
-                Lockon = false;
-                ClearTargets();
+                _nearbyEnemies[enemy] = distance;
             }
         }
+
     }
 
-    public void ClearTargets()
+    private bool IsEnemyVisible(GameObject enemy)
     {
-        DepthOfRange = 0;
-        Auto = true;
+        Vector3 direction = (enemy.transform.position - transform.position).normalized;
+        float angle = Vector3.Angle(_playerMovement.GetDirection(), direction);
+
+        return angle <= _lockOnAngleThreshold && HasLineOfSight(enemy);
     }
 
-    private void Check()
+    public void EnableMimic(bool enable)
     {
-        if (TargetEnemy == null)
-        {
-            ClearTargets();
-        }
+        _mimicSpawner.enabled = enable;
+    }
+    public void SetUpMimic(MimicSpawner mimic)
+    {
+        _mimicSpawner = mimic;
+        _mimicSpawner._mimicClonePrefab = _mimicClonePrefab;
     }
 
-    private void GetEnemiesZone()
+    private bool HasLineOfSight(GameObject target)
     {
-        EnemyNear.Clear();
-        BoxCollider box = _Area.GetComponent<BoxCollider>();
-        if (box == null)
-        {
-            return;
-        }
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        Vector3 targetPos = target.transform.position + Vector3.up * 0.5f;
+        Vector3 direction = (targetPos - origin).normalized;
+        float distance = Vector3.Distance(origin, targetPos);
 
-        Vector3 center = box.transform.TransformPoint(box.center);
-        Vector3 halfExtents = Vector3.Scale(box.size, box.transform.lossyScale) / 2f;
+        return !Physics.Raycast(origin, direction, distance, _ignoreLayerMask);
+    }
 
-        Collider[] hits = Physics.OverlapBox(center, halfExtents, box.transform.rotation, EnemyLayer);
-        foreach (Collider hit in hits)
+    private void FindNearestVisibleEnemy()
+    {
+        _targetEnemy = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (var enemy in _visibleEnemies)
         {
-            if (hit.GetComponent<Enemy>() != null)
+            if (enemy.Value < closestDistance)
             {
-                //EnemyNearby.Add(hit.gameObject);
-                EnemyNear.Add(hit.gameObject, Vector3.Distance(hit.gameObject.transform.position, this.transform.position));
+                closestDistance = enemy.Value;
+                _targetEnemy = enemy.Key.transform;
             }
         }
     }
 
-    private void HandleAutoTargetTracking()
-    {
-        TargetEnemy = null;
-        float Diatance = Mathf.Infinity;
-        foreach (GameObject enemy in EnemyNear.Keys)
-        {
-            Vector3 dir = (enemy.transform.position - this.transform.position).normalized;
-            Vector3 forward = playmove._body.transform.forward;
-            float dotProduct = Vector3.Dot(forward, dir);
-            //Debug.Log(dotProduct);
-            float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
-            dot = angle;
-            if (angle < AngleThreshold && CastARay(enemy) == true)
-            {
-                if (Diatance > Vector3.Distance(enemy.transform.position, this.transform.position))
-                {
-                    Diatance = Vector3.Distance(enemy.transform.position, this.transform.position);
-                    TargetEnemy = enemy.transform;
-                }
-            }
-        }
-    }
-
-    private bool CastARay(GameObject Target)
-    {
-        float distance = Vector3.Distance(this.transform.position, Target.transform.position);
-        Vector3 directionToTarget = (Target.transform.position - transform.position).normalized;
-        Vector3 rayStart = transform.position + Vector3.up * 0.5f;
-
-        Ray ray = new Ray(transform.position, directionToTarget);
-        RaycastHit[] hits = Physics.RaycastAll(ray, distance, ~_LayerMaskIgnore);
-
-        //Debug.DrawRay(rayStart, directionToTarget * distance, Color.cyan, 1.0f);
-        foreach (RaycastHit hit in hits)
-        {
-            //Debug.Log(hit.collider.name);
-            if (hit.collider.CompareTag("Object"))
-            {
-                //Debug.Log("Hit");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void HandleEnemyInView()
-    {
-        EnemyInView.Clear();
-        float Diatance = Mathf.Infinity * Mathf.PerlinNoise1D(1);
-        foreach (KeyValuePair<GameObject, float> enemy in EnemyNear)
-        {
-            if (enemy.Key != null)
-            {
-                Vector3 dir = (enemy.Key.transform.position - this.transform.position).normalized;
-                Vector3 forward = playmove._body.transform.forward;
-                float dotProduct = Vector3.Dot(forward, dir);
-                //Debug.Log(dotProduct);
-                float angle = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
-                dot = angle;
-                if (angle < AngleThreshold && CastARay(enemy.Key) == true)
-                {
-                    EnemyInView.Add(enemy.Key, enemy.Value);
-                }
-            }
-        }
-    }
-
-    public void SwitchTarget()
+    private void HandleTargetSwitching()
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            Auto = false;
-            DepthOfRange += 1;
-            SwitchingTarget();
+            _autoTargeting = false;
+            _currentTargetIndex = (_currentTargetIndex + 1) % _visibleEnemies.Count;
+            SelectTargetByIndex();
         }
     }
 
-    public void SwitchingTarget()
+    private void SelectTargetByIndex()
     {
-        if (DepthOfRange >= EnemyInView.Count)
-        {
-            DepthOfRange = 0;
-        }
-        var sortedEnemy = EnemyInView.OrderBy(pair => pair.Value);
-        KeyValuePair<GameObject, float> enemy = sortedEnemy.ElementAt(DepthOfRange);
-        TargetEnemy = enemy.Key.transform;
+        if (_visibleEnemies.Count == 0) return;
+
+        var sortedTargets = _visibleEnemies.OrderBy(e => e.Value).ToArray();
+        _targetEnemy = sortedTargets[_currentTargetIndex].Key.transform;
     }
 
-    public void LocateTarget()
+    private void UpdateTargetIndicator()
     {
-        if (TargetEnemy != null)
+        if (_targetEnemy != null)
         {
-            ForEasyLocation.transform.position = TargetEnemy.position;
+            _targetIndicator.transform.position = _targetEnemy.position;
         }
+    }
+
+    private void ClearTargeting()
+    {
+        _currentTargetIndex = 0;
+        _autoTargeting = true;
+        _targetEnemy = null;
+    }
+    #endregion
+
+    #region Animation Events
+    public void ResetCombo()
+    {
+        _animator.SetBool("Combo", false);
+        _canComboContinue = false;
+        _isInComboWindow = false;
+    }
+
+    public void EnableComboWindow(float animationDuration)
+    {
+        float windowStartTime = animationDuration * (_comboWindowPercentage / 100f);
+        StartCoroutine(OpenComboWindow(windowStartTime));
+    }
+
+    private IEnumerator OpenComboWindow(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _isInComboWindow = true;
+    }
+    #endregion
+
+    #region Stat Management
+    private void ApplyPlayerStats()
+    {
+        //_playerDamage = _playerData.Damage;
+        _parryDuration = _playerData.ParryDuration;
     }
     #endregion
 }

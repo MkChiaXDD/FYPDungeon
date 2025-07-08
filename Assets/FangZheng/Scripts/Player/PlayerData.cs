@@ -43,7 +43,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     public int Damage { get; private set; }
     public float Speed { get; private set; }
     public float Dash { get; private set; }
-    public float ParryTime { get; private set; }
+    public float ParryDuration { get; private set; }
     public float ParryThreshhold { get; private set; }
     public float Health { get; private set; }
     public float MimicSpawnChance { get; private set; }
@@ -107,7 +107,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         Damage = _Dmg;
         Speed = _Speed;
         Dash = _Dash;
-        ParryTime = _ParryDuration;
+        ParryDuration = _ParryDuration;
         ParryThreshhold = _ParryThreshold;
         MimicSpawnChance = _MimicSpawnChance;
         MimicCount = _MimicAmount;
@@ -185,11 +185,11 @@ public class PlayerData : MonoBehaviour, IDamageable
                     case Effect.EffectType.ParryCooldown:
                         if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
                         {
-                            ParryTime += (_ParryDuration * effect.ModifierValue) - _ParryDuration;
+                            ParryDuration += (_ParryDuration * effect.ModifierValue) - _ParryDuration;
                         }
                         else
                         {
-                            ParryTime += effect.ModifierValue;
+                            ParryDuration += effect.ModifierValue;
                         }
                         break;
                     case Effect.EffectType.LifeSteal:
@@ -262,9 +262,9 @@ public class PlayerData : MonoBehaviour, IDamageable
             Dash = 1;
         }
 
-        if (ParryTime <= 0)
+        if (ParryDuration <= 0)
         {
-            ParryTime = 0.1f;
+            ParryDuration = 0.1f;
         }
 
         //if (MimicSpawnChance > 0.75f)
@@ -314,6 +314,6 @@ public class PlayerData : MonoBehaviour, IDamageable
         activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
     }
 
-    public void TakePhysicalDamage(float damage, AttackType attackType) => TakeDamage(damage);
+    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => TakeDamage(damage);
  
 }

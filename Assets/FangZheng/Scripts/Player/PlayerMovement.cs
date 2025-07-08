@@ -1,33 +1,32 @@
 using System.Collections;
-
 using UnityEngine;
-
 
 public class PlayerMovement : MonoBehaviour
 {
-
-
     [SerializeField] public Rigidbody _rb;
     [SerializeField] public Transform _body;
     [SerializeField] public Camera _camera;
     [SerializeField] public MeshTrail _meshTrail;
 
-
     [Header("Movement")]
     [SerializeField] private float _normalspeed = 4;
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private float _dashSpeed = 30;
-    //[SerializeField] private float _gravityScale = 1.0f;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
 
     private Vector3 _input;
     private Vector3 _mousePos;
-    [SerializeField]  private float _currentSpeed;
-    private const float _defaultGravity = -9.81f;
+    [SerializeField] private float _currentSpeed;
+    private bool _isMovementLocked = false;
+    private bool _isDashing = false;
 
     public static PlayerMovement Instance { get; private set; }
+
+    // Public property to check movement state
+    public bool IsMoving => _input.magnitude > 0.1f && !_isMovementLocked;
+    public bool IsMovementLocked => _isMovementLocked;
 
     private void Awake()
     {
@@ -40,13 +39,13 @@ public class PlayerMovement : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-
     }
 
     public void Start()
     {
         Addmodifier();
     }
+
     public void OnEnable()
     {
         playerData.DataChange.AddListener(Addmodifier);
@@ -54,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_isMovementLocked) return;
+
         GatherInput();
         look();
         MousePosition();
@@ -62,8 +63,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_isMovementLocked) return;
+
         Move();
     }
+
     void GatherInput()
     {
         _input.x = UnityEngine.Input.GetAxisRaw("Horizontal");
@@ -76,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
         _dashSpeed = playerData.Dash;
         _currentSpeed = _normalspeed;
     }
+
     void look()
     {
         if (_input != Vector3.zero || _mousePos != Vector3.zero)
@@ -102,7 +107,6 @@ public class PlayerMovement : MonoBehaviour
             if (hit.transform.gameObject.tag == "Ground")
             {
                 _mousePos = hit.point;
-                //ball.transform.position = _MousePos;
                 return;
             }
         }
@@ -115,22 +119,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Space) && _rb.velocity != Vector3.zero)
+        if (Input.GetKeyDown(KeyCode.Space) && _rb.velocity != Vector3.zero && !_isMovementLocked)
             StartCoroutine(Dashing());
     }
 
     private IEnumerator Dashing()
     {
+        _isDashing = true;
         _meshTrail.HandleTrailActivation();
         _currentSpeed = playerData.Dash + playerData.Speed;
         yield return new WaitForSeconds(0.1f);
         _currentSpeed = playerData.Speed;
+        _isDashing = false;
     }
 
     public void Stun()
     {
         _normalspeed = 0;
-        _dashSpeed = 0;      
+        _dashSpeed = 0;
     }
 
     public void Unstun()
@@ -142,7 +148,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-
         _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
         Vector3 force = _input.ToIso().normalized * _currentSpeed;
@@ -153,7 +158,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _rb.velocity = _rb.velocity.normalized * _currentSpeed;
         }
-
     }
 
     public Transform GetThisTransform()
@@ -161,6 +165,22 @@ public class PlayerMovement : MonoBehaviour
         return transform;
     }
 
+    // New method to lock/unlock movement
+    public void SetMovementLock(bool lockState)
+    {
+        _isMovementLocked = lockState;
+
+        if (lockState)
+        {
+            // Immediately stop movement when locked
+            _rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            // Reset speed when unlocked
+            _currentSpeed = _normalspeed;
+        }
+    }
 }
 
 public static class Helpers

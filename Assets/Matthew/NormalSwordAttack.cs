@@ -5,7 +5,7 @@ public class NormalSwordAttack : MonoBehaviour
 {
     [Header("Combat Settings")]
     public ElementType attackElement = ElementType.Pyro;
-    public AttackType attackType = AttackType.Sharp;
+    public PhysicalAttackType attackType = PhysicalAttackType.Sharp;
     [SerializeField] private float elementalDuration = 5;
 
     [SerializeField] private int damageAmount = 1;
@@ -48,7 +48,7 @@ public class NormalSwordAttack : MonoBehaviour
         }
     }
 
-    public void SwordAttack()
+    public void ExecuteLightAttack()
     {
         //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
         slashVFX.Play();
@@ -76,6 +76,44 @@ public class NormalSwordAttack : MonoBehaviour
             }
         }
     }
+
+    public void ExecuteAttack(AttackType light)
+    {
+        //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
+        slashVFX.Play();
+        // apply damage & knockback
+        Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<IDamageable>(out var hitTargets) && !hit.CompareTag("Player"))
+            {
+                if (hit.CompareTag("Object"))
+                {
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                }
+                else
+                {
+                    //hitEnemies.TakeDamage(damageAmount);
+                    ApplyElementalEffects(hit.gameObject);
+
+                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                    // ApplyStatusEffects(hit.gameObject, stun);
+                    // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
+                    ApplyKnockBack(hit.gameObject);
+                    PlayDmgVFX();
+                }
+            }
+        }
+    }
+
+    public void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
+    {
+        // Heavy attack implementation with:
+        // - SphereCastAll for AOE
+        // - Damage calculation using damageMultiplier
+        // - Visual effects scaled by radius
+    }
+
 
     public void ElementalSwordAttack() //rememeber to swap elemental with normal
     {

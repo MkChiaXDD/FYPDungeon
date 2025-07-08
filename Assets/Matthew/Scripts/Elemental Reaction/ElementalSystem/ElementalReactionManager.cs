@@ -214,7 +214,7 @@ public enum ElementType
     None        // Neutral
 }
 
-public enum AttackType
+public enum PhysicalAttackType
 {
     Sharp, //sharp
     Blunt, //not sharp

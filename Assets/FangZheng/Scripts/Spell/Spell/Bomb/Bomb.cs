@@ -114,7 +114,7 @@ public class Boom : Projectile, IDamageable
         throw new NotImplementedException();
     }
 
-    public void TakePhysicalDamage(float damage, AttackType attackType)
+    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
     {
         throw new NotImplementedException();
     }

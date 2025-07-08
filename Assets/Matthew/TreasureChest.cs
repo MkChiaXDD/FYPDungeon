@@ -105,5 +105,5 @@ public class SpringChest : MonoBehaviour, IDamageable
 
     public virtual void Heal(float healAmount) { }
     public void TakeElementalDamage(float damage, ElementType element) => Die();
-    public void TakePhysicalDamage(float damage, AttackType attackType) => Die();
+    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => Die();
 }
