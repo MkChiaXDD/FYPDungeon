@@ -41,7 +41,7 @@ public class Breakable : MonoBehaviour, IDamageable
             }
         }
     }
-    public void TakeElementalDamage(float damage, ElementType element) => Die();
+    public void TakeElementalDamage(float damage, ElementType element) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage"); }
     public void TakeDamage(float damage) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage");  }
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
     {
