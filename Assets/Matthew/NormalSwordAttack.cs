@@ -5,6 +5,7 @@ public class NormalSwordAttack : MonoBehaviour
 {
     [Header("Combat Settings")]
     public ElementType attackElement = ElementType.Pyro;
+    public AttackType attackType = AttackType.Sharp;
     [SerializeField] private float elementalDuration = 5;
 
     [SerializeField] private int damageAmount = 1;

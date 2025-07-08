@@ -13,49 +13,22 @@ public class Breakable : MonoBehaviour, IDamageable
     [SerializeField] private float explosionUpwardModifier = 1f;
     [SerializeField] LayerMask everyMask;
     // Start is called before the first frame update
-    void Start()
-    {
-        //StartCoroutine(nameof(BreakObject));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    StartCoroutine(nameof(BreakObject));
-        //}
-    }
-
-    // Using OnTriggerEnter (for trigger collisions)
-    void OnTriggerEnter(Collider other)
-    {
-        // Check if the collider's tag is "Enemy"
-        if (other.gameObject.CompareTag("EarthShatterAttack"))
-        {
-            StartCoroutine(nameof(BreakObject));
-            Debug.Log("Triggered by EarthShatter!");
-        }
-    }
-
     private IEnumerator BreakObject()
     {
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
-        Explode();
+        SelfExplode();
         if (dropSystem)
         { 
             dropSystem.SpawnDropItem();
         }     
         Destroy(gameObject);
     }
-
-    void Explode()
+    //spreads itself outwards, does not affect anything else
+    void SelfExplode()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position,transform.localScale.x,~everyMask);
+        Collider[] hits = Physics.OverlapSphere(transform.position,explosionRadius,~everyMask);
         foreach (var hit in hits)
-        {
-       
-
+        {   
             if (hit.attachedRigidbody != null)
             {
                 hit.attachedRigidbody.AddExplosionForce(
@@ -67,19 +40,18 @@ public class Breakable : MonoBehaviour, IDamageable
                 );
             }
         }
-
-        Destroy(gameObject);
     }
-
-    public void TakeDamage(float damage) => Die();
-
-    public virtual void Heal(float healAmount) { }
-
     public void TakeElementalDamage(float damage, ElementType element) => Die();
+    public void TakeDamage(float damage) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage");  }
+    public void TakePhysicalDamage(float damage, AttackType attackType)
+    {
+        if (attackType == AttackType.Blunt)
+        {
+            Die();
+        }
+    }
     public void Die() => StartCoroutine(nameof(BreakObject));
-
     public void DropItem() => dropSystem.SpawnDropItem();
 
- 
- 
+    public void Heal(float healAmoount){/*yes this function does nothing, do not implement*/}
 }

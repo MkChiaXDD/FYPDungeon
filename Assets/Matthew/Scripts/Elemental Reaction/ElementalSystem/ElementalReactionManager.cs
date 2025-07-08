@@ -214,6 +214,13 @@ public enum ElementType
     None        // Neutral
 }
 
+public enum AttackType
+{
+    Sharp, //sharp
+    Blunt, //not sharp
+    None
+}
+
 // ReactionType.cs
 public enum ReactionType
 {
