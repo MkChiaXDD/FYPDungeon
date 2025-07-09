@@ -64,14 +64,14 @@ public class NormalSwordAttack : MonoBehaviour
             {
                 if (hit.CompareTag("Object"))
                 {
-                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                    hitTargets.TakePhysicalDamage(damageAmount, SharpAttackType);
                 }
                 else
                 {
                     //hitEnemies.TakeDamage(damageAmount);
-                    ApplyElementalEffects(hit.gameObject);
+                    
 
-                    hitTargets.TakeElementalDamage(damageAmount, attackElement);
+                    hitTargets.TakePhysicalDamage(damageAmount, SharpAttackType);
                     // ApplyStatusEffects(hit.gameObject, stun);
                     // hit.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(poison);
                     ApplyKnockBack(hit.gameObject);

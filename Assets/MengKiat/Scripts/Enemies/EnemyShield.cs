@@ -15,9 +15,11 @@ public class EnemyShield : MonoBehaviour
         currentHp = this.maxHp;
     }
 
-    public void HitShield(float damage)
+    public void HitShield(float damage, PhysicalAttackType physicalAttackType)
     {
-        currentHp -= damage;
+        if (physicalAttackType != PhysicalAttackType.Blunt)
+            currentHp -= damage;
+        else currentHp = 0;
 
         if (currentHp <= 0)
         {

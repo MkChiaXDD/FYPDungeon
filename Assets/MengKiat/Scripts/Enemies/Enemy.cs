@@ -62,14 +62,16 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    private void ShieldTakeDamage(float amount)
+    private void ShieldTakeDamage(float amount, PhysicalAttackType physicalAttackType)
     {
+
+
 
         EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
         float currentShieldHealth = shield.GetShieldHp();
         if (currentShieldHealth > 0)
         {
-            shield.HitShield(amount);
+            shield.HitShield(amount,physicalAttackType);
             return;
         }
 
@@ -79,13 +81,7 @@ public class Enemy : MonoBehaviour, IDamageable
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
-        if (enemyShield != null && enemyShield.GetComponent<EnemyShield>().GetShieldHp() > 0)
-        {
-            if (enemyShield.GetComponent<EnemyShield>())
-                ShieldTakeDamage(amount);
-
-            return;
-        }
+       
 
         currentHealth -= amount;
         UpdateHealthBar();
@@ -109,10 +105,20 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
     {
+        if (enemyShield != null && enemyShield.GetComponent<EnemyShield>().GetShieldHp() > 0)
+        {
+            if (enemyShield.GetComponent<EnemyShield>())
+                ShieldTakeDamage(damage, attackType);
+
+            return;
+        }
+
+
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(attackType);
         float finalDamage = damage / resistanceMultiplier;
-   
+
+    
         TakeDamage(finalDamage);
     }
 
