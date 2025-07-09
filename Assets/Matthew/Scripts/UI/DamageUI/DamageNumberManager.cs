@@ -129,8 +129,7 @@ public class DamageNumberManager : MonoBehaviour
         GameObject numberGO = Instantiate(
             damageNumberPrefab,
             testPosition,
-            Quaternion.identity,
-            worldCanvas.transform
+            Quaternion.identity
         );
 
         DamageNumber damageNumber = numberGO.GetComponentInChildren<DamageNumber>();
