@@ -81,8 +81,7 @@ public class DamageNumberManager : MonoBehaviour
         GameObject numberGO = Instantiate(
             damageNumberPrefab,
             spawnPosition,
-            Quaternion.identity,
-            worldCanvas.transform
+            Quaternion.identity
         );
 
         DamageNumber damageNumber = numberGO.GetComponentInChildren<DamageNumber>();
@@ -99,13 +98,12 @@ public class DamageNumberManager : MonoBehaviour
         if (damageNumberPrefab == null) return;
 
         // Position slightly above the hit point
-        Vector3 spawnPosition = position + Vector3.up * 2.0f;
+        Vector3 spawnPosition = position + Vector3.up * 1.0f;
 
         GameObject numberGO = Instantiate(
             damageNumberPrefab,
             spawnPosition,
-            Quaternion.identity,
-            worldCanvas.transform
+            Quaternion.identity
         );
 
         DamageNumber damageNumber = numberGO.GetComponentInChildren<DamageNumber>();
@@ -114,6 +112,27 @@ public class DamageNumberManager : MonoBehaviour
             damageNumber.Initialize(damage);
         }
     }
+
+    public void ShowDamage(Vector3 position, float damage, Color color)
+    {
+        if (damageNumberPrefab == null) return;
+
+        // Position slightly above the hit point
+        Vector3 spawnPosition = position + Vector3.up * 1.0f;
+
+        GameObject numberGO = Instantiate(
+            damageNumberPrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        DamageNumber damageNumber = numberGO.GetComponentInChildren<DamageNumber>();
+        if (damageNumber != null)
+        {
+            damageNumber.Initialize(damage,color);
+        }
+    }
+
 
     private void Update()
     {

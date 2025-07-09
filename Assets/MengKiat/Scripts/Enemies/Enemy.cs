@@ -111,6 +111,7 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             if (enemyShield.GetComponent<EnemyShield>())
                 ShieldTakeDamage(damage, attackType);
+            ShowDamageNumber(this.transform.position, damage, Color.gray);
 
             return;
         }
@@ -195,6 +196,15 @@ public class Enemy : MonoBehaviour, IDamageable
         InitialiseResistance();
     }
 
+    private void ShowDamageNumber(Vector3 position, float damage, Color color)
+    {
+        if (DamageNumberManager.Instance)
+        {
+            DamageNumberManager.Instance.ShowDamage(position, damage, color);
+        }
+    }
+
+    //default color is white
     private void ShowDamageNumber(Vector3 position, float damage)
     {
         if (DamageNumberManager.Instance)

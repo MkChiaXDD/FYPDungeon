@@ -40,14 +40,21 @@ public class DamageNumber : MonoBehaviour
     public void Initialize(float damage, PhysicalAttackType physicalAttackType)
     {
         damageText.text = damage.ToString();
-        damageText.color = Color.black;
+        damageText.color = Color.red;
         StartCoroutine(Animate());
     }
 
     public void Initialize(float damage)
     {
         damageText.text = damage.ToString();
-        damageText.color = Color.black;
+        damageText.color = Color.white;
+        StartCoroutine(Animate());
+    }
+
+    public void Initialize(float damage, Color color)
+    {
+        damageText.text = damage.ToString();
+        damageText.color = color;
         StartCoroutine(Animate());
     }
 
