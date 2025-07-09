@@ -19,6 +19,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int RoundToSpawnTank = 4;
     [SerializeField] private int RoundToSpawnBomber = 5;
 
+    private GameObject portal;
+
     public void GetAllRoomSpawnPoint()
     {
         if (mapGen == null || enemyPrefabs == null || enemyPrefabs.Count == 0)
