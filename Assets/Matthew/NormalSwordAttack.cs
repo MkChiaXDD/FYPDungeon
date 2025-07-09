@@ -252,7 +252,10 @@ public class NormalSwordAttack : MonoBehaviour
 
     public void ApplyStatusEffects(GameObject target, StatusEffect effect)
     {
+        if (target.gameObject.GetComponent<StatusEffectReceiver>())
         target.gameObject.GetComponent<StatusEffectReceiver>().ApplyEffect(effect);
+        else
+            target.gameObject.AddComponent<StatusEffectReceiver>().ApplyEffect(effect);
     }
 
     public void PlayDmgVFX()

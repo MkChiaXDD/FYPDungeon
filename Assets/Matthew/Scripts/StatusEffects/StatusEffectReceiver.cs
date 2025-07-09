@@ -246,7 +246,7 @@ public class FireEffect : StatusEffect
 [CreateAssetMenu(menuName = "Status Effects/Stun")]
 public class StunEffect : StatusEffect
 {
-    public float StunDuration = 5f;
+    public float StunDuration = 2f;
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Stun] Applying stun to {receiver.gameObject.name}");
