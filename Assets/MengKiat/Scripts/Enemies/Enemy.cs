@@ -151,7 +151,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (gameObject.GetComponent<BossCheckDeath>() != null)
         {
-            gameObject.GetComponent<BossCheckDeath>().DieProceed();
+            gameObject.GetComponent<BossCheckDeath>().SummonPortal();
             Destroy(gameObject.GetComponent<BossCheckDeath>());
             Debug.Log("BOSS DIES");
         }

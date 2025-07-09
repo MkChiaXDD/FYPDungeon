@@ -5,6 +5,7 @@ public class BossCheckDeath : MonoBehaviour
 {
     public UnityEvent OnLevelEnd;
     public BuffSelectionUI BuffSelectionUI;
+    private GameObject portal;
 
     public void OnEnable()
     {
@@ -13,12 +14,20 @@ public class BossCheckDeath : MonoBehaviour
 
     }
 
-    public void DieProceed()
+    public void SummonPortal()
     {
-        //OnLevelEnd?.Invoke();
-        BuffSelectionUI.Select();
-        BuffSelectionUI.CreateBuffCardUI();
-        FindFirstObjectByType<FarthestRoom>().NextLevel();
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == "PORTAL(Clone)")
+            {
+                portal = obj;
+                portal.SetActive(true);
+                return;
+            }
+        }
+        Debug.LogError("Can't find portal");
+
     }
 
     public void SetBuffUI()

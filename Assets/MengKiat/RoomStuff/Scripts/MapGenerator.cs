@@ -40,6 +40,7 @@ namespace RMG
         [SerializeField] private Material farthestRoomMaterial;
         [SerializeField] private float roomSizeMultiplier = 2;
         [SerializeField] private int BigBossRounds = 2;
+        [SerializeField] private GameObject portal;
 
         /// <summary>
         /// Called before Start(). It initializes and categorizes all room prefabs
@@ -340,6 +341,11 @@ namespace RMG
             {
                 FindFirstObjectByType<EnemySpawner>()?.ChooseBigBoss();
             }
+
+            Transform spawnPoint = farthestRoom.gameObject.transform.Find("EnemySpawnPoint");
+            Instantiate(portal, spawnPoint.position * roomSizeMultiplier, Quaternion.identity);
+            portal.SetActive(false);
         }
     }
+
 }
