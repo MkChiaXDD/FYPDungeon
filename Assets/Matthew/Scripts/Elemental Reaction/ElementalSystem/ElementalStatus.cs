@@ -110,6 +110,6 @@ public class ElementalStatus : MonoBehaviour
 
         // Add color-coded console messages
         string colorTag = ColorUtility.ToHtmlStringRGB(GetElementColor(element));
-        Debug.Log($"<color=#{colorTag}>{fullMessage}</color>");
+        //Debug.Log($"<color=#{colorTag}>{fullMessage}</color>");
     }
 }

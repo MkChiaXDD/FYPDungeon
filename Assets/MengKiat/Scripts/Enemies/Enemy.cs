@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void ShieldTakeDamage(float amount)
     {
+<<<<<<< Updated upstream
         if (shieldPrefab != null)
         {
             EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
@@ -75,14 +76,33 @@ public class Enemy : MonoBehaviour, IDamageable
             }
         }
         
+=======
+        EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
+        float currentShieldHealth = shield.GetShieldHp();
+        if (currentShieldHealth > 0)
+        {
+            shield.HitShield(amount);
+            return;
+        }
+>>>>>>> Stashed changes
     }
 
 
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
+<<<<<<< Updated upstream
               
             ShieldTakeDamage(amount);
+=======
+        if (enemyShield != null && enemyShield.GetComponent<EnemyShield>().GetShieldHp() > 0)
+        {
+            if (enemyShield.GetComponent<EnemyShield>())
+                ShieldTakeDamage(amount);
+
+            return;
+        }
+>>>>>>> Stashed changes
 
         currentHealth -= amount;
         UpdateHealthBar();
@@ -92,8 +112,6 @@ public class Enemy : MonoBehaviour, IDamageable
         if (currentHealth <= 0f)
             Die();
     }
-
-  
 
     public void TakeElementalDamage(float amount, ElementType elementType)
     {  
@@ -136,9 +154,6 @@ public class Enemy : MonoBehaviour, IDamageable
             _ => 1f
         };
     }
-
-
-
 
     // Shared death logic
     public virtual void Die()
