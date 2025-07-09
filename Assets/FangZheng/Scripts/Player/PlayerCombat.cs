@@ -225,6 +225,7 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
+            
             _basicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
         }

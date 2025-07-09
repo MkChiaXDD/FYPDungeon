@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected bool isStunned = false;
     protected Coroutine stunCoroutine;
 
+
     protected virtual void Awake()
     {
         InitialiseDifficulty();
@@ -81,15 +82,16 @@ public class Enemy : MonoBehaviour, IDamageable
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
-       
-
         currentHealth -= amount;
+        ShowDamageNumber(this.transform.position, amount);
         UpdateHealthBar();
         //PlayDamageVFX();
         //TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
         Debug.Log(name + " Get Hit: " + amount);
         if (currentHealth <= 0f)
             Die();
+
+        
     }
 
     public void TakeElementalDamage(float amount, ElementType elementType)
@@ -191,6 +193,14 @@ public class Enemy : MonoBehaviour, IDamageable
 
 
         InitialiseResistance();
+    }
+
+    private void ShowDamageNumber(Vector3 position, float damage)
+    {
+        if (DamageNumberManager.Instance)
+        {
+            DamageNumberManager.Instance.ShowDamage(position, damage);
+        }
     }
 
     private void InitialiseResistance()

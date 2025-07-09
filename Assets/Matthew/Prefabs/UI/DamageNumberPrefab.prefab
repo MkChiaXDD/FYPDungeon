@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5334134838543057947
+--- !u!1 &4189884371441299936
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2405459206263916583}
-  - component: {fileID: 7377938355760943853}
-  - component: {fileID: 269944950864080705}
-  - component: {fileID: 3985598996814611054}
+  - component: {fileID: 5855306905174474204}
+  - component: {fileID: 1603388278734677782}
+  - component: {fileID: 8330774738162211514}
+  - component: {fileID: 4100665843068854296}
+  - component: {fileID: -4158832988575090956}
   m_Layer: 10
-  m_Name: Text (TMP)
+  m_Name: DamageNumberPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2405459206263916583
+--- !u!224 &5855306905174474204
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334134838543057947}
+  m_GameObject: {fileID: 4189884371441299936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,23 +38,23 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 400, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7377938355760943853
+--- !u!222 &1603388278734677782
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334134838543057947}
+  m_GameObject: {fileID: 4189884371441299936}
   m_CullTransparentMesh: 1
---- !u!114 &269944950864080705
+--- !u!114 &8330774738162211514
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334134838543057947}
+  m_GameObject: {fileID: 4189884371441299936}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -97,15 +98,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -133,32 +134,38 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -366.55908, y: 0, z: -372.98926, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3985598996814611054
+--- !u!114 &4100665843068854296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334134838543057947}
+  m_GameObject: {fileID: 4189884371441299936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5225fd4e0ccc8b64399c921736c54eb9, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a24089364b926948806baf6e23f0d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadingTime: 3
-  initialVelocity: {x: 0, y: 300}
-  gravity: -800
-  bounceDamping: 0.7
-  horizontalDrag: 0.95
-  noiseProfiles:
-  - profileName: gay
-    velocityRange: {x: 0, y: 0}
-    horizontalDirectionRange: {x: 0, y: 0}
-    positionOffsetIntensity: 0
-  defaultNoiseProfileIndex: 0
+  damageText: {fileID: 8330774738162211514}
+  floatSpeed: 1
+  fadeDuration: 1
+  lifeTime: 5
+--- !u!114 &-4158832988575090956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4189884371441299936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67ac58a8b3dc9864197c65f56139a30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useStaticBillboard: 1
