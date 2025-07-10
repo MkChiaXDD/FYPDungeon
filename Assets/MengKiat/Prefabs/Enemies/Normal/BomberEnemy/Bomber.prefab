@@ -157,7 +157,7 @@ Transform:
   - {fileID: 7538895897445492386}
   - {fileID: 2833530113885736721}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2095845324671339278
 MeshFilter:
@@ -272,6 +272,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: debfb7cd10446564fa3290001fadcf1c, type: 2}
   healthBar: {fileID: 4509366166351370113}
   currentHealth: 0
+  shieldPrefab: {fileID: 0}
+  shieldHp: 0
   pyroResistance: 1
   hydroResistance: 1
   electroResistance: 1
@@ -293,7 +295,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   turnSpeed: 200
-  smoothing: 1
+  smoothing: 3
   explodingParticle: {fileID: 4666178427124820627}
   model: {fileID: 8811385662227527003}
   isPickedup: 0
