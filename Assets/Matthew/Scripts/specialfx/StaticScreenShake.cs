@@ -92,7 +92,7 @@ public static class StaticScreenShake
         state.Camera = camera;
         state.Params = finalParams;
         state.OriginalRotation = Quaternion.Euler(0,0,0);
-        state.OriginalPosition = new Vector3(0,0,-10);
+        state.OriginalPosition = new Vector3(0,0,-75);
         state.RotationalNoiseOffset = Random.Range(0f, 100f);
         state.TranslationalNoiseOffset = finalParams.UseSeparateNoiseForTranslation
             ? Random.Range(0f, 100f)
