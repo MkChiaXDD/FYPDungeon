@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum AttackType { Light, Heavy }
 
@@ -46,8 +47,8 @@ public class PlayerCombat : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float _lightAttackCooldown = 0.5f;
     [SerializeField] private float _heavyAttackCooldown = 1.5f;
-    [SerializeField] private float _minChargeTime = 0.5f;
-    [SerializeField] private float _maxChargeTime = 2f;
+    [SerializeField] public float _minChargeTime = 0.5f;
+    [SerializeField] public float _maxChargeTime = 2f;
     [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
     [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
     [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
@@ -66,6 +67,10 @@ public class PlayerCombat : MonoBehaviour
     [Header("Mimic")]
     [SerializeField] private MimicSpawner _mimicSpawner;
     [SerializeField] private GameObject _mimicClonePrefab;
+
+
+    public UnityEvent ChargingUp;
+    public UnityEvent UnCharge;
 
     public static PlayerCombat Instance { get; private set; }
 
@@ -134,12 +139,14 @@ public class PlayerCombat : MonoBehaviour
 
     private void HandleChargedAttack()
     {
+        
         // Start charging heavy attack
         if (Input.GetMouseButtonDown(0) && Time.time > _lastAttackTime + _currentAttackCooldown)
         {
             _isCharging = true;
             _chargeStartTime = Time.time;
             _playerMovement.SetMovementLock(true); // Lock movement during charge
+            ChargingUp?.Invoke();
         }
 
         // Execute attack on release
@@ -157,6 +164,7 @@ public class PlayerCombat : MonoBehaviour
         {
             _isCharging = false;
             _playerMovement.SetMovementLock(false);
+            UnCharge?.Invoke();
         }
     }
 
@@ -214,6 +222,8 @@ public class PlayerCombat : MonoBehaviour
         {
             _mimicSpawner.TrySpawnMimic();
         }
+
+        UnCharge?.Invoke();
     }
 
     private void ExecuteLightAttack()
