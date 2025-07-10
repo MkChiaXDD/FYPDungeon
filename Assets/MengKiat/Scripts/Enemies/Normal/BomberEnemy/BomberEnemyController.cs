@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class BomberEnemyController : Enemy
@@ -12,6 +12,7 @@ public class BomberEnemyController : Enemy
     [SerializeField] float explosionGrowDuration = 1f;
     [SerializeField] float explodeGrowScale = 2f;
     [SerializeField] float explosionUpwardModifier = 1f;
+    [SerializeField] private GameObject circleIndicator;
 
     [Header("Difficulty Scaling")]
     [SerializeField] int roundForScaling = 1;
@@ -62,6 +63,15 @@ public class BomberEnemyController : Enemy
 
         if (explodingParticle != null)
             explodingParticle.Stop();
+
+        if (circleIndicator != null)
+        {
+            circleIndicator.transform.SetParent(transform);
+            circleIndicator.transform.localPosition = Vector3.zero;
+            circleIndicator.transform.localScale = transform.localScale * (currentExplosionRadius * 2f);
+            circleIndicator.transform.localScale = new Vector3(circleIndicator.transform.localScale.x, 0.05f, circleIndicator.transform.localScale.z);
+            circleIndicator.SetActive(false);
+        }
     }
 
     void Update()
@@ -156,6 +166,9 @@ public class BomberEnemyController : Enemy
 
     public IEnumerator ExplosionSequence()
     {
+        if (circleIndicator != null)
+            circleIndicator.SetActive(true);
+
         boutaDie = true;
         isExploding = true;
 
@@ -186,29 +199,26 @@ public class BomberEnemyController : Enemy
 
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
+            if (hit.CompareTag("Player"))
             {
-                hit.attachedRigidbody.AddExplosionForce(
-                    explosionForce,
-                    transform.position,
-                    currentExplosionRadius,
-                    explosionUpwardModifier,
-                    ForceMode.Impulse
-                );
+                if (hit.TryGetComponent<IDamageable>(out var dmg) && hit.attachedRigidbody != null)
+                {
+                    Vector3 direction = (hit.transform.position - transform.position).normalized;
+                    Vector3 knockbackForce = direction * explosionForce;
 
-                if (hit.TryGetComponent<IDamageable>(out var dmg))
+                    // Apply knockback manually
+                    hit.attachedRigidbody.velocity = Vector3.zero; // optional: reset current movement
+                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Impulse);
+
+                    // Apply damage
                     dmg.TakeDamage(data.damage);
-            }
-            else if (hit.attachedRigidbody != null)
-            {
-                hit.attachedRigidbody.AddExplosionForce(
-                    explosionForce / 3,
-                    transform.position,
-                    currentExplosionRadius,
-                    0f,
-                    ForceMode.Impulse
-                );
 
+                    ExplosionScreenShake();
+                }
+            }
+            else
+            {
+                // Still trigger bomber chain reactions
                 if (hit.TryGetComponent<BomberEnemyController>(out var bomber) && !bomber.boutaDie)
                 {
                     bomber.StartCoroutine(bomber.ExplosionSequence());
@@ -219,6 +229,7 @@ public class BomberEnemyController : Enemy
         PlayExplosionVFX();
     }
 
+
     void PlayExplosionVFX()
     {
         model.SetActive(false);
@@ -227,7 +238,6 @@ public class BomberEnemyController : Enemy
             explodingParticle.Play();
 
         float duration = explodingParticle.main.duration;
-        ExplosionScreenShake();
         Destroy(gameObject, duration);
     }
 
