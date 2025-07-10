@@ -67,7 +67,7 @@ public class BomberEnemyController : Enemy
         if (circleIndicator != null)
         {
             circleIndicator.transform.SetParent(transform);
-            circleIndicator.transform.localPosition = Vector3.zero;
+            circleIndicator.transform.localPosition = new Vector3(0, -0.53f, 0);
             circleIndicator.transform.localScale = transform.localScale * (currentExplosionRadius * 2f);
             circleIndicator.transform.localScale = new Vector3(circleIndicator.transform.localScale.x, 0.05f, circleIndicator.transform.localScale.z);
             circleIndicator.SetActive(false);
@@ -218,12 +218,23 @@ public class BomberEnemyController : Enemy
             }
             else
             {
+                if (hit.attachedRigidbody != null)
+                {
+                    Vector3 dir = (hit.transform.position - transform.position).normalized;
+                    Vector3 knockbackForce = dir * (explosionForce / 3f); // scale it down for non-player
+
+                    // Apply knockback
+                    hit.attachedRigidbody.velocity = Vector3.zero; // optional reset
+                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Impulse);
+                }
+
                 // Still trigger bomber chain reactions
                 if (hit.TryGetComponent<BomberEnemyController>(out var bomber) && !bomber.boutaDie)
                 {
                     bomber.StartCoroutine(bomber.ExplosionSequence());
                 }
             }
+
         }
 
         PlayExplosionVFX();
