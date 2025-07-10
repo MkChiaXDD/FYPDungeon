@@ -21,7 +21,7 @@ public class ParticalManager : MonoBehaviour
     public void Bleed(Transform pos)
     {
         GameObject bleed =  Instantiate(BleedPartical, pos.position, Quaternion.identity);
-        Destroy(bleed , 10f);
+        Destroy(bleed , 1f);
     }
 
     public void PlayVFX(GameObject vfx , Transform Pos)
