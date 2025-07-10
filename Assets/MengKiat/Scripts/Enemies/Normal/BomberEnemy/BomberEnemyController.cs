@@ -11,14 +11,13 @@ public class BomberEnemyController : Enemy
     [SerializeField] float explosionForce = 500f;
     [SerializeField] float explosionGrowDuration = 1f;
     [SerializeField] float explodeGrowScale = 2f;
-    [SerializeField] private float explosionUpwardModifier = 1f;
+    [SerializeField] float explosionUpwardModifier = 1f;
 
-    [Header("Diff Scaling Settings")]
-    [SerializeField] private int roundForScaling = 1;
-    [SerializeField] private float explodingSizeMultiplier = 1.5f;
-    private float currentExplosionRadius;
+    [Header("Difficulty Scaling")]
+    [SerializeField] int roundForScaling = 1;
+    [SerializeField] float explodingSizeMultiplier = 1.5f;
 
-    [Header("Roam Settings")]
+    [Header("Roaming")]
     [SerializeField] float roamDelay = 3f;
 
     [Header("Avoidance")]
@@ -27,22 +26,25 @@ public class BomberEnemyController : Enemy
     [SerializeField] float avoidWeight = 5f;
     [SerializeField] LayerMask obstacleMask;
 
-    [Header("Smoothing")]
+    [Header("Movement Smoothing")]
     [SerializeField] float turnSpeed = 10f;
     [SerializeField] float smoothing = 5f;
 
-    [Header("Particle")]
-    [SerializeField] private ParticleSystem explodingParticle;
-    [SerializeField] private GameObject model;
-    private bool boutaDie = false;
+    [Header("Visual & Effects")]
+    [SerializeField] ParticleSystem explodingParticle;
+    [SerializeField] GameObject model;
+    [SerializeField] Light theLight;
 
-    Vector3 spawnPosition;
-    Vector3 roamTarget;
-    float roamTimer;
-    Transform player;
-    Vector3 currentDir;
-    State state;
-    bool isExploding;
+    private float currentExplosionRadius;
+    private Vector3 spawnPosition;
+    private Vector3 roamTarget;
+    private float roamTimer;
+    private Transform player;
+    private Vector3 currentDir;
+
+    private State state;
+    private bool boutaDie = false;
+    private bool isExploding = false;
     public bool isPickedup = false;
 
     void Start()
@@ -54,24 +56,19 @@ public class BomberEnemyController : Enemy
         currentDir = transform.forward;
 
         if (currentRound < roundForScaling)
-        {
             currentExplosionRadius = explosionRadius;
-        }
         else
-        {
             currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
-        }
 
         if (explodingParticle != null)
-        {
             explodingParticle.Stop();
-        }
     }
 
     void Update()
     {
-        if (player == null || isStunned || boutaDie) return;
-        if (isPickedup) return;
+        if (player == null || isStunned || boutaDie || isPickedup)
+            return;
+
         float distToPlayerXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -79,21 +76,18 @@ public class BomberEnemyController : Enemy
 
         if (state != State.Attack)
         {
-            if (distToPlayerXZ <= data.attackRange - 1) state = State.Attack;
-            else if (distToPlayerXZ <= data.detectionRange) state = State.Chase;
-            else state = State.Roam;
+            if (distToPlayerXZ <= data.attackRange - 1)
+                state = State.Attack;
+            else if (distToPlayerXZ <= data.detectionRange)
+                state = State.Chase;
+            else
+                state = State.Roam;
         }
 
         switch (state)
         {
             case State.Roam:
-                roamTimer += Time.deltaTime;
-                MoveWithAvoidance(roamTarget);
-                if (Vector3.Distance(transform.position, roamTarget) < 0.2f || roamTimer >= roamDelay)
-                {
-                    roamTimer = 0f;
-                    ChooseRoamTarget();
-                }
+                HandleRoam();
                 break;
 
             case State.Chase:
@@ -104,6 +98,18 @@ public class BomberEnemyController : Enemy
                 if (!isExploding)
                     StartCoroutine(ExplosionSequence());
                 break;
+        }
+    }
+
+    void HandleRoam()
+    {
+        roamTimer += Time.deltaTime;
+        MoveWithAvoidance(roamTarget);
+
+        if (Vector3.Distance(transform.position, roamTarget) < 0.2f || roamTimer >= roamDelay)
+        {
+            roamTimer = 0f;
+            ChooseRoamTarget();
         }
     }
 
@@ -128,96 +134,107 @@ public class BomberEnemyController : Enemy
 
             if (Physics.SphereCast(transform.position, feelerRadius, dir, out RaycastHit hit, feelerLength, obstacleMask))
             {
-                Vector3 n = hit.normal;
-                n.y = 0;
-                n.Normalize();
+                Vector3 normal = hit.normal;
+                normal.y = 0;
                 float strength = (feelerLength - hit.distance) / feelerLength;
-                avoidDir += n * strength;
+                avoidDir += normal.normalized * strength;
             }
         }
 
         Vector3 desired = seekDir + avoidDir * avoidWeight;
         desired.y = 0;
+
         if (desired == Vector3.zero)
             desired = transform.forward;
-        desired.Normalize();
 
+        desired.Normalize();
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
         transform.position += currentDir * data.moveSpeed * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(currentDir),
-            Time.deltaTime * turnSpeed
-        );
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentDir), Time.deltaTime * turnSpeed);
     }
 
-    IEnumerator ExplosionSequence()
+    public IEnumerator ExplosionSequence()
     {
         boutaDie = true;
         isExploding = true;
+
         float t = 0f;
+        float flashSpeed = 5f;
         Vector3 initialScale = model.transform.localScale;
         Vector3 targetScale = initialScale * explodeGrowScale;
 
         while (t < explosionGrowDuration)
         {
             model.transform.localScale = Vector3.Lerp(initialScale, targetScale, t / explosionGrowDuration);
+
+            float lerp = Mathf.PingPong(Time.time * flashSpeed, 1f);
+            theLight.color = Color.Lerp(Color.red, Color.white, lerp);
+
             t += Time.deltaTime;
             yield return null;
         }
 
         model.transform.localScale = targetScale;
+        theLight.color = Color.red;
         Explode();
     }
 
     void Explode()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, currentExplosionRadius);
+
         foreach (var hit in hits)
         {
             if (hit.CompareTag("Player") && hit.attachedRigidbody != null)
             {
-                Debug.Log("Explosion Radius: " + currentExplosionRadius);
                 hit.attachedRigidbody.AddExplosionForce(
-                    explosionForce,            // base force
-                    transform.position,        // origin
-                    currentExplosionRadius,           // radius
-                    explosionUpwardModifier,   // upwards modifier
-                    ForceMode.Impulse          // instant burst
+                    explosionForce,
+                    transform.position,
+                    currentExplosionRadius,
+                    explosionUpwardModifier,
+                    ForceMode.Impulse
                 );
 
                 if (hit.TryGetComponent<IDamageable>(out var dmg))
                     dmg.TakeDamage(data.damage);
             }
+            else if (hit.attachedRigidbody != null)
+            {
+                hit.attachedRigidbody.AddExplosionForce(
+                    explosionForce / 3,
+                    transform.position,
+                    currentExplosionRadius,
+                    0f,
+                    ForceMode.Impulse
+                );
+
+                if (hit.TryGetComponent<BomberEnemyController>(out var bomber) && !bomber.boutaDie)
+                {
+                    bomber.StartCoroutine(bomber.ExplosionSequence());
+                }
+            }
         }
+
         PlayExplosionVFX();
     }
 
-    private void PlayExplosionVFX()
-    {
-        PlayExplosionParticle(); //explosion particles
-        ExplosionScreenShake(); // screenshake
-    }
-
-    private void ExplosionScreenShake()
-    {
-        StaticScreenShake.Shake(Camera.main, strongerShake);
-    }
-
-
-    private void PlayExplosionParticle()
+    void PlayExplosionVFX()
     {
         model.SetActive(false);
-        if (explodingParticle != null)
-        {
-            explodingParticle.Play();
-        }
-        float duration = explodingParticle.main.duration;
 
+        if (explodingParticle != null)
+            explodingParticle.Play();
+
+        float duration = explodingParticle.main.duration;
+        ExplosionScreenShake();
         Destroy(gameObject, duration);
     }
 
+    void ExplosionScreenShake()
+    {
+        StaticScreenShake.Shake(Camera.main, strongerShake);
+    }
 
     void ChooseRoamTarget()
     {

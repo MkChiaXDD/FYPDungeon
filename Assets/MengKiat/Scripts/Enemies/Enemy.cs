@@ -85,6 +85,7 @@ public class Enemy : MonoBehaviour, IDamageable
         currentHealth -= amount;
         ShowDamageNumber(this.transform.position, amount);
         UpdateHealthBar();
+        ParticalManager.Instance.Bleed(this.transform);
         //PlayDamageVFX();
         //TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
         Debug.Log(name + " Get Hit: " + amount);
