@@ -1,8 +1,10 @@
 
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class ParticalManager : MonoBehaviour
 {
+    public GameObject BleedPartical;
     public static ParticalManager Instance { get; private set; }
 
     private void Awake()
@@ -14,6 +16,12 @@ public class ParticalManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void Bleed(Transform pos)
+    {
+        GameObject bleed =  Instantiate(BleedPartical, pos.position, Quaternion.identity);
+        Destroy(bleed , 10f);
     }
 
     public void PlayVFX(GameObject vfx , Transform Pos)
@@ -30,7 +38,7 @@ public class ParticalManager : MonoBehaviour
             }
             else
             {
-                Destroy(vfx, 2f);
+                Destroy(vfx, 1f);
             }
         }
     }
