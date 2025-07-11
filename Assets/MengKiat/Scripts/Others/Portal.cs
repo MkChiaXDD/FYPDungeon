@@ -18,7 +18,7 @@ public class Portal : MonoBehaviour
             PortalInteractionCanvas.gameObject.SetActive(true);
         }
 
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             //OnLevelEnd?.Invoke();
             //BuffSelectionUI.Select();
