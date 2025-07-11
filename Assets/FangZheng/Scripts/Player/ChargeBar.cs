@@ -5,6 +5,8 @@
 
 public class ChargeBar : MonoBehaviour
 {
+    public GameObject CirculeUI;
+    public Vector3 OriginalSize;
     public PlayerCombat playerCombat;
     public GameObject BarObj;
     public Slider Bar;
@@ -28,6 +30,8 @@ public class ChargeBar : MonoBehaviour
     {
         BarChargeMax = playerCombat._maxChargeTime;
         BarCanHeavey = playerCombat._minChargeTime;
+
+        OriginalSize = CirculeUI.transform.localScale;
 
         Bar.maxValue = BarChargeMax;
         Bar.value = 0;

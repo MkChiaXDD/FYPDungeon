@@ -157,6 +157,7 @@ public class PlayerCombat : MonoBehaviour
 
             float chargeTime = Time.time - _chargeStartTime;
             ExecuteAttack(chargeTime);
+            UnCharge?.Invoke();
         }
 
         // Cancel charge if moving during charge time
