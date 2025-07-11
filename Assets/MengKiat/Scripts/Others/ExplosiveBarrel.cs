@@ -5,9 +5,11 @@ public class ExplosiveBarrel : MonoBehaviour
 {
     [SerializeField] private float flyForce;
     [SerializeField] private GameObject UI;
+    [SerializeField] private ParticleSystem explosionParticle;
     private Rigidbody rb;
     private bool playerNearby = false;
     private Transform playerTransform;
+    private MeshRenderer mesh;
 
     private bool isExploding = false;
     [SerializeField] private float explodeDuration = 1f;
@@ -17,6 +19,7 @@ public class ExplosiveBarrel : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        mesh = GetComponent<MeshRenderer>();
 
         UI.SetActive(false);
     }
@@ -78,6 +81,11 @@ public class ExplosiveBarrel : MonoBehaviour
 
     void Explode()
     {
+        if (explosionParticle != null)
+        {
+            explosionParticle.Play();
+        }   
+
         Collider[] hits = Physics.OverlapSphere(transform.position, explodeRadius);
 
         foreach (var hit in hits)
@@ -95,7 +103,9 @@ public class ExplosiveBarrel : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        mesh.enabled = false;
+        float time = explosionParticle.main.duration;
+        Destroy(gameObject, time);
     }
 
 }
