@@ -28,7 +28,6 @@ public class SpellCast
     public float duration;
     public float AtkPerSec;
     public float Speed;
-    public List<Element> ApplyElement;
     public CollisionType collisionType;
     public LayerMask enemyLayer;
     public enum CollisionType
@@ -63,9 +62,3 @@ public class SpellCast
     }
 }
 
-[System.Serializable]
-public class Element
-{
-    public string elementName;
-    public float potency;
-}
