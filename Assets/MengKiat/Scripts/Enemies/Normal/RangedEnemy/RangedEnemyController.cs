@@ -33,7 +33,11 @@ public class RangedEnemyController : Enemy
         if (player == null || isStunned) return;
 
         FacePlayer();
-        attackTimer += Time.deltaTime;
+
+        if (state != State.Reposition)
+        {
+            attackTimer += Time.deltaTime;
+        }
 
         switch (state)
         {

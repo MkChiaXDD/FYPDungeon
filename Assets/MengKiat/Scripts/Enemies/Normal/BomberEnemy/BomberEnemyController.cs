@@ -208,7 +208,7 @@ public class BomberEnemyController : Enemy
 
                     // Apply knockback manually
                     hit.attachedRigidbody.velocity = Vector3.zero; // optional: reset current movement
-                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Impulse);
+                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
 
                     // Apply damage
                     dmg.TakeDamage(data.damage);
@@ -225,7 +225,7 @@ public class BomberEnemyController : Enemy
 
                     // Apply knockback
                     hit.attachedRigidbody.velocity = Vector3.zero; // optional reset
-                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Impulse);
+                    hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
                 }
 
                 // Still trigger bomber chain reactions
