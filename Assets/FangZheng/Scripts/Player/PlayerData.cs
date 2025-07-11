@@ -52,6 +52,8 @@ public class PlayerData : MonoBehaviour, IDamageable
     // Elemental status effects
     private Dictionary<ElementType, float> activeElementalEffects = new Dictionary<ElementType, float>();
 
+    [SerializeField] private Canvas DeathCanvas;
+
 
     private void Awake()
     {
@@ -77,6 +79,11 @@ public class PlayerData : MonoBehaviour, IDamageable
             CurrentHealth = CurrentHealth - damage;
             Debug.Log("ouch");
         }
+
+        if (CurrentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     public virtual void Heal(float healAmount)
@@ -93,7 +100,9 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void Die()
     {
+
         Debug.Log("die");
+        DeathCanvas.gameObject.SetActive(true);
     }
 
     public void SetInv(bool state)
