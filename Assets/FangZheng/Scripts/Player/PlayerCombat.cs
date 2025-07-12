@@ -82,7 +82,7 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -146,7 +146,11 @@ public class PlayerCombat : MonoBehaviour
             _isCharging = true;
             _chargeStartTime = Time.time;
             _playerMovement.SetMovementLock(true); // Lock movement during charge
-            ChargingUp?.Invoke();
+            if (Time.time > _lastAttackTime + _currentAttackCooldown) {
+                ChargingUp?.Invoke();
+                Debug.Log("Charging up : " + Time.time + " and " + _lastAttackTime);
+            }
+            
         }
 
         // Execute attack on release
@@ -195,7 +199,7 @@ public class PlayerCombat : MonoBehaviour
             float chargePercent = Mathf.Clamp01((chargeTime - _minChargeTime) / (_maxChargeTime - _minChargeTime));
             float damageMultiplier = 1f + chargePercent;
             float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
-
+            UnCharge?.Invoke();
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
@@ -204,6 +208,7 @@ public class PlayerCombat : MonoBehaviour
             // Light attack
             _currentAttackCooldown = _lightAttackCooldown;
             _lastAttackType = AttackType.Light;
+            UnCharge?.Invoke();
             ExecuteLightAttack();
         }
 
@@ -214,7 +219,7 @@ public class PlayerCombat : MonoBehaviour
                 _currentWeapon.baseDurabilityCost :
                 _currentWeapon.baseDurabilityCost * 2;
 
-
+            UnCharge?.Invoke();
             GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, durabilityCost);
         }
 
