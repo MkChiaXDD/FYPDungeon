@@ -49,12 +49,14 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
     {
-        ParticleSystem HeavyVfxInstance = Instantiate(heavyAttackVFX, center, transform.rotation);
+        Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
+        ParticleSystem HeavyVfxInstance = Instantiate(heavyAttackVFX, center, rotation);
         HeavyVfxInstance.Play();
         Destroy(HeavyVfxInstance.gameObject, 2f);
 
         int scaledDamage = Mathf.RoundToInt(damageAmount * damageMultiplier);
         ApplyAttack(center, radius, scaledDamage, secondaryAttackType, damageMultiplier);
+        PlayHeavyAttackVFX(scaledDamage);
     }
 
     protected virtual void ApplyAttack(Vector3 center, float radius, int damage, PhysicalAttackType physicalType, float intensity = 1f)

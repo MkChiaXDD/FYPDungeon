@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class NormalHammerAttack : BaseAttackScript
 {
-    
+    private int StunStatusEffectID = 0;
     protected override void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
         base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
-        ApplyStatusEffect(hit.gameObject, statusEffects[0]);
+        ApplyStatusEffect(hit.gameObject, statusEffects[StunStatusEffectID]);
     }
 
     public override void ExecuteLightAttack()
@@ -22,7 +22,5 @@ public class NormalHammerAttack : BaseAttackScript
         Destroy(vfx, 2f);
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
-    }
-
-    
+    }   
 }

@@ -422,8 +422,6 @@ public class PlayerCombat : MonoBehaviour
         _currentWeapon = _equippedWeapon.GetComponent<Weapon>();
         _currentBasicAttack = _currentWeapon.weaponData.baseAttackScript;
 
-        Debug.LogWarning("swapped weapons");
-
         if (_currentWeapon != null)
         {
             _currentWeapon.CurrDurability = item.Durability;
