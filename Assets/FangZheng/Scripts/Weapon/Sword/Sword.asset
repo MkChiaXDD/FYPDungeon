@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af60670517e12948af4af7635624c64, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 21300000, guid: 068a541d966439648ad027be5a8c37f3, type: 3}
   itemName: Sword
+  itemIcon: {fileID: 21300000, guid: 068a541d966439648ad027be5a8c37f3, type: 3}
   description: 'dog
 
 '
-  maxStack: 1
-  itemType: 2
+  itemType: 3
+  MaxDurability: 30
   ItemPrefab: {fileID: 8449004803641222730, guid: 283dced21787f2549a3092b952a9fcfa,
     type: 3}
-  MaxDurability: 30
+  maxStack: 1
   spells:
     SpellPrefab: {fileID: 1070103179766844408, guid: a319b700532cfde44a1c4ad64e6ab68f,
       type: 3}
@@ -33,9 +33,10 @@ MonoBehaviour:
     duration: 20
     AtkPerSec: 1
     Speed: 10
-    ApplyElement: []
     collisionType: 1
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
     spellType: 0
+  baseAttackScript: {fileID: 2392847688725395779, guid: 283dced21787f2549a3092b952a9fcfa,
+    type: 3}
