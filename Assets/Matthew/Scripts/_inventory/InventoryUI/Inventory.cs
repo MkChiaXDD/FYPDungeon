@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
     public ItemInstance equippedSlot;
     public int equippedSlotNum = 0;
     public UnityEvent ChangeSlot;
-
+    public UnityEvent ChangeDurability;
     private void Awake()
     {
         PopulateList();
@@ -79,6 +79,7 @@ public class Inventory : MonoBehaviour
         if ((items[itemSlot].Durability - DurabilityUsage) > 0)
         {
             items[itemSlot].Durability -= DurabilityUsage;
+            ChangeDurability?.Invoke();
         }
         else {
             Debug.Log("Breaking " + items[itemSlot].name);

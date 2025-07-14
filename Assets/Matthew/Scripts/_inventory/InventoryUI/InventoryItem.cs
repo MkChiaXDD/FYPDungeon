@@ -1,3 +1,4 @@
+using Cdm.Figma;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,17 +10,29 @@ public class InventoryItem : MonoBehaviour,
 {
     [SerializeField] private TMP_Text countText;
     [SerializeField] private GameObject descriptionBox;
+    [SerializeField] private GameObject DurabilityStorage;
+    [SerializeField] private GameObject DurabilityPrefab;
+    [SerializeField] private GameObject Playerprefab;
 
+    private Inventory inventory;
     private Image itemImage;
     private TMP_Text descriptionText;
     public ItemInstance itemInstance;
     public Transform parentAfterDrag;
 
+    private void OnEnable()
+    {
+        inventory = FindFirstObjectByType<Inventory>();
+        inventory.ChangeDurability.AddListener(ClearAndRenewDur);
+    }
     private void Awake()
     {
         itemImage = GetComponent<Image>();
         descriptionText = descriptionBox.GetComponentInChildren<TMP_Text>();
         descriptionBox.SetActive(false);
+        //DurabilityStorage.SetActive(false);
+        //DurabilityPrefab = DurabilityStorage.GetComponentInChildren<TMP_Text>().gameObject;
+
     }
 
     public void ObtainItem(ItemInstance newItem, int amt)
@@ -27,9 +40,22 @@ public class InventoryItem : MonoBehaviour,
         itemInstance = newItem;
         itemInstance.itemCount = amt;
         itemImage.sprite = itemInstance.icon;
+        ClearAndRenewDur();
         UpdateCount();
     }
 
+    public void ClearAndRenewDur()
+    {
+        foreach (Transform child in DurabilityStorage.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < itemInstance.Durability; i++)
+        {
+            GameObject Orb = Instantiate(DurabilityPrefab , DurabilityStorage.transform);
+        }
+    }
     public ItemInstance GetItem() => itemInstance;
 
     public void UpdateCount() => countText.text = itemInstance.itemCount.ToString();
