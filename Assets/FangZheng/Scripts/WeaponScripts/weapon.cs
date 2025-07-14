@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] public WeaponDatas weaponData;
+    [SerializeField] public WeaponData weaponData;
     [SerializeField] public int CurrDurability;
     [SerializeField] public SpellCast spellCastList;
 

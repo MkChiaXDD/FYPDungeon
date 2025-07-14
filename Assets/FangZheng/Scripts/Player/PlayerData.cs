@@ -65,7 +65,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         {
             Instance = this;
         }
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
 
         CurrentHealth = _MaxHealth;
         ResetToBaseStats();

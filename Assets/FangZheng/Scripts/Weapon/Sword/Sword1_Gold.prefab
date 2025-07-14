@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -2147820696872761682}
   - component: {fileID: 3262499511379049623}
   - component: {fileID: 2647562155385194055}
+  - component: {fileID: 2392847688725395779}
   m_Layer: 0
   m_Name: Sword1_Gold
   m_TagString: Untagged
@@ -111,11 +112,13 @@ MonoBehaviour:
     duration: 0
     AtkPerSec: 0
     Speed: 0
-    ApplyElement: []
     collisionType: 0
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 0
     spellType: 0
-  baseDurabilityUsed: 1
-  skillDurabilityUsed: 3
+  baseDurabilityCost: 1
+  skillDurabilityCost: 3
   broke: 0
   WeaponBreak:
     m_PersistentCalls:
@@ -184,3 +187,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3627685, y: 2.3628883, z: 0.11519314}
   m_Center: {x: 0, y: 0.47956425, z: 0}
+--- !u!114 &2392847688725395779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449004803641222730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb4e932c08038249bdbcee7e91e3dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackElement: 4
+  baseAttackType: 0
+  secondaryAttackType: 0
+  elementalDuration: 5
+  damageAmount: 2
+  knockbackForce: 5
+  attackRadius: 5
+  statusEffects: []
+  lightAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
+    type: 3}
+  heavyAttackVFX: {fileID: 4308418088350387192, guid: 77ecc56b83ca04347bdb9522d8365c85,
+    type: 3}
