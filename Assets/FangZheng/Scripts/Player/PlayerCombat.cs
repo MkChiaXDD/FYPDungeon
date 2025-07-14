@@ -39,7 +39,9 @@ public class PlayerCombat : MonoBehaviour
     [Header("Combat & Weapons")]
     [SerializeField] private Transform _weaponHoldPoint;
     [SerializeField] private Animator _animator;
-    [SerializeField] private BaseAttackScript _basicAttack;
+
+    [SerializeField] private BaseAttackScript _currentBasicAttack;
+    [SerializeField] private BaseAttackScript baseBasicAttack;  
     private GameObject _equippedWeapon;
     public Weapon _currentWeapon;
     private float _lastAttackTime;
@@ -88,6 +90,7 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         _playerMovement = GetComponent<PlayerMovement>();
+        _currentBasicAttack = baseBasicAttack;
     }
 
     private void OnEnable()
@@ -240,9 +243,8 @@ public class PlayerCombat : MonoBehaviour
             StartCoroutine(DashToAttack(attackPosition, true));
         }
         else
-        {
-            
-            _basicAttack.ExecuteLightAttack();
+        {      
+            _currentBasicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
         }
     }
@@ -252,7 +254,7 @@ public class PlayerCombat : MonoBehaviour
         if (_isLockedOn && _targetEnemy != null)
         {
             // Attack in locked direction
-            _basicAttack.ExecuteHeavyAttack(
+            _currentBasicAttack.ExecuteHeavyAttack(
                 _targetEnemy.position,
                 damageMultiplier,
                 aoeRadius
@@ -264,7 +266,7 @@ public class PlayerCombat : MonoBehaviour
             Vector3 attackDirection = _playerMovement.GetDirection();
             Vector3 attackPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z) + attackDirection * 2f;
             
-            _basicAttack.ExecuteHeavyAttack(
+            _currentBasicAttack.ExecuteHeavyAttack(
                 attackPosition,
                 damageMultiplier,
                 aoeRadius
@@ -308,7 +310,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (isLightAttack)
         {
-            _basicAttack.ExecuteLightAttack();
+            _currentBasicAttack.ExecuteLightAttack();
         }
         TriggerAttackAnimation(isLightAttack ? "LightAttack" : "HeavyAttack");
     }
@@ -415,8 +417,13 @@ public class PlayerCombat : MonoBehaviour
 
         _equippedWeapon = Instantiate(item.ItemPrefab, _weaponHoldPoint);
         ConfigureWeaponPhysics(_equippedWeapon);
+        
 
         _currentWeapon = _equippedWeapon.GetComponent<Weapon>();
+        _currentBasicAttack = _currentWeapon.weaponData.baseAttackScript;
+
+        Debug.LogWarning("swapped weapons");
+
         if (_currentWeapon != null)
         {
             _currentWeapon.CurrDurability = item.Durability;
@@ -438,6 +445,7 @@ public class PlayerCombat : MonoBehaviour
         {
             Destroy(_equippedWeapon);
         }
+        _currentBasicAttack = baseBasicAttack;
         _currentWeapon = null;
     }
     #endregion

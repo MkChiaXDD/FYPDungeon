@@ -218,6 +218,10 @@ public class BomberEnemyController : Enemy
             }
             else
             {
+                if (hit.gameObject.GetComponent<IDamageable>() == null)
+                {
+                    return;
+                }
                 if (hit.attachedRigidbody != null)
                 {
                     Vector3 dir = (hit.transform.position - transform.position).normalized;

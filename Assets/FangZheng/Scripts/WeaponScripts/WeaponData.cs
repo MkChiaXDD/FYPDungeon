@@ -4,18 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
-public class WeaponDatas : ItemData
+public class WeaponData : ItemData
 {
-    //string WeaponName;
-    //string Description;
-    //Sprite icon;
-
-    //public GameObject WeaponPrefab;
     public SpellCast spells;
-    //public List<SpellCast> spells;
-
-
+    public BaseAttackScript baseAttackScript;
 }
+
 [System.Serializable]
 public class SpellCast
 {
@@ -43,9 +37,6 @@ public class SpellCast
         Aoe,
         Cast
     }
-
-
-    //public Animation Animation;
 
     public void Initialize(Transform Object)
     {

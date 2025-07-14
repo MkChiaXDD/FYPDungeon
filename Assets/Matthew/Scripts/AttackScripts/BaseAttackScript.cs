@@ -19,6 +19,7 @@ public abstract class BaseAttackScript : MonoBehaviour
     [Header("Visual Effects")]
     [SerializeField] protected ParticleSystem lightAttackVFX;
     [SerializeField] protected ParticleSystem heavyAttackVFX;
+
     protected StaticScreenShake.ShakeParams damageParams = new()
     {
         ShakeType = ShakeType.Translational,
@@ -76,8 +77,22 @@ public abstract class BaseAttackScript : MonoBehaviour
         }
         else
         {
+            target.TakePhysicalDamage(damage, physicalType);
+            ApplyKnockBack(hit.gameObject, knockbackForce * intensity);
+            PlayAttackVFX();
+        }
+    }
+
+    protected virtual void ProcessTargetHit(Collider hit, IDamageable target, int damage, ElementType elementType, float intensity)
+    {
+        if (hit.CompareTag("Object"))
+        {
+            target.TakeElementalDamage(damage, elementType);
+        }
+        else
+        {
             ApplyElementalEffects(hit.gameObject);
-            target.TakeElementalDamage(damage, attackElement);
+            target.TakeElementalDamage(damage, elementType);
             ApplyKnockBack(hit.gameObject, knockbackForce * intensity);
             PlayAttackVFX();
         }

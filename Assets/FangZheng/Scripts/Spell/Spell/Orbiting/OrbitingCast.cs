@@ -21,7 +21,7 @@ public class OrbitingCast : Spell
         GameObject SpawnedOrb = Instantiate(Orb, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));
         
         SpawnedOrb.GetComponent<Orbiting>().Init(spellCastList);
-        SpawnedOrb.GetComponent<Orbiting>().Intitialize(PlayerMovement.Instance.GetThisTransform() , Amount, OrbAttack);
+        SpawnedOrb.GetComponent<Orbiting>().Intitialize(PlayerMovement.Instance.GetTransform() , Amount, OrbAttack);
 
     }
 

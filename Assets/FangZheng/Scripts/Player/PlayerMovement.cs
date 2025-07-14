@@ -115,6 +115,12 @@ public class PlayerMovement : MonoBehaviour
         return (_mousePos - transform.position).normalized;
     }
 
+    public Quaternion GetDirectionQuaternion()
+    {
+        Vector3 direction = GetDirection();
+        return Quaternion.LookRotation(direction);
+    }
+
     private void Dash()
     {
         if (Input.GetKeyDown(KeyCode.Space) && _rb.velocity != Vector3.zero && !_isMovementLocked)
@@ -158,9 +164,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public Transform GetThisTransform()
+    public Transform GetTransform()
     {
         return transform;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
     }
 
     // New method to lock/unlock movement
