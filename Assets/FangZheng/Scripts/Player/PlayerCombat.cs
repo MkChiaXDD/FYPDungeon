@@ -71,8 +71,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject _mimicClonePrefab;
 
 
-    public UnityEvent ChargingUp;
-    public UnityEvent UnCharge;
+    public UnityEvent ChargeUp;
+    public UnityEvent Uncharge;
 
     public static PlayerCombat Instance { get; private set; }
 
@@ -150,7 +150,7 @@ public class PlayerCombat : MonoBehaviour
             _chargeStartTime = Time.time;
             _playerMovement.SetMovementLock(true); // Lock movement during charge
             if (Time.time > _lastAttackTime + _currentAttackCooldown) {
-                ChargingUp?.Invoke();
+                ChargeUp?.Invoke();
                 Debug.Log("Charging up : " + Time.time + " and " + _lastAttackTime);
             }
             
@@ -164,7 +164,7 @@ public class PlayerCombat : MonoBehaviour
 
             float chargeTime = Time.time - _chargeStartTime;
             ExecuteAttack(chargeTime);
-            UnCharge?.Invoke();
+            Uncharge?.Invoke();
         }
 
         // Cancel charge if moving during charge time
@@ -172,7 +172,7 @@ public class PlayerCombat : MonoBehaviour
         {
             _isCharging = false;
             _playerMovement.SetMovementLock(false);
-            UnCharge?.Invoke();
+            Uncharge?.Invoke();
         }
     }
 
@@ -202,7 +202,7 @@ public class PlayerCombat : MonoBehaviour
             float chargePercent = Mathf.Clamp01((chargeTime - _minChargeTime) / (_maxChargeTime - _minChargeTime));
             float damageMultiplier = 1f + chargePercent;
             float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
-            UnCharge?.Invoke();
+            Uncharge?.Invoke();
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
@@ -211,7 +211,7 @@ public class PlayerCombat : MonoBehaviour
             // Light attack
             _currentAttackCooldown = _lightAttackCooldown;
             _lastAttackType = AttackType.Light;
-            UnCharge?.Invoke();
+            Uncharge?.Invoke();
             ExecuteLightAttack();
         }
 
@@ -222,7 +222,7 @@ public class PlayerCombat : MonoBehaviour
                 _currentWeapon.baseDurabilityCost :
                 _currentWeapon.baseDurabilityCost * 2;
 
-            UnCharge?.Invoke();
+            Uncharge?.Invoke();
             GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, durabilityCost);
         }
 
@@ -232,7 +232,7 @@ public class PlayerCombat : MonoBehaviour
             _mimicSpawner.TrySpawnMimic();
         }
 
-        UnCharge?.Invoke();
+        Uncharge?.Invoke();
     }
 
     private void ExecuteLightAttack()

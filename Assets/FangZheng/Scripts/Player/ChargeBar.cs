@@ -1,80 +1,75 @@
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ChargeBar : MonoBehaviour
 {
-
     public PlayerCombat playerCombat;
     public GameObject BarObj;
-    public Slider Bar;
-    public Image BarBorder;
+    public Slider sliderBar;
+    public Image barBorder;
     public float BarCharge;
-    public float BarChargeMax = 2f;
-    public float BarCanHeavey = 0.5f;
-    public Color NormalBarColor;
+    public float MaxChargeTime = 2f;
+    public float MinChargeTime = 0.5f;
+    public Color originalBarColor;
 
-    public bool _IsCharge;
-    public float _StartChargeTimer;
+    public bool _isCharging;
+    public float _chargeTimer;
     private void OnEnable()
     {
-        playerCombat.ChargingUp.AddListener(StartChargeUp);
-        playerCombat.UnCharge.AddListener(End);
+        playerCombat.ChargeUp.AddListener(StartChargeUp);
+        playerCombat.Uncharge.AddListener(ResetCharge);
     }
-    // Start is called before the first frame update
 
-    
+    // Start is called before the first frame update
     void Start()
     {
-        BarChargeMax = playerCombat._maxChargeTime;
-        BarCanHeavey = playerCombat._minChargeTime;
-
-        //OriginalSize = CirculeUI.transform.localScale;
-        //CirculeUI.GetComponent<RectTransform>().
-        Bar.maxValue = BarChargeMax;
-        Bar.value = 0;
-        BarCharge = 0;
-        NormalBarColor = BarBorder.color;
-        BarObj.gameObject.SetActive(false);
+        InitialiseChargeBar();
     }
 
     public void StartChargeUp()
     {
-        BarObj.gameObject.SetActive(true);
-        _IsCharge = true;
-        _StartChargeTimer = 0;
-        BarBorder.color = NormalBarColor;
-
+        BarObj.SetActive(true);
+        _isCharging = true;
+        _chargeTimer = 0;
+        barBorder.color = originalBarColor;
     }
 
     private void Update()
     {
-        if (_IsCharge == true)
+        if (_isCharging == true)
         {
-            _StartChargeTimer += Time.deltaTime;
-            Bar.value = _StartChargeTimer;
-            if (_StartChargeTimer >= BarCanHeavey)
+            _chargeTimer += Time.deltaTime;
+            sliderBar.value = _chargeTimer;
+
+            if (_chargeTimer >= MinChargeTime)
             {
-                BarBorder.color = Color.yellow;
+                barBorder.color = Color.yellow;
             }
 
-            if (_StartChargeTimer >= BarChargeMax)
+            if (_chargeTimer >= MaxChargeTime)
             {
-                BarBorder.color = Color.red;
+                barBorder.color = Color.red;
             }
         }
-
-
     }
 
-    private void End()
+    private void ResetCharge()
     {
-        _IsCharge = false;
-        Bar.value = 0;
-        _StartChargeTimer = 0;
-        BarBorder.color= NormalBarColor;
+        _isCharging = false;
+        sliderBar.value = 0;
+        _chargeTimer = 0;
+        barBorder.color = originalBarColor;
         BarObj.SetActive(false);
     }
 
+    private void InitialiseChargeBar()
+    {
+        MaxChargeTime = playerCombat._maxChargeTime;
+        MinChargeTime = playerCombat._minChargeTime;
+        sliderBar.maxValue = MaxChargeTime;
+        sliderBar.value = 0;
+        BarCharge = 0;
+        originalBarColor = barBorder.color;
+        BarObj.SetActive(false);
+    }
 }

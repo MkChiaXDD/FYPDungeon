@@ -17,6 +17,7 @@ public class WeaponBreak : MonoBehaviour
     {
         
     }
+
     private void Start()
     {
         weaponRenderer = GetComponent<Renderer>();
@@ -62,10 +63,10 @@ public class WeaponBreak : MonoBehaviour
 
         weaponRenderer.materials = dissolveMats;
 
-        StartCoroutine(Dissolving());
+        StartCoroutine(HandleDissolve());
     }
 
-    private IEnumerator Dissolving()
+    private IEnumerator HandleDissolve()
     {
         while (currentDissolve < 1)
         {
@@ -80,5 +81,7 @@ public class WeaponBreak : MonoBehaviour
         }
 
         yield return null;
+
+        Destroy(this.gameObject);
     }
 }
