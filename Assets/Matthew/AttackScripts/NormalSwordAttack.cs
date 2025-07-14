@@ -54,8 +54,11 @@ public class NormalSwordAttack : MonoBehaviour
 
     public void ExecuteLightAttack()
     {
+        Quaternion vfxRotation = transform.rotation * Quaternion.Euler(-90, 0, 0);
         //slashGO.transform.localRotation = Quaternion.Euler(Random.Range(-20 * Mathf.PerlinNoise1D(1), 30 * Mathf.PerlinNoise1D(1)),transform.rotation.y,transform.rotation.z) ;
-        slashVFX.Play();
+        ParticleSystem LightVfxInstance = Instantiate(slashVFX, transform.position, vfxRotation);
+        LightVfxInstance.Play();
+        Destroy(LightVfxInstance.gameObject, 1f);
         // apply damage & knockback
         Collider[] hits = Physics.OverlapSphere(transform.position, slashRadius);
         foreach (var hit in hits)
@@ -180,15 +183,6 @@ public class NormalSwordAttack : MonoBehaviour
         }
     }
 
-    private void DamageEnemy(GameObject enemyTarget)
-    {
-        // When hitting an enemy
-        DamageTypeManager.Instance.ApplyDamage(
-            enemyTarget.GetComponent<ResistanceProfile>(),
-        DamageType.Sharp,
-        50f
-    );
-    }
 
     private void ApplyElementalEffects(GameObject target)
     {

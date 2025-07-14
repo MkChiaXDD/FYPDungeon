@@ -39,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
     [Header("Combat & Weapons")]
     [SerializeField] private Transform _weaponHoldPoint;
     [SerializeField] private Animator _animator;
-    [SerializeField] private NormalSwordAttack _basicAttack;
+    [SerializeField] private BaseAttackScript _basicAttack;
     private GameObject _equippedWeapon;
     public Weapon _currentWeapon;
     private float _lastAttackTime;
@@ -308,7 +308,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (isLightAttack)
         {
-            _basicAttack.ExecuteAttack(AttackType.Light);
+            _basicAttack.ExecuteLightAttack();
         }
         TriggerAttackAnimation(isLightAttack ? "LightAttack" : "HeavyAttack");
     }
