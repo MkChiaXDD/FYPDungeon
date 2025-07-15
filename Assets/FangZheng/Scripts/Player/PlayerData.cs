@@ -332,6 +332,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     {
         if (Input.GetKeyDown(KeyCode.F12))
         {
+            playerCheating = !playerCheating;
             PlayerGeCheat();
         }
     }
@@ -340,10 +341,14 @@ public class PlayerData : MonoBehaviour, IDamageable
     {
         if (!playerCheating)
         {
+            ResetToBaseStats();
             return;
         }
 
         MaxHealth = 1000000;
         CurrentHealth = 1000000;
+
+        
+
     }
 }
