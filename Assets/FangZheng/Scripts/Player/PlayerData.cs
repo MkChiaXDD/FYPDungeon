@@ -54,6 +54,8 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     [SerializeField] private Canvas DeathCanvas;
 
+    private bool playerCheating = false;
+
 
     private void Awake()
     {
@@ -324,5 +326,24 @@ public class PlayerData : MonoBehaviour, IDamageable
     }
 
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => TakeDamage(damage);
- 
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            PlayerGeCheat();
+        }
+    }
+
+    private void PlayerGeCheat()
+    {
+        if (!playerCheating)
+        {
+            return;
+        }
+
+        MaxHealth = 1000000;
+        CurrentHealth = 1000000;
+    }
 }
