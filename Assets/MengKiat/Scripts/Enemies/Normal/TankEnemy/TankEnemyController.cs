@@ -95,6 +95,7 @@ public class TankEnemyController : Enemy
                     }
                 }
 
+                FacePlayer();
                 attackTimer -= Time.deltaTime;
                 if (attackTimer <= 0f)
                 {
@@ -107,6 +108,13 @@ public class TankEnemyController : Enemy
                 RushToBomber(carriedBomber);
                 break;
         }
+    }
+    void FacePlayer()
+    {
+        Vector3 dir = player.position - transform.position;
+        dir.y = 0;
+        if (dir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(dir);
     }
 
     private void ChaseWithAvoidance()
