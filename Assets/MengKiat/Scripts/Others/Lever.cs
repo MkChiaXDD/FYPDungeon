@@ -3,8 +3,11 @@ using UnityEngine;
 public class Lever : MonoBehaviour
 {
     [SerializeField] private GameObject lever;
-    [SerializeField] private Door door;
     [SerializeField] private GameObject canvas;
+
+    [Header("Insert Door")]
+    [SerializeField] private Door door;
+
     public bool isOn = false;
     private bool isColliding = false;
 
@@ -20,6 +23,7 @@ public class Lever : MonoBehaviour
     {
         if (isColliding)
         {
+            Debug.Log("Can be pressed");
             if (Input.GetKeyDown(KeyCode.E))
             {
                 ToggleLever();
@@ -29,7 +33,7 @@ public class Lever : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerBody"))
         {
             isColliding = true;
             canvas.SetActive(true);
@@ -38,7 +42,7 @@ public class Lever : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerBody"))
         {
             isColliding = false;
             canvas.SetActive(false);

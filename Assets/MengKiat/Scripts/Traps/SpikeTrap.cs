@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpikeTrap : MonoBehaviour
 {
     [SerializeField] private int damage = 2;
-    [SerializeField] private float activateDuration = 3f;
+    [SerializeField] private float timeToActivate = 3f;
     [SerializeField] private float activeDuration = 1f;
     [SerializeField] private float knockbackForce = 10f;
     [SerializeField] private GameObject spikes;
@@ -17,7 +17,7 @@ public class SpikeTrap : MonoBehaviour
 
         if (!isActivated)
         {
-            if (timer > activateDuration)
+            if (timer > timeToActivate)
             {
                 Debug.Log("SPIKETRAP: TRAP ACTIVATED!");
                 isActivated = true;
