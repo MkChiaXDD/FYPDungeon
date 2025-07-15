@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
+    [Header("Insert Door")]
     [SerializeField] private Door door;
     private bool isOn = false;
 

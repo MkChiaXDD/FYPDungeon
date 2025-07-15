@@ -16,7 +16,7 @@ namespace RMG
 
         // Reference to the special start room prefab (placed first)
         [SerializeField] private Room startRoom;
-
+        [SerializeField] private Room bossRoomPrefab; // Add this field for your premade boss room
         // Pool of all available room prefabs (excluding start room)
         [SerializeField] private Room[] rooms;
 
@@ -308,7 +308,7 @@ namespace RMG
                 }
             }
 
-            // ✅ Highlight the farthest room
+            // Find farthest room
             Room farthestRoom = null;
             int maxDistance = -1;
             foreach (Room room in spawnedRooms)
@@ -320,31 +320,57 @@ namespace RMG
                 }
             }
 
-            if (farthestRoom != null && farthestRoomMaterial != null)
+            if (farthestRoom != null)
             {
-                // Change material of all renderers in that room
-                MeshRenderer[] renderers = farthestRoom.GetComponentsInChildren<MeshRenderer>();
-                foreach (MeshRenderer renderer in renderers)
+                // Get connection info before destroying the room
+                Vector3 farthestRoomPosition = farthestRoom.transform.position;
+                Quaternion farthestRoomRotation = farthestRoom.transform.rotation;
+                List<Room> connectedRooms = new List<Room>(farthestRoom.connections);
+
+                // Remove old room
+                spawnedRooms.Remove(farthestRoom);
+                Destroy(farthestRoom.gameObject);
+
+                // Instantiate boss room at same position
+                Room bossRoom = Instantiate(bossRoomPrefab, farthestRoomPosition, farthestRoomRotation, transform);
+                bossRoom.Init();
+                spawnedRooms.Add(bossRoom);
+
+                // Reconnect all previous connections
+                foreach (Room connectedRoom in connectedRooms)
                 {
-                    renderer.material = farthestRoomMaterial;
+                    bossRoom.AddConnection(connectedRoom);
+                    connectedRoom.AddConnection(bossRoom);
+                    connectedRoom.connections.Remove(farthestRoom);
+                }
+
+                // Set up boss room
+                bossRoom.gameObject.name = "Boss Room";
+                bossRoom.distanceFromHome = maxDistance;
+
+                // Spawn portal and set up boss
+                Transform spawnPoint = bossRoom.transform.Find("EnemySpawnPoint");
+                if (spawnPoint != null)
+                {
+                    var portalObj = Instantiate(portal, spawnPoint.position * roomSizeMultiplier, Quaternion.identity);
+                    portalObj.SetActive(false);
+                }
+
+                // Choose boss type based on round
+                int round = DifficultyManager.Instance.GetRound();
+                var enemySpawner = FindFirstObjectByType<EnemySpawner>();
+                if (enemySpawner != null)
+                {
+                    if (round % BigBossRounds != 0)
+                    {
+                        enemySpawner.ChooseMiniBoss();
+                    }
+                    else
+                    {
+                        enemySpawner.ChooseBigBoss();
+                    }
                 }
             }
-
-            farthestRoom.gameObject.name = "Farthest Room";
-            farthestRoom.gameObject.AddComponent<FarthestRoom>();
-            int round = DifficultyManager.Instance.GetRound();
-            if (round % BigBossRounds != 0)
-            {
-                FindFirstObjectByType<EnemySpawner>()?.ChooseMiniBoss();
-            }
-            else
-            {
-                FindFirstObjectByType<EnemySpawner>()?.ChooseBigBoss();
-            }
-
-            Transform spawnPoint = farthestRoom.gameObject.transform.Find("EnemySpawnPoint");
-            Instantiate(portal, spawnPoint.position * roomSizeMultiplier, Quaternion.identity);
-            portal.SetActive(false);
         }
     }
 

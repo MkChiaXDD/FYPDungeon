@@ -118,11 +118,11 @@ public class WallTrans : MonoBehaviour
         currentlyTransparentWalls.Add(WallRenderer);
     }
 
-    private void OnDrawGizmos()
-    {
+    //private void OnDrawGizmos()
+    //{
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, player.position );
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawLine(transform.position, player.position );
         
-    }
+    //}
 }

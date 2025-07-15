@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 9185031561284776090}
   - component: {fileID: 7753650494198701122}
   - component: {fileID: 7364192355005753547}
+  - component: {fileID: 7467684310386423114}
   m_Layer: 7
   m_Name: PlayerBody
   m_TagString: PlayerBody
@@ -508,20 +509,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackElement: 4
-  SharpAttackType: 0
-  BluntAttackType: 1
+  baseAttackType: 0
+  secondaryAttackType: 1
   elementalDuration: 5
   damageAmount: 1
   knockbackForce: 10
-  slashRadius: 5
-  poison: {fileID: 11400000, guid: 5e155ddd92350714d819fec51c1f7f3c, type: 2}
-  stun: {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
-  slashGO: {fileID: 1066712663172131563}
-  slashVFX: {fileID: 7207448430502091016}
-  heavySlashGO: {fileID: 9081227854686691549, guid: 77ecc56b83ca04347bdb9522d8365c85,
-    type: 3}
-  heavySlashVFX: {fileID: 4308418088350387192, guid: 77ecc56b83ca04347bdb9522d8365c85,
-    type: 3}
+  attackRadius: 5
+  statusEffects: []
+  lightAttackVFX: {fileID: 0}
+  heavyAttackVFX: {fileID: 0}
 --- !u!114 &797286816022296312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,7 +535,7 @@ MonoBehaviour:
   secondaryAttackType: 1
   elementalDuration: 5
   damageAmount: 2
-  knockbackForce: 10
+  knockbackForce: 50
   attackRadius: 5
   statusEffects:
   - {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
@@ -605,6 +601,28 @@ MonoBehaviour:
   meshRefreshRate: 0.01
   meshDestroyDelay: 0.1
   meshMaterial: {fileID: 2100000, guid: d3ef3e80d96f0464bb5d1860fc43debb, type: 2}
+--- !u!114 &7467684310386423114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862224453572156063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23464385c33a1fc41832ab48b2cc06d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackElement: 4
+  baseAttackType: 0
+  secondaryAttackType: 1
+  elementalDuration: 5
+  damageAmount: 1
+  knockbackForce: 5
+  attackRadius: 5
+  statusEffects: []
+  lightAttackVFX: {fileID: 0}
+  heavyAttackVFX: {fileID: 0}
 --- !u!1 &1039663109148780674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1180,7 @@ Transform:
   - {fileID: 1860584052360023747}
   - {fileID: 3297713763679413179}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1875158068303767876
 Rigidbody:
@@ -1258,6 +1276,9 @@ MonoBehaviour:
   ChangeSlot:
     m_PersistentCalls:
       m_Calls: []
+  ChangeDurability:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7740907624236579539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1290,7 +1311,8 @@ MonoBehaviour:
   _parryZone: {fileID: 2653683474674355295}
   _weaponHoldPoint: {fileID: 5756828072230524705}
   _animator: {fileID: 6072418435860255704}
-  baseBasicAttack: {fileID: 0}
+  _currentBasicAttack: {fileID: 0}
+  baseBasicAttack: {fileID: 8061770018731179795}
   _currentWeapon: {fileID: 0}
   _lightAttackCooldown: 0.5
   _heavyAttackCooldown: 1.5
@@ -1304,10 +1326,10 @@ MonoBehaviour:
     type: 3}
   _mimicClonePrefab: {fileID: 2372583028561593353, guid: dfd7c71cc0e4b254a8ba7f5341ba7f86,
     type: 3}
-  ChargingUp:
+  ChargeUp:
     m_PersistentCalls:
       m_Calls: []
-  UnCharge:
+  Uncharge:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &450010975989994624
@@ -1380,14 +1402,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCombat: {fileID: 7740907624236579539}
   BarObj: {fileID: 124046865189711680}
-  Bar: {fileID: 3731579214407092880}
-  BarBorder: {fileID: 3068999271130889383}
+  sliderBar: {fileID: 3731579214407092880}
+  barBorder: {fileID: 3068999271130889383}
   BarCharge: 0
-  BarChargeMax: 2
-  BarCanHeavey: 0.5
-  NormalBarColor: {r: 0, g: 0, b: 0, a: 0}
-  _IsCharge: 0
-  _StartChargeTimer: 0
+  MaxChargeTime: 2
+  MinChargeTime: 0.5
+  originalBarColor: {r: 0, g: 0, b: 0, a: 0}
+  _isCharging: 0
+  _chargeTimer: 0
 --- !u!1 &3278456829643826320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4747,12 +4769,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b96641527e3db5944a8cf0e195221832, type: 3}
---- !u!1 &1066712663172131563 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8677413115767619063, guid: b96641527e3db5944a8cf0e195221832,
-    type: 3}
-  m_PrefabInstance: {fileID: 8548365094087415580}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &7207448430502091016 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1344294708111461908, guid: b96641527e3db5944a8cf0e195221832,

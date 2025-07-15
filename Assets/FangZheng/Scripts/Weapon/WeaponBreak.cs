@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class WeaponBreak : MonoBehaviour
 {
-    [SerializeField] Material Dissolve_Shader;
-    [SerializeField] float dissolveSpeed = 1f;
+    public Material Dissolve_Shader { get; set; }
+    public float dissolveSpeed { get; set; }
     [SerializeField] string dissolveAmountProperty = "_DissolveAmount";
-    
+
     private Material[] Original_M;
     private Renderer weaponRenderer;
-    private bool WepoanBreak;
     private float currentDissolve = 0;
 
-    private void OnEnable()
-    {
-        
-    }
 
     private void Start()
     {
+        gameObject.GetComponent<BoxCollider>().enabled = false;
         weaponRenderer = GetComponent<Renderer>();
 
         Original_M = weaponRenderer.materials;
@@ -28,16 +24,20 @@ public class WeaponBreak : MonoBehaviour
         StartDisolve();
     }
 
+
+
     private void StartDisolve()
     {
+        gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up, ForceMode.Impulse);
+
         Material[] dissolveMats = new Material[Original_M.Length];
         for (int i = 0; i < dissolveMats.Length; i++)
         {
             dissolveMats[i] = new Material(Dissolve_Shader);
             if (Original_M[i].HasProperty("_BaseMap"))
             {
-                dissolveMats[i].SetTexture("_MainTexture" , Original_M[i].GetTexture("_BaseMap"));
-                
+                dissolveMats[i].SetTexture("_MainTexture", Original_M[i].GetTexture("_BaseMap"));
+
             }
 
             if (Original_M[i].HasProperty("_MetallicGlossMap"))

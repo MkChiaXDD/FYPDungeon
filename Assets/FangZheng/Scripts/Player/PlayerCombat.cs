@@ -45,6 +45,7 @@ public class PlayerCombat : MonoBehaviour
     private GameObject _equippedWeapon;
     public Weapon _currentWeapon;
     private float _lastAttackTime;
+    [SerializeField] private Material breakMaterial;
 
     [Header("Attack Settings")]
     [SerializeField] private float _lightAttackCooldown = 0.5f;
@@ -441,7 +442,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_equippedWeapon != null)
         {
-            Destroy(_equippedWeapon);
+            _equippedWeapon.AddComponent<WeaponBreak>().Dissolve_Shader = breakMaterial;
+            _equippedWeapon.GetComponent<WeaponBreak>().dissolveSpeed = 2;
+
+            _equippedWeapon.gameObject.transform.SetParent(null, true);
+            _equippedWeapon = null;
         }
         _currentBasicAttack = baseBasicAttack;
         _currentWeapon = null;

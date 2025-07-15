@@ -220,7 +220,7 @@ public class BomberEnemyController : Enemy
             {
                 if (hit.gameObject.GetComponent<IDamageable>() == null)
                 {
-                    return;
+                    continue;
                 }
                 if (hit.attachedRigidbody != null)
                 {
