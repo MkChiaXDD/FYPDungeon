@@ -57,6 +57,8 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     private bool playerCheating = false;
 
+    [SerializeField] private DamagedVFX damagedVFX;
+
 
     private void Awake()
     {
@@ -69,6 +71,14 @@ public class PlayerData : MonoBehaviour, IDamageable
             Instance = this;
         }
         //DontDestroyOnLoad(this.gameObject);
+
+        // Get reference to Damageable component
+        //damagedVFX = GetComponentInChildren<DamagedVFX>();
+
+        if (damagedVFX == null)
+        {
+            Debug.LogWarning("Damageable component not found on player!");
+        }
 
         CurrentHealth = _MaxHealth;
         ResetToBaseStats();
@@ -85,6 +95,11 @@ public class PlayerData : MonoBehaviour, IDamageable
         {
             CurrentHealth = CurrentHealth - damage;
             Debug.Log("ouch");
+            // Trigger flash effect
+            if (damagedVFX != null)
+            {
+                damagedVFX.TriggerDamageFlash();
+            }
         }
 
         if (CurrentHealth <= 0)

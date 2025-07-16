@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Pickupable : MonoBehaviour
 {
-    public ItemData drop;
+    public ItemData dropData;
     [SerializeField] private int dropAmt = 1;
     [SerializeField] private float timeToObtain = 0f;
     [SerializeField] private bool PickupAlready = false;
@@ -44,6 +44,8 @@ public class Pickupable : MonoBehaviour
     {
         if (!playerObject.CompareTag(PlayerTag)) return;
 
+        
+
         //AudioManager.Instance.PlaySFX("Pickup");
         AddToInventory(FindObjectOfType<InventoryManager>());
         Destroy(gameObject);
@@ -67,8 +69,8 @@ public class Pickupable : MonoBehaviour
 
     private void AddToInventory(InventoryManager inventory)
     {
-        ItemInstance newDrop = new ItemInstance(drop);
-        //TextManager.TextInstance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);
+        ItemInstance newDrop = new ItemInstance(dropData);
+        TextManager.Instance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);
         inventory.AddItem(newDrop, dropAmt);
         inventory.UpdateInventory();
         PickupAlready = true;

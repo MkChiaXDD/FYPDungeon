@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
     public Sound[] bgm, sfx;
     public AudioSource bgmSource, sfxSource;
 
+     
+
     private void Awake()
     {
         if (Instance == null)
@@ -24,10 +26,10 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayMusic("NatureBGM");
+        PlayBGMusic("NatureBGM");
     }
 
-    public void PlayMusic(string name)
+    public void PlayBGMusic(string name)
     {
         Sound s = Array.Find(bgm, x => x.name == name);
 
@@ -36,42 +38,43 @@ public class AudioManager : MonoBehaviour
             Debug.Log("Sound not found");
         }
         else
-        {          
+        {
             bgmSource.clip = s.clip;
             bgmSource.Play();
         }
     }
 
-    public void PlaySFX(string name)
+
+    public void PlaySFX(string name, bool isPitchRandom = false)
     {
         Sound s = Array.Find(sfx, x => x.name == name);
-        if(s == null)
+
+        if (s == null)
         {
-            Debug.Log("Sound not found");
+            Debug.LogWarning("Sound not found");
+            return;
         }
-        else
+
+
+        if (isPitchRandom)
         {
             //make each sound more varied
             RandomisePitch();
-            sfxSource.PlayOneShot(s.clip);
         }
 
-
+        sfxSource.PlayOneShot(s.clip);
     }
 
     public void PlayOneShotSFX(string name)
     {
         Sound s = Array.Find(sfx, x => x.name == name);
-        
-        if ( s == null)
+
+        if (s == null)
         {
             Debug.Log("no sound");
         }
         else
-        {
-            
-            //make each sound more varied
-            RandomisePitch();
+        {        
             sfxSource.Play();
         }
 
@@ -112,5 +115,9 @@ public class AudioManager : MonoBehaviour
     public void RandomisePitch()
     {
         sfxSource.pitch = UnityEngine.Random.Range(1f, 1.5f);
+    }
+    public void RandomisePitch(float minRange, float maxRange)
+    {
+        sfxSource.pitch = UnityEngine.Random.Range(minRange, maxRange);
     }
 }

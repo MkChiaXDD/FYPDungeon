@@ -51,8 +51,9 @@ public class PlayerCombat : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float _lightAttackCooldown = 0.5f;
     [SerializeField] private float _heavyAttackCooldown = 1.5f;
-    [SerializeField] public float _minChargeTime = 0.5f;
+    [SerializeField] public float _minChargeTime = 0.1f;
     [SerializeField] public float _maxChargeTime = 2f;
+    
     [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
     [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
     [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
@@ -60,9 +61,14 @@ public class PlayerCombat : MonoBehaviour
     private float _currentAttackCooldown;
     private float _chargeStartTime;
     private bool _isCharging;
+    public UnityEvent ChargeUp;
+    public UnityEvent Uncharge;
+
     private AttackType _lastAttackType;
     private bool _canComboContinue;
     private bool _isInComboWindow;
+
+   
 
     [Header("Inventory")]
     [SerializeField] private InventoryManager _inventoryManager;
@@ -73,8 +79,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject _mimicClonePrefab;
 
 
-    public UnityEvent ChargeUp;
-    public UnityEvent Uncharge;
+   
 
     public static PlayerCombat Instance { get; private set; }
 
@@ -153,7 +158,7 @@ public class PlayerCombat : MonoBehaviour
     {
         
         // Start charging heavy attack
-        if (Input.GetMouseButtonDown(0) && Time.time > _lastAttackTime + _currentAttackCooldown)
+        if (Input.GetMouseButtonDown(0) && Time.time + _minChargeTime > _lastAttackTime + _currentAttackCooldown)
         {
             _isCharging = true;
             _chargeStartTime = Time.time;
