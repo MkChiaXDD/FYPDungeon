@@ -28,6 +28,11 @@ public class PlayerMovement : MonoBehaviour
     public bool IsMoving => _input.magnitude > 0.1f && !_isMovementLocked;
     public bool IsMovementLocked => _isMovementLocked;
 
+    private float _speedMultiplier = 1f;
+    private float _baseNormalSpeed;
+    private float _baseDashSpeed;
+    private Coroutine _speedModifierCoroutine;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -42,12 +47,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Start()
     {
-        Addmodifier();
+        ResetSpeedModifiers();
     }
 
     public void OnEnable()
     {
-        playerData.DataChange.AddListener(Addmodifier);
+        playerData.DataChange.AddListener(ResetSpeedModifiers);
     }
 
     private void Update()
@@ -68,11 +73,11 @@ public class PlayerMovement : MonoBehaviour
 
     void GatherInput()
     {
-        _input.x = UnityEngine.Input.GetAxisRaw("Horizontal");
-        _input.z = UnityEngine.Input.GetAxisRaw("Vertical");
+        _input.x = Input.GetAxisRaw("Horizontal");
+        _input.z = Input.GetAxisRaw("Vertical");
     }
 
-    void Addmodifier()
+    void ResetSpeedModifiers()
     {
         _normalspeed = playerData.Speed;
         _dashSpeed = playerData.Dash;
@@ -97,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
 
     void MousePosition()
     {
-        Vector3 mousePos = UnityEngine.Input.mousePosition;
+        Vector3 mousePos = Input.mousePosition;
         Ray ray = _camera.ScreenPointToRay(mousePos);
         RaycastHit[] hits = Physics.RaycastAll(ray);
         foreach (RaycastHit hit in hits)
@@ -156,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 force = _input.ToIso().normalized * _currentSpeed;
 
-        _rb.AddForce(force, ForceMode.Impulse);
+        _rb.AddForce(force, ForceMode.VelocityChange);
 
         if (_rb.velocity.magnitude > _currentSpeed)
         {
@@ -164,15 +169,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
 
-    public Vector3 GetPosition()
-    {
-        return transform.position;
-    }
 
     // New method to lock/unlock movement
     public void SetMovementLock(bool lockState)
@@ -189,6 +186,16 @@ public class PlayerMovement : MonoBehaviour
             // Reset speed when unlocked
             _currentSpeed = _normalspeed;
         }
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
     }
 }
 

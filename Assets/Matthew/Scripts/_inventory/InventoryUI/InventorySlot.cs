@@ -5,10 +5,7 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
     private InventoryManager manager;
-    private Image slotImage;
-
-    private void Awake() => slotImage = GetComponent<Image>();
-
+   
     public void SetManager(InventoryManager newManager) => manager = newManager;
     public InventoryManager GetManager() => manager;
 
