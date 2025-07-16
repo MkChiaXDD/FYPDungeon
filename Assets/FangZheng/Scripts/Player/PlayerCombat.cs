@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -126,6 +127,13 @@ public class PlayerCombat : MonoBehaviour
             if (_visibleEnemies.Count == 0)
             {
                 ClearTargeting();
+            }
+            else
+            {
+                if (_targetIndicator.gameObject.activeInHierarchy == false)
+                {
+                    _targetIndicator.gameObject.SetActive(true);
+                }
             }
         }
 
@@ -596,6 +604,11 @@ public class PlayerCombat : MonoBehaviour
         _currentTargetIndex = 0;
         _autoTargeting = true;
         _targetEnemy = null;
+
+        if (_targetIndicator.gameObject.activeInHierarchy == true)
+        {
+            _targetIndicator.gameObject.SetActive(false);
+        }
     }
     #endregion
 
