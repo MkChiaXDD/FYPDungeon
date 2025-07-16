@@ -17,6 +17,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private int _MimicAmount = 1;
     [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
 
+    public bool _InVin;
     public float _LifeStealAmount;
     public float _DmgStoreAmount;
     public float _CritChance;
@@ -76,15 +77,37 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        if (_isInvulnerable == false)
+        if (_InVin == false)
         {
-            CurrentHealth = CurrentHealth - damage;
-            Debug.Log("ouch");
-        }
+            if (_isInvulnerable == false)
+            {
+                CurrentHealth = CurrentHealth - damage;
+                Debug.Log("ouch");
+            }
 
-        if (CurrentHealth <= 0)
+            if (CurrentHealth <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+    private void Update()
+    {
+        SetInv();
+    }
+
+    public void SetInv()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            Die();
+            if (_InVin == false) {
+                _InVin = true;
+            }
+            else
+            {
+                _InVin = false;
+            }
         }
     }
 
@@ -292,37 +315,40 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void TakeElementalDamage(float damage, ElementType elementType)
     {
-        // Apply elemental effect (burning, electrocution, etc.)
-        ApplyElementalEffect(elementType, damage);
-        TakeDamage(damage);
+        if (_InVin == false) {
+            // Apply elemental effect (burning, electrocution, etc.)
+            ApplyElementalEffect(elementType, damage);
+            TakeDamage(damage);
+        }
     }
 
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
 
-        // Example: Apply burning effect for Pyro damage
-        if (elementType == ElementType.Pyro)
-        {
-            // Start or refresh burning effect*
-            if (TryGetComponent<BurningEffect>(out var burning))
+            // Example: Apply burning effect for Pyro damage
+            if (elementType == ElementType.Pyro)
             {
-                burning.RefreshEffect(damageAmount);
+                // Start or refresh burning effect*
+                if (TryGetComponent<BurningEffect>(out var burning))
+                {
+                    burning.RefreshEffect(damageAmount);
+                }
+                else
+                {
+
+                    burning = gameObject.AddComponent<BurningEffect>();
+                    burning.Initialize(damageAmount, this);
+                }
             }
-            else
-            {
 
-                burning = gameObject.AddComponent<BurningEffect>();
-                burning.Initialize(damageAmount, this);
-            }
-        }
+            // Add similar effects for other elements:
+            // - Hydro: Wet status (increased Electro damage)
+            // - Electro: Stun effect
+            // - Cryo: Slow movement
 
-        // Add similar effects for other elements:
-        // - Hydro: Wet status (increased Electro damage)
-        // - Electro: Stun effect
-        // - Cryo: Slow movement
-
-        // Track elemental effect for visual feedback
-        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
+            // Track elemental effect for visual feedback
+            activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
+        
     }
 
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => TakeDamage(damage);
