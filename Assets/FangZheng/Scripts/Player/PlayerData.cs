@@ -26,7 +26,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public bool _Mimic;
 
-    
+
     public bool _Influence;
     public bool _Link;
     public bool _Perfection;
@@ -79,36 +79,47 @@ public class PlayerData : MonoBehaviour, IDamageable
     {
         if (_InVin == false)
         {
-            if (_isInvulnerable == false)
-            {
-                CurrentHealth = CurrentHealth - damage;
-                Debug.Log("ouch");
-            }
-
-            if (CurrentHealth <= 0)
-            {
-                Die();
-            }
+            return;
         }
+        if (_isInvulnerable == false)
+        {
+            CurrentHealth = CurrentHealth - damage;
+            Debug.Log("ouch");
+        }
+
+        if (CurrentHealth <= 0)
+        {
+            Die();
+        }
+
     }
 
     private void Update()
     {
-        SetInv();
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SetInv();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            playerCheating = !playerCheating;
+            PlayerGeCheat();
+        }
     }
 
     public void SetInv()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+
+        if (_InVin == false)
         {
-            if (_InVin == false) {
-                _InVin = true;
-            }
-            else
-            {
-                _InVin = false;
-            }
+            _InVin = true;
         }
+        else
+        {
+            _InVin = false;
+        }
+
     }
 
     public virtual void Heal(float healAmount)
@@ -241,7 +252,8 @@ public class PlayerData : MonoBehaviour, IDamageable
                     case Effect.EffectType.Mimic:
                         _Mimic = true;
                         //PlayerCombat.Instance.EnableMimic(_Mimic);
-                        if (mimic == null) {
+                        if (mimic == null)
+                        {
                             mimic = this.AddComponent<MimicSpawner>();
                             PlayerCombat.Instance.SetUpMimic(mimic);
                         }
@@ -267,27 +279,29 @@ public class PlayerData : MonoBehaviour, IDamageable
 
                         break;
                     case Effect.EffectType.MimicCastAmount:
-                    MimicCount += (int)effect.ModifierValue;
+                        MimicCount += (int)effect.ModifierValue;
                         break;
                 }
             }
         }
-        if (MaxHealth <= 0 ) {
+        if (MaxHealth <= 0)
+        {
             MaxHealth = 1;
-            
+
         }
 
-        if(CurrentHealth > MaxHealth)
+        if (CurrentHealth > MaxHealth)
         {
             CurrentHealth = MaxHealth;
         }
 
-        if (Damage <= 0 )
+        if (Damage <= 0)
         {
             Damage = 1;
         }
 
-        if (Speed <= 0) {
+        if (Speed <= 0)
+        {
             Speed = 0.1f;
         }
 
@@ -309,59 +323,53 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     }
 
-  
+
 
 
 
     public void TakeElementalDamage(float damage, ElementType elementType)
     {
-        if (_InVin == false) {
-            // Apply elemental effect (burning, electrocution, etc.)
-            ApplyElementalEffect(elementType, damage);
-            TakeDamage(damage);
+        if (_InVin == false)
+        {
+            return;
         }
+        // Apply elemental effect (burning, electrocution, etc.)
+        ApplyElementalEffect(elementType, damage);
+        TakeDamage(damage);
+
     }
 
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
 
-            // Example: Apply burning effect for Pyro damage
-            if (elementType == ElementType.Pyro)
+        // Example: Apply burning effect for Pyro damage
+        if (elementType == ElementType.Pyro)
+        {
+            // Start or refresh burning effect*
+            if (TryGetComponent<BurningEffect>(out var burning))
             {
-                // Start or refresh burning effect*
-                if (TryGetComponent<BurningEffect>(out var burning))
-                {
-                    burning.RefreshEffect(damageAmount);
-                }
-                else
-                {
-
-                    burning = gameObject.AddComponent<BurningEffect>();
-                    burning.Initialize(damageAmount, this);
-                }
+                burning.RefreshEffect(damageAmount);
             }
+            else
+            {
 
-            // Add similar effects for other elements:
-            // - Hydro: Wet status (increased Electro damage)
-            // - Electro: Stun effect
-            // - Cryo: Slow movement
+                burning = gameObject.AddComponent<BurningEffect>();
+                burning.Initialize(damageAmount, this);
+            }
+        }
 
-            // Track elemental effect for visual feedback
-            activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
-        
+        // Add similar effects for other elements:
+        // - Hydro: Wet status (increased Electro damage)
+        // - Electro: Stun effect
+        // - Cryo: Slow movement
+
+        // Track elemental effect for visual feedback
+        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
+
     }
 
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => TakeDamage(damage);
 
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-            playerCheating = !playerCheating;
-            PlayerGeCheat();
-        }
-    }
 
     private void PlayerGeCheat()
     {
@@ -374,7 +382,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         MaxHealth = 1000000;
         CurrentHealth = 1000000;
 
-        
+
 
     }
 }

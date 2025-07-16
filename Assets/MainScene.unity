@@ -131,6 +131,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5994782545432060766, guid: 7dd8544c4e1ea9440a0e244a7b339edd,
+        type: 3}
+      propertyPath: _dropItem.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2863340710718266253, guid: 7dd8544c4e1ea9440a0e244a7b339edd,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -226,7 +231,13 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7927074470257955095, guid: 7dd8544c4e1ea9440a0e244a7b339edd,
+        type: 3}
+      propertyPath: dropSystem
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -5994782545432060766, guid: 7dd8544c4e1ea9440a0e244a7b339edd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -493,6 +504,12 @@ PrefabInstance:
       propertyPath: BigBossRounds
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 5852643766391408839, guid: b8a12971664a0434a92e65e3a8eaac00,
+        type: 3}
+      propertyPath: bossRoomPrefab
+      value: 
+      objectReference: {fileID: 114567647249888680, guid: 84aad81eb8b438945a3988263c35a57a,
+        type: 3}
     - target: {fileID: 5852643766391408839, guid: b8a12971664a0434a92e65e3a8eaac00,
         type: 3}
       propertyPath: rooms.Array.size
@@ -1197,8 +1214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e3158cb2cdae4588fcd4fbbf1ec6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dissolve_Shader: {fileID: 2100000, guid: 9f8259925f8e2e04583f9fa485146823, type: 2}
-  dissolveSpeed: 0.5
   dissolveAmountProperty: _DissolveAmount
 --- !u!1001 &1889198289
 PrefabInstance:
@@ -1282,7 +1297,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: bf37d8c541324de4581048738c88decc, type: 2}
+      objectReference: {fileID: 2100000, guid: 3b06d087f9bfc8e43b3021937d61cc67, type: 2}
     - target: {fileID: 919132149155446097, guid: 2bc22e55426a81e41a99e2ca9b995476,
         type: 3}
       propertyPath: m_Name
