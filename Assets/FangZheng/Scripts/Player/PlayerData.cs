@@ -87,7 +87,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        if (_InVin == false)
+        if (_InVin)
         {
             return;
         }

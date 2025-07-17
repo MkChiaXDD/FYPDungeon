@@ -70,7 +70,7 @@ public class Pickupable : MonoBehaviour
     private void AddToInventory(InventoryManager inventory)
     {
         ItemInstance newDrop = new ItemInstance(dropData);
-        TextManager.Instance.CreateText(new Vector3(350, 800, 1), "Picked up " + newDrop.name, Color.white);
+        
         inventory.AddItem(newDrop, dropAmt);
         inventory.UpdateInventory();
         PickupAlready = true;
