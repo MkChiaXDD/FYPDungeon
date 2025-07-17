@@ -7,10 +7,21 @@ public class SpikeTrap : MonoBehaviour
     [SerializeField] private float activeDuration = 1f;
     [SerializeField] private float knockbackForce = 10f;
     [SerializeField] private GameObject spikes;
+    [SerializeField] private float spikeMoveSpeed = 5f;
+    [SerializeField] private float spikeForwardDistance = 1f;
+
     private float timer;
     private bool isActivated = false;
 
-    // Update is called once per frame
+    private Vector3 initialPos;
+    private Vector3 extendedPos;
+
+    private void Start()
+    {
+        initialPos = spikes.transform.localPosition;
+        extendedPos = initialPos + Vector3.forward * spikeForwardDistance;
+    }
+
     void Update()
     {
         timer += Time.deltaTime;
@@ -23,7 +34,9 @@ public class SpikeTrap : MonoBehaviour
                 isActivated = true;
                 timer = 0;
             }
-            spikes.SetActive(false);
+
+            // Move spikes back (retracted)
+            spikes.transform.localPosition = Vector3.MoveTowards(spikes.transform.localPosition, initialPos, spikeMoveSpeed * Time.deltaTime);
         }
         else
         {
@@ -33,7 +46,9 @@ public class SpikeTrap : MonoBehaviour
                 isActivated = false;
                 timer = 0;
             }
-            spikes.SetActive(true);
+
+            // Move spikes forward (extended)
+            spikes.transform.localPosition = Vector3.MoveTowards(spikes.transform.localPosition, extendedPos, spikeMoveSpeed * Time.deltaTime);
         }
     }
 
@@ -47,7 +62,7 @@ public class SpikeTrap : MonoBehaviour
             if (rb != null)
             {
                 Vector3 knockbackDir = (other.transform.position - transform.position).normalized;
-                knockbackDir.y = 0f; // Optional: prevent vertical launch
+                knockbackDir.y = 0f;
                 rb.AddForce(knockbackDir * knockbackForce, ForceMode.Impulse);
 
                 if (other.TryGetComponent(out IDamageable damageable))
