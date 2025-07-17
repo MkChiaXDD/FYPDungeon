@@ -30,6 +30,10 @@ public class SpikeTrap : MonoBehaviour
         {
             if (timer > timeToActivate)
             {
+                if (SoundManager.Instance != null)
+                {
+                    SoundManager.Instance.PlaySFX("Spike");
+                }
                 Debug.Log("SPIKETRAP: TRAP ACTIVATED!");
                 isActivated = true;
                 timer = 0;
