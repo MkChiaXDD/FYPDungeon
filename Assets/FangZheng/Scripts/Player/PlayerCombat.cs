@@ -260,6 +260,11 @@ public class PlayerCombat : MonoBehaviour
         {      
             _currentBasicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
+
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlaySFX("BasicAttack");
+            }
         }
     }
 
@@ -325,6 +330,10 @@ public class PlayerCombat : MonoBehaviour
         if (isLightAttack)
         {
             _currentBasicAttack.ExecuteLightAttack();
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlaySFX("BasicAttack");
+            }
         }
         TriggerAttackAnimation(isLightAttack ? "LightAttack" : "HeavyAttack");
     }
