@@ -169,6 +169,11 @@ public class BomberEnemyController : Enemy
         if (circleIndicator != null)
             circleIndicator.SetActive(true);
 
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlaySFX("BomberChargeUp");
+        }
+
         boutaDie = true;
         isExploding = true;
 
@@ -251,6 +256,11 @@ public class BomberEnemyController : Enemy
 
         if (explodingParticle != null)
             explodingParticle.Play();
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlaySFX("BomberExplode");
+        }
 
         float duration = explodingParticle.main.duration;
         Destroy(gameObject, duration);

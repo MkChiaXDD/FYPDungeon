@@ -101,6 +101,7 @@ public class RangedEnemyController : Enemy
             if (b != null)
             {
                 Vector3 dir = player.position - transform.position;
+                dir = new Vector3(dir.x, 0, dir.z);
                 b.Initialize(dir);
                 b.SetDamage(data.damage);
             }
