@@ -93,7 +93,7 @@ public class EnemySpawner : MonoBehaviour
                     }
 
                     GameObject enemyInstance = Instantiate(chosenEnemy, spawnPos, Quaternion.identity, enemyParent);
-                    enemyInstance.transform.parent = room.transform;
+                    //enemyInstance.transform.parent = room.transform;
                 }
 
             }
