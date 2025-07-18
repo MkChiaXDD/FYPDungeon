@@ -79,7 +79,10 @@ public class SoundManager : MonoBehaviour
     {
         if (sfxDict.ContainsKey(clipName))
         {
+            sfxSource.clip = sfxDict[clipName];
             sfxSource.PlayOneShot(sfxDict[clipName]);
+            sfxSource.Play();
+            Debug.LogWarning("this is played" + clipName);
         }
         else
         {

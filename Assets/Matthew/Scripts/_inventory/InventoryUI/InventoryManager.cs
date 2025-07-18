@@ -229,6 +229,9 @@ public class InventoryManager : MonoBehaviour
         if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
             return null;
 
+
+        
+
         return inventory.GetItem(inventory.equippedSlotNum);
     }
 
@@ -260,6 +263,7 @@ public class InventoryManager : MonoBehaviour
             if (inventorySlots[i].TryGetComponent<Image>(out var slotImage))
             {
                 slotImage.sprite = (i == slotIndex) ? highlightedTex : normalTex;
+               
             }
         }
     }

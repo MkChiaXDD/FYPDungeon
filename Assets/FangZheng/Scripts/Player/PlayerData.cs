@@ -70,15 +70,8 @@ public class PlayerData : MonoBehaviour, IDamageable
         {
             Instance = this;
         }
-        //DontDestroyOnLoad(this.gameObject);
+     
 
-        // Get reference to Damageable component
-        //damagedVFX = GetComponentInChildren<DamagedVFX>();
-
-        if (damagedVFX == null)
-        {
-            Debug.LogWarning("Damageable component not found on player!");
-        }
 
         CurrentHealth = _MaxHealth;
         ResetToBaseStats();
