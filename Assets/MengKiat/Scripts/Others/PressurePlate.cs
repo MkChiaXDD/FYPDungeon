@@ -1,31 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
     [Header("Insert Door")]
-    [SerializeField] private Door door;
+    [SerializeField] private List<Door> doors;
     private bool isOn = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            isOn = true;
-            ToggleDoor();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isOn = false;
+            isOn = !isOn;
             ToggleDoor();
         }
     }
 
     private void ToggleDoor()
     {
-        door.ToggleDoor(isOn);
+        foreach (Door door in doors)
+        {
+            door.ToggleDoor(isOn);
+        }
     }
 }
