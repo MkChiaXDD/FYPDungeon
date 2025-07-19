@@ -33,9 +33,19 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (Room room in allRooms)
         {
-            Transform spawnPoint = room.transform.Find("EnemySpawnPoint");
+            // Get all child transforms that contain "EnemySpawnPoint" in their name
+            Transform[] spawnPoints = room.GetComponentsInChildren<Transform>();
+            List<Transform> validSpawnPoints = new List<Transform>();
 
-            if (spawnPoint != null)
+            foreach (Transform t in spawnPoints)
+            {
+                if (t.name.Contains("EnemySpawnPoint"))
+                {
+                    validSpawnPoints.Add(t);
+                }
+            }
+
+            if (validSpawnPoints.Count > 0)
             {
                 int round = diffMgr.GetRound();
                 int minEnemies = diffMgr.GetMinEnemies();
@@ -44,6 +54,8 @@ public class EnemySpawner : MonoBehaviour
 
                 for (int i = 0; i < numOfEnemies; i++)
                 {
+                    // Pick a random spawn point from the available ones
+                    Transform spawnPoint = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
                     Vector3 spawnOffset = new Vector3(Random.Range(-offSet, offSet), 0, Random.Range(-offSet, offSet));
                     Vector3 spawnPos = spawnPoint.position + spawnOffset;
 
@@ -80,7 +92,7 @@ public class EnemySpawner : MonoBehaviour
                             else if (name.Contains("bomber") && round >= RoundToSpawnBomber)
                                 availableEnemies.Add(enemy);
                             else if (!name.Contains("fast") && !name.Contains("ranged") && !name.Contains("tank") && !name.Contains("bomber") && !name.Contains("healer"))
-                                availableEnemies.Add(enemy); // Basic/default enemies only (not healer)
+                                availableEnemies.Add(enemy); // Basic/default enemies only
                         }
 
                         if (availableEnemies.Count == 0)
@@ -93,15 +105,14 @@ public class EnemySpawner : MonoBehaviour
                     }
 
                     GameObject enemyInstance = Instantiate(chosenEnemy, spawnPos, Quaternion.identity, enemyParent);
-                    //enemyInstance.transform.parent = room.transform;
                 }
-
             }
             else
             {
                 Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
         }
+
     }
 
     public void ChooseMiniBoss()
