@@ -20,6 +20,8 @@ public class Door : MonoBehaviour
     {
         originalPosition = transform.position;
         originalRotation = transform.localRotation;
+
+        ToggleDoor(isActive);
     }
 
     public void ToggleDoor(bool isOpen)
@@ -33,7 +35,7 @@ public class Door : MonoBehaviour
         }
         else
         {
-            transform.localRotation = Quaternion.Euler(closedRotation); // Or originalRotation if needed
+            transform.localRotation = originalRotation; // Or originalRotation if needed
 
             float yOffset = isOpen ? liftAmount : 0f;
             transform.position = originalPosition + new Vector3(0f, yOffset, 0f);
