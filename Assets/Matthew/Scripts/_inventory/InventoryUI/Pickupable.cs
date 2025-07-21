@@ -74,6 +74,7 @@ public class Pickupable : MonoBehaviour
         inventory.AddItem(newDrop, dropAmt);
         inventory.UpdateInventory();
         PickupAlready = true;
-        GetComponent<BoxCollider>().isTrigger = true;
+        
+        GetComponent<Collider>().isTrigger = true;
     }
 }

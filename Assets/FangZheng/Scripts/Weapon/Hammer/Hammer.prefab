@@ -36,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6729255124254305624
 MeshFilter:
@@ -134,7 +134,8 @@ MonoBehaviour:
   damageAmount: 2
   knockbackForce: 5
   attackRadius: 5
-  statusEffects: []
+  statusEffects:
+  - {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
   lightAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
     type: 3}
   heavyAttackVFX: {fileID: 4308418088350387192, guid: 77ecc56b83ca04347bdb9522d8365c85,

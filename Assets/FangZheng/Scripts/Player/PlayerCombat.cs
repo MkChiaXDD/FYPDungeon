@@ -195,9 +195,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && _currentWeapon != null)
         {
-            _currentWeapon.Cast();
-
-            GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, _currentWeapon.skillDurabilityCost);
+            _currentWeapon.Cast();       
         }
     }
 
@@ -235,6 +233,8 @@ public class PlayerCombat : MonoBehaviour
             int durabilityCost = _lastAttackType == AttackType.Light ?
                 _currentWeapon.baseDurabilityCost :
                 _currentWeapon.baseDurabilityCost * 2;
+
+            Debug.LogWarning(durabilityCost);
 
             Uncharge?.Invoke();
             GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, durabilityCost);

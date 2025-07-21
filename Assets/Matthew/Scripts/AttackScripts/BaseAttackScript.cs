@@ -45,6 +45,8 @@ public abstract class BaseAttackScript : MonoBehaviour
         LightVfxInstance.Play();
         Destroy(LightVfxInstance.gameObject, 1f);
         ApplyAttack(transform.position, attackRadius, damageAmount, baseAttackType);
+
+        Debug.LogWarning(baseAttackType);
     }
 
     public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
