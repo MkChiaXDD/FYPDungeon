@@ -16,9 +16,12 @@ public class HealthBar : MonoBehaviour
 
     void Start()
     {
-        health = healthMax;
-        targetFillAmount = healthMax / healthMax;
-        healthAmountMaterial.SetFloat("_AmountOfLiquid", healthMax / healthMax);
+        Initialise();
+    }
+
+    private void OnDestroy()
+    {
+        Initialise(); //call again so th
     }
 
     void Update()
@@ -67,5 +70,12 @@ public class HealthBar : MonoBehaviour
             // Wait until next frame
             yield return null;
         }
+    }
+
+    private void Initialise()
+    {
+        health = healthMax;
+        targetFillAmount = healthMax / healthMax;
+        healthAmountMaterial.SetFloat("_AmountOfLiquid", healthMax / healthMax);
     }
 }
