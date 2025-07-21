@@ -38,7 +38,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public UnityEvent DataChange;
 
-    public float CurrentHealth { get; private set; }
+    public float CurrentHealth { get;  set; }
     public float MaxHealth { get; private set; }
     public bool _isInvulnerable { get; private set; }
     public int Damage { get; private set; }
@@ -135,6 +135,8 @@ public class PlayerData : MonoBehaviour, IDamageable
         if (CurrentHealth < MaxHealth)
         {
             CurrentHealth += healAmount;
+
+            Debug.Log("healed " + healAmount);
             if (CurrentHealth > MaxHealth)
             {
                 CurrentHealth = MaxHealth;
