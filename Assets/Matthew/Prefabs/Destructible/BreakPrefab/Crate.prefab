@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
@@ -31,17 +31,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 8.296163
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: -3.4087367
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
@@ -82,11 +82,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1f61609ecc9a4f34b8d74d7b86f73bb0, type: 2}
+      objectReference: {fileID: 2100000, guid: 6fb87792f1cef09408ed96cead5d1cdb, type: 2}
     - target: {fileID: 919132149155446097, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_Name
-      value: Crate 1 Variant
+      value: Crate
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -132,7 +132,7 @@ MonoBehaviour:
   dropSystem: {fileID: -5994782545432060766}
   explodeRange: 1.5
   explosionRadius: 3
-  explosionForce: 5
+  explosionForce: 50
   explosionUpwardModifier: 1
   everyMask:
     serializedVersion: 2
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dropItem:
-  - _dropItemPrefab: {fileID: 0}
+  - _dropItemPrefab: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
+      type: 3}
     _dropRate: 0
   _dropHeight: 3.5

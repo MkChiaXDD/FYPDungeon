@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Destroy : MonoBehaviour
 {
-    [SerializeField] private float DestroyCountdownDuration = 5.0f;
+    [SerializeField] private float DestroyCountdownDuration = 3.0f;
     // Start is called before the first frame update
     void Start()
     { 

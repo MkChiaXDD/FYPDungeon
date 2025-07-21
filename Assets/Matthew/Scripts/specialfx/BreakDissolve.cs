@@ -2,24 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponBreak : MonoBehaviour
+public class BreakDissolve : MonoBehaviour
 {
-    public Material Dissolve_Shader { get; set; }
-    public float dissolveSpeed { get; set; }
+    public Material Dissolve_Shader;
+    public float DissolveSpeed { get; set; }
     [SerializeField] string dissolveAmountProperty = "_DissolveAmount";
 
     private Material[] Original_M;
-    private Renderer weaponRenderer;
+    private MeshRenderer meshRenderer;
     private float currentDissolve = 0;
 
 
     private void Start()
     {
-        if (gameObject.GetComponent<BoxCollider>())
-        gameObject.GetComponent<BoxCollider>().enabled = false;
-        weaponRenderer = GetComponent<Renderer>();
 
-        Original_M = weaponRenderer.materials;
+        meshRenderer = GetComponent<MeshRenderer>();
+
+        Original_M = meshRenderer.materials;
         currentDissolve = 0;
 
         StartDisolve();
@@ -35,6 +34,7 @@ public class WeaponBreak : MonoBehaviour
         for (int i = 0; i < dissolveMats.Length; i++)
         {
             dissolveMats[i] = new Material(Dissolve_Shader);
+
             if (Original_M[i].HasProperty("_BaseMap"))
             {
                 dissolveMats[i].SetTexture("_MainTexture", Original_M[i].GetTexture("_BaseMap"));
@@ -62,7 +62,7 @@ public class WeaponBreak : MonoBehaviour
             }
         }
 
-        weaponRenderer.materials = dissolveMats;
+        meshRenderer.materials = dissolveMats;
 
         StartCoroutine(HandleDissolve());
     }
@@ -71,7 +71,7 @@ public class WeaponBreak : MonoBehaviour
     {
         while (currentDissolve < 1)
         {
-            currentDissolve += Time.deltaTime * dissolveSpeed;
+            currentDissolve += Time.deltaTime * DissolveSpeed;
 
             foreach (var mat in GetComponent<Renderer>().materials)
             {

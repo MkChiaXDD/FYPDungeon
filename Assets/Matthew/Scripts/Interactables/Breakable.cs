@@ -36,7 +36,7 @@ public class Breakable : MonoBehaviour, IDamageable
                     transform.position,        // origin
                     explosionRadius,           // radius
                     explosionUpwardModifier,   // upwards modifier
-                    ForceMode.Impulse          // instant burst
+                    ForceMode.Force          // instant burst
                 );
             }
         }
