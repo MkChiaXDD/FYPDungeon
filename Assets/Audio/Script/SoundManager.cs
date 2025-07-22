@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class SoundManager : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class SoundManager : MonoBehaviour
 
     [Header("SFX Clips")]
     [SerializeField] private List<AudioClip> sfxClips = new List<AudioClip>();
+
+    [Header("Player")]
+    [SerializeField] private GameObject Player;
+    [SerializeField] private float Hearing_Distance;
 
     private Dictionary<string, AudioClip> musicDict;
     private Dictionary<string, AudioClip> sfxDict;
@@ -75,11 +80,22 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySFX(string clipName)
+    public void PlaySFX(string clipName , GameObject obj , bool DoesDitanceEffect = true)
     {
         if (sfxDict.ContainsKey(clipName))
         {
             sfxSource.clip = sfxDict[clipName];
+
+            float distance = (Player.transform.position - obj.transform.position).magnitude;
+
+            if (DoesDitanceEffect && distance > Hearing_Distance)
+            {
+ 
+                return;
+            }
+
+            float volume = DoesDitanceEffect ? Mathf.Clamp01(1 - (distance / Hearing_Distance)) : 1f;
+
             sfxSource.PlayOneShot(sfxDict[clipName]);
             sfxSource.Play();
             Debug.LogWarning("this is played" + clipName);

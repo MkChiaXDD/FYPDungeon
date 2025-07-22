@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
@@ -32,7 +33,8 @@ public class SpikeTrap : MonoBehaviour
             {
                 if (SoundManager.Instance != null)
                 {
-                    SoundManager.Instance.PlaySFX("Spike");
+                    SoundManager.Instance.PlaySFX("Spike", this.gameObject);
+
                 }
                 Debug.Log("SPIKETRAP: TRAP ACTIVATED!");
                 isActivated = true;

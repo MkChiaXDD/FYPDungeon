@@ -19,7 +19,7 @@ public class NormalBasicAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("BasicAttack");
+        SoundManager.Instance.PlaySFX("BasicAttack", this.gameObject);
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }

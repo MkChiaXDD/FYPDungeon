@@ -415,6 +415,7 @@ GameObject:
   - component: {fileID: 7364192355005753547}
   - component: {fileID: 7467684310386423114}
   - component: {fileID: 5154216621231534579}
+  - component: {fileID: 1052761126325800875}
   m_Layer: 7
   m_Name: PlayerBody
   m_TagString: PlayerBody
@@ -646,6 +647,14 @@ MonoBehaviour:
   statusEffects: []
   lightAttackVFX: {fileID: 0}
   heavyAttackVFX: {fileID: 0}
+--- !u!81 &1052761126325800875
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862224453572156063}
+  m_Enabled: 1
 --- !u!1 &1039663109148780674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1747,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3023764888954098219}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &7307389256687057879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3463,7 +3472,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7363408003974165925}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &1743031411753436657
 MonoBehaviour:
   m_ObjectHideFlags: 0

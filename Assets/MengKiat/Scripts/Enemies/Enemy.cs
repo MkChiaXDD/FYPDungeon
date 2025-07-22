@@ -143,7 +143,7 @@ public class Enemy : MonoBehaviour, IDamageable
         //PlayDamageVFX();
         PlayHitEffect();
         Debug.Log(name + " Get Hit: " + amount);
-        SoundManager.Instance.PlaySFX("HitSFX");
+        SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
 
         if (currentHealth <= 0f)
             Die();
