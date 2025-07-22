@@ -65,14 +65,11 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void ShieldTakeDamage(float amount, PhysicalAttackType physicalAttackType)
     {
-
-
-
         EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
         float currentShieldHealth = shield.GetShieldHp();
         if (currentShieldHealth > 0)
         {
-            shield.HitShield(amount,physicalAttackType);
+            shield.HitShield(amount, physicalAttackType);
             return;
         }
 
@@ -87,19 +84,18 @@ public class Enemy : MonoBehaviour, IDamageable
         UpdateHealthBar();
         ParticalManager.Instance.Bleed(this.transform);
         //PlayDamageVFX();
-        //TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
         Debug.Log(name + " Get Hit: " + amount);
+        SoundManager.Instance.PlaySFX("HitSFX");
 
-            AudioManager.Instance.PlaySFX("HitSFX");
         if (currentHealth <= 0f)
             Die();
 
 
-        
+
     }
 
     public void TakeElementalDamage(float amount, ElementType elementType)
-    {  
+    {
         // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
         float finalDamage = amount / resistanceMultiplier;
@@ -125,7 +121,7 @@ public class Enemy : MonoBehaviour, IDamageable
         float resistanceMultiplier = GetResistanceMultiplier(attackType);
         float finalDamage = damage / resistanceMultiplier;
 
-    
+
         TakeDamage(finalDamage);
     }
 
@@ -146,7 +142,7 @@ public class Enemy : MonoBehaviour, IDamageable
         return elementType switch
         {
             PhysicalAttackType.Sharp => pyroResistance,
-            PhysicalAttackType.Blunt => hydroResistance,      
+            PhysicalAttackType.Blunt => hydroResistance,
             _ => 1f
         };
     }

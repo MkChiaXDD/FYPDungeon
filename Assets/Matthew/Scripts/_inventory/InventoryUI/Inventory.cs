@@ -93,7 +93,7 @@ public class Inventory : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
             {
-                AudioManager.Instance.PlaySFX("InventorySelect");
+                SoundManager.Instance.PlaySFX("InventorySelect");
                 Debug.Log("sguds");
                 equippedSlot = items[i];
                 equippedSlotNum = i;

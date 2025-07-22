@@ -93,7 +93,7 @@ public class PlayerData : MonoBehaviour, IDamageable
             {
                 damagedVFX.TriggerDamageFlash();
             }
-            AudioManager.Instance.PlaySFX("HitSFX");
+            SoundManager.Instance.PlaySFX("HitSFX");
         }
 
         if (CurrentHealth <= 0)
