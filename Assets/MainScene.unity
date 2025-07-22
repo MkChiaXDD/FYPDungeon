@@ -673,6 +673,46 @@ PrefabInstance:
       propertyPath: orthographic size
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 740802854}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlaySFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SoundManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: ButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767146799155925859, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3023764888954098219, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_Name
@@ -683,9 +723,24 @@ PrefabInstance:
       propertyPath: _turnspeed
       value: 36000
       objectReference: {fileID: 0}
+    - target: {fileID: 4383157245410307425, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6241527651883044732, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034366910102109858, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034366910102109858, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7594790781530792185, guid: be52ee2c82c68f047b7b813bbccfe6a9,
@@ -706,6 +761,16 @@ PrefabInstance:
     - target: {fileID: 7780194143377051600, guid: be52ee2c82c68f047b7b813bbccfe6a9,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826675074277818036, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826675074277818036, guid: be52ee2c82c68f047b7b813bbccfe6a9,
+        type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -786,36 +851,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d266d238cd7c5e249b29f891e189c644, type: 3}
---- !u!1 &740802851 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2403578439296407867, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1029279758441410581}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &740802852 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8478316970480772350, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1029279758441410581}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &740802856
+--- !u!114 &740802854 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2998039610064119818, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1029279758441410581}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740802851}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d49c537d7845f6b40b8c6f013d707525, type: 3}
+  m_Script: {fileID: 11500000, guid: 846e6ffa78e1c4d4687152c5fb955629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgm: []
-  sfx:
-  - name: InventorySelect
-    clip: {fileID: 8300000, guid: 1b9d13a73cd298e4e9a719f2f3ae8d82, type: 3}
-  bgmSource: {fileID: 0}
-  sfxSource: {fileID: 740802852}
 --- !u!1001 &819686019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1030,6 +1077,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2998039610064119818, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
+        type: 3}
+      propertyPath: sfxClips.Array.size
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2998039610064119818, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
+        type: 3}
+      propertyPath: sfxClips.Array.data[16]
+      value: 
+      objectReference: {fileID: 8300000, guid: 027fbd7fd26543f4c9cc8e16314fafde, type: 3}
     - target: {fileID: 8491411336196259377, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
         type: 3}
       propertyPath: m_RootOrder
@@ -1088,11 +1145,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2403578439296407867, guid: 5b2010a1e4a587d4d94891cd87ca1c4f,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 740802856}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b2010a1e4a587d4d94891cd87ca1c4f, type: 3}
 --- !u!1001 &6661967008403211167
 PrefabInstance:

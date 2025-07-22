@@ -89,8 +89,11 @@ public class Enemy : MonoBehaviour, IDamageable
         //PlayDamageVFX();
         //TextManager.Instance.CreateText(transform.position, amount.ToString(), Color.black);
         Debug.Log(name + " Get Hit: " + amount);
+
+            AudioManager.Instance.PlaySFX("HitSFX");
         if (currentHealth <= 0f)
             Die();
+
 
         
     }
