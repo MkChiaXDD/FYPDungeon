@@ -126,9 +126,9 @@ public class TankEnemyController : Enemy
         Vector3 avoidDir = Vector3.zero;
         Vector3[] feelers = new Vector3[]
         {
-            transform.forward,
-            (transform.forward + transform.right).normalized,
-            (transform.forward - transform.right).normalized
+        transform.forward,
+        (transform.forward + transform.right).normalized,
+        (transform.forward - transform.right).normalized
         };
 
         foreach (var f in feelers)
@@ -154,7 +154,25 @@ public class TankEnemyController : Enemy
 
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        transform.position += currentDir * data.moveSpeed * Time.deltaTime;
+        // ✅ Distance-based speed adjustment
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
+        float adjustedSpeed;
+
+        if (distToPlayer > data.detectionRange * 0.7f)
+        {
+            // Far: chase faster
+            adjustedSpeed = data.moveSpeed * 2f;
+        }
+        else
+        {
+            // Close: chase slower
+            adjustedSpeed = data.moveSpeed * 0.75f;
+        }
+
+        Debug.Log($"[CHASE] Dist: {distToPlayer:F2}, Speed: {adjustedSpeed:F2}");
+
+        transform.position += currentDir * adjustedSpeed * Time.deltaTime;
+
         Quaternion targetRot = Quaternion.LookRotation(currentDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
     }
