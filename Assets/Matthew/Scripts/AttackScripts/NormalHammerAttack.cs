@@ -12,9 +12,7 @@ public class NormalHammerAttack : BaseAttackScript
     }
 
     public override void ExecuteLightAttack()
-    {
-
-     
+    { 
         //hammer presets
         Vector3 position = FindObjectOfType<PlayerMovement>().GetPosition() + transform.forward * 1.5f;
         Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
@@ -23,7 +21,11 @@ public class NormalHammerAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
+        AudioManager.Instance.PlaySFX("HammerSlam");
+
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
         
     }   
+
+
 }

@@ -82,7 +82,7 @@ public class Inventory : MonoBehaviour
             ChangeDurability?.Invoke();
         }
         else {
-            Debug.Log("Breaking " + items[itemSlot].name);
+            Debug.Log("Breaking " + items[itemSlot].name);       
             RemoveItemAtSlot(itemSlot, 1); 
 
         }

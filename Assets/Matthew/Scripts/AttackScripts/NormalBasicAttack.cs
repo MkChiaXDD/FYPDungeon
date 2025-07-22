@@ -14,12 +14,18 @@ public class NormalBasicAttack : BaseAttackScript
         //base presets
         Vector3 position = FindObjectOfType<PlayerMovement>().GetPosition() + transform.forward * 1.5f;
         Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
+
         ParticleSystem vfx = Instantiate(lightAttackVFX, position, rotation);
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
+        AudioManager.Instance.PlaySFX("BasicAttack");
+
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }
+
+    
+   
 
 
 }

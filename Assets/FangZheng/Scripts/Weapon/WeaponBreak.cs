@@ -83,6 +83,7 @@ public class WeaponBreak : MonoBehaviour
 
         yield return null;
 
+        SoundManager.Instance.PlaySFX("WeaponBreak");
         Destroy(this.gameObject);
     }
 }
