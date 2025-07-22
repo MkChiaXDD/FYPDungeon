@@ -1461,6 +1461,7 @@ GameObject:
   - component: {fileID: 8224880954546790157}
   - component: {fileID: 9001285970958728947}
   - component: {fileID: 7307389256687057879}
+  - component: {fileID: 8658254144484520337}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -1759,6 +1760,23 @@ MonoBehaviour:
   RoomPrefab: {fileID: 7337704147415000979, guid: 08cb55967f9876c4fa100f7d56d05ee2,
     type: 3}
   iconScale: 2
+--- !u!114 &8658254144484520337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3023764888954098219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7bab7a5410034a439dff5d62e1cbd93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 862224453572156063}
+  PlayerModels: []
+  ModelWIthMaterial: []
+  hitMaterials: {fileID: 2100000, guid: ac95d9eef53b97242847854f4547765e, type: 2}
+  hitduration: 4
 --- !u!1 &3047921864834967540
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,7 +1792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3826068191054110984
 RectTransform:
   m_ObjectHideFlags: 0

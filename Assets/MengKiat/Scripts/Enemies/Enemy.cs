@@ -13,6 +13,16 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private GameObject shieldPrefab;
     private GameObject enemyShield;
     [SerializeField] private float shieldHp;
+
+    [Header("Hit Effect")]
+    [SerializeField] private Color hitColor = Color.red;
+    [SerializeField] private float hitDuration = 1f;
+    [SerializeField] private Renderer enemyRenderer;
+    [SerializeField] private bool useEmission = true;
+    [SerializeField] private Color originalColor;
+    [SerializeField] private Color originalEmissionColor;
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+
     public float maxHealth => data.maxHealth;
     protected int currentRound;
     protected float damage;
@@ -38,6 +48,21 @@ public class Enemy : MonoBehaviour, IDamageable
         InitialiseShield();
         Invoke(nameof(InitialiseHealthBar), 1f);
         transform.AddComponent<ElementalStatus>();
+
+        enemyRenderer = this.GetComponent<Renderer>() ;
+        if (enemyRenderer != null)
+        {
+            originalColor = enemyRenderer.material.color;
+            if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+            {
+                originalEmissionColor = enemyRenderer.material.GetColor(EmissionColor);
+            }
+        }
+        //if (enemyRenderer.material)
+        //{
+
+        //}
+
     }
 
     public void InitialiseShield()
@@ -76,6 +101,38 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
 
+    private void PlayHitEffect()
+    {
+        if (enemyRenderer == null) return;
+
+
+        enemyRenderer.material.color = hitColor;
+
+        if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+        {
+            enemyRenderer.material.SetColor(EmissionColor, Color.red);
+            enemyRenderer.material.EnableKeyword("_EMISSION");
+        }
+
+        StartCoroutine(ResetHitEffect());
+    }
+
+    private IEnumerator ResetHitEffect()
+    {
+        yield return new WaitForSeconds(hitDuration);
+
+        if (enemyRenderer == null) yield break;
+
+        enemyRenderer.material.color = originalColor;
+
+ 
+        if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+        {
+            enemyRenderer.material.SetColor(EmissionColor, originalEmissionColor);
+
+        }
+    }
+
     // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
@@ -84,6 +141,7 @@ public class Enemy : MonoBehaviour, IDamageable
         UpdateHealthBar();
         ParticalManager.Instance.Bleed(this.transform);
         //PlayDamageVFX();
+        PlayHitEffect();
         Debug.Log(name + " Get Hit: " + amount);
         SoundManager.Instance.PlaySFX("HitSFX");
 
