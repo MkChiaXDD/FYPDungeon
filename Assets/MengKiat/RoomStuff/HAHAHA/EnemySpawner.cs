@@ -120,6 +120,25 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
+    public void ClearEnemies()
+    {
+        if (enemyParent == null)
+        {
+            Debug.LogWarning("Enemy parent not assigned.");
+            return;
+        }
+
+        // Loop through all children of enemyParent and destroy them
+        for (int i = enemyParent.childCount - 1; i >= 0; i--)
+        {
+            Transform child = enemyParent.GetChild(i);
+            Destroy(child.gameObject);
+        }
+
+        Debug.Log("All enemies cleared.");
+    }
+
+
     public void ChooseBoss()
     {
         Transform spawnPoint = GameObject.Find("BossSpawnPos").transform;

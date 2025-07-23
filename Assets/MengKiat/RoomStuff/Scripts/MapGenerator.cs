@@ -304,10 +304,11 @@ namespace RMG
 
         public void NextLevel()
         {
+            FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
             FindFirstObjectByType<DifficultyManager>()?.IncreaseRound();
             Generate();
             GameObject player = GameObject.FindWithTag("Player");
-            player.transform.position = new Vector3(0, 4, 0);
+            player.transform.position = new Vector3(0, -0.02000004f, 0);
         }
     }
 }
