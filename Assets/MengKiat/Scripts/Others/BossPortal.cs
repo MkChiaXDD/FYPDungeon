@@ -15,7 +15,8 @@ public class BossPortal : MonoBehaviour
                 GameObject bossRoomSpawn = GameObject.Find("PlayerSpawnPoint");
                 if (playerObject != null && bossRoomSpawn != null)
                 {
-                    playerObject.transform.position = bossRoomSpawn.transform.position;
+                    playerObject.transform.position = new Vector3(bossRoomSpawn.transform.position.x, playerObject.transform.position.y, bossRoomSpawn.transform.position.z);
+                    Destroy(gameObject);
                 }
             }
         }

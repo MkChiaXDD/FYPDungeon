@@ -1,4 +1,4 @@
-using RMG;
+﻿using RMG;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -134,12 +134,29 @@ public class EnemySpawner : MonoBehaviour
 
     public void ChooseBoss()
     {
-        Transform spawnPoint = GameObject.Find("BossSpawnPos").transform;
+        GameObject spawnObj = GameObject.Find("BossSpawnPos");
 
-        GameObject chosenBoss = Instantiate(bossPrefabs[Random.Range(0, bossPrefabs.Count)], spawnPoint.position, Quaternion.identity, enemyParent);
+        if (spawnObj == null)
+        {
+            Debug.LogError("❌ BossSpawnPos not found in the scene!");
+            return;
+        }
+
+        Transform spawnPoint = spawnObj.transform;
+
+        if (bossPrefabs == null || bossPrefabs.Count == 0)
+        {
+            Debug.LogError("❌ No boss prefabs assigned!");
+            return;
+        }
+
+        GameObject bossPrefab = bossPrefabs[Random.Range(0, bossPrefabs.Count)];
+        GameObject chosenBoss = Instantiate(bossPrefab, spawnPoint.position, Quaternion.identity, enemyParent);
+
         GameObject nextLvlPortal = Instantiate(nextLevelPortal, spawnPoint.position, Quaternion.identity);
         nextLvlPortal.SetActive(false);
 
         chosenBoss.AddComponent<BossCheckDeath>();
     }
+
 }

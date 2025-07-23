@@ -11,7 +11,6 @@ public class BossCheckDeath : MonoBehaviour
     {
         FindAnyObjectByType<BuffSelectionUI>().Spawn.AddListener(SetBuffUI);
         SetBuffUI();
-
     }
 
     public void SummonPortal()

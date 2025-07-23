@@ -12,6 +12,8 @@ namespace RMG
 
         [SerializeField] private Room startRoom;
         [SerializeField] private GameObject bossPortalObject;
+        [SerializeField] private Vector3 bossRoomPosition;
+        [SerializeField] private GameObject bossRoom;
         [SerializeField] private Room[] rooms;
         [SerializeField] private Room[] uniqueRooms; // NEW: rooms allowed only once
 
@@ -57,6 +59,7 @@ namespace RMG
 
         private void Start()
         {
+            SpawnBossRoom();
             Generate();
         }
 
@@ -66,6 +69,11 @@ namespace RMG
             {
                 Generate();
             }
+        }
+
+        private void SpawnBossRoom()
+        {
+            /*GameObject bossRoomInstance = */Instantiate(bossRoom, bossRoomPosition, Quaternion.identity, transform);
         }
 
         public void Generate()
