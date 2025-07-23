@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class TankEnemyController : Enemy
 {
+
+    
+
+    [Header("Stats")]
     [SerializeField] private float attackCooldown = 1f;
 
     [Header("Diff Scaling Settings")]
@@ -84,7 +88,7 @@ public class TankEnemyController : Enemy
                     chosenBomber = FindClosestBomber();
                     hasEvaluatedThrowChance = true;
 
-                    Debug.Log($"Rolling throw chance: {rand} <= {chanceToGoThrow}, Round: {currentRound}, BomberFound: {chosenBomber != null}");
+                    //Debug.Log($"Rolling throw chance: {rand} <= {chanceToGoThrow}, Round: {currentRound}, BomberFound: {chosenBomber != null}");
 
                     if (rand <= chanceToGoThrow && currentRound >= roundForScaling && chosenBomber != null)
                     {
@@ -169,7 +173,7 @@ public class TankEnemyController : Enemy
             adjustedSpeed = data.moveSpeed * 0.75f;
         }
 
-        Debug.Log($"[CHASE] Dist: {distToPlayer:F2}, Speed: {adjustedSpeed:F2}");
+        //Debug.Log($"[CHASE] Dist: {distToPlayer:F2}, Speed: {adjustedSpeed:F2}");
 
         transform.position += currentDir * adjustedSpeed * Time.deltaTime;
 
@@ -179,7 +183,7 @@ public class TankEnemyController : Enemy
 
     private void Attack()
     {
-        Debug.Log("TANKENEMY: Attack");
+        //Debug.Log("TANKENEMY: Attack");
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -217,7 +221,7 @@ public class TankEnemyController : Enemy
 
         if (distanceToBomber <= 1f && !hasThrown)
         {
-            Debug.Log("Tank reached bomber!");
+            //Debug.Log("Tank reached bomber!");
 
             carriedBomber.transform.position = carryZone.position;
             carriedBomber.transform.SetParent(carryZone);
@@ -274,7 +278,7 @@ public class TankEnemyController : Enemy
             bomberRb.AddForce(throwDir * throwingForce, ForceMode.Impulse);
         }
 
-        Debug.Log("Tank threw the bomber!");
+        //Debug.Log("Tank threw the bomber!");
 
         carriedBomber = null;
         isCarrying = false;

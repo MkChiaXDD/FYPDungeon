@@ -171,7 +171,7 @@ public class BomberEnemyController : Enemy
 
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.PlaySFX("BomberChargeUp");
+            SoundManager.Instance.PlaySFX("BomberChargeUp", this.gameObject);
         }
 
         boutaDie = true;
@@ -259,7 +259,7 @@ public class BomberEnemyController : Enemy
 
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.PlaySFX("BomberExplode");
+            SoundManager.Instance.PlaySFX("BomberExplode", this.gameObject);
         }
 
         float duration = explodingParticle.main.duration;

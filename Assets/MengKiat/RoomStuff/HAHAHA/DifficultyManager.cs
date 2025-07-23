@@ -16,6 +16,7 @@ public class DifficultyManager : MonoBehaviour
     [SerializeField] private float maxMultiplier = 2f;
 
     [SerializeField] private int currentRound = 1;
+    [SerializeField] private int maxRounds = 2;
 
     private void Awake()
     {
@@ -64,5 +65,10 @@ public class DifficultyManager : MonoBehaviour
     public int GetRound()
     {
         return currentRound;
+    }
+
+    public int GetMaxRound()
+    {
+        return maxRounds;
     }
 }

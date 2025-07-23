@@ -18,7 +18,7 @@ public class NormalSwordAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("SwordSlash");
+        SoundManager.Instance.PlaySFX("SwordSlash", this.gameObject);
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }

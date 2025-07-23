@@ -67,7 +67,7 @@ Transform:
   - {fileID: 4826634883755587695}
   - {fileID: 6367771711553426131}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4531307053388353627
 MeshFilter:
@@ -184,13 +184,19 @@ MonoBehaviour:
   currentHealth: 0
   shieldPrefab: {fileID: 0}
   shieldHp: 0
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitDuration: 1
+  enemyRenderer: {fileID: 0}
+  useEmission: 1
+  _totalFlashes: 1
+  dmgFlashSpeed: 8
   pyroResistance: 1
   hydroResistance: 1
   electroResistance: 1
   cryoResistance: 1
   stunDuration: 1
   attackCooldown: 1
-  roundForScaling: 3
+  roundForScaling: 2
   chanceToGoThrow: 1
   detectionRange: 10
   rushToBomberSpeedMultiplier: 10

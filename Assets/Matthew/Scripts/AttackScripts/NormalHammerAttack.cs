@@ -21,7 +21,7 @@ public class NormalHammerAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("HammerSlam");
+        SoundManager.Instance.PlaySFX("HammerSlam", this.gameObject);
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
         

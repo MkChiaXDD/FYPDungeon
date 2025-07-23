@@ -6,13 +6,31 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    [Header("References")]
+    [Header("References/Components")]
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
     [SerializeField] public float currentHealth;
     [SerializeField] private GameObject shieldPrefab;
     private GameObject enemyShield;
     [SerializeField] private float shieldHp;
+
+
+    //take damage vfx
+    private EnemyHitSquash hitSquashEffect;
+    private Coroutine hitEffectCoroutine;
+    private bool isHitEffectActive = false;
+
+    [Header("Hit Effect")]
+    [SerializeField] private Color hitColor = Color.red;
+    [SerializeField] private float hitDuration = 1f;
+    [SerializeField] private Renderer enemyRenderer;
+    [SerializeField] private bool useEmission = true;
+    private Color originalColor;
+    private Color originalEmissionColor;
+    [SerializeField] private int _totalFlashes = 1;
+    [SerializeField] private float dmgFlashSpeed = 8;
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+
     public float maxHealth => data.maxHealth;
     protected int currentRound;
     protected float damage;
@@ -34,10 +52,23 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void Awake()
     {
+        _totalFlashes = 1;
+        dmgFlashSpeed = 8;
+        hitSquashEffect = gameObject.AddComponent<EnemyHitSquash>();
         InitialiseDifficulty();
         InitialiseShield();
         Invoke(nameof(InitialiseHealthBar), 1f);
         transform.AddComponent<ElementalStatus>();
+
+        enemyRenderer = this.GetComponent<Renderer>();
+        if (enemyRenderer != null)
+        {
+            originalColor = enemyRenderer.material.color;
+            if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+            {
+                originalEmissionColor = enemyRenderer.material.GetColor(EmissionColor);
+            }
+        }
     }
 
     public void InitialiseShield()
@@ -75,6 +106,74 @@ public class Enemy : MonoBehaviour, IDamageable
 
     }
 
+    private void PlayDamagedVFX()
+    {
+        SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+        hitSquashEffect.PlaySquashEffect();
+        PlayHitEffects();
+    }
+
+    private void PlayHitEffects()
+    {
+        if (enemyRenderer == null) return;
+
+        // Stop existing effect if one is running
+        if (isHitEffectActive && hitEffectCoroutine != null)
+        {
+            StopCoroutine(hitEffectCoroutine);
+        }
+
+        hitEffectCoroutine = StartCoroutine(HitEffectAnimation());
+    }
+
+    private IEnumerator HitEffectAnimation()
+    {
+        isHitEffectActive = true;
+        float timer = 0f;
+        int flashCount = 0;
+        int totalFlashes = _totalFlashes; // Number of times to flash
+        float flashSpeed = dmgFlashSpeed; // Speed of the pingpong effect
+
+        Material material = enemyRenderer.material;
+        Color baseColor = originalColor;
+        Color baseEmission = useEmission && material.HasProperty(EmissionColor) ?
+                             material.GetColor(EmissionColor) : Color.black;
+
+        while (timer < hitDuration && flashCount < totalFlashes * 2)
+        {
+            timer += Time.deltaTime;
+
+            // PingPong between 0 and 1 to create flashing effect
+            float pingPongValue = Mathf.PingPong(timer * flashSpeed, 1f);
+
+            // Lerp between original and hit colors
+            material.color = Color.Lerp(baseColor, hitColor, pingPongValue);
+
+            if (useEmission && material.HasProperty(EmissionColor))
+            {
+                Color currentEmission = Color.Lerp(baseEmission, Color.red, pingPongValue);
+                material.SetColor(EmissionColor, currentEmission);
+                material.EnableKeyword("_EMISSION");
+            }
+
+            // Count completed half-cycles (each full flash is 2 half-cycles)
+            if (pingPongValue < 0.1f) // Near the start of a new cycle
+            {
+                flashCount++;
+            }
+
+            yield return null;
+        }
+
+        // Ensure we return to original colors
+        material.color = baseColor;
+        if (useEmission && material.HasProperty(EmissionColor))
+        {
+            material.SetColor(EmissionColor, baseEmission);
+        }
+
+        isHitEffectActive = false;
+    }
 
     // Shared damage logic
     public virtual void TakeDamage(float amount)
@@ -83,10 +182,8 @@ public class Enemy : MonoBehaviour, IDamageable
         ShowDamageNumber(this.transform.position, amount);
         UpdateHealthBar();
         ParticalManager.Instance.Bleed(this.transform);
-        //PlayDamageVFX();
-        Debug.Log(name + " Get Hit: " + amount);
-        SoundManager.Instance.PlaySFX("HitSFX");
 
+        PlayDamagedVFX();
         if (currentHealth <= 0f)
             Die();
 
@@ -154,7 +251,6 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             gameObject.GetComponent<BossCheckDeath>().SummonPortal();
             Destroy(gameObject.GetComponent<BossCheckDeath>());
-            Debug.Log("BOSS DIES");
         }
 
         StaticScreenShake.Shake(Camera.main, deathParams);
@@ -187,7 +283,7 @@ public class Enemy : MonoBehaviour, IDamageable
         int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
         currentHealth = finalHealth;
 
-        Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
+        //Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
 
         damage = data.damage;
 

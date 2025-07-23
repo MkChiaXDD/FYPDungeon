@@ -134,6 +134,11 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator Dashing()
     {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlaySFX("PlayerDash", this.gameObject);
+
+        }
         _isDashing = true;
         _meshTrail.HandleTrailActivation();
         _currentSpeed = playerData.Dash + playerData.Speed;

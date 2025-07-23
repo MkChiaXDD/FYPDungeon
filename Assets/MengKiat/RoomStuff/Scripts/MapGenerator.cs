@@ -11,7 +11,10 @@ namespace RMG
         public int maxRooms = 40;
 
         [SerializeField] private Room startRoom;
-        [SerializeField] private Room bossRoomPrefab;
+        [SerializeField] private GameObject bossPortalObject;
+        [SerializeField] private Vector3 bossRoomPosition;
+        [SerializeField] private float bossRoomRotation;
+        [SerializeField] private GameObject bossRoom;
         [SerializeField] private Room[] rooms;
         [SerializeField] private Room[] uniqueRooms; // NEW: rooms allowed only once
 
@@ -31,7 +34,6 @@ namespace RMG
         [SerializeField] private Material farthestRoomMaterial;
         [SerializeField] private float roomSizeMultiplier = 2;
         [SerializeField] private int BigBossRounds = 2;
-        [SerializeField] private GameObject portal;
 
         private void Awake()
         {
@@ -58,6 +60,7 @@ namespace RMG
 
         private void Start()
         {
+            SpawnBossRoom();
             Generate();
         }
 
@@ -67,6 +70,11 @@ namespace RMG
             {
                 Generate();
             }
+        }
+
+        private void SpawnBossRoom()
+        {
+            Instantiate(bossRoom, bossRoomPosition, Quaternion.Euler(new Vector3(Quaternion.identity.x, bossRoomRotation, Quaternion.identity.z)), transform);
         }
 
         public void Generate()
@@ -118,6 +126,7 @@ namespace RMG
             transform.localScale = Vector3.one * roomSizeMultiplier;
             var enemySpawner = FindFirstObjectByType<EnemySpawner>();
             enemySpawner.GetAllRoomSpawnPoint();
+            enemySpawner.ChooseBoss();
         }
 
         private void Clear()
@@ -292,48 +301,25 @@ namespace RMG
 
             if (farthestRoom != null)
             {
-                Vector3 farthestRoomPosition = farthestRoom.transform.position;
-                Quaternion farthestRoomRotation = farthestRoom.transform.rotation;
-                List<Room> connectedRooms = new List<Room>(farthestRoom.connections);
+                farthestRoom.gameObject.name = "Farthest Room";
+                Debug.Log($"Farthest room renamed: {farthestRoom.name} at distance {maxDistance}");
 
-                spawnedRooms.Remove(farthestRoom);
-                Destroy(farthestRoom.gameObject);
-
-                Room bossRoom = Instantiate(bossRoomPrefab, farthestRoomPosition, farthestRoomRotation, transform);
-                bossRoom.Init();
-                spawnedRooms.Add(bossRoom);
-
-                foreach (Room connectedRoom in connectedRooms)
-                {
-                    bossRoom.AddConnection(connectedRoom);
-                    connectedRoom.AddConnection(bossRoom);
-                    connectedRoom.connections.Remove(farthestRoom);
-                }
-
-                bossRoom.gameObject.name = "Boss Room";
-                bossRoom.distanceFromHome = maxDistance;
-
-                Transform spawnPoint = bossRoom.transform.Find("EnemySpawnPoint");
-                if (spawnPoint != null)
-                {
-                    var portalObj = Instantiate(portal, spawnPoint.position * roomSizeMultiplier, Quaternion.identity);
-                    portalObj.SetActive(false);
-                }
-
-                int round = DifficultyManager.Instance.GetRound();
-                var enemySpawner = FindFirstObjectByType<EnemySpawner>();
-                if (enemySpawner != null)
-                {
-                    if (round % BigBossRounds != 0)
-                    {
-                        enemySpawner.ChooseMiniBoss();
-                    }
-                    else
-                    {
-                        enemySpawner.ChooseBigBoss();
-                    }
-                }
+                // ✅ Spawn the boss portal in the center of the farthest room
+                Vector3 centerPos = farthestRoom.transform.localPosition * roomSizeMultiplier;
+                centerPos = new Vector3(centerPos.x, 4, centerPos.z);
+                GameObject portalInstance = Instantiate(bossPortalObject, centerPos, Quaternion.identity);
+                portalInstance.SetActive(true);
             }
+        }
+
+        public void NextLevel()
+        {
+            Debug.Log("Generating new map");
+            FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
+            FindFirstObjectByType<DifficultyManager>()?.IncreaseRound();
+            Generate();
+            GameObject player = GameObject.FindWithTag("Player");
+            player.transform.position = new Vector3(0, -0.02000004f, 0);
         }
     }
 }

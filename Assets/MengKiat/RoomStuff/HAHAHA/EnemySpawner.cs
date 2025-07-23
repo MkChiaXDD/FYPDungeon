@@ -1,4 +1,4 @@
-using RMG;
+﻿using RMG;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +8,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform enemyParent;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> enemyPrefabs;
-    [SerializeField] private List<GameObject> minibossPrefabs;
-    [SerializeField] private List<GameObject> bigBossPrefabs;
+    [SerializeField] private List<GameObject> bossPrefabs;
     [SerializeField] private float healerSpawnChance = 0.001f;
+    [SerializeField] private GameObject nextLevelPortal;
 
     [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
@@ -18,8 +18,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int RoundToSpawnRanged = 3;
     [SerializeField] private int RoundToSpawnTank = 4;
     [SerializeField] private int RoundToSpawnBomber = 5;
-
-    private GameObject portal;
 
     public void GetAllRoomSpawnPoint()
     {
@@ -109,23 +107,56 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
+                //Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
         }
 
     }
 
-    public void ChooseMiniBoss()
+    public void ClearEnemies()
     {
-        GameObject boss = minibossPrefabs[Random.Range(0, minibossPrefabs.Count)];
-        Debug.Log("Mini-Boss Selected: " + boss.name);
-        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
+        if (enemyParent == null)
+        {
+            Debug.LogWarning("Enemy parent not assigned.");
+            return;
+        }
+
+        // Loop through all children of enemyParent and destroy them
+        for (int i = enemyParent.childCount - 1; i >= 0; i--)
+        {
+            Transform child = enemyParent.GetChild(i);
+            Destroy(child.gameObject);
+        }
+
+        Debug.Log("All enemies cleared.");
     }
 
-    public void ChooseBigBoss()
+
+    public void ChooseBoss()
     {
-        GameObject boss = bigBossPrefabs[Random.Range(0, bigBossPrefabs.Count)];
-        Debug.Log("Big Boss Selected: " + boss.name);
-        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
+        GameObject spawnObj = GameObject.Find("BossSpawnPos");
+
+        if (spawnObj == null)
+        {
+            Debug.LogError("❌ BossSpawnPos not found in the scene!");
+            return;
+        }
+
+        Transform spawnPoint = spawnObj.transform;
+
+        if (bossPrefabs == null || bossPrefabs.Count == 0)
+        {
+            Debug.LogError("❌ No boss prefabs assigned!");
+            return;
+        }
+
+        GameObject bossPrefab = bossPrefabs[Random.Range(0, bossPrefabs.Count)];
+        GameObject chosenBoss = Instantiate(bossPrefab, spawnPoint.position, Quaternion.identity, enemyParent);
+
+        GameObject nextLvlPortal = Instantiate(nextLevelPortal, spawnPoint.position, Quaternion.identity);
+        nextLvlPortal.SetActive(false);
+
+        chosenBoss.AddComponent<BossCheckDeath>();
     }
+
 }

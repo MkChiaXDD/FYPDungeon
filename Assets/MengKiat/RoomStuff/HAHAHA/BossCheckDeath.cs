@@ -11,11 +11,11 @@ public class BossCheckDeath : MonoBehaviour
     {
         FindAnyObjectByType<BuffSelectionUI>().Spawn.AddListener(SetBuffUI);
         SetBuffUI();
-
     }
 
     public void SummonPortal()
     {
+        Debug.Log("Finding Portal");
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
         foreach (GameObject obj in allObjects)
         {

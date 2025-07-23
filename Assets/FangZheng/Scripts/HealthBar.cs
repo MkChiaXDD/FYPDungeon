@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class HealthBar : MonoBehaviour
 {
-    public PlayerData PlayerData;
-    public Slider Healthbar;
+    public PlayerData PlayerData;  
     public float healthMax;
     public float health;
     [SerializeField] private Material healthAmountMaterial;
+    [SerializeField] private TMP_Text HealthText;
 
     private float targetFillAmount;  // Target value for smooth animation
     private Coroutine healthAnimation;  // Reference to active animation coroutine
@@ -36,6 +37,7 @@ public class HealthBar : MonoBehaviour
         // Start animation if target changed
         if (newTarget != targetFillAmount)
         {
+            HealthText.text = newTarget + " / " + healthMax;
             targetFillAmount = newTarget;
 
             // Stop existing animation if running

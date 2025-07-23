@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
@@ -32,9 +33,9 @@ public class SpikeTrap : MonoBehaviour
             {
                 if (SoundManager.Instance != null)
                 {
-                    SoundManager.Instance.PlaySFX("Spike");
+                    SoundManager.Instance.PlaySFX("Spike", this.gameObject);
+
                 }
-                Debug.Log("SPIKETRAP: TRAP ACTIVATED!");
                 isActivated = true;
                 timer = 0;
             }
@@ -46,7 +47,6 @@ public class SpikeTrap : MonoBehaviour
         {
             if (timer > activeDuration)
             {
-                Debug.Log("SPIKETRAP: TRAP DEACTIVATED!");
                 isActivated = false;
                 timer = 0;
             }
@@ -72,11 +72,8 @@ public class SpikeTrap : MonoBehaviour
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(damage);
-                    Debug.Log("SPIKETRAP: HIT Something");
                 }
             }
-
-            Debug.Log("SPIKETRAP: Player took damage and was knocked back!");
         }
     }
 }

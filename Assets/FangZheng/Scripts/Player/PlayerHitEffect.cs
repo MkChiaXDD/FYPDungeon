@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitEffect : MonoBehaviour
+public class PlayerHitEffect : MonoBehaviour
 {
     [SerializeField] private GameObject Player;
     [SerializeField] private List<GameObject> PlayerModels = new List<GameObject>();
