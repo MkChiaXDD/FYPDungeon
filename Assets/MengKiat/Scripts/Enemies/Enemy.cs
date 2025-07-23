@@ -27,6 +27,8 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private bool useEmission = true;
     [SerializeField] private Color originalColor;
     [SerializeField] private Color originalEmissionColor;
+    [SerializeField] private int _totalFlashes = 1;
+    [SerializeField] private float dmgFlashSpeed = 8;
     private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
     public float maxHealth => data.maxHealth;
@@ -50,6 +52,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void Awake()
     {
+        _totalFlashes = 1;
+        dmgFlashSpeed = 8;
         hitSquashEffect = gameObject.AddComponent<EnemyHitSquash>();
         InitialiseDifficulty();
         InitialiseShield();
@@ -132,8 +136,8 @@ public class Enemy : MonoBehaviour, IDamageable
         isHitEffectActive = true;
         float timer = 0f;
         int flashCount = 0;
-        const int totalFlashes = 3; // Number of times to flash
-        const float flashSpeed = 8f; // Speed of the pingpong effect
+        int totalFlashes = _totalFlashes; // Number of times to flash
+        float flashSpeed = dmgFlashSpeed; // Speed of the pingpong effect
 
         Material material = enemyRenderer.material;
         Color baseColor = material.color;
