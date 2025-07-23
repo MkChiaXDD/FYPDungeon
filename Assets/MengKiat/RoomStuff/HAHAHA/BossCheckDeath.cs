@@ -16,7 +16,6 @@ public class BossCheckDeath : MonoBehaviour
 
     public void SummonPortal()
     {
-        Debug.Log("Finding Portal");
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
         foreach (GameObject obj in allObjects)
         {

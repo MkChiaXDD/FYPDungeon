@@ -8,9 +8,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform enemyParent;
     [SerializeField] private float offSet = 1.5f;
     [SerializeField] private List<GameObject> enemyPrefabs;
-    [SerializeField] private List<GameObject> bossPrefabs;
+    [SerializeField] private List<GameObject> minibossPrefabs;
+    [SerializeField] private List<GameObject> bigBossPrefabs;
     [SerializeField] private float healerSpawnChance = 0.001f;
-    [SerializeField] private GameObject nextLevelPortal;
 
     [Header("Scaling")]
     [SerializeField] private DifficultyManager diffMgr;
@@ -20,11 +20,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int RoundToSpawnBomber = 5;
 
     private GameObject portal;
-
-    private void Start()
-    {
-        ChooseBoss();
-    }
 
     public void GetAllRoomSpawnPoint()
     {
@@ -120,14 +115,17 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
-    public void ChooseBoss()
+    public void ChooseMiniBoss()
     {
-        Transform spawnPoint = GameObject.Find("BossSpawnPos").transform;
+        GameObject boss = minibossPrefabs[Random.Range(0, minibossPrefabs.Count)];
+        Debug.Log("Mini-Boss Selected: " + boss.name);
+        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
+    }
 
-        GameObject chosenBoss = Instantiate(bossPrefabs[Random.Range(0, bossPrefabs.Count)], spawnPoint.position, Quaternion.identity, enemyParent);
-        GameObject nextLvlPortal = Instantiate(nextLevelPortal, spawnPoint.position, Quaternion.identity);
-        nextLvlPortal.SetActive(false);
-
-        chosenBoss.AddComponent<BossCheckDeath>();
+    public void ChooseBigBoss()
+    {
+        GameObject boss = bigBossPrefabs[Random.Range(0, bigBossPrefabs.Count)];
+        Debug.Log("Big Boss Selected: " + boss.name);
+        FindFirstObjectByType<FarthestRoom>()?.SummonBoss(boss);
     }
 }
