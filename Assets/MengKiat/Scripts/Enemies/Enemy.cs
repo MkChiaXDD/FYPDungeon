@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private GameObject shieldPrefab;
     private GameObject enemyShield;
     [SerializeField] private float shieldHp;
-    
+
 
     //take damage vfx
     private EnemyHitSquash hitSquashEffect;
@@ -25,8 +25,8 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private float hitDuration = 1f;
     [SerializeField] private Renderer enemyRenderer;
     [SerializeField] private bool useEmission = true;
-    [SerializeField] private Color originalColor;
-    [SerializeField] private Color originalEmissionColor;
+    private Color originalColor;
+    private Color originalEmissionColor;
     [SerializeField] private int _totalFlashes = 1;
     [SerializeField] private float dmgFlashSpeed = 8;
     private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour, IDamageable
         Invoke(nameof(InitialiseHealthBar), 1f);
         transform.AddComponent<ElementalStatus>();
 
-        enemyRenderer = this.GetComponent<Renderer>() ;
+        enemyRenderer = this.GetComponent<Renderer>();
         if (enemyRenderer != null)
         {
             originalColor = enemyRenderer.material.color;
@@ -140,7 +140,7 @@ public class Enemy : MonoBehaviour, IDamageable
         float flashSpeed = dmgFlashSpeed; // Speed of the pingpong effect
 
         Material material = enemyRenderer.material;
-        Color baseColor = material.color;
+        Color baseColor = originalColor;
         Color baseEmission = useEmission && material.HasProperty(EmissionColor) ?
                              material.GetColor(EmissionColor) : Color.black;
 
