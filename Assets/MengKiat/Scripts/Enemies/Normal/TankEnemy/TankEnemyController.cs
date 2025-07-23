@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class TankEnemyController : Enemy
 {
+
+    
+
+    [Header("Stats")]
     [SerializeField] private float attackCooldown = 1f;
 
     [Header("Diff Scaling Settings")]

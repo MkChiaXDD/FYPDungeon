@@ -6,13 +6,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    [Header("References")]
+    [Header("References/Components")]
     [SerializeField] protected EnemyData data;
     [SerializeField] DynamicHealthBar healthBar;
     [SerializeField] public float currentHealth;
     [SerializeField] private GameObject shieldPrefab;
     private GameObject enemyShield;
     [SerializeField] private float shieldHp;
+    
+
+    //take damage vfx
+    private EnemyHitSquash hitSquashEffect;
+    private Coroutine hitEffectCoroutine;
+    private bool isHitEffectActive = false;
 
     [Header("Hit Effect")]
     [SerializeField] private Color hitColor = Color.red;
@@ -44,6 +50,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void Awake()
     {
+        hitSquashEffect = gameObject.AddComponent<EnemyHitSquash>();
         InitialiseDifficulty();
         InitialiseShield();
         Invoke(nameof(InitialiseHealthBar), 1f);
@@ -100,37 +107,73 @@ public class Enemy : MonoBehaviour, IDamageable
 
     }
 
+    private void PlayDamagedVFX()
+    {
+        SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+        hitSquashEffect.PlaySquashEffect();
+        PlayHitEffects();
+    }
 
-    private void PlayHitEffect()
+    private void PlayHitEffects()
     {
         if (enemyRenderer == null) return;
 
-
-        enemyRenderer.material.color = hitColor;
-
-        if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+        // Stop existing effect if one is running
+        if (isHitEffectActive && hitEffectCoroutine != null)
         {
-            enemyRenderer.material.SetColor(EmissionColor, Color.red);
-            enemyRenderer.material.EnableKeyword("_EMISSION");
+            StopCoroutine(hitEffectCoroutine);
         }
 
-        StartCoroutine(ResetHitEffect());
+        hitEffectCoroutine = StartCoroutine(HitEffectAnimation());
     }
 
-    private IEnumerator ResetHitEffect()
+    private IEnumerator HitEffectAnimation()
     {
-        yield return new WaitForSeconds(hitDuration);
+        isHitEffectActive = true;
+        float timer = 0f;
+        int flashCount = 0;
+        const int totalFlashes = 3; // Number of times to flash
+        const float flashSpeed = 8f; // Speed of the pingpong effect
 
-        if (enemyRenderer == null) yield break;
+        Material material = enemyRenderer.material;
+        Color baseColor = material.color;
+        Color baseEmission = useEmission && material.HasProperty(EmissionColor) ?
+                             material.GetColor(EmissionColor) : Color.black;
 
-        enemyRenderer.material.color = originalColor;
-
- 
-        if (useEmission && enemyRenderer.material.HasProperty(EmissionColor))
+        while (timer < hitDuration && flashCount < totalFlashes * 2)
         {
-            enemyRenderer.material.SetColor(EmissionColor, originalEmissionColor);
+            timer += Time.deltaTime;
 
+            // PingPong between 0 and 1 to create flashing effect
+            float pingPongValue = Mathf.PingPong(timer * flashSpeed, 1f);
+
+            // Lerp between original and hit colors
+            material.color = Color.Lerp(baseColor, hitColor, pingPongValue);
+
+            if (useEmission && material.HasProperty(EmissionColor))
+            {
+                Color currentEmission = Color.Lerp(baseEmission, Color.red, pingPongValue);
+                material.SetColor(EmissionColor, currentEmission);
+                material.EnableKeyword("_EMISSION");
+            }
+
+            // Count completed half-cycles (each full flash is 2 half-cycles)
+            if (pingPongValue < 0.1f) // Near the start of a new cycle
+            {
+                flashCount++;
+            }
+
+            yield return null;
         }
+
+        // Ensure we return to original colors
+        material.color = baseColor;
+        if (useEmission && material.HasProperty(EmissionColor))
+        {
+            material.SetColor(EmissionColor, baseEmission);
+        }
+
+        isHitEffectActive = false;
     }
 
     // Shared damage logic
@@ -140,10 +183,10 @@ public class Enemy : MonoBehaviour, IDamageable
         ShowDamageNumber(this.transform.position, amount);
         UpdateHealthBar();
         ParticalManager.Instance.Bleed(this.transform);
-        //PlayDamageVFX();
-        PlayHitEffect();
+
+        PlayDamagedVFX();
         Debug.Log(name + " Get Hit: " + amount);
-        SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+        
 
         if (currentHealth <= 0f)
             Die();
