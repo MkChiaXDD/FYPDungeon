@@ -121,7 +121,6 @@ GameObject:
   - component: {fileID: 4821142206564517963}
   - component: {fileID: 728402843038517255}
   - component: {fileID: 6199738596824793647}
-  - component: {fileID: 2972188434460100755}
   m_Layer: 3
   m_Name: RangedMini
   m_TagString: Enemy
@@ -262,14 +261,6 @@ MonoBehaviour:
   currentHealth: 0
   shieldPrefab: {fileID: 0}
   shieldHp: 0
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
-  hitDuration: 1
-  enemyRenderer: {fileID: 0}
-  useEmission: 1
-  originalColor: {r: 0, g: 0, b: 0, a: 0}
-  originalEmissionColor: {r: 0, g: 0, b: 0, a: 0}
-  _totalFlashes: 1
-  dmgFlashSpeed: 8
   pyroResistance: 1
   hydroResistance: 1
   electroResistance: 1
@@ -287,22 +278,6 @@ MonoBehaviour:
   repositionRadius: 10
   repositionDuration: 3
   rotationSpeed: 100
---- !u!114 &2972188434460100755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7786778049398845702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d90e2b850fee4743b8818996b3f52a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnLevelEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  BuffSelectionUI: {fileID: 0}
 --- !u!1001 &3502309873706667504
 PrefabInstance:
   m_ObjectHideFlags: 0
