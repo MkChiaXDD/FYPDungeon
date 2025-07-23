@@ -9,16 +9,21 @@ public class DamageNumber : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.5f;
     [SerializeField] private float lifeTime = 1f;
 
+    [SerializeField] private float scaleDuration = 0.5f; // Duration of the scale-up animation
+    [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Curve for smooth scaling
 
 
 
- 
+
+
     private Vector3 floatDirection;
     private Color originalColor;
     private RectTransform rectTransform;
+    private Vector3 originalScale;
 
     private void Awake()
     {
+        originalScale = transform.localScale;
         rectTransform = GetComponent<RectTransform>();
         originalColor = damageText.color;
 
@@ -73,6 +78,18 @@ public class DamageNumber : MonoBehaviour
     {
         float elapsed = 0f;
         Vector3 startPosition = rectTransform.position;
+
+        // Scale up animation
+        float scaleElapsed = 0f;
+        while (scaleElapsed < scaleDuration)
+        {
+            scaleElapsed += Time.deltaTime;
+            float progress = scaleCurve.Evaluate(scaleElapsed / scaleDuration);
+            rectTransform.localScale = originalScale * progress;
+            yield return null;
+        }
+        rectTransform.localScale = originalScale;
+
 
         while (elapsed < lifeTime)
         {

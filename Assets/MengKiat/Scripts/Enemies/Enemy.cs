@@ -189,9 +189,6 @@ public class Enemy : MonoBehaviour, IDamageable
         ParticalManager.Instance.Bleed(this.transform);
 
         PlayDamagedVFX();
-        Debug.Log(name + " Get Hit: " + amount);
-        
-
         if (currentHealth <= 0f)
             Die();
 
