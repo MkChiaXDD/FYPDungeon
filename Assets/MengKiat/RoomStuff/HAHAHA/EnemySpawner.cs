@@ -19,13 +19,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int RoundToSpawnTank = 4;
     [SerializeField] private int RoundToSpawnBomber = 5;
 
-    private GameObject portal;
-
-    private void Start()
-    {
-        ChooseBoss();
-    }
-
     public void GetAllRoomSpawnPoint()
     {
         if (mapGen == null || enemyPrefabs == null || enemyPrefabs.Count == 0)
@@ -114,7 +107,7 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
+                //Debug.LogWarning("No 'EnemySpawnPoint' found in " + room.name);
             }
         }
 

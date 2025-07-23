@@ -13,7 +13,18 @@ public class Portal : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                ProceedNextLevel();
+                int round = FindFirstObjectByType<DifficultyManager>().GetRound();
+                int maxRound = FindFirstObjectByType<DifficultyManager>().GetMaxRound();
+                Debug.Log($"Round: {round} / Max Round: {maxRound}");
+                if (round < maxRound)
+                {
+                    ProceedNextLevel();
+                }
+                else
+                {
+                    Debug.Log("You Win!");
+                    ProceedToWinscreen();
+                }
                 Destroy(gameObject);
             }
         }
@@ -51,11 +62,11 @@ public class Portal : MonoBehaviour
 
     private void ProceedToWinscreen()
     {
-       //if (!FindObjectOfType<EndingScript>(true))
-       // {
-       //     Debug.Log("Canvas with EndingScript is not found, please rememeber to make it XFZ");
-       // }
+        if (!FindObjectOfType<EndingScript>(true))
+        {
+            Debug.Log("Canvas with EndingScript is not found, please rememeber to make it XFZ");
+        }
 
-       // FindObjectOfType<EndingScript>(true).ProceedToWinscreen();
+        FindObjectOfType<EndingScript>(true).ProceedToWinscreen();
     }
 }

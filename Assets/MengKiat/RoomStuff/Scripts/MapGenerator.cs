@@ -117,6 +117,7 @@ namespace RMG
             transform.localScale = Vector3.one * roomSizeMultiplier;
             var enemySpawner = FindFirstObjectByType<EnemySpawner>();
             enemySpawner.GetAllRoomSpawnPoint();
+            enemySpawner.ChooseBoss();
         }
 
         private void Clear()
@@ -304,6 +305,7 @@ namespace RMG
 
         public void NextLevel()
         {
+            Debug.Log("Generating new map");
             FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
             FindFirstObjectByType<DifficultyManager>()?.IncreaseRound();
             Generate();

@@ -69,11 +69,6 @@ public class Enemy : MonoBehaviour, IDamageable
                 originalEmissionColor = enemyRenderer.material.GetColor(EmissionColor);
             }
         }
-        //if (enemyRenderer.material)
-        //{
-
-        //}
-
     }
 
     public void InitialiseShield()
@@ -256,7 +251,6 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             gameObject.GetComponent<BossCheckDeath>().SummonPortal();
             Destroy(gameObject.GetComponent<BossCheckDeath>());
-            Debug.Log("BOSS DIES");
         }
 
         StaticScreenShake.Shake(Camera.main, deathParams);
@@ -289,7 +283,7 @@ public class Enemy : MonoBehaviour, IDamageable
         int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
         currentHealth = finalHealth;
 
-        Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
+        //Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
 
         damage = data.damage;
 
