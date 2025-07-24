@@ -12,7 +12,7 @@ public class BossPortal : MonoBehaviour
             {
                 Debug.Log("Player Teleport");
                 GameObject playerObject = GameObject.FindWithTag("Player");
-                GameObject bossRoomSpawn = GameObject.Find("PlayerSpawnPoint");
+                GameObject bossRoomSpawn = GameObject.Find("PlayerSpawn");
                 if (playerObject != null && bossRoomSpawn != null)
                 {
                     playerObject.transform.position = new Vector3(bossRoomSpawn.transform.position.x, playerObject.transform.position.y, bossRoomSpawn.transform.position.z);

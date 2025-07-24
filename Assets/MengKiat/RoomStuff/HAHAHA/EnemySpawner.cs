@@ -134,7 +134,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void ChooseBoss()
     {
-        GameObject spawnObj = GameObject.Find("BossSpawnPos");
+        GameObject spawnObj = GameObject.Find("BossSpawn");
 
         if (spawnObj == null)
         {
