@@ -6,6 +6,8 @@ public class Breakable : MonoBehaviour, IDamageable
 {
     [SerializeField] private GameObject brokenObject;
     [SerializeField] private ItemDropSystem dropSystem;
+    [SerializeField] private PhysicalAttackType attackTypeToBreak;
+    [SerializeField] private string BreakSFXName;
 
     [SerializeField] float explodeRange = 1.5f;
     [SerializeField] float explosionRadius = 3f;
@@ -20,7 +22,8 @@ public class Breakable : MonoBehaviour, IDamageable
         if (dropSystem)
         { 
             dropSystem.SpawnDropItem();
-        }     
+        }
+        PlayBreakSFX(BreakSFXName);
         Destroy(gameObject);
     }
     //spreads itself outwards, does not affect anything else
@@ -41,14 +44,20 @@ public class Breakable : MonoBehaviour, IDamageable
             }
         }
     }
+
+    private void PlayBreakSFX(string BreakSFX)
+    {
+        SoundManager.Instance.PlaySFX(BreakSFX, this.gameObject);
+    }
     public void TakeElementalDamage(float damage, ElementType element) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage"); }
     public void TakeDamage(float damage) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage");  }
     public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
     {
-        if (attackType == PhysicalAttackType.Blunt)
-        {
-            Die();
-        }
+        //if (attackType == PhysicalAttackType.Blunt)
+        //{
+        //    Die();
+        //}
+        Die();
     }
     public void Die() => StartCoroutine(nameof(BreakObject));
     public void DropItem() => dropSystem.SpawnDropItem();
