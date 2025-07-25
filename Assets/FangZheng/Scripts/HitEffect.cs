@@ -1,4 +1,4 @@
-using Cdm.Figma;
+//using Cdm.Figma; //I comment this out as it is showing error. - Kapaw
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
