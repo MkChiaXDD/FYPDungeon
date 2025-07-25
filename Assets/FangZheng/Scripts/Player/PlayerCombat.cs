@@ -1,14 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public enum AttackType { Light, Heavy }
 
+[RequireComponent(typeof(PlayerMovement), typeof(Inventory))]
 public class PlayerCombat : MonoBehaviour
 {
+    #region Constants
+    private const float COMBO_WINDOW_DELAY = 0.2f;
+    private const float DASH_ATTACK_DURATION = 0.2f;
+    private const float PARRY_ACTIVE_DURATION = 0.5f;
+    private const float ENEMY_DETECTION_HEIGHT_OFFSET = 1f;
+    private const float ATTACK_HEIGHT_OFFSET = 1f;
+    #endregion
+
+    #region Serialized Fields
     [Header("Player Data")]
     [SerializeField] private PlayerData _playerData;
 
@@ -19,105 +28,133 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Targeting & Lock-On")]
     [SerializeField] private float _lockOnAngleThreshold = 35f;
+    [SerializeField] private float _targetDetectionRadius = 15f;
     [SerializeField] private Transform _targetEnemy;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private GameObject _targetIndicator;
+
+    [Header("Blocking & Parry")]
+    [SerializeField] private float _parryThreshold = 0.5f;
+    [SerializeField] private float _parryDuration = 4f;
+    [SerializeField] private GameObject _parryZone;
+
+    [Header("Combat & Weapons")]
+    [SerializeField] private Transform _weaponHoldPoint;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private BaseAttackScript _currentBasicAttack;
+    [SerializeField] private BaseAttackScript baseBasicAttack;
+    [SerializeField] private Material breakMaterial;
+
+    [Header("Attack Settings")]
+
+    public float _lightAttackCooldown = 0.5f;
+    public float _heavyAttackCooldown = 1.5f;
+    public float _minChargeTime = 0.1f;
+    public float _maxChargeTime = 2f;
+    [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
+    [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
+    [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
+
+    [Header("Attack Recovery")]
+    [SerializeField] private float _attackRecoveryTime = 0.1f; // Time to recover after each attack
+    private bool _isInRecovery = false;
+
+    [Header("Inventory")]
+    [SerializeField] private InventoryManager _inventoryManager;
+
+    [Header("Mimic")]
+    [SerializeField] private MimicSpawner _mimicSpawner;
+    [SerializeField] private GameObject _mimicClonePrefab;
+    #endregion
+
+    #region Private Fields
+    private GameObject _equippedWeapon;
+    public Weapon _currentWeapon;
+    private ItemInstance _currentItem;
+
+    // Targeting
     private bool _isLockedOn = false;
     private bool _autoTargeting = true;
     private int _currentTargetIndex;
     private Dictionary<GameObject, float> _nearbyEnemies = new Dictionary<GameObject, float>();
     private Dictionary<GameObject, float> _visibleEnemies = new Dictionary<GameObject, float>();
 
-    [Header("Blocking & Parry")]
-    [SerializeField] private float _parryThreshold = 0.5f;
-    [SerializeField] private float _parryDuration = 4f;
-    [SerializeField] private float _parryCooldown;
-    [SerializeField] private GameObject _parryZone;
+    // Blocking/Parry
+    private float _parryCooldown;
     private float _blockHoldStartTime;
     private bool _isParrying;
     private bool _isBlocking;
 
-    [Header("Combat & Weapons")]
-    [SerializeField] private Transform _weaponHoldPoint;
-    [SerializeField] private Animator _animator;
-
-    [SerializeField] private BaseAttackScript _currentBasicAttack;
-    [SerializeField] private BaseAttackScript baseBasicAttack;  
-    private GameObject _equippedWeapon;
-    public Weapon _currentWeapon;
+    // Attacks
     private float _lastAttackTime;
-    [SerializeField] private Material breakMaterial;
-
-    [Header("Attack Settings")]
-    [SerializeField] private float _lightAttackCooldown = 0.5f;
-    [SerializeField] private float _heavyAttackCooldown = 1.5f;
-    [SerializeField] public float _minChargeTime = 0.1f;
-    [SerializeField] public float _maxChargeTime = 2f;
-    
-    [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
-    [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
-    [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
-
     private float _currentAttackCooldown;
     private float _chargeStartTime;
     private bool _isCharging;
-    public UnityEvent ChargeUp;
-    public UnityEvent Uncharge;
-
     private AttackType _lastAttackType;
     private bool _canComboContinue;
     private bool _isInComboWindow;
 
-   
+    // Cached components
+    private Inventory _inventory;
+    #endregion
 
-    [Header("Inventory")]
-    [SerializeField] private InventoryManager _inventoryManager;
-    private ItemInstance _currentItem;
+    #region Events
+    public UnityEvent ChargeUp;
+    public UnityEvent Uncharge;
+    #endregion
 
-    [Header("Mimic")]
-    [SerializeField] private MimicSpawner _mimicSpawner;
-    [SerializeField] private GameObject _mimicClonePrefab;
-
-
-   
-
+    #region Properties
     public static PlayerCombat Instance { get; private set; }
+    public bool IsLockedOn => _isLockedOn;
+    public Transform TargetEnemy => _targetEnemy;
+    #endregion
 
+    #region Unity Lifecycle
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+
+        _inventory = GetComponent<Inventory>();
     }
 
     private void Start()
     {
-        _playerMovement = GetComponent<PlayerMovement>();
+        if (_playerMovement == null)
+        {
+            _playerMovement = GetComponent<PlayerMovement>();
+        }
+
         _currentBasicAttack = baseBasicAttack;
     }
 
     private void OnEnable()
     {
-        GetComponent<Inventory>().ChangeSlot.AddListener(UpdateEquippedItem);
+        _inventory.ChangeSlot.AddListener(UpdateEquippedItem);
         _inventoryManager.ModifySlot.AddListener(UpdateEquippedItem);
         _playerData.DataChange.AddListener(ApplyPlayerStats);
     }
 
     private void OnDisable()
     {
-        GetComponent<Inventory>().ChangeSlot.AddListener(UpdateEquippedItem);
-        _inventoryManager.ModifySlot.AddListener(UpdateEquippedItem);
-        _playerData.DataChange.AddListener(ApplyPlayerStats);
+        _inventory.ChangeSlot.RemoveListener(UpdateEquippedItem);
+        _inventoryManager.ModifySlot.RemoveListener(UpdateEquippedItem);
+        _playerData.DataChange.RemoveListener(ApplyPlayerStats);
     }
 
     private void Update()
     {
         HandleBlocking();
         HandleLockOn();
+        // Update recovery timer
+        if (_isInRecovery && Time.time > _lastAttackTime + _currentAttackCooldown + _attackRecoveryTime)
+        {
+            _isInRecovery = false;
+        }
 
         if (_isLockedOn)
         {
@@ -133,51 +170,54 @@ public class PlayerCombat : MonoBehaviour
             {
                 ClearTargeting();
             }
-            else
+            else if (!_targetIndicator.activeInHierarchy)
             {
-                if (_targetIndicator.gameObject.activeInHierarchy == false)
-                {
-                    _targetIndicator.gameObject.SetActive(true);
-                }
+                _targetIndicator.SetActive(true);
             }
         }
 
         UpdateTargetIndicator();
         HandleAttacks();
-        _parryCooldown -= Time.deltaTime;
+
+        if (_parryCooldown > 0)
+        {
+            _parryCooldown -= Time.deltaTime;
+        }
     }
+    #endregion
 
     #region Combat Core
     private void HandleAttacks()
     {
+        if (_isInRecovery) return; // Prevent charging during recovery
         HandleChargedAttack();
         HandleSpecialAttack();
     }
 
     private void HandleChargedAttack()
     {
-        
         // Start charging heavy attack
-        if (Input.GetMouseButtonDown(0) && Time.time + _minChargeTime > _lastAttackTime + _currentAttackCooldown)
+        if (Input.GetMouseButtonDown(0))
         {
-            _isCharging = true;
-            _chargeStartTime = Time.time;
-            _playerMovement.SetMovementLock(true); // Lock movement during charge
-            if (Time.time > _lastAttackTime + _currentAttackCooldown) {
+            if (Time.time > _lastAttackTime + _currentAttackCooldown)
+            {
+                _isCharging = true;
+                _chargeStartTime = Time.time;
+                _playerMovement.SetMovementLock(true);
                 ChargeUp?.Invoke();
-                Debug.Log("Charging up : " + Time.time + " and " + _lastAttackTime);
             }
-            
         }
 
         // Execute attack on release
         if (Input.GetMouseButtonUp(0) && _isCharging)
         {
             _isCharging = false;
-            _playerMovement.SetMovementLock(false); // Unlock movement
+            _playerMovement.SetMovementLock(false);
 
             float chargeTime = Time.time - _chargeStartTime;
+
             ExecuteAttack(chargeTime);
+
             Uncharge?.Invoke();
         }
 
@@ -190,19 +230,23 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-
     private void HandleSpecialAttack()
     {
-        if (Input.GetMouseButtonDown(1) && _currentWeapon != null)
+        if (!_currentWeapon)
+            return;
+
+        if (Input.GetMouseButtonDown(1))
         {
-            _currentWeapon.Cast();       
+            _currentWeapon.Cast();
         }
     }
 
-
     private void ExecuteAttack(float chargeTime)
     {
+        if (_isInRecovery) return; // Prevent attacking during recovery
+
         _lastAttackTime = Time.time;
+        _isInRecovery = true;
 
         if (chargeTime >= _minChargeTime)
         {
@@ -210,11 +254,10 @@ public class PlayerCombat : MonoBehaviour
             _currentAttackCooldown = _heavyAttackCooldown;
             _lastAttackType = AttackType.Heavy;
 
-            // Calculate heavy attack damage and AOE based on charge time
             float chargePercent = Mathf.Clamp01((chargeTime - _minChargeTime) / (_maxChargeTime - _minChargeTime));
             float damageMultiplier = 1f + chargePercent;
             float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
-            Uncharge?.Invoke();
+
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
@@ -223,30 +266,11 @@ public class PlayerCombat : MonoBehaviour
             // Light attack
             _currentAttackCooldown = _lightAttackCooldown;
             _lastAttackType = AttackType.Light;
-            Uncharge?.Invoke();
             ExecuteLightAttack();
         }
 
-        // Apply durability cost
-        if (_currentWeapon != null)
-        {
-            int durabilityCost = _lastAttackType == AttackType.Light ?
-                _currentWeapon.baseDurabilityCost :
-                _currentWeapon.baseDurabilityCost * 2;
-
-            Debug.LogWarning(durabilityCost);
-
-            Uncharge?.Invoke();
-            GetComponent<Inventory>().BreakItem(GetComponent<Inventory>().equippedSlotNum, durabilityCost);
-        }
-
-        // Spawn mimic if applicable
-        if (_mimicSpawner != null)
-        {
-            _mimicSpawner.TrySpawnMimic();
-        }
-
-        Uncharge?.Invoke();
+        ApplyDurabilityCost();
+        TrySpawnMimic();
     }
 
     private void ExecuteLightAttack()
@@ -257,53 +281,30 @@ public class PlayerCombat : MonoBehaviour
             StartCoroutine(DashToAttack(attackPosition, true));
         }
         else
-        {      
+        {
             _currentBasicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
-
-            if (SoundManager.Instance != null)
-            {
-                SoundManager.Instance.PlaySFX("BasicAttack" , this.gameObject);
-            }
+            PlayAttackSound("BasicAttack");
         }
     }
 
     private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
     {
-        if (_isLockedOn && _targetEnemy != null)
-        {
-            // Attack in locked direction
-            _currentBasicAttack.ExecuteHeavyAttack(
-                _targetEnemy.position,
-                damageMultiplier,
-                aoeRadius
-            );
-        }
-        else
-        {
-            // Attack in facing direction
-            Vector3 attackDirection = _playerMovement.GetDirection();
-            Vector3 attackPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z) + attackDirection * 2f;
-            
-            _currentBasicAttack.ExecuteHeavyAttack(
-                attackPosition,
-                damageMultiplier,
-                aoeRadius
-            );
-        }
+        Vector3 attackPosition = _isLockedOn && _targetEnemy != null
+            ? _targetEnemy.position
+            : transform.position + _playerMovement.GetDirection() * 2f + Vector3.up * ATTACK_HEIGHT_OFFSET;
+
+        _currentBasicAttack.ExecuteHeavyAttack(attackPosition, damageMultiplier, aoeRadius);
         TriggerAttackAnimation("HeavyAttack");
     }
-
-
 
     private IEnumerator HeavyAttackMovement()
     {
         float elapsed = 0;
         Vector3 startPos = transform.position;
-        Vector3 moveDirection = _isLockedOn && _targetEnemy != null ?
-            (_targetEnemy.position - transform.position).normalized :
-            transform.forward;
-
+        Vector3 moveDirection = _isLockedOn && _targetEnemy != null
+            ? (_targetEnemy.position - transform.position).normalized
+            : transform.forward;
         Vector3 endPos = startPos + moveDirection * _heavyAttackMoveDistance;
 
         while (elapsed < _heavyAttackMoveDuration)
@@ -320,9 +321,9 @@ public class PlayerCombat : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 endPos = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
 
-        while (elapsed < 0.2f)
+        while (elapsed < DASH_ATTACK_DURATION)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsed / 0.15f);
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / DASH_ATTACK_DURATION);
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -330,10 +331,7 @@ public class PlayerCombat : MonoBehaviour
         if (isLightAttack)
         {
             _currentBasicAttack.ExecuteLightAttack();
-            if (SoundManager.Instance != null)
-            {
-                SoundManager.Instance.PlaySFX("BasicAttack", this.gameObject);
-            }
+            PlayAttackSound("BasicAttack");
         }
         TriggerAttackAnimation(isLightAttack ? "LightAttack" : "HeavyAttack");
     }
@@ -355,9 +353,35 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
-            // Heavy attacks reset combo
             ResetCombo();
             _animator.SetTrigger("HeavyAttack");
+        }
+    }
+
+    private void PlayAttackSound(string soundName)
+    {
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlaySFX(soundName, gameObject);
+        }
+    }
+
+    private void ApplyDurabilityCost()
+    {
+        if (_currentWeapon == null) return;
+
+        int durabilityCost = _lastAttackType == AttackType.Light
+            ? _currentWeapon.baseDurabilityCost
+            : _currentWeapon.baseDurabilityCost * 2;
+
+        _inventory.BreakItem(_inventory.equippedSlotNum, durabilityCost);
+    }
+
+    private void TrySpawnMimic()
+    {
+        if (_mimicSpawner != null)
+        {
+            _mimicSpawner.TrySpawnMimic();
         }
     }
     #endregion
@@ -411,16 +435,17 @@ public class PlayerCombat : MonoBehaviour
         StartCoroutine(ParryDuration());
     }
 
-    public void ResetParryCooldown()
-    {
-        _parryCooldown = _playerData.ParryDuration;
-    }
-
     private IEnumerator ParryDuration()
     {
         _parryCooldown = _parryDuration;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(PARRY_ACTIVE_DURATION);
 
+        _isParrying = false;
+        _parryZone.SetActive(false);
+    }
+
+    public void CancelParry()
+    {
         _isParrying = false;
         _parryZone.SetActive(false);
     }
@@ -440,34 +465,37 @@ public class PlayerCombat : MonoBehaviour
 
         _equippedWeapon = Instantiate(item.ItemPrefab, _weaponHoldPoint);
         ConfigureWeaponPhysics(_equippedWeapon);
-        
 
         _currentWeapon = _equippedWeapon.GetComponent<Weapon>();
-        _currentBasicAttack = _currentWeapon.weaponData.baseAttackScript;
-
         if (_currentWeapon != null)
         {
+            _currentBasicAttack = _currentWeapon.weaponData.baseAttackScript;
             _currentWeapon.CurrDurability = item.Durability;
         }
     }
 
     private void ConfigureWeaponPhysics(GameObject weapon)
     {
-        Collider weaponCollider = weapon.GetComponent<Collider>();
-        if (weaponCollider != null) weaponCollider.isTrigger = true;
+        if (weapon.TryGetComponent<Collider>(out var weaponCollider))
+        {
+            weaponCollider.isTrigger = true;
+        }
 
-        Rigidbody weaponRb = weapon.GetComponent<Rigidbody>();
-        if (weaponRb != null) weaponRb.isKinematic = true;
+        if (weapon.TryGetComponent<Rigidbody>(out var weaponRb))
+        {
+            weaponRb.isKinematic = true;
+        }
     }
 
     private void ClearWeapon()
     {
         if (_equippedWeapon != null)
         {
-            _equippedWeapon.AddComponent<WeaponBreak>().Dissolve_Shader = breakMaterial;
-            _equippedWeapon.GetComponent<WeaponBreak>().dissolveSpeed = 2;
+            var weaponBreak = _equippedWeapon.AddComponent<WeaponBreak>();
+            weaponBreak.Dissolve_Shader = breakMaterial;
+            weaponBreak.dissolveSpeed = 2;
 
-            _equippedWeapon.gameObject.transform.SetParent(null, true);
+            _equippedWeapon.transform.SetParent(null, true);
             _equippedWeapon = null;
         }
         _currentBasicAttack = baseBasicAttack;
@@ -492,74 +520,34 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (var enemy in _nearbyEnemies)
         {
-            if (enemy.Key == null) continue;
-
-            if (IsEnemyVisible(enemy.Key))
+            if (enemy.Key != null && IsEnemyVisible(enemy.Key))
             {
                 _visibleEnemies.Add(enemy.Key, enemy.Value);
             }
         }
     }
 
-
     private void ScanForNearbyEnemies()
     {
         _nearbyEnemies.Clear();
 
-        // Define detection parameters
-        float detectionRadius = 15f;
-        Vector3 detectionCenter = transform.position + Vector3.up * 1f;
+        Vector3 detectionCenter = transform.position + Vector3.up * ENEMY_DETECTION_HEIGHT_OFFSET;
+        var hitColliders = Physics.OverlapSphere(detectionCenter, _targetDetectionRadius, _enemyLayer);
 
-        // Detect all enemies in radius
-        Collider[] hitColliders = Physics.OverlapSphere(
-            detectionCenter,
-            detectionRadius,
-            _enemyLayer
-        );
-
-        // Process detected enemies
         foreach (var hitCollider in hitColliders)
         {
-            GameObject enemy = hitCollider.gameObject;
+            if (hitCollider.gameObject == null) continue;
 
-            // Skip if enemy is null or already dead
-            if (enemy == null) continue;
-
-            // Calculate distance to player
-            float distance = Vector3.Distance(
-                transform.position,
-                enemy.transform.position
-            );
-
-            // Add to nearby enemies dictionary
-            if (!_nearbyEnemies.ContainsKey(enemy))
-            {
-                _nearbyEnemies.Add(enemy, distance);
-            }
-            else
-            {
-                _nearbyEnemies[enemy] = distance;
-            }
+            float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
+            _nearbyEnemies[hitCollider.gameObject] = distance;
         }
-
     }
 
     private bool IsEnemyVisible(GameObject enemy)
     {
         Vector3 direction = (enemy.transform.position - transform.position).normalized;
         float angle = Vector3.Angle(_playerMovement.GetDirection(), direction);
-
         return angle <= _lockOnAngleThreshold && HasLineOfSight(enemy);
-    }
-
-    public void EnableMimic(bool enable)
-    {
-        _mimicSpawner.enabled = enable;
-    }
-    public void SetUpMimic(MimicSpawner mimic)
-    {
-        _mimicSpawner = mimic;
-        _mimicSpawner._mimicClonePrefab = _mimicClonePrefab;
     }
 
     private bool HasLineOfSight(GameObject target)
@@ -589,7 +577,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void HandleTargetSwitching()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && _visibleEnemies.Count > 0)
         {
             _autoTargeting = false;
             _currentTargetIndex = (_currentTargetIndex + 1) % _visibleEnemies.Count;
@@ -599,8 +587,6 @@ public class PlayerCombat : MonoBehaviour
 
     private void SelectTargetByIndex()
     {
-        if (_visibleEnemies.Count == 0) return;
-
         var sortedTargets = _visibleEnemies.OrderBy(e => e.Value).ToArray();
         _targetEnemy = sortedTargets[_currentTargetIndex].Key.transform;
     }
@@ -618,11 +604,21 @@ public class PlayerCombat : MonoBehaviour
         _currentTargetIndex = 0;
         _autoTargeting = true;
         _targetEnemy = null;
+        _targetIndicator.SetActive(false);
+    }
 
-        if (_targetIndicator.gameObject.activeInHierarchy == true)
+    public void EnableMimic(bool enable)
+    {
+        if (_mimicSpawner != null)
         {
-            _targetIndicator.gameObject.SetActive(false);
+            _mimicSpawner.enabled = enable;
         }
+    }
+
+    public void SetUpMimic(MimicSpawner mimic)
+    {
+        _mimicSpawner = mimic;
+        _mimicSpawner._mimicClonePrefab = _mimicClonePrefab;
     }
     #endregion
 
@@ -650,7 +646,6 @@ public class PlayerCombat : MonoBehaviour
     #region Stat Management
     private void ApplyPlayerStats()
     {
-        //_playerDamage = _playerData.Damage;
         _parryDuration = _playerData.ParryDuration;
     }
     #endregion
