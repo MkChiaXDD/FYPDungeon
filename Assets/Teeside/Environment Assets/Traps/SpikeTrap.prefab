@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 214953582877312795}
   - component: {fileID: 4751063357345343565}
   - component: {fileID: 5603098670613591667}
-  - component: {fileID: 4078720705900493388}
   - component: {fileID: 5057730896484600511}
+  - component: {fileID: 478037121565370897}
   m_Layer: 0
   m_Name: SpikeTrap
   m_TagString: Untagged
@@ -86,27 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4078720705900493388
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6416951119983539817}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4, y: 1.3231521, z: 4}
-  m_Center: {x: -2, y: 0.16157615, z: 2}
 --- !u!114 &5057730896484600511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +105,27 @@ MonoBehaviour:
   spikes: {fileID: 8967376181840035373}
   spikeMoveSpeed: 0.3
   spikeForwardDistance: 0.01
+--- !u!65 &478037121565370897
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416951119983539817}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1, z: 2}
+  m_Center: {x: -1, y: 0, z: 1}
 --- !u!1001 &1520544020880098664
 PrefabInstance:
   m_ObjectHideFlags: 0

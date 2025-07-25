@@ -80,29 +80,34 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySFX(string clipName , GameObject obj , bool DoesDitanceEffect = true)
+    public void PlaySFX(string clipName, GameObject obj, bool DoesDistanceEffect = true)
     {
         if (sfxDict.ContainsKey(clipName))
         {
-            sfxSource.clip = sfxDict[clipName];
-
-            float distance = (Player.transform.position - obj.transform.position).magnitude;
-
-            if (DoesDitanceEffect && distance > Hearing_Distance)
+            if (DoesDistanceEffect)
             {
- 
-                return;
+                if (obj == null) return;
+                if (Player == null) return;
+
+                float distance = (Player.transform.position - obj.transform.position).magnitude;
+
+                if (distance > Hearing_Distance)
+                    return;
+
+                float volume = Mathf.Clamp01(1 - (distance / Hearing_Distance));
+                sfxSource.volume = volume;
+            }
+            else
+            {
+                sfxSource.volume = 1f;
             }
 
-            float volume = DoesDitanceEffect ? Mathf.Clamp01(1 - (distance / Hearing_Distance)) : 1f;
-
             sfxSource.PlayOneShot(sfxDict[clipName]);
-            sfxSource.Play();
-            Debug.LogWarning("this is played" + clipName);
         }
         else
         {
             Debug.LogWarning("SFX clip " + clipName + " not found!");
         }
     }
+
 }
