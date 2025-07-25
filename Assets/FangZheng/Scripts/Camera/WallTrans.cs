@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class WallTrans : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class WallTrans : MonoBehaviour
     public LayerMask Wall;
     public LayerMask Playerlayer;
     public float transparencyAmount = 0.5f;
-    public float rayRadius = 0.1f;
+    public float extraDetectionMargin = 0.1f;
+
+    private BoxCollider playerCollider;
 
     public List<Renderer> AllWalls;
 
@@ -23,6 +26,8 @@ public class WallTrans : MonoBehaviour
     public List<GameObject> HiddenObject;
     private void Start()
     {
+        playerCollider = player.GetComponent<BoxCollider>();
+
         foreach (Renderer wall in AllWalls)
         {
             Material[] Materials = new Material[wall.materials.Length];
@@ -46,11 +51,25 @@ public class WallTrans : MonoBehaviour
     private void Update()
     {
         Vector3 Direction =  transform.position - player.position;
+
         //float distance = Direction.magnitude;
+        // Calculate collider bounds with extra margin
+        Bounds colliderBounds = playerCollider.bounds;
+        colliderBounds.Expand(extraDetectionMargin * 2); // Expand in all directions
+
 
         RaycastHit[] hits;
-        hits = Physics.RaycastAll(player.position, Direction.normalized, 100, Wall);
-        Debug.DrawRay(player.position, Direction.normalized * 100, Color.red, 2.0f);
+        hits = Physics.BoxCastAll(
+            colliderBounds.center,
+            colliderBounds.extents,
+            Direction.normalized,
+            player.rotation,
+            1000,
+            Wall
+
+        );
+
+    
         ResetWall();
         foreach (RaycastHit hit in hits)
         {
@@ -77,6 +96,7 @@ public class WallTrans : MonoBehaviour
 
         foreach (GameObject hidenwalls in HiddenObject)
         {
+            if (hidenwalls)
             hidenwalls.GetComponent<Renderer>().enabled = true;
         }
         HiddenObject.Clear();
