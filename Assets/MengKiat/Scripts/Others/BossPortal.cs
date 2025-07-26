@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class BossPortal : MonoBehaviour
 {
+    [SerializeField] private GameObject portalInteraction;
     public bool playerInRange = false;
+
+    private void Start()
+    {
+        portalInteraction.SetActive(false);
+    }
 
     private void Update()
     {
@@ -27,6 +33,7 @@ public class BossPortal : MonoBehaviour
         if (other.CompareTag("PlayerBody"))
         {
             playerInRange = true;
+            portalInteraction.SetActive(true);
         }
     }
 
@@ -35,6 +42,7 @@ public class BossPortal : MonoBehaviour
         if (other.CompareTag("PlayerBody"))
         {
             playerInRange = false;
+            portalInteraction.SetActive(false);
         }
     }
 }

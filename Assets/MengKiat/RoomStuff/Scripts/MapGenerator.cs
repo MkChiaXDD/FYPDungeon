@@ -321,5 +321,14 @@ namespace RMG
             GameObject player = GameObject.FindWithTag("Player");
             player.transform.position = new Vector3(0, -0.02000004f, 0);
         }
+
+        public void Restart()
+        {
+            Debug.Log("Generating new map");
+            FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
+            Generate();
+            GameObject player = GameObject.FindWithTag("Player");
+            player.transform.position = new Vector3(0, -0.02000004f, 0);
+        }
     }
 }

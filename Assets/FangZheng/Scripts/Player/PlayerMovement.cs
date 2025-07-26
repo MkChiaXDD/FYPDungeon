@@ -137,7 +137,6 @@ public class PlayerMovement : MonoBehaviour
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlaySFX("PlayerDash", this.gameObject);
-
         }
         _isDashing = true;
         _meshTrail.HandleTrailActivation();

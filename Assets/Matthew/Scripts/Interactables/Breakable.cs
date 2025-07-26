@@ -17,12 +17,16 @@ public class Breakable : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     private IEnumerator BreakObject()
     {
+        if (brokenObject)
         yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
-        SelfExplode();
+
         if (dropSystem)
-        { 
+        {
             dropSystem.SpawnDropItem();
         }
+
+        SelfExplode();
+        
         PlayBreakSFX(BreakSFXName);
         Destroy(gameObject);
     }

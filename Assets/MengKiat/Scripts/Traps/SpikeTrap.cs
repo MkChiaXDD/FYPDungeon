@@ -34,7 +34,6 @@ public class SpikeTrap : MonoBehaviour
                 if (SoundManager.Instance != null)
                 {
                     SoundManager.Instance.PlaySFX("Spike", this.gameObject);
-
                 }
                 isActivated = true;
                 timer = 0;

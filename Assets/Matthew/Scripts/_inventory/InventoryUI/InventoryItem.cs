@@ -1,4 +1,3 @@
-//using Cdm.Figma;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
