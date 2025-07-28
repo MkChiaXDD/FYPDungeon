@@ -5,8 +5,8 @@ using TMPro;
 
 public class HealthBar : MonoBehaviour
 {
-    public PlayerData PlayerData;  
-    public float healthMax;
+    public PlayerData PlayerData;
+    public float maxHealth;
     public float health;
     [SerializeField] private Material healthAmountMaterial;
     [SerializeField] private TMP_Text HealthText;
@@ -15,10 +15,11 @@ public class HealthBar : MonoBehaviour
     private Coroutine healthAnimation;  // Reference to active animation coroutine
     public float animationSpeed = 1f;  // Speed of health bar animation
 
-    void Start()
+    private void Awake()
     {
         Initialise();
     }
+
 
     private void OnDestroy()
     {
@@ -27,19 +28,11 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        // Update target values from PlayerData
-        health = PlayerData.CurrentHealth;
-        healthMax = PlayerData.MaxHealth;
+        UpdatePlayerHealth();
 
-        // Calculate new target fill amount
-        float newTarget = Mathf.Clamp01(health / healthMax);
-
-        // Start animation if target changed
+        float newTarget = health / maxHealth;
         if (newTarget != targetFillAmount)
         {
-            HealthText.text = newTarget + " / " + healthMax;
-            targetFillAmount = newTarget;
-
             // Stop existing animation if running
             if (healthAnimation != null)
             {
@@ -49,6 +42,8 @@ public class HealthBar : MonoBehaviour
             // Start new animation
             healthAnimation = StartCoroutine(AnimateHealthBar());
         }
+
+      
     }
 
     IEnumerator AnimateHealthBar()
@@ -76,8 +71,17 @@ public class HealthBar : MonoBehaviour
 
     private void Initialise()
     {
-        health = healthMax;
-        targetFillAmount = healthMax / healthMax;
-        healthAmountMaterial.SetFloat("_AmountOfLiquid", healthMax / healthMax);
+        health = maxHealth;
+        targetFillAmount = maxHealth / maxHealth;
+        healthAmountMaterial.SetFloat("_AmountOfLiquid", maxHealth / maxHealth);
+
+    }
+
+    private void UpdatePlayerHealth()
+    {
+        // Update target values from PlayerData
+        health = PlayerData.CurrentHealth;
+        maxHealth = PlayerData.MaxHealth;
+        HealthText.text = health + " / " + maxHealth;
     }
 }
