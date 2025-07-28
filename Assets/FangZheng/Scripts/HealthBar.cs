@@ -5,34 +5,61 @@ using TMPro;
 
 public class HealthBar : MonoBehaviour
 {
+    [Header("References")]
     public PlayerData PlayerData;
-    public float maxHealth;
-    public float health;
     [SerializeField] private Material healthAmountMaterial;
-    [SerializeField] private TMP_Text HealthText;
+    [SerializeField] private TMP_Text healthText;
 
-    private float targetFillAmount;  // Target value for smooth animation
-    private Coroutine healthAnimation;  // Reference to active animation coroutine
-    public float animationSpeed = 1f;  // Speed of health bar animation
+    [Header("Settings")]
+    [SerializeField] private float animationSpeed = 1f;
+
+    private float targetFillAmount;
+    private Coroutine healthAnimation;
+
 
     private void Awake()
     {
-        Initialise();
+        Initialize();
     }
 
-
-    private void OnDestroy()
+    private void OnEnable()
     {
-        Initialise(); //call again so th
+        // Reset when enabled (better than OnDestroy for object pooling)
+        Initialize();
     }
 
-    void Update()
+    private void Update()
     {
-        UpdatePlayerHealth();
-
-        float newTarget = health / maxHealth;
-        if (newTarget != targetFillAmount)
+        if (healthAmountMaterial.GetFloat("_AmountOfLiquid") != PlayerData.CurrentHealth / PlayerData.MaxHealth)
         {
+            UpdateHealthDisplay();
+        }
+    }
+
+    private void Initialize()
+    {
+        if (PlayerData != null)
+        {
+            healthText.text = $"{PlayerData.CurrentHealth} / {PlayerData.MaxHealth}";
+            targetFillAmount = PlayerData.CurrentHealth / PlayerData.MaxHealth;
+            healthAmountMaterial.SetFloat("_AmountOfLiquid", targetFillAmount);
+        }
+    }
+
+    private void UpdateHealthDisplay()
+    {
+        if (PlayerData == null) return;
+
+        // Update text display
+        healthText.text = $"{PlayerData.CurrentHealth} / {PlayerData.MaxHealth}";
+
+        // Calculate new target
+        float newTarget = PlayerData.CurrentHealth / PlayerData.MaxHealth;
+
+        if (!Mathf.Approximately(newTarget, targetFillAmount))
+        {
+            targetFillAmount = newTarget;
+
             // Stop existing animation if running
             if (healthAnimation != null)
             {
@@ -42,46 +69,28 @@ public class HealthBar : MonoBehaviour
             // Start new animation
             healthAnimation = StartCoroutine(AnimateHealthBar());
         }
-
-      
     }
 
-    IEnumerator AnimateHealthBar()
+    private IEnumerator AnimateHealthBar()
     {
-        // Get initial fill amount from material
         float currentFill = healthAmountMaterial.GetFloat("_AmountOfLiquid");
+        float tolerance = 0.001f; // Small value to prevent unnecessary iterations
 
-        // Animate until we reach target value
-        while (currentFill != targetFillAmount)
+        while (Mathf.Abs(currentFill - targetFillAmount) > tolerance)
         {
-            // Smoothly interpolate towards target
             currentFill = Mathf.MoveTowards(
                 currentFill,
                 targetFillAmount,
                 animationSpeed * Time.deltaTime
             );
 
-            // Update material property
             healthAmountMaterial.SetFloat("_AmountOfLiquid", currentFill);
-
-            // Wait until next frame
             yield return null;
         }
+
+        // Ensure final value is set exactly
+        healthAmountMaterial.SetFloat("_AmountOfLiquid", targetFillAmount);
+        healthAnimation = null;
     }
 
-    private void Initialise()
-    {
-        health = maxHealth;
-        targetFillAmount = maxHealth / maxHealth;
-        healthAmountMaterial.SetFloat("_AmountOfLiquid", maxHealth / maxHealth);
-
-    }
-
-    private void UpdatePlayerHealth()
-    {
-        // Update target values from PlayerData
-        health = PlayerData.CurrentHealth;
-        maxHealth = PlayerData.MaxHealth;
-        HealthText.text = health + " / " + maxHealth;
-    }
 }
