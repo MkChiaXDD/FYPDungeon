@@ -141,7 +141,7 @@ public class RangedMiniController : Enemy
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
             b.Initialize(player.position - transform.position, bulletSplitAmt);
-            b.SetDamage(data.damage);
+            b.SetDamage(data.damage / bulletSplitAmt);
         }
     }
 
