@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class TankEnemyController : Enemy
 {
-
-    
-
     [Header("Stats")]
     [SerializeField] private float attackCooldown = 1f;
 
@@ -32,6 +29,7 @@ public class TankEnemyController : Enemy
     private float attackTimer;
     private Vector3 currentDir;
     private float originalSmoothing;
+    private float originalSpeed;
 
     [Header("Throwing Settings")]
     [SerializeField] private float throwingForce = 25f;
@@ -42,6 +40,12 @@ public class TankEnemyController : Enemy
 
     private enum State { Idle, Chase, Attack, RushToBomber }
     private State state;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        originalSpeed = CurrentMoveSpeed;
+    }
 
     void Start()
     {
@@ -74,6 +78,7 @@ public class TankEnemyController : Enemy
         {
             case State.Idle:
                 attackTimer = attackCooldown;
+                ResetSpeed(); // Return to normal speed when idle
                 break;
 
             case State.Chase:
@@ -87,8 +92,6 @@ public class TankEnemyController : Enemy
                     float rand = Random.value;
                     chosenBomber = FindClosestBomber();
                     hasEvaluatedThrowChance = true;
-
-                    //Debug.Log($"Rolling throw chance: {rand} <= {chanceToGoThrow}, Round: {currentRound}, BomberFound: {chosenBomber != null}");
 
                     if (rand <= chanceToGoThrow && currentRound >= roundForScaling && chosenBomber != null)
                     {
@@ -113,6 +116,7 @@ public class TankEnemyController : Enemy
                 break;
         }
     }
+
     void FacePlayer()
     {
         Vector3 dir = player.position - transform.position;
@@ -130,9 +134,9 @@ public class TankEnemyController : Enemy
         Vector3 avoidDir = Vector3.zero;
         Vector3[] feelers = new Vector3[]
         {
-        transform.forward,
-        (transform.forward + transform.right).normalized,
-        (transform.forward - transform.right).normalized
+            transform.forward,
+            (transform.forward + transform.right).normalized,
+            (transform.forward - transform.right).normalized
         };
 
         foreach (var f in feelers)
@@ -158,32 +162,23 @@ public class TankEnemyController : Enemy
 
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        // ✅ Distance-based speed adjustment
+        // Dynamic speed adjustment based on distance
         float distToPlayer = Vector3.Distance(transform.position, player.position);
-        float adjustedSpeed;
-
         if (distToPlayer > data.detectionRange * 0.7f)
         {
-            // Far: chase faster
-            adjustedSpeed = data.moveSpeed * 2f;
+            MultiplySpeed(2f); // Chase faster when far away
         }
         else
         {
-            // Close: chase slower
-            adjustedSpeed = data.moveSpeed * 0.75f;
+            MultiplySpeed(0.75f); // Slow down when getting close
         }
 
-        //Debug.Log($"[CHASE] Dist: {distToPlayer:F2}, Speed: {adjustedSpeed:F2}");
-
-        transform.position += currentDir * adjustedSpeed * Time.deltaTime;
-
-        Quaternion targetRot = Quaternion.LookRotation(currentDir);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+        transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentDir), Time.deltaTime * turnSpeed);
     }
 
     private void Attack()
     {
-        //Debug.Log("TANKENEMY: Attack");
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -204,15 +199,15 @@ public class TankEnemyController : Enemy
         if (chosenBomber == null || isCarrying) return;
 
         smoothing = 15f;
+        MultiplySpeed(rushToBomberSpeedMultiplier); // Use speed multiplier for rushing
 
         Transform bomberPos = chosenBomber.transform;
-
         Vector3 toBomber = bomberPos.position - transform.position;
         toBomber.y = 0;
         Vector3 dir = toBomber.normalized;
 
         currentDir = Vector3.Slerp(currentDir, dir, smoothing * Time.deltaTime);
-        transform.position += currentDir * (data.moveSpeed * rushToBomberSpeedMultiplier) * Time.deltaTime;
+        transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
 
         Quaternion targetRot = Quaternion.LookRotation(currentDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
@@ -221,8 +216,6 @@ public class TankEnemyController : Enemy
 
         if (distanceToBomber <= 1f && !hasThrown)
         {
-            //Debug.Log("Tank reached bomber!");
-
             carriedBomber.transform.position = carryZone.position;
             carriedBomber.transform.SetParent(carryZone);
 
@@ -235,6 +228,7 @@ public class TankEnemyController : Enemy
             isCarrying = true;
             hasThrown = true;
             smoothing = originalSmoothing;
+            ResetSpeed(); // Return to normal speed when carrying
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
         }
     }
@@ -278,14 +272,12 @@ public class TankEnemyController : Enemy
             bomberRb.AddForce(throwDir * throwingForce, ForceMode.Impulse);
         }
 
-        //Debug.Log("Tank threw the bomber!");
-
         carriedBomber = null;
         isCarrying = false;
-        StartCoroutine(thrownTimer());
+        StartCoroutine(ThrownTimer());
     }
 
-    IEnumerator thrownTimer()
+    private IEnumerator ThrownTimer()
     {
         yield return new WaitForSeconds(1f);
         hasThrown = false;

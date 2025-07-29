@@ -11,7 +11,7 @@ public class RangedEnemyController : Enemy
     [SerializeField] float attackCooldown = 2f;
     [SerializeField] float repositionRadius = 5f;
 
-    [Header("Diff Scaling Settings")]
+    [Header("Difficulty Scaling")]
     [SerializeField] int roundForScaling = 1;
     [SerializeField] float shootDelay = 0.5f;
     [SerializeField] int amountToShoot = 3;
@@ -21,9 +21,14 @@ public class RangedEnemyController : Enemy
     Vector3 repositionTarget;
     Transform player;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        spawnPosition = transform.position;
+    }
+
     void Start()
     {
-        spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
         state = State.Idle;
     }
@@ -48,15 +53,7 @@ public class RangedEnemyController : Enemy
                 break;
 
             case State.Attack:
-                int amtToShoot;
-                if (currentRound < roundForScaling)
-                {
-                    amtToShoot = 1;
-                }
-                else
-                {
-                    amtToShoot = amountToShoot;
-                }
+                int amtToShoot = currentRound < roundForScaling ? 1 : amountToShoot;
                 StartCoroutine(Shoot(amtToShoot));
                 attackTimer = 0f;
                 ChooseRepositionTarget();
@@ -73,7 +70,7 @@ public class RangedEnemyController : Enemy
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     horizontalTarget,
-                    data.moveSpeed * Time.deltaTime
+                    CurrentMoveSpeed * Time.deltaTime
                 );
 
                 if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f)
@@ -103,13 +100,12 @@ public class RangedEnemyController : Enemy
                 Vector3 dir = player.position - transform.position;
                 dir = new Vector3(dir.x, 0, dir.z);
                 b.Initialize(dir);
-                b.SetDamage(data.damage);
+                b.SetDamage(damage);
             }
 
-            yield return new WaitForSeconds(shootDelay); // ← adjust delay as needed
+            yield return new WaitForSeconds(shootDelay);
         }
     }
-
 
     void ChooseRepositionTarget()
     {
