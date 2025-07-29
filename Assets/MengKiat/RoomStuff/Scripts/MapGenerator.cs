@@ -13,8 +13,8 @@ namespace RMG
         [SerializeField] private Room startRoom;
         [SerializeField] private GameObject bossPortalObject;
         [SerializeField] private Vector3 bossRoomPosition;
-        [SerializeField] private float bossRoomRotation;
-        [SerializeField] private GameObject bossRoom;
+        [SerializeField] private float[] bossRoomRotation;
+        [SerializeField] private GameObject[] bossRoom;
         [SerializeField] private Room[] rooms;
         [SerializeField] private Room[] uniqueRooms; // NEW: rooms allowed only once
 
@@ -74,7 +74,7 @@ namespace RMG
 
         private void SpawnBossRoom()
         {
-            Instantiate(bossRoom, bossRoomPosition, Quaternion.Euler(new Vector3(Quaternion.identity.x, bossRoomRotation, Quaternion.identity.z)), transform);
+            Instantiate(bossRoom[Random.Range(0, bossRoom.Length)], bossRoomPosition, Quaternion.Euler(new Vector3(Quaternion.identity.x, bossRoomRotation[Random.Range(0, bossRoomRotation.Length)], Quaternion.identity.z)), transform);
         }
 
         public void Generate()
