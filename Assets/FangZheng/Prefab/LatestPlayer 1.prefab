@@ -396,7 +396,8 @@ MonoBehaviour:
   damageAmount: 1
   knockbackForce: 5
   attackRadius: 3
-  statusEffects: []
+  statusEffects:
+  - {fileID: 11400000, guid: 35a53156e6af7934a9cf6428c2e6b367, type: 2}
   lightAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
     type: 3}
   heavyAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
@@ -12248,8 +12249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec3b8d1c67fef7428977da22ae604ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDuration: 0.1
-  targetTimeScale: 0.02
+  defaultDuration: 0.15
+  targetTimeScale: 0.01
   timeScaleCurve:
     serializedVersion: 2
     m_Curve:
@@ -14079,6 +14080,11 @@ MonoBehaviour:
     spellType: 0
   baseDurabilityCost: 1
   skillDurabilityCost: 3
+  _lightAttackCooldown: 0.5
+  _heavyAttackCooldown: 1.5
+  _minChargeTime: 0.1
+  _maxChargeTime: 2
+  movementModifier: 1
   broke: 0
   WeaponBreak:
     m_PersistentCalls:
@@ -16029,17 +16035,25 @@ MonoBehaviour:
   _parryZone: {fileID: 3025214456549648015}
   _weaponHoldPoint: {fileID: 6166855005750919132}
   _animator: {fileID: 2609005353369366632}
-  _currentBasicAttack: {fileID: 0}
+  _currentBasicAttack: {fileID: 2830041833853026863}
   baseBasicAttack: {fileID: 2830041833853026863}
   breakMaterial: {fileID: 2100000, guid: 9f8259925f8e2e04583f9fa485146823, type: 2}
-  _lightAttackCooldown: 0.1
-  _heavyAttackCooldown: 1.5
-  _minChargeTime: 0.5
-  _maxChargeTime: 2
-  _heavyAttackMoveDistance: 10
-  _heavyAttackMoveDuration: 0.3
-  _lightAttackMoveDistance: 9
-  _lightAttackMoveDuration: 0.1
+  _baselightAttackCooldown: 0.1
+  _baseheavyAttackCooldown: 0.2
+  _baseminChargeTime: 0.5
+  _basemaxChargeTime: 0.7
+  _baseheavyAttackMoveDistance: 1.5
+  _baseheavyAttackMoveDuration: 0.3
+  _baselightAttackMoveDistance: 0.9
+  _baselightAttackMoveDuration: 0.1
+  _currentlightAttackCooldown: 0.5
+  _currentheavyAttackCooldown: 0.5
+  _currentminChargeTime: 0.1
+  _currentmaxChargeTime: 1
+  _currentheavyAttackMoveDistance: 1.5
+  _currentheavyAttackMoveDuration: 0.3
+  _currentlightAttackMoveDistance: 1.5
+  _currentlightAttackMoveDuration: 0.3
   _comboWindowPercentage: 30
   _attackRecoveryTime: 0.1
   _inventoryManager: {fileID: 102138882889163288}
@@ -18543,6 +18557,11 @@ MonoBehaviour:
     spellType: 0
   baseDurabilityCost: 1
   skillDurabilityCost: 3
+  _lightAttackCooldown: 0.5
+  _heavyAttackCooldown: 1.5
+  _minChargeTime: 0.1
+  _maxChargeTime: 2
+  movementModifier: 1
   broke: 0
   WeaponBreak:
     m_PersistentCalls:
