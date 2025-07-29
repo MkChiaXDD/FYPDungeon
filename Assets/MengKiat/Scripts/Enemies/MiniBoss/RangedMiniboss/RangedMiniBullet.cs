@@ -44,16 +44,12 @@ public class RangedMiniBullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("RANGEDENEMY: HIT PLAYER");
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
+            Destroy(gameObject);
         }
-        else if (other.CompareTag("Parry"))
-        {
-            BounceBack();
-            Debug.Log("Parry");
-            return;
-        }
-
-        if (!other.TryGetComponent<IDamageable>(out var damageable)) return;
-        damageable.TakeDamage(damage);
     }
 
     public void BounceBack()
