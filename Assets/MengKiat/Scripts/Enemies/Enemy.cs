@@ -14,8 +14,15 @@ public class Enemy : MonoBehaviour, IDamageable
     private GameObject enemyShield;
     [SerializeField] private float shieldHp;
 
+    [Header("Movement")]
+    [SerializeField] protected float currentMoveSpeed;
+    public float CurrentMoveSpeed
+    {
+        get => currentMoveSpeed;
+        set => currentMoveSpeed = Mathf.Max(0, value); // Ensure speed doesn't go negative
+    }
 
-    //take damage vfx
+    // Take damage VFX
     private EnemyHitSquash hitSquashEffect;
     private Coroutine hitEffectCoroutine;
     private bool isHitEffectActive = false;
@@ -49,12 +56,12 @@ public class Enemy : MonoBehaviour, IDamageable
     protected bool isStunned = false;
     protected Coroutine stunCoroutine;
 
-
     protected virtual void Awake()
     {
         _totalFlashes = 1;
         dmgFlashSpeed = 8;
         hitSquashEffect = gameObject.AddComponent<EnemyHitSquash>();
+        currentMoveSpeed = data.moveSpeed; // Initialize speed
         InitialiseDifficulty();
         InitialiseShield();
         Invoke(nameof(InitialiseHealthBar), 1f);
@@ -71,17 +78,31 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
+    #region Speed Control Methods
+    public virtual void SetSpeed(float newSpeed)
+    {
+        currentMoveSpeed = Mathf.Max(0, newSpeed);
+    }
+
+    public virtual void MultiplySpeed(float multiplier)
+    {
+        currentMoveSpeed = Mathf.Max(0, data.moveSpeed * multiplier);
+    }
+
+    public virtual void ResetSpeed()
+    {
+        currentMoveSpeed = data.moveSpeed;
+    }
+    #endregion
+
     public void InitialiseShield()
     {
         if (shieldPrefab != null && enemyShield == null)
         {
             enemyShield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
-
             enemyShield.transform.SetParent(transform);
-
             enemyShield.transform.localPosition = new Vector3(0, 1.5f, 0);
 
-            // Initialize the shield's HP
             EnemyShield shield = enemyShield.GetComponent<EnemyShield>();
             if (shield != null)
             {
@@ -103,7 +124,6 @@ public class Enemy : MonoBehaviour, IDamageable
             shield.HitShield(amount, physicalAttackType);
             return;
         }
-
     }
 
     private void PlayDamagedVFX()
@@ -117,7 +137,6 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (enemyRenderer == null) return;
 
-        // Stop existing effect if one is running
         if (isHitEffectActive && hitEffectCoroutine != null)
         {
             StopCoroutine(hitEffectCoroutine);
@@ -131,8 +150,8 @@ public class Enemy : MonoBehaviour, IDamageable
         isHitEffectActive = true;
         float timer = 0f;
         int flashCount = 0;
-        int totalFlashes = _totalFlashes; // Number of times to flash
-        float flashSpeed = dmgFlashSpeed; // Speed of the pingpong effect
+        int totalFlashes = _totalFlashes;
+        float flashSpeed = dmgFlashSpeed;
 
         Material material = enemyRenderer.material;
         Color baseColor = originalColor;
@@ -142,11 +161,7 @@ public class Enemy : MonoBehaviour, IDamageable
         while (timer < hitDuration && flashCount < totalFlashes * 2)
         {
             timer += Time.deltaTime;
-
-            // PingPong between 0 and 1 to create flashing effect
             float pingPongValue = Mathf.PingPong(timer * flashSpeed, 1f);
-
-            // Lerp between original and hit colors
             material.color = Color.Lerp(baseColor, hitColor, pingPongValue);
 
             if (useEmission && material.HasProperty(EmissionColor))
@@ -156,8 +171,7 @@ public class Enemy : MonoBehaviour, IDamageable
                 material.EnableKeyword("_EMISSION");
             }
 
-            // Count completed half-cycles (each full flash is 2 half-cycles)
-            if (pingPongValue < 0.1f) // Near the start of a new cycle
+            if (pingPongValue < 0.1f)
             {
                 flashCount++;
             }
@@ -165,7 +179,6 @@ public class Enemy : MonoBehaviour, IDamageable
             yield return null;
         }
 
-        // Ensure we return to original colors
         material.color = baseColor;
         if (useEmission && material.HasProperty(EmissionColor))
         {
@@ -175,7 +188,6 @@ public class Enemy : MonoBehaviour, IDamageable
         isHitEffectActive = false;
     }
 
-    // Shared damage logic
     public virtual void TakeDamage(float amount)
     {
         currentHealth -= amount;
@@ -186,18 +198,13 @@ public class Enemy : MonoBehaviour, IDamageable
         PlayDamagedVFX();
         if (currentHealth <= 0f)
             Die();
-
-
-
     }
 
     public void TakeElementalDamage(float amount, ElementType elementType)
     {
-        // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(elementType);
         float finalDamage = amount / resistanceMultiplier;
 
-        // Apply elemental effect (burning, electrocution, etc.)
         ApplyElementalEffect(elementType, finalDamage);
         TakeDamage(finalDamage);
     }
@@ -209,15 +216,11 @@ public class Enemy : MonoBehaviour, IDamageable
             if (enemyShield.GetComponent<EnemyShield>())
                 ShieldTakeDamage(damage, attackType);
             ShowDamageNumber(this.transform.position, damage, Color.gray);
-
             return;
         }
 
-
-        // Calculate resistance multiplier
         float resistanceMultiplier = GetResistanceMultiplier(attackType);
         float finalDamage = damage / resistanceMultiplier;
-
 
         TakeDamage(finalDamage);
     }
@@ -244,7 +247,6 @@ public class Enemy : MonoBehaviour, IDamageable
         };
     }
 
-    // Shared death logic
     public virtual void Die()
     {
         if (gameObject.GetComponent<BossCheckDeath>() != null)
@@ -267,8 +269,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         DifficultyManager difficulty = FindFirstObjectByType<DifficultyManager>();
 
-        float multiplier = 1f; // default multiplier
-        currentRound = 1;      // default round
+        float multiplier = 1f;
+        currentRound = 1;
 
         if (difficulty != null)
         {
@@ -282,12 +284,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         int finalHealth = Mathf.RoundToInt(data.maxHealth * multiplier);
         currentHealth = finalHealth;
-
-        //Debug.Log($"[Enemy] ROUND: {currentRound} | MULTIPLIER: {multiplier} | FINAL HEALTH: {currentHealth}");
-
         damage = data.damage;
-
-
 
         InitialiseResistance();
     }
@@ -300,7 +297,6 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    //default color is white
     private void ShowDamageNumber(Vector3 position, float damage)
     {
         if (DamageNumberManager.Instance)
@@ -321,49 +317,37 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         healthBar.SetHealth(currentHealth);
     }
+
     private void ApplyElementalEffect(ElementType elementType, float damageAmount)
     {
-
-        // Example: Apply burning effect for Pyro damage
         if (elementType == ElementType.Pyro)
         {
-            // Start or refresh burning effect*
             if (TryGetComponent<BurningEffect>(out var burning))
             {
                 burning.RefreshEffect(damageAmount);
             }
             else
             {
-
                 burning = gameObject.AddComponent<BurningEffect>();
                 burning.Initialize(damageAmount, this);
             }
         }
         if (elementType == ElementType.Electro)
         {
+            if (TryGetComponent<ElectroEffect>(out var electro))
             {
-                // Start or refresh burning effect*
-                if (TryGetComponent<ElectroEffect>(out var electro))
-                {
-                    electro.RefreshEffect(damageAmount);
-                }
-                else
-                {
-
-                    electro = gameObject.AddComponent<ElectroEffect>();
-                    electro.Initialize(damageAmount, this);
-                }
+                electro.RefreshEffect(damageAmount);
+            }
+            else
+            {
+                electro = gameObject.AddComponent<ElectroEffect>();
+                electro.Initialize(damageAmount, this);
             }
         }
-        // Add similar effects for other elements:
-        // - Hydro: Wet status (increased Electro damage)
-        // - Electro: Stun effect
-        // - Cryo: Slow movement
 
-        // Track elemental effect for visual feedback
-        activeElementalEffects[elementType] = Time.time + 3f; // Effect lasts 3 seconds
-
+        activeElementalEffects[elementType] = Time.time + 3f;
     }
+
     public virtual void ApplyStun(float duration)
     {
         if (data.enemyType == EnemyData.EnemyType.notNormalEnemy) return;
@@ -397,11 +381,9 @@ public class Enemy : MonoBehaviour, IDamageable
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-
         Gizmos.DrawWireSphere(transform.position, data.detectionRange);
 
         Gizmos.color = Color.red;
-
         Gizmos.DrawWireSphere(transform.position, data.attackRange);
     }
 
@@ -409,42 +391,39 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         HitStopVFX();
     }
+
     private void HitStopVFX()
     {
         HitStopManager.ActivateHitStopGlobal();
     }
 
-
-
     protected StaticScreenShake.ShakeParams deathParams = new()
     {
-
         ShakeType = ShakeType.Translational,
-        ShakeDuration = 0.25f,      // A quarter of a second
-        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
-        DampingSpeed = 10f,          // Damping speed to return to normal
-        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
-        TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f), // Shake in X and Y equally
+        ShakeDuration = 0.25f,
+        ShakeMagnitude = 2.5f,
+        DampingSpeed = 10f,
+        RotationalNoiseSpeed = 20f,
+        TranslationalShakeMagnitude = new Vector3(0.5f, 0.5f, 0f),
         TranslationalNoiseSpeed = 50f,
         UseSeparateNoiseForTranslation = true,
         EnableX = false,
         EnableY = true,
-        EnableZ = false              // No Z for 2D
+        EnableZ = false
     };
 
     protected StaticScreenShake.ShakeParams strongerShake = new()
     {
-
         ShakeType = ShakeType.Translational,
-        ShakeDuration = 0.25f,      // A quarter of a second
-        ShakeMagnitude = 2.5f,       // Rotational magnitude (in degrees) - keep it small for 2D
-        DampingSpeed = 10f,          // Damping speed to return to normal
-        RotationalNoiseSpeed = 20f,  // Noise speed for rotation
-        TranslationalShakeMagnitude = new Vector3(1f, 1f, 0f), // Shake in X and Y equally
+        ShakeDuration = 0.25f,
+        ShakeMagnitude = 2.5f,
+        DampingSpeed = 10f,
+        RotationalNoiseSpeed = 20f,
+        TranslationalShakeMagnitude = new Vector3(1f, 1f, 0f),
         TranslationalNoiseSpeed = 50f,
         UseSeparateNoiseForTranslation = true,
         EnableX = false,
         EnableY = true,
-        EnableZ = false              // No Z for 2D
+        EnableZ = false
     };
 }

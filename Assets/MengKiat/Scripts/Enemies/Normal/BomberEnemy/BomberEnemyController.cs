@@ -48,18 +48,18 @@ public class BomberEnemyController : Enemy
     private bool isExploding = false;
     public bool isPickedup = false;
 
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
         state = State.Roam;
         ChooseRoamTarget();
         currentDir = transform.forward;
 
-        if (currentRound < roundForScaling)
-            currentExplosionRadius = explosionRadius;
-        else
-            currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
+        currentExplosionRadius = currentRound < roundForScaling
+            ? explosionRadius
+            : explosionRadius * explodingSizeMultiplier;
 
         if (explodingParticle != null)
             explodingParticle.Stop();
@@ -160,12 +160,18 @@ public class BomberEnemyController : Enemy
         desired.Normalize();
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        transform.position += currentDir * data.moveSpeed * Time.deltaTime;
+        transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentDir), Time.deltaTime * turnSpeed);
     }
 
     public IEnumerator ExplosionSequence()
     {
+        if (isExploding || boutaDie) yield break;
+
+        // Slow down during charge-up
+        float originalSpeed = CurrentMoveSpeed;
+        SetSpeed(originalSpeed * 0.3f);
+
         if (circleIndicator != null)
             circleIndicator.SetActive(true);
 
@@ -193,6 +199,7 @@ public class BomberEnemyController : Enemy
             yield return null;
         }
 
+        SetSpeed(originalSpeed); // Restore speed (though explosion happens immediately after)
         model.transform.localScale = targetScale;
         theLight.color = Color.red;
         Explode();
@@ -211,13 +218,9 @@ public class BomberEnemyController : Enemy
                     Vector3 direction = (hit.transform.position - transform.position).normalized;
                     Vector3 knockbackForce = direction * explosionForce;
 
-                    // Apply knockback manually
-                    hit.attachedRigidbody.velocity = Vector3.zero; // optional: reset current movement
+                    hit.attachedRigidbody.velocity = Vector3.zero;
                     hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
-
-                    // Apply damage
                     dmg.TakeDamage(data.damage);
-
                     ExplosionScreenShake();
                 }
             }
@@ -230,25 +233,20 @@ public class BomberEnemyController : Enemy
                 if (hit.attachedRigidbody != null)
                 {
                     Vector3 dir = (hit.transform.position - transform.position).normalized;
-                    Vector3 knockbackForce = dir * (explosionForce / 3f); // scale it down for non-player
-
-                    // Apply knockback
-                    hit.attachedRigidbody.velocity = Vector3.zero; // optional reset
+                    Vector3 knockbackForce = dir * (explosionForce / 3f);
+                    hit.attachedRigidbody.velocity = Vector3.zero;
                     hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
                 }
 
-                // Still trigger bomber chain reactions
                 if (hit.TryGetComponent<BomberEnemyController>(out var bomber) && !bomber.boutaDie)
                 {
                     bomber.StartCoroutine(bomber.ExplosionSequence());
                 }
             }
-
         }
 
         PlayExplosionVFX();
     }
-
 
     void PlayExplosionVFX()
     {
