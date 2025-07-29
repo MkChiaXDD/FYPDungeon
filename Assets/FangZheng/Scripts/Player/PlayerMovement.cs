@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
         _currentSpeed = _normalspeed;
     }
 
-    
+
 
     private void Move()
     {
@@ -223,6 +223,21 @@ public class PlayerMovement : MonoBehaviour
             _speedModifierCoroutine = StartCoroutine(UpdateMovementModifier());
         }
     }
+
+
+    public void ResetPlayerMovementModifier()
+    {
+        // Stop any existing modifier coroutine
+        if (_speedModifierCoroutine != null)
+        {
+            StopCoroutine(_speedModifierCoroutine);
+        }
+
+        _targetMovementModifier = 1; // Clamp between 0% and 200% (dont handle the negative)
+        _speedModifierCoroutine = StartCoroutine(UpdateMovementModifier());
+
+    }
+
 
     private IEnumerator UpdateMovementModifier()
     {

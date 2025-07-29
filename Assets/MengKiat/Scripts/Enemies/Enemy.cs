@@ -93,6 +93,11 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         currentMoveSpeed = data.moveSpeed;
     }
+
+    public virtual float GetOriginalSpeed()
+    {
+        return data.moveSpeed;
+    }
     #endregion
 
     public void InitialiseShield()
@@ -131,6 +136,10 @@ public class Enemy : MonoBehaviour, IDamageable
         SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
         hitSquashEffect.PlaySquashEffect();
         PlayHitEffects();
+        PlayHitStopVFX();
+        ParticalManager.Instance.Bleed(this.transform);
+
+
     }
 
     private void PlayHitEffects()
@@ -193,8 +202,6 @@ public class Enemy : MonoBehaviour, IDamageable
         currentHealth -= amount;
         ShowDamageNumber(this.transform.position, amount);
         UpdateHealthBar();
-        ParticalManager.Instance.Bleed(this.transform);
-
         PlayDamagedVFX();
         if (currentHealth <= 0f)
             Die();
@@ -387,12 +394,9 @@ public class Enemy : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, data.attackRange);
     }
 
-    private void PlayDamageVFX()
-    {
-        HitStopVFX();
-    }
 
-    private void HitStopVFX()
+
+    private void PlayHitStopVFX()
     {
         HitStopManager.ActivateHitStopGlobal();
     }

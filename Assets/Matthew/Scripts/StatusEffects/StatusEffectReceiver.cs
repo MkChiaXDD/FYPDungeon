@@ -8,6 +8,7 @@ public class StatusEffectReceiver : MonoBehaviour
     public PoisonEffect poison;
     public StunEffect stun;
     public SpeedBoostEffect speedBoost;
+    public SlownessEffect slowEffect;
 
     void Update()
     {
@@ -304,7 +305,7 @@ public class SpeedBoostEffect : StatusEffect
         if (receiver.TryGetComponent<PlayerMovement>(out var movement))
         {
             //originalSpeeds[receiver] = movement.Speed;
-           // movement.Speed *= speedMultiplier;
+            // movement.Speed *= speedMultiplier;
             //Debug.Log($"[Speed Boost] Speed increased from {originalSpeeds[receiver]} to {movement.Speed}");
         }
     }
@@ -317,6 +318,43 @@ public class SpeedBoostEffect : StatusEffect
             if (receiver.TryGetComponent<CharacterController>(out var movement))
             {
                 //movement.Speed = originalSpeed;
+                Debug.Log($"[Speed Boost] Speed restored to {originalSpeed}");
+            }
+            originalSpeeds.Remove(receiver);
+        }
+    }
+
+    public override void UpdateEffect(StatusEffectReceiver receiver)
+    {
+        Debug.Log($"[Speed Boost] Active on {receiver.gameObject.name} ({duration:0.00}s remaining)");
+    }
+}
+
+[CreateAssetMenu(menuName = "Status Effects/Slowness")]
+public class SlownessEffect : StatusEffect
+{
+    public float speedMultiplier = 0.5f;
+    private Dictionary<StatusEffectReceiver, float> originalSpeeds = new Dictionary<StatusEffectReceiver, float>();
+
+    public override void ApplyEffect(StatusEffectReceiver receiver)
+    {
+        Debug.Log($"[Speed Boost] Applying to {receiver.gameObject.name}");
+        if (receiver.TryGetComponent<Enemy>(out var movement))
+        {
+            originalSpeeds[receiver] = movement.GetOriginalSpeed();
+             movement.MultiplySpeed(speedMultiplier);
+            //Debug.Log($"[Speed Boost] Speed increased from {originalSpeeds[receiver]} to {movement.Speed}");
+        }
+    }
+
+    public override void RemoveEffect(StatusEffectReceiver receiver)
+    {
+        Debug.Log($"[Speed Boost] Removing from {receiver.gameObject.name}");
+        if (originalSpeeds.TryGetValue(receiver, out float originalSpeed))
+        {
+            if (receiver.TryGetComponent<Enemy>(out var movement))
+            {
+                movement.ResetSpeed();
                 Debug.Log($"[Speed Boost] Speed restored to {originalSpeed}");
             }
             originalSpeeds.Remove(receiver);

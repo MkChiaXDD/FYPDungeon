@@ -14,8 +14,7 @@ GameObject:
   - component: {fileID: -5709164385585042958}
   - component: {fileID: -3687516599443071855}
   - component: {fileID: 4477864166372980347}
-  - component: {fileID: 284387369908073022}
-  - component: {fileID: 8919843932415621280}
+  - component: {fileID: 5049343551129420485}
   m_Layer: 0
   m_Name: Hammer
   m_TagString: Untagged
@@ -161,7 +160,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.44209042, y: 1.147499, z: 0.20105408}
   m_Center: {x: -0.0000002607703, y: -0.01675576, z: -0.00000017558801}
---- !u!114 &284387369908073022
+--- !u!114 &5049343551129420485
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,10 +173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: b53ec1587f40c764d928088dac46f119, type: 2}
-  CurrDurability: 0
+  CurrDurability: 5
   spellCastList:
-    SpellPrefab: {fileID: 6859128836655008300, guid: e6cb87bab5bc0d7458411333c1c920eb,
-      type: 3}
+    SpellPrefab: {fileID: 0}
     dmg: 0
     Radius: 0
     Size: {x: 0, y: 0, z: 0}
@@ -193,23 +191,12 @@ MonoBehaviour:
     spellType: 0
   baseDurabilityCost: 1
   skillDurabilityCost: 3
+  _lightAttackCooldown: 0.5
+  _heavyAttackCooldown: 1.5
+  _minChargeTime: 2
+  _maxChargeTime: 5
+  movementModifier: 0.5
   broke: 0
   WeaponBreak:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8919843932415621280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2559788273133413441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2abdc2cdab050944a919971c12020282, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropData: {fileID: 11400000, guid: b53ec1587f40c764d928088dac46f119, type: 2}
-  dropAmt: 1
-  timeToObtain: 0
-  PickupAlready: 0

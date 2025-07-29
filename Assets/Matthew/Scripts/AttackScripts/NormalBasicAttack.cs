@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class NormalBasicAttack : BaseAttackScript
 {
+
+    private int SlowStatusEffectID = 0;
     protected override void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
-        base.ProcessTargetHit(hit, target, damage, physicalType, intensity);  
+        base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
+        ApplyStatusEffect(hit.gameObject, statusEffects[SlowStatusEffectID]);
     }
 
     public override void ExecuteLightAttack()

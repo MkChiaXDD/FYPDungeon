@@ -112,8 +112,8 @@ public class ChargeBar : MonoBehaviour
 
     private void InitialiseChargeBar()
     {
-        MaxChargeTime = playerCombat._maxChargeTime;
-        MinChargeTime = playerCombat._minChargeTime;
+        MaxChargeTime = playerCombat._currentmaxChargeTime;
+        MinChargeTime = playerCombat._currentminChargeTime;
         sliderBar.maxValue = MaxChargeTime;
         sliderBar.value = 0f;
         BarCharge = 0f;
