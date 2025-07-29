@@ -11,6 +11,11 @@ public class WeaponData : ItemData
     public WeaponType weaponType;
     public SpellCast spells;
     public BaseAttackScript baseAttackScript;
+
+    public float _lightAttackCooldown = 0.5f;
+    public float _heavyAttackCooldown = 1.5f;
+    public float _minChargeTime = 0.1f;
+    public float _maxChargeTime = 2f;
 }
 
 [System.Serializable]

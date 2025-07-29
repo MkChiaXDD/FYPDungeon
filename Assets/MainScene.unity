@@ -2553,25 +2553,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
-    - target: {fileID: 2133897498945543639, guid: e4317c76aa4618143ac38fdbf3be4c6e,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 97f9875574074d84ba2746a769d85496, type: 2}
     - target: {fileID: 5866820748421582000, guid: e4317c76aa4618143ac38fdbf3be4c6e,
         type: 3}
       propertyPath: m_RootOrder
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866820748421582000, guid: e4317c76aa4618143ac38fdbf3be4c6e,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866820748421582000, guid: e4317c76aa4618143ac38fdbf3be4c6e,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5866820748421582000, guid: e4317c76aa4618143ac38fdbf3be4c6e,
         type: 3}
@@ -2623,8 +2608,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5813138193266202743, guid: e4317c76aa4618143ac38fdbf3be4c6e, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -14882,6 +14866,8 @@ MonoBehaviour:
   _maxChargeTime: 2
   _heavyAttackMoveDistance: 1.5
   _heavyAttackMoveDuration: 0.3
+  _lightAttackMoveDistance: 1.5
+  _lightAttackMoveDuration: 0.3
   _comboWindowPercentage: 30
   _attackRecoveryTime: 0.1
   _inventoryManager: {fileID: 6761763950290246765}

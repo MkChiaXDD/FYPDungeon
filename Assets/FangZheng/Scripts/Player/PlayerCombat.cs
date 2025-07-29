@@ -54,6 +54,9 @@ public class PlayerCombat : MonoBehaviour
     public float _maxChargeTime = 2f;
     [SerializeField] private float _heavyAttackMoveDistance = 1.5f;
     [SerializeField] private float _heavyAttackMoveDuration = 0.3f;
+
+    [SerializeField] private float _lightAttackMoveDistance = 1.5f;
+    [SerializeField] private float _lightAttackMoveDuration = 0.3f;
     [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
 
     [Header("Attack Recovery")]
@@ -285,6 +288,7 @@ public class PlayerCombat : MonoBehaviour
             _currentAttackCooldown = _lightAttackCooldown;
             _lastAttackType = AttackType.Light;
             ExecuteLightAttack();
+            StartCoroutine(LightAttackMovement());
         }
 
         ApplyDurabilityCost();
@@ -306,6 +310,23 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    private IEnumerator LightAttackMovement()
+    {
+        float elapsed = 0;
+        Vector3 startPos = transform.position;
+        Vector3 moveDirection = _isLockedOn && _targetEnemy != null
+            ? (_targetEnemy.position - transform.position).normalized
+            : _playerMovement.GetDirection();
+        Vector3 endPos = startPos + moveDirection * _lightAttackMoveDistance;
+
+        while (elapsed < _lightAttackMoveDuration)
+        {
+            transform.position = Vector3.Lerp(startPos, endPos, elapsed / _lightAttackMoveDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
     {
         Vector3 attackPosition = _isLockedOn && _targetEnemy != null
@@ -322,7 +343,7 @@ public class PlayerCombat : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 moveDirection = _isLockedOn && _targetEnemy != null
             ? (_targetEnemy.position - transform.position).normalized
-            : transform.forward;
+            : _playerMovement.GetDirection();
         Vector3 endPos = startPos + moveDirection * _heavyAttackMoveDistance;
 
         while (elapsed < _heavyAttackMoveDuration)
