@@ -217,6 +217,8 @@ public class PlayerCombat : MonoBehaviour
 
     private void HandleChargedAttack()
     {
+        float ChargedSlowDownEffect = 0.25f;
+        float BaseMovementModifier = 1f;
         // Start charging heavy attack
         if (Input.GetMouseButtonDown(0))
         {
@@ -224,7 +226,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 _isCharging = true;
                 _chargeStartTime = Time.time;
-                _playerMovement.SetMovementLock(true);
+                _playerMovement.ChangePlayerMovementModifier(ChargedSlowDownEffect);
                 ChargeUp?.Invoke();
             }
         }
@@ -233,7 +235,8 @@ public class PlayerCombat : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && _isCharging)
         {
             _isCharging = false;
-            _playerMovement.SetMovementLock(false);
+            _playerMovement.ChangePlayerMovementModifier(BaseMovementModifier);
+
 
             float chargeTime = Time.time - _chargeStartTime;
 
@@ -242,13 +245,14 @@ public class PlayerCombat : MonoBehaviour
             Uncharge?.Invoke();
         }
 
-        // Cancel charge if moving during charge time
-        if (_isCharging && _playerMovement.IsMoving)
-        {
-            _isCharging = false;
-            _playerMovement.SetMovementLock(false);
-            Uncharge?.Invoke();
-        }
+        //// Cancel charge if moving during charge time
+        //if (_isCharging && _playerMovement.IsMoving)
+        //{
+        //    _isCharging = false;
+        //    _playerMovement.ChangePlayerMovementModifier(0.25f);
+
+        //    Uncharge?.Invoke();
+        //}
     }
 
     private void HandleSpecialAttack()
@@ -313,18 +317,23 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator LightAttackMovement()
     {
         float elapsed = 0;
-        Vector3 startPos = transform.position;
         Vector3 moveDirection = _isLockedOn && _targetEnemy != null
             ? (_targetEnemy.position - transform.position).normalized
             : _playerMovement.GetDirection();
-        Vector3 endPos = startPos + moveDirection * _lightAttackMoveDistance;
+
+        // Calculate force vector
+        Vector3 force = moveDirection * (_lightAttackMoveDistance / _lightAttackMoveDuration) * _playerMovement._rb.mass;
 
         while (elapsed < _lightAttackMoveDuration)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsed / _lightAttackMoveDuration);
+            // Apply force for more physical movement
+            _playerMovement._rb.AddForce(force * Time.deltaTime, ForceMode.VelocityChange);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        // Immediately dampen the velocity after the attack
+        _playerMovement._rb.velocity = Vector3.zero;
     }
 
     private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
@@ -340,18 +349,23 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator HeavyAttackMovement()
     {
         float elapsed = 0;
-        Vector3 startPos = transform.position;
         Vector3 moveDirection = _isLockedOn && _targetEnemy != null
             ? (_targetEnemy.position - transform.position).normalized
             : _playerMovement.GetDirection();
-        Vector3 endPos = startPos + moveDirection * _heavyAttackMoveDistance;
+
+        // Calculate force vector
+        Vector3 force = moveDirection * (_heavyAttackMoveDistance / _heavyAttackMoveDuration) * _playerMovement._rb.mass;
 
         while (elapsed < _heavyAttackMoveDuration)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsed / _heavyAttackMoveDuration);
+            // Apply force for more physical movement
+            _playerMovement._rb.AddForce(force * Time.deltaTime, ForceMode.VelocityChange);
             elapsed += Time.deltaTime;
             yield return null;
         }
+
+        // Immediately dampen the velocity after the attack
+        _playerMovement._rb.velocity = Vector3.zero;
     }
 
     private IEnumerator DashToAttack(Vector3 targetPosition, bool isLightAttack)
