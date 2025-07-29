@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEditor.Progress;
-using static WeaponData;
 
 public enum AttackType { Light, Heavy }
 
