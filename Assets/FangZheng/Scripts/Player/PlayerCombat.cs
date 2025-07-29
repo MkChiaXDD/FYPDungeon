@@ -514,20 +514,18 @@ public class PlayerCombat : MonoBehaviour
     #region Equipment
     private void UpdateEquippedItem()
     {
-        ClearWeapon();      
-        EquipItem(_currentItem);
+        ClearCurrentWeapon();      
+        EquipItem();
     }
 
-    private void EquipItem(ItemInstance item)
+    private void EquipItem()
     {
         _currentItem = _inventoryManager.GetCurrentHotbarItem();
-        if (item?.ItemPrefab == null) return;
-
-        CreateWeaponHoldingInstance(item);
+        CreateWeaponHoldingInstance(_currentItem);
 
         if (_currentWeapon != null)
         {          
-            UpdateWeaponHeld(item);
+            UpdateWeaponHeld(_currentItem);
         }
         else
         {         
@@ -548,7 +546,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void ClearWeapon()
+    private void ClearCurrentWeapon()
     {
         if (_equippedWeapon != null)
         {
@@ -567,6 +565,11 @@ public class PlayerCombat : MonoBehaviour
 
     private void CreateWeaponHoldingInstance(ItemInstance item)
     {
+        if (item?.ItemPrefab == null) {
+            Debug.LogWarning("no weapons found!");
+            return;
+
+        };
         _equippedWeapon = Instantiate(item.ItemPrefab, _weaponHoldPoint);
         ConfigureWeaponPhysics(_equippedWeapon);
 

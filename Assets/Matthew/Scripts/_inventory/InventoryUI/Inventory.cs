@@ -84,7 +84,6 @@ public class Inventory : MonoBehaviour
         else {
             Debug.Log("Breaking " + items[itemSlot].name);       
             RemoveItemAtSlot(itemSlot, 1); 
-
         }
     }
     private void SelectSlot()
