@@ -1,7 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-
+public enum WeaponType { Unarmed, Hammer, Sword }
 public class Weapon : MonoBehaviour
 {
     [SerializeField] public WeaponData weaponData;

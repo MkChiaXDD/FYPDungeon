@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
+
+
 public class WeaponData : ItemData
 {
+    public WeaponType weaponType;
     public SpellCast spells;
     public BaseAttackScript baseAttackScript;
 }
