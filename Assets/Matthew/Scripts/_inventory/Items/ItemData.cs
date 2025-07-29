@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public enum ItemType { Resource, Food, Tool, Weapon }
-
+   
     public string itemName;
     public Sprite itemIcon;
     [TextArea] public string description;

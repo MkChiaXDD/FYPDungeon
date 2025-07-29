@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static WeaponData;
 
 public enum AttackType { Light, Heavy }
 
@@ -65,6 +66,18 @@ public class PlayerCombat : MonoBehaviour
     [Header("Mimic")]
     [SerializeField] private MimicSpawner _mimicSpawner;
     [SerializeField] private GameObject _mimicClonePrefab;
+
+    [Header("AbilityIcons")]
+    [SerializeField] private GameObject dashBasicAttackIcon;
+    [SerializeField] private GameObject scratchBasicAttackIcon;
+
+    [SerializeField] private GameObject hammerBasicAttackIcon;
+    [SerializeField] private GameObject hammerUltAttackIcon;
+
+    [SerializeField] private GameObject swordBasicAttackIcon;
+    [SerializeField] private GameObject swordUltAttackIcon;
+
+
     #endregion
 
     #region Private Fields
@@ -108,6 +121,11 @@ public class PlayerCombat : MonoBehaviour
     public bool IsLockedOn => _isLockedOn;
     public Transform TargetEnemy => _targetEnemy;
     #endregion
+
+   
+
+
+
 
     #region Unity Lifecycle
     private void Awake()
@@ -471,6 +489,11 @@ public class PlayerCombat : MonoBehaviour
         {
             _currentBasicAttack = _currentWeapon.weaponData.baseAttackScript;
             _currentWeapon.CurrDurability = item.Durability;
+            UpdateSkillIcons(_currentWeapon.weaponData.weaponType);
+        }
+        else
+        {
+            UpdateSkillIcons(WeaponType.Unarmed);
         }
     }
 
@@ -500,6 +523,7 @@ public class PlayerCombat : MonoBehaviour
         }
         _currentBasicAttack = baseBasicAttack;
         _currentWeapon = null;
+        UpdateSkillIcons(WeaponType.Unarmed);
     }
     #endregion
 
@@ -572,6 +596,38 @@ public class PlayerCombat : MonoBehaviour
                 closestDistance = enemy.Value;
                 _targetEnemy = enemy.Key.transform;
             }
+        }
+    }
+
+    private void UpdateSkillIcons(WeaponType weaponType)
+    {
+        // First, deactivate all icons
+        dashBasicAttackIcon.SetActive(false);
+        scratchBasicAttackIcon.SetActive(false);
+        hammerBasicAttackIcon.SetActive(false);
+        hammerUltAttackIcon.SetActive(false);
+        swordBasicAttackIcon.SetActive(false);
+        swordUltAttackIcon.SetActive(false);
+
+        // Activate the appropriate icons based on weapon type
+        switch (weaponType)
+        {
+            case WeaponType.Hammer:
+                hammerBasicAttackIcon.SetActive(true);
+                hammerUltAttackIcon.SetActive(true);
+                break;
+
+            case WeaponType.Sword:
+                swordBasicAttackIcon.SetActive(true);
+                swordUltAttackIcon.SetActive(true);
+                break;
+
+            case WeaponType.Unarmed:
+            default:
+                // Default to scratch/dash icons when no weapon equipped
+                dashBasicAttackIcon.SetActive(true);
+                scratchBasicAttackIcon.SetActive(true);
+                break;
         }
     }
 
