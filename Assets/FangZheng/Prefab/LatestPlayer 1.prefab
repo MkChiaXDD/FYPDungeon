@@ -397,7 +397,7 @@ MonoBehaviour:
   knockbackForce: 5
   attackRadius: 3
   statusEffects:
-  - {fileID: 11400000, guid: 35a53156e6af7934a9cf6428c2e6b367, type: 2}
+  - {fileID: 0}
   lightAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
     type: 3}
   heavyAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
@@ -15931,6 +15931,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6925304242640056600}
   - {fileID: 6192413185186530071}
   - {fileID: 4070306543382657793}
   - {fileID: 1534893739428610800}
@@ -23534,6 +23535,102 @@ Transform:
   m_Father: {fileID: 2146544865900979566}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1073790265775220538
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 627327067543964333}
+    m_Modifications:
+    - target: {fileID: 6766578467528734500, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784465152927710999, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 60476ef002fc9824c95c4c5164fb4a98, type: 3}
+--- !u!114 &4976942073470471577 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5473976899546557091, guid: 60476ef002fc9824c95c4c5164fb4a98,
+    type: 3}
+  m_PrefabInstance: {fileID: 1073790265775220538}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eed26d928c55b04488743f51f6eebf18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &6925304242640056600 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7997620028425704994, guid: 60476ef002fc9824c95c4c5164fb4a98,
+    type: 3}
+  m_PrefabInstance: {fileID: 1073790265775220538}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4883257682148025696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23614,9 +23711,35 @@ PrefabInstance:
       objectReference: {fileID: 4885652794664186949}
     - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
         type: 3}
+      propertyPath: _dialogSystem
+      value: 
+      objectReference: {fileID: 4976942073470471577}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
       propertyPath: instructionText
       value: 
       objectReference: {fileID: 2276032361340592581}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1]._npc
+      value: 
+      objectReference: {fileID: 11400000, guid: ebe07cdcee324be4a8683b69477d8441,
+        type: 2}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1].HelpStuff
+      value: Press Spcae to Dash
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1]._StepName
+      value: Dashing
+      objectReference: {fileID: 0}
     - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
         type: 3}
       propertyPath: steps.Array.data[0].isCompleted
@@ -23624,8 +23747,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
         type: 3}
+      propertyPath: steps.Array.data[1].Instruction
+      value: Move Around and press Spcae to Dash at the direction
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1].TimeForHint
+      value: 100000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
       propertyPath: steps.Array.data[0].requiredAction
       value: e
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1].requiredKeys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106218219211182474, guid: 31fe43af4098f16468c3eed6f93354ed,
+        type: 3}
+      propertyPath: steps.Array.data[1].requiredKeys.Array.data[0]
+      value: 32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
