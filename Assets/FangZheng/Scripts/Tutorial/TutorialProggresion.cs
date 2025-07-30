@@ -13,11 +13,12 @@ public class TutorialProggresion : MonoBehaviour
         public string Instruction;
         public string HelpStuff;
         public KeyCode[] requiredKeys;
-        public string requiredAction;
+        public List<string> requiredAction;
         public GameObject objectToHighlight;
         public GameObject UiNeeded;
         public bool isCompleted;
         public float TimeForHint = 5.0f;
+        public Npc _npc;
     }
 
     public List<TutorialStep> steps = new List<TutorialStep>();
@@ -30,8 +31,16 @@ public class TutorialProggresion : MonoBehaviour
     private float StartTime;
     private bool showingHelp;
     private List<KeyCode> keysPressed = new List<KeyCode>();
-
+    private List<string> RequiredAction;
+    private bool ActionComplete;
+    private bool IsDailogFinish;
+    [SerializeField] private DialogSystem _dialogSystem;
     public static TutorialProggresion Instance;
+
+    private void OnEnable()
+    {
+        _dialogSystem.DailogFinish.AddListener(StartAfterDailog);
+    }
 
     private void Awake()
     {
@@ -62,40 +71,61 @@ public class TutorialProggresion : MonoBehaviour
     private void Update()
     {
         if (currentStepIndex >= steps.Count) return;
+        
 
-        TutorialStep currentStep = steps[currentStepIndex];
-        if (!currentStep.isCompleted && !showingHelp &&
-            Time.time - StartTime > currentStep.TimeForHint)
-        {
-            Help();
-        }
-
-        if (currentStep.requiredKeys.Length > 0)
-        {
-            foreach (KeyCode key in currentStep.requiredKeys)
+        if (IsDailogFinish == true) {
+            TutorialStep currentStep = steps[currentStepIndex];
+            if (!currentStep.isCompleted && !showingHelp &&
+                Time.time - StartTime > currentStep.TimeForHint)
             {
-                if (Input.GetKeyDown(key) && !keysPressed.Contains(key))
+                Help();
+            }
+
+            if (currentStep.requiredKeys.Length > 0)
+            {
+                foreach (KeyCode key in currentStep.requiredKeys)
                 {
-                    keysPressed.Add(key);
+                    if (Input.GetKeyDown(key) && !keysPressed.Contains(key))
+                    {
+                        keysPressed.Add(key);
+                    }
                 }
             }
-        }
 
-        bool allKeysPressed = true;
-        foreach (KeyCode key in currentStep.requiredKeys)
-        {
-            if (!keysPressed.Contains(key))
+            bool allKeysPressed = true;
+            foreach (KeyCode key in currentStep.requiredKeys)
             {
-                allKeysPressed = false;
-                break;
+                if (!keysPressed.Contains(key))
+                {
+                    allKeysPressed = false;
+                    break;
+                }
+            }
+
+            if (allKeysPressed && ActionComplete)
+            {
+                CompleteStep();
             }
         }
+    }
 
-        if (allKeysPressed)
+    public void StartAfterDailog()
+    {
+        TutorialStep step = steps[currentStepIndex];
+
+        StartTime = Time.time;
+        showingHelp = false;
+        RequiredAction = steps[currentStepIndex].requiredAction;
+        instructionText.text = step.Instruction;
+
+        ActionComplete = false;
+        if (RequiredAction.Count <= 0)
         {
-            CompleteStep();
+            ActionComplete = true;
         }
-
+        IsDailogFinish = _dialogSystem.DailogEnd;
+        TutorialUI.SetActive(true);
+        HelpPrompt.SetActive(false);
     }
 
     public void startStep(int StepPoint)
@@ -108,19 +138,37 @@ public class TutorialProggresion : MonoBehaviour
 
         currentStepIndex = StepPoint;
         TutorialStep step = steps[StepPoint];
-        StartTime = Time.time;
-        showingHelp = false;
 
-        instructionText.text = step.Instruction;
 
-        TutorialUI.SetActive(true);
-        HelpPrompt.SetActive(false);
+        if (step._npc == null) {
+            IsDailogFinish = true;
+            StartTime = Time.time;
+            showingHelp = false;
+            RequiredAction = steps[StepPoint].requiredAction;
+            instructionText.text = step.Instruction;
+
+            ActionComplete = false;
+            if (RequiredAction.Count <= 0)
+            {
+                ActionComplete = true;
+            }
+
+            TutorialUI.SetActive(true);
+            HelpPrompt.SetActive(false);
+        }
+        else
+        {
+            IsDailogFinish = false;
+            _dialogSystem.Activate(step._npc);
+            
+        }
     }
 
+    
     public void CompleteStep()
     {
         steps[currentStepIndex].isCompleted = true;
-
+        ActionComplete = false;
         startStep(currentStepIndex + 1);
     }
 
@@ -134,9 +182,29 @@ public class TutorialProggresion : MonoBehaviour
 
     public void IfPlayerPerformAction(string actionName)
     {
-        if ( currentStepIndex < steps.Count && steps[currentStepIndex].requiredAction == actionName)
+
+        if (RequiredAction.Count <= 0) {
+            if (currentStepIndex < steps.Count )
+            {
+                ActionComplete = true;
+                //CompleteStep();
+            }
+        }
+        else
         {
-            CompleteStep();
+            foreach (string action in steps[currentStepIndex].requiredAction)
+            {
+                if (action == actionName)
+                {
+                    RequiredAction.Remove(action);
+                }
+            }
+
+            if (RequiredAction.Count <= 0)
+            {
+                ActionComplete = true;
+            }
+
         }
     }
 

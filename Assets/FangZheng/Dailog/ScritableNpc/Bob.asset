@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 703315b1debe0f14fafd0fb76c415980, type: 3}
+  m_Name: Bob
+  m_EditorClassIdentifier: 
+  _Name: BOB
+  _Lines:
+  - _Text: Hi
+    _Special_Text: 0
+    _SpeakerType: 1
+    _MultiChoose: 0
+    _Choices: []
+  - _Text: My Name is bob
+    _Special_Text: 0
+    _SpeakerType: 1
+    _MultiChoose: 0
+    _Choices: []
+  - _Text: What is your name
+    _Special_Text: 0
+    _SpeakerType: 1
+    _MultiChoose: 1
+    _Choices:
+    - _Option_Text: Bob
+      _Option_Value: 3
+    - _Option_Text: Other
+      _Option_Value: 4
+  - _Text: Oh Your name is Bob also
+    _Special_Text: 1
+    _SpeakerType: 1
+    _MultiChoose: 0
+    _Choices: []
+  - _Text: I see
+    _Special_Text: 1
+    _SpeakerType: 1
+    _MultiChoose: 0
+    _Choices: []
+  - _Text: Good to see you again
+    _Special_Text: 0
+    _SpeakerType: 1
+    _MultiChoose: 0
+    _Choices: []
+  _Photo: {fileID: 21300000, guid: ec86f6d12810dd0438e6d8349c25a796, type: 3}
