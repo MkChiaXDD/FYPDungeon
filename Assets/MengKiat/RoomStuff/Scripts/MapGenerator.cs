@@ -308,7 +308,7 @@ namespace RMG
                 Vector3 centerPos = farthestRoom.transform.localPosition * roomSizeMultiplier;
                 centerPos = new Vector3(centerPos.x, 4, centerPos.z);
                 GameObject portalInstance = Instantiate(bossPortalObject, centerPos, Quaternion.identity);
-                portalInstance.SetActive(true);
+                FindFirstObjectByType<EnemyTracker>().SetBossPortal(portalInstance);
             }
         }
 
