@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -6,6 +6,7 @@ public class EnemyKillScale
 {
     public int round;
     public int killCount;
+    public int killGoal; // 👈 Goal to complete the quest
 }
 
 public class EnemyTracker : MonoBehaviour
@@ -25,12 +26,8 @@ public class EnemyTracker : MonoBehaviour
         {
             Debug.LogWarning("DifficultyManager is not assigned.");
         }
-    }
 
-    void Update()
-    {
-        // Optional: you can update currentRound here if it changes in real-time
-        // currentRound = difMgr.GetRound();
+        PrintKillData();
     }
 
     public void IncreaseKills()
@@ -39,36 +36,62 @@ public class EnemyTracker : MonoBehaviour
 
         currentRound = difMgr.GetRound();
 
-        // Find existing record for current round
         EnemyKillScale currentEntry = enemyKillsEachRound.Find(e => e.round == currentRound);
 
         if (currentEntry != null)
         {
             currentEntry.killCount++;
+
+            // 👇 Show status after each kill
+            Debug.Log($"Round {currentRound}: {currentEntry.killCount} / {currentEntry.killGoal} kills");
+
+            // ✅ Check if quest complete
+            if (currentEntry.killCount >= currentEntry.killGoal)
+            {
+                Debug.Log($"✅ Quest complete for Round {currentRound}! Kill Goal: {currentEntry.killGoal}");
+            }
         }
         else
         {
-            enemyKillsEachRound.Add(new EnemyKillScale
+            Debug.LogWarning($"No kill goal defined for round {currentRound}. Adding default goal (10).");
+
+            // Add a new entry with default goal and log it
+            var newEntry = new EnemyKillScale
             {
                 round = currentRound,
-                killCount = 1
-            });
+                killCount = 1,
+                killGoal = 10
+            };
+
+            enemyKillsEachRound.Add(newEntry);
+            Debug.Log($"Round {currentRound}: 1 / {newEntry.killGoal} kills");
         }
     }
 
-    // Optional: Get total kills for a specific round
+
     public int GetKillCountForRound(int round)
     {
         var entry = enemyKillsEachRound.Find(e => e.round == round);
         return entry != null ? entry.killCount : 0;
     }
 
-    // Optional: Debug log all rounds and kills
+    public bool IsKillGoalReached(int round)
+    {
+        var entry = enemyKillsEachRound.Find(e => e.round == round);
+        return entry != null && entry.killCount >= entry.killGoal;
+    }
+
     public void PrintKillData()
     {
+        if (enemyKillsEachRound == null || enemyKillsEachRound.Count == 0)
+        {
+            Debug.Log("No enemy kill data recorded yet.");
+            return;
+        }
+
         foreach (var entry in enemyKillsEachRound)
         {
-            Debug.Log($"Round {entry.round}: {entry.killCount} kills");
+            Debug.Log($"Round {entry.round}: {entry.killCount}/{entry.killGoal} kills");
         }
     }
 }

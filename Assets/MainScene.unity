@@ -491,6 +491,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2680024654600473551, guid: b8a12971664a0434a92e65e3a8eaac00,
         type: 3}
+      propertyPath: baseMaxEnemies
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680024654600473551, guid: b8a12971664a0434a92e65e3a8eaac00,
+        type: 3}
+      propertyPath: baseMinEnemies
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680024654600473551, guid: b8a12971664a0434a92e65e3a8eaac00,
+        type: 3}
       propertyPath: curvePoints.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -774,9 +784,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyKillsEachRound:
   - round: 1
-    killCount: 50
+    killCount: 0
+    killGoal: 10
   - round: 2
-    killCount: 50
+    killCount: 0
+    killGoal: 10
   difMgr: {fileID: 488337058}
 --- !u!1001 &662560942
 PrefabInstance:
@@ -1688,6 +1700,11 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 1743049956}
+    - target: {fileID: 2830041833853026863, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: damageAmount
+      value: 1748
+      objectReference: {fileID: 0}
     - target: {fileID: 4885652794664186949, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
       propertyPath: m_IsActive
