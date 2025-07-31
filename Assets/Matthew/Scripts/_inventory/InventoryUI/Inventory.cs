@@ -95,7 +95,6 @@ public class Inventory : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
             {
                 SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject , false);
-                Debug.Log("sguds");
                 equippedSlot = items[i];
                 equippedSlotNum = i;
                 manager.HighlightEquippedSlot(i);
