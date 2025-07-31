@@ -6,7 +6,7 @@ public class EnemyKillScale
 {
     public int round;
     public int killCount;
-    public int killGoal; // 👈 Goal to complete the quest
+    public int killGoal;
 }
 
 public class EnemyTracker : MonoBehaviour
@@ -15,6 +15,7 @@ public class EnemyTracker : MonoBehaviour
     [SerializeField] private DifficultyManager difMgr;
 
     private int currentRound;
+    private GameObject bossPortal;
 
     void Start()
     {
@@ -30,6 +31,19 @@ public class EnemyTracker : MonoBehaviour
         PrintKillData();
     }
 
+    public void SetBossPortal(GameObject newPortal)
+    {
+        if (newPortal == null)
+        {
+            Debug.LogWarning("SetBossPortal was called with null.");
+            return;
+        }
+
+        bossPortal = newPortal;
+        bossPortal.SetActive(false); // disable immediately
+        Debug.Log("New BossPortal assigned and set inactive.");
+    }
+
     public void IncreaseKills()
     {
         if (difMgr == null) return;
@@ -41,21 +55,23 @@ public class EnemyTracker : MonoBehaviour
         if (currentEntry != null)
         {
             currentEntry.killCount++;
-
-            // 👇 Show status after each kill
             Debug.Log($"Round {currentRound}: {currentEntry.killCount} / {currentEntry.killGoal} kills");
 
-            // ✅ Check if quest complete
             if (currentEntry.killCount >= currentEntry.killGoal)
             {
                 Debug.Log($"✅ Quest complete for Round {currentRound}! Kill Goal: {currentEntry.killGoal}");
+
+                if (bossPortal != null && !bossPortal.activeSelf)
+                {
+                    bossPortal.SetActive(true);
+                    Debug.Log("BossPortal activated!");
+                }
             }
         }
         else
         {
             Debug.LogWarning($"No kill goal defined for round {currentRound}. Adding default goal (10).");
 
-            // Add a new entry with default goal and log it
             var newEntry = new EnemyKillScale
             {
                 round = currentRound,
@@ -67,7 +83,6 @@ public class EnemyTracker : MonoBehaviour
             Debug.Log($"Round {currentRound}: 1 / {newEntry.killGoal} kills");
         }
     }
-
 
     public int GetKillCountForRound(int round)
     {
