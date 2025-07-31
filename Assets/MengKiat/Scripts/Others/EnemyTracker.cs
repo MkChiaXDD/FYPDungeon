@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using TMPro; // Add this namespace for TextMeshPro support
 
 [System.Serializable]
 public class EnemyKillScale
@@ -13,6 +14,7 @@ public class EnemyTracker : MonoBehaviour
 {
     [SerializeField] private List<EnemyKillScale> enemyKillsEachRound = new List<EnemyKillScale>();
     [SerializeField] private DifficultyManager difMgr;
+    [SerializeField] private TMP_Text killCountText; // Reference to your TMP text component
 
     private int currentRound;
     private GameObject bossPortal;
@@ -28,6 +30,7 @@ public class EnemyTracker : MonoBehaviour
             Debug.LogWarning("DifficultyManager is not assigned.");
         }
 
+        UpdateKillCountText(); // Update text on start
         PrintKillData();
     }
 
@@ -40,7 +43,7 @@ public class EnemyTracker : MonoBehaviour
         }
 
         bossPortal = newPortal;
-        bossPortal.SetActive(false); // disable immediately
+        bossPortal.SetActive(false);
         Debug.Log("New BossPortal assigned and set inactive.");
     }
 
@@ -81,6 +84,30 @@ public class EnemyTracker : MonoBehaviour
 
             enemyKillsEachRound.Add(newEntry);
             Debug.Log($"Round {currentRound}: 1 / {newEntry.killGoal} kills");
+        }
+
+        UpdateKillCountText(); // Update the UI text after increasing kills
+    }
+
+    private void UpdateKillCountText()
+    {
+        if (killCountText == null) return;
+
+        var currentEntry = enemyKillsEachRound.Find(e => e.round == currentRound);
+        if (currentEntry != null)
+        {
+            if (currentEntry.killCount < currentEntry.killGoal)
+            {
+                killCountText.text = $"Kills: {currentEntry.killCount}/{currentEntry.killGoal}";
+            }
+            else
+            {
+                killCountText.text = "Proceed to the portal";
+            }
+        }
+        else
+        {
+            killCountText.text = $"Kills: 0/10"; // Default display if no entry exists
         }
     }
 
