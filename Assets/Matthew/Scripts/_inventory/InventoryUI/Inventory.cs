@@ -61,7 +61,9 @@ public class Inventory : MonoBehaviour
             ChangeSlot?.Invoke();
         }
     }
-    public ItemInstance GetItem(int num) => items[num];
+    public ItemInstance GetItem(int num) {       
+        return items[num];
+     }
     public int CheckItemCount(ItemInstance itemType)
     {
         int count = 0;

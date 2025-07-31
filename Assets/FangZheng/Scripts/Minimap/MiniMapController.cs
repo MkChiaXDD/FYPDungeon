@@ -24,7 +24,7 @@ public class MiniMapController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            MinimapObj.SetActive(!MinimapObj.gameObject.active);
+            MinimapObj.SetActive(!MinimapObj.activeSelf);
         }
     }
 
@@ -32,7 +32,7 @@ public class MiniMapController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (Map.active == false)
+            if (Map.activeSelf == false)
             {
                 Map.SetActive(true);
                 _camera.fieldOfView = NormalCameraSize;

@@ -33,7 +33,7 @@ namespace RMG
 
         [SerializeField] private Material farthestRoomMaterial;
         [SerializeField] private float roomSizeMultiplier = 2;
-        [SerializeField] private int BigBossRounds = 2;
+       
 
         private void Awake()
         {

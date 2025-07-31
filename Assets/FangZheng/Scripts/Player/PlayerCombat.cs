@@ -149,11 +149,12 @@ public class PlayerCombat : MonoBehaviour
         Instance = this;
 
         _inventory = GetComponent<Inventory>();
-        UpdateEquippedItem();
+       
     }
 
     private void Start()
     {
+        UpdateEquippedItem();
         if (_playerMovement == null)
         {
             _playerMovement = GetComponent<PlayerMovement>();
