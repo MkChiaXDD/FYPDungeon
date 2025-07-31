@@ -14,6 +14,8 @@ public class Breakable : MonoBehaviour, IDamageable
     [SerializeField] float explosionForce = 5f;
     [SerializeField] private float explosionUpwardModifier = 1f;
     [SerializeField] LayerMask everyMask;
+
+    [SerializeField] private List<StatusEffect> effects = new List<StatusEffect>();
     // Start is called before the first frame update
     private IEnumerator BreakObject()
     {

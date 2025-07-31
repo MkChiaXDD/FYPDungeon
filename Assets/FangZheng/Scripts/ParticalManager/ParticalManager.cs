@@ -5,17 +5,6 @@ public class ParticalManager : MonoBehaviour
     public GameObject BleedPartical;
     public static ParticalManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
     public void Bleed(Transform pos)
     {
         GameObject bleed =  Instantiate(BleedPartical, pos.position, Quaternion.identity);
