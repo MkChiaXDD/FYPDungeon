@@ -26,9 +26,4 @@ public class NormalBasicAttack : BaseAttackScript
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }
-
-    
-   
-
-
 }
