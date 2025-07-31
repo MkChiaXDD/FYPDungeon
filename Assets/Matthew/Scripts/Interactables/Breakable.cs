@@ -24,7 +24,7 @@ public class Breakable : MonoBehaviour, IDamageable
 
         if (dropSystem)
         {
-            dropSystem.SpawnDropItem();
+            DropItem();
         }
 
         SelfExplode();
