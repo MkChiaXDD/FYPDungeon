@@ -35,9 +35,9 @@ public class Breakable : MonoBehaviour, IDamageable
     //spreads itself outwards, does not affect anything else
     void SelfExplode()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position,explosionRadius,~everyMask);
-        foreach (var hit in hits)
-        {   
+        Collider[] selfhits = Physics.OverlapSphere(transform.position, explosionRadius, ~everyMask);
+        foreach (var hit in selfhits)
+        {
             if (hit.attachedRigidbody != null)
             {
                 hit.attachedRigidbody.AddExplosionForce(
@@ -49,6 +49,23 @@ public class Breakable : MonoBehaviour, IDamageable
                 );
             }
         }
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius, ~everyMask);
+        foreach (var hit in selfhits)
+        {
+            if (hit.attachedRigidbody != null)
+            {
+                hit.attachedRigidbody.AddExplosionForce(
+                    explosionForce,            // base force
+                    transform.position,        // origin
+                    explosionRadius,           // radius
+                    explosionUpwardModifier,   // upwards modifier
+                    ForceMode.Force          // instant burst
+                );
+            }
+        }
+
+
     }
 
     private void PlayBreakSFX(string BreakSFX)

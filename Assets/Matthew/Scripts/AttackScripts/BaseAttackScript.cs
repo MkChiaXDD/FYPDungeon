@@ -47,6 +47,8 @@ public abstract class BaseAttackScript : MonoBehaviour
         ApplyAttack(transform.position, attackRadius, damageAmount, baseAttackType);
 
         Debug.LogWarning(baseAttackType);
+
+        PlayLightScreenShakeVFX();
     }
 
     public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
@@ -153,6 +155,21 @@ public abstract class BaseAttackScript : MonoBehaviour
         HitStopManager.ActivateHitStopGlobal(duration, timescale);
     }
 
+    protected virtual void PlayLightScreenShakeVFX()
+    {
+        var shakeParams = new StaticScreenShake.ShakeParams
+        {
+            ShakeType = ShakeType.Translational,
+            ShakeDuration = 0.2f,
+            ShakeMagnitude = 3f,
+            DampingSpeed = 10f,
+            TranslationalShakeMagnitude = new Vector3(0.4f, 0.4f, 0f),
+            TranslationalNoiseSpeed = 70f,
+            EnableX = true,
+            EnableY = true
+        };
+        StaticScreenShake.Shake(Camera.main, shakeParams);
+    }
     protected virtual void PlayHeavyAttackVFX(float intensity)
     {  
         var shakeParams = new StaticScreenShake.ShakeParams
