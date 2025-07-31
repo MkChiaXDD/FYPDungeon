@@ -317,6 +317,7 @@ public class PlayerCombat : MonoBehaviour
             _currentBasicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
             PlayAttackSound("BasicAttack");
+            Debug.Log("LIGHT ATTACK");
         }
     }
 
