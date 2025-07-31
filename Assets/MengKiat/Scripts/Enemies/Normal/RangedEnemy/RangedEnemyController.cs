@@ -99,8 +99,7 @@ public class RangedEnemyController : Enemy
             {
                 Vector3 dir = player.position - transform.position;
                 dir = new Vector3(dir.x, 0, dir.z);
-                b.Initialize(dir);
-                b.SetDamage(damage);
+                b.Initialize(dir, 6, data.damage);
             }
 
             yield return new WaitForSeconds(shootDelay);

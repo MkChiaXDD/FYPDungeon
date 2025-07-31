@@ -2,84 +2,54 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    public float speed = 20f;
-    public float lifetime = 5f;
+    public float speed;
     public float damage;
     public Vector3 direction;
-    public enum Type
-    {
-        Enemy,
-        Player,
-        Other
-    };
-    [SerializeField] private Type _type;
-    [SerializeField] private new Renderer renderer;
+    public float lifetime = 3f;
+
     void Start()
     {
         Destroy(gameObject, lifetime);
     }
 
-    public void Initialize(Vector3 dir , Type type = Type.Enemy)
+    public void Initialize(Vector3 dir, float spd, float dmg)
     {
         direction = dir.normalized;
-        _type = type;
+        speed = spd;
+        damage = dmg;
 
-        Destroy(gameObject, lifetime);
+        // Face movement direction
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
     }
 
     void Update()
     {
-        transform.position += speed * Time.deltaTime * direction;
-    }
-
-    public void SetDamage(float dmg)
-    {
-        damage = dmg;
+        transform.position += direction * speed * Time.deltaTime;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && _type != Type.Player)
+        if (other.CompareTag("PlayerBody"))
         {
-            Debug.Log("RANGEDENEMY: HIT PLAYER");
-            if (other.TryGetComponent(out IDamageable damageable))
-            {
-                damageable.TakeDamage(damage);
-            }
-            Destroy(gameObject);
+            Debug.Log("RANGEDBOSSENEMY: HIT PLAYER");
         }
-        if (other.CompareTag("Parry"))
+        else if (other.CompareTag("Parry"))
         {
-            BounceBack(other.transform.parent.gameObject.transform.parent.GetComponent<PlayerMovement>().GetDirection());
-            other.transform.parent.gameObject.transform.parent.GetComponent<PlayerCombat>().CancelParry();
-            Debug.Log("Parry");
+            BounceBack();
+            Debug.Log("Minibullet Parry");
+            return;
         }
 
-        if (other.CompareTag("Bullet") && other.GetComponent<EnemyBullet>() != null)
-        {
-            if(_type != other.GetComponent<EnemyBullet>()._type)
-            {
-                Destroy(other.gameObject);
-                Destroy(gameObject);
-            }
-
-        }
-        if (other.CompareTag("Enemy") && _type == Type.Player)
-        {
-            if (other.TryGetComponent(out IDamageable damageable))
-            {
-
-                damageable.TakeDamage(damage);
-                Destroy(gameObject);
-                Debug.Log("RANGEDENEMY: HIT Enemy");
-            }
-        }
+        if (!other.TryGetComponent<IDamageable>(out var damageable)) return;
+        damageable.TakeDamage(damage);
     }
 
-    public void BounceBack(Vector3 dir)
+    void BounceBack()
     {
-        direction = new Vector3(dir.x, direction.y, dir.z);
-        _type = Type.Player;
-        renderer.material.color = Color.yellow;
+        direction = -direction;
+        // Rotate to face new direction
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
     }
 }
