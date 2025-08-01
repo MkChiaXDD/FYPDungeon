@@ -89,7 +89,7 @@ public class EnemyTracker : MonoBehaviour
         UpdateKillCountText(); // Update the UI text after increasing kills
     }
 
-    private void UpdateKillCountText()
+    public void UpdateKillCountText()
     {
         if (killCountText == null) return;
 
