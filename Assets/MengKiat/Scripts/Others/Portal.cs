@@ -19,7 +19,7 @@ public class Portal : MonoBehaviour
                 if (round < maxRound)
                 {
                     ProceedNextLevel();
-                    FindFirstObjectByType<EnemyTracker>()?.UpdateKillCountText();
+                    FindFirstObjectByType<EnemyTracker>()?.DefaultText();
                 }
                 else
                 {

@@ -382,6 +382,7 @@ MonoBehaviour:
   currentHealth: 0
   shieldPrefab: {fileID: 0}
   shieldHp: 0
+  currentMoveSpeed: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitDuration: 1
   enemyRenderer: {fileID: 0}
@@ -430,6 +431,7 @@ MonoBehaviour:
   poison: {fileID: 11400000, guid: 5e155ddd92350714d819fec51c1f7f3c, type: 2}
   stun: {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
   speedBoost: {fileID: 11400000, guid: 4d4c15d4d91cb6b47a3f9403fe8226e7, type: 2}
+  slowEffect: {fileID: 0}
 --- !u!1001 &109058679344883138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -842,7 +844,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c1ed542966bc8d042b5eb561d414ee20,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5055450725704494952}
   m_SourcePrefab: {fileID: 100100000, guid: c1ed542966bc8d042b5eb561d414ee20, type: 3}
 --- !u!4 &8143497960063954913 stripped
 Transform:
@@ -856,3 +862,24 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8541425525653473290}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &5055450725704494952
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811385662227527003}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c1ed542966bc8d042b5eb561d414ee20, type: 3}
+  m_Controller: {fileID: 9100000, guid: a7122c8e462c81f4b9818b0ebf90d90a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

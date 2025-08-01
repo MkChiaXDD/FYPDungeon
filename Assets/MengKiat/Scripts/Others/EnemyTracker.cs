@@ -89,7 +89,7 @@ public class EnemyTracker : MonoBehaviour
         UpdateKillCountText(); // Update the UI text after increasing kills
     }
 
-    public void UpdateKillCountText()
+    private void UpdateKillCountText()
     {
         if (killCountText == null) return;
 
@@ -109,6 +109,11 @@ public class EnemyTracker : MonoBehaviour
         {
             killCountText.text = $"Kills: 0/10"; // Default display if no entry exists
         }
+    }
+
+    public void DefaultText()
+    {
+        killCountText.text = $"Kills: 0/10";
     }
 
     public int GetKillCountForRound(int round)
