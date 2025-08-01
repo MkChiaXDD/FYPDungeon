@@ -38,6 +38,8 @@ public class TankEnemyController : Enemy
     private bool hasThrown = false;
     private bool hasEvaluatedThrowChance = false;
 
+    private bool hasSeenPlayer = false;
+
     private enum State { Idle, Chase, Attack, RushToBomber }
     private State state;
 
@@ -66,13 +68,25 @@ public class TankEnemyController : Enemy
 
         if (state != State.RushToBomber)
         {
-            if (dist <= data.attackRange) state = State.Attack;
-            else if (dist <= data.detectionRange) state = State.Chase;
-            else state = State.Idle;
+            if (dist <= data.detectionRange)
+            {
+                hasSeenPlayer = true;
+            }
 
-            if (state != State.Attack)
-                hasEvaluatedThrowChance = false;
+            if (hasSeenPlayer)
+            {
+                if (dist <= data.attackRange) state = State.Attack;
+                else state = State.Chase;
+
+                if (state != State.Attack)
+                    hasEvaluatedThrowChance = false;
+            }
+            else
+            {
+                state = State.Idle;
+            }
         }
+
 
         switch (state)
         {
