@@ -21,6 +21,8 @@ public class RangedEnemyController : Enemy
     Vector3 repositionTarget;
     Transform player;
 
+    private bool hasSeenPlayer = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,9 +49,12 @@ public class RangedEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
-                if (Vector3.Distance(transform.position, player.position) <= data.attackRange
-                    && attackTimer >= attackCooldown)
+                if (!hasSeenPlayer && Vector3.Distance(transform.position, player.position) <= data.attackRange)
+                    hasSeenPlayer = true;
+
+                if (hasSeenPlayer && attackTimer >= attackCooldown)
                     state = State.Attack;
+
                 break;
 
             case State.Attack:
