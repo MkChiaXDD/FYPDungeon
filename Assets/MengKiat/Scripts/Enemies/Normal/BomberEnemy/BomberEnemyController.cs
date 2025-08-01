@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BomberEnemyController : Enemy
 {
-    enum State { Roam, Chase, Attack }
+    enum State { Idle, Roam, Chase, Attack }
 
     [Header("Ranges & Forces")]
     [SerializeField] float roamRadius = 5f;
@@ -20,6 +20,11 @@ public class BomberEnemyController : Enemy
 
     [Header("Roaming")]
     [SerializeField] float roamDelay = 3f;
+
+    [Header("Idle")]
+    [SerializeField] float idleDuration = 2f;
+    private float idleTimer;
+    private bool wasRoamingBeforeIdle = false;
 
     [Header("Avoidance")]
     [SerializeField] float feelerLength = 2f;
@@ -53,7 +58,7 @@ public class BomberEnemyController : Enemy
         base.Awake();
         spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
-        state = State.Roam;
+        state = State.Idle;
         ChooseRoamTarget();
         currentDir = transform.forward;
 
@@ -87,15 +92,27 @@ public class BomberEnemyController : Enemy
         if (state != State.Attack)
         {
             if (distToPlayerXZ <= data.attackRange - 1)
+            {
                 state = State.Attack;
+            }
             else if (distToPlayerXZ <= data.detectionRange)
+            {
                 state = State.Chase;
-            else
-                state = State.Roam;
+            }
+            else if (state != State.Idle && state != State.Roam)
+            {
+                state = State.Idle;
+                idleTimer = 0f;
+                wasRoamingBeforeIdle = false;
+            }
         }
 
         switch (state)
         {
+            case State.Idle:
+                HandleIdle();
+                break;
+
             case State.Roam:
                 HandleRoam();
                 break;
@@ -111,6 +128,28 @@ public class BomberEnemyController : Enemy
         }
     }
 
+    void HandleIdle()
+    {
+        idleTimer += Time.deltaTime;
+
+        if (idleTimer >= idleDuration)
+        {
+            idleTimer = 0f;
+            wasRoamingBeforeIdle = !wasRoamingBeforeIdle;
+
+            if (wasRoamingBeforeIdle)
+            {
+                ChooseRoamTarget();
+                roamTimer = 0f;
+                state = State.Roam;
+            }
+            else
+            {
+                state = State.Idle;
+            }
+        }
+    }
+
     void HandleRoam()
     {
         roamTimer += Time.deltaTime;
@@ -119,7 +158,7 @@ public class BomberEnemyController : Enemy
         if (Vector3.Distance(transform.position, roamTarget) < 0.2f || roamTimer >= roamDelay)
         {
             roamTimer = 0f;
-            ChooseRoamTarget();
+            state = State.Idle;
         }
     }
 
@@ -168,7 +207,6 @@ public class BomberEnemyController : Enemy
     {
         if (isExploding || boutaDie) yield break;
 
-        // Slow down during charge-up
         float originalSpeed = CurrentMoveSpeed;
         SetSpeed(originalSpeed * 0.3f);
 
@@ -184,7 +222,7 @@ public class BomberEnemyController : Enemy
         isExploding = true;
 
         float t = 0f;
-        float flashSpeed = 5f;
+        float flashSpeed = 2f;
         Vector3 initialScale = model.transform.localScale;
         Vector3 targetScale = initialScale * explodeGrowScale;
 
@@ -199,7 +237,7 @@ public class BomberEnemyController : Enemy
             yield return null;
         }
 
-        SetSpeed(originalSpeed); // Restore speed (though explosion happens immediately after)
+        SetSpeed(originalSpeed);
         model.transform.localScale = targetScale;
         theLight.color = Color.red;
         Explode();
@@ -227,9 +265,8 @@ public class BomberEnemyController : Enemy
             else
             {
                 if (hit.gameObject.GetComponent<IDamageable>() == null)
-                {
                     continue;
-                }
+
                 if (hit.attachedRigidbody != null)
                 {
                     Vector3 dir = (hit.transform.position - transform.position).normalized;
