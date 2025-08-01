@@ -297,6 +297,7 @@ public class PlayerCombat : MonoBehaviour
                         _isLockedOn = true;
                     }
                 }
+
                 _isCharging = true;
                 _chargeStartTime = Time.time;
                 _playerMovement.ChangePlayerMovementModifier(ChargedSlowDownEffect);
