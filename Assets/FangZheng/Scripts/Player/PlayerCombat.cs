@@ -251,7 +251,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 OnAction?.Invoke("HeavyAttack");
             }
-
+            Uncharge?.Invoke();
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
