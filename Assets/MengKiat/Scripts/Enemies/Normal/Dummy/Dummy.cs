@@ -55,10 +55,10 @@ public class Dummy : Enemy
 
     private void Update()
     {
-        if (isStunned )
-        {
-            return;
-        }
+        //if (isStunned )
+        //{
+        //    return;
+        //}
 
         attackTimer -= Time.deltaTime;
 
@@ -69,9 +69,11 @@ public class Dummy : Enemy
         }
 
         if (EnemyShield != null) {
-            if (EnemyShield.active == false)
+            if (!EnemyShield.activeSelf)
             {
                 EnemyShield = null;
+                Destroy(EnemyShield);
+                Debug.Log("Shield Destroy");
             }
 
             if (EnemyShield == null && HaveShield == 1)

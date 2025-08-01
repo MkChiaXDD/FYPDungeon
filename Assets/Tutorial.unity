@@ -2891,7 +2891,7 @@ PrefabInstance:
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
       propertyPath: steps.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
@@ -2966,6 +2966,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
+      propertyPath: steps.Array.data[7].HelpStuff
+      value: Press Tab To Open Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[7]._StepName
+      value: OpenMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].HelpStuff
+      value: Use Mouse right click to drag and Scroll to zoom in
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8]._StepName
+      value: DragMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
       propertyPath: steps.Array.data[1].Instruction
       value: Move Around and press Spcae to Dash at the direction
       objectReference: {fileID: 0}
@@ -3027,6 +3047,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
+      propertyPath: steps.Array.data[7].Instruction
+      value: Press Tab To Open Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[7].TimeForHint
+      value: 100000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].Instruction
+      value: Use Mouse right click to drag and Scroll to zoom in
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].TimeForHint
+      value: 100000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
       propertyPath: steps.Array.data[0].requiredAction
       value: 
       objectReference: {fileID: 0}
@@ -3044,6 +3084,16 @@ PrefabInstance:
         type: 3}
       propertyPath: steps.Array.data[2].requiredKeys.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[7].requiredKeys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].requiredKeys.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
@@ -3072,6 +3122,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
+      propertyPath: steps.Array.data[7].requiredAction.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].requiredAction.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
       propertyPath: steps.Array.data[1].requiredKeys.Array.data[0]
       value: 32
       objectReference: {fileID: 0}
@@ -3097,6 +3157,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
+      propertyPath: steps.Array.data[7].requiredKeys.Array.data[0]
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].requiredKeys.Array.data[0]
+      value: 318
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
       propertyPath: steps.Array.data[2].requiredAction.Array.data[0]
       value: NormalAttack
       objectReference: {fileID: 0}
@@ -3118,6 +3188,16 @@ PrefabInstance:
     - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
         type: 3}
       propertyPath: steps.Array.data[6].requiredAction.Array.data[0]
+      value: BreakEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[7].requiredAction.Array.data[0]
+      value: BreakEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691512752976737514, guid: 3d3b8bf34c621f6458f595988e113a95,
+        type: 3}
+      propertyPath: steps.Array.data[8].requiredAction.Array.data[0]
       value: BreakEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 1902993352257131926, guid: 3d3b8bf34c621f6458f595988e113a95,
