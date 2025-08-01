@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,8 @@ public class NormalBasicAttack : BaseAttackScript
         Destroy(vfx, 2f);
 
         SoundManager.Instance.PlaySFX("BasicAttack", this.gameObject);
+
+        Debug.Log("Basic attack: " + baseAttackType);
 
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }

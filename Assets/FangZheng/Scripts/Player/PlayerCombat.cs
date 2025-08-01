@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ public class PlayerCombat : MonoBehaviour
     #region Serialized Fields
     [Header("Player Data")]
     [SerializeField] private PlayerData _playerData;
+    [SerializeField] private bool Tutorial;
 
     [Header("Layers & Masks")]
     [SerializeField] private LayerMask _ignoreLayerMask;
@@ -125,6 +127,7 @@ public class PlayerCombat : MonoBehaviour
     #region Events
     public UnityEvent ChargeUp;
     public UnityEvent Uncharge;
+    public event Action<string> OnAction;
     #endregion
 
     #region Properties
@@ -161,6 +164,15 @@ public class PlayerCombat : MonoBehaviour
         }
 
         _currentBasicAttack = baseBasicAttack;
+
+        if (FindFirstObjectByType<TutorialProggresion>().isActiveAndEnabled)
+        {
+            Tutorial = true;
+        }
+        else
+        {
+            Tutorial = false;
+        }
     }
 
     private void OnEnable()
@@ -235,6 +247,11 @@ public class PlayerCombat : MonoBehaviour
             float damageMultiplier = 1f + chargePercent;
             float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
 
+            if (Tutorial)
+            {
+                OnAction?.Invoke("HeavyAttack");
+            }
+
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
@@ -243,6 +260,13 @@ public class PlayerCombat : MonoBehaviour
             // Light attack
             _currentAttackCooldown = _currentlightAttackCooldown;
             _lastAttackType = AttackType.Light;
+
+
+            if (Tutorial)
+            {
+                OnAction?.Invoke("NormalAttack");
+            }
+
             ExecuteLightAttack();
             StartCoroutine(LightAttackMovement());
         }
@@ -315,10 +339,16 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
+            Uncharge?.Invoke();
             _currentBasicAttack.ExecuteLightAttack();
             TriggerAttackAnimation("LightAttack");
             PlayAttackSound("BasicAttack");
             Debug.Log("LIGHT ATTACK");
+        }
+
+        if (Tutorial)
+        {
+            OnAction?.Invoke("NormalAttack");
         }
     }
 

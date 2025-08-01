@@ -31,17 +31,25 @@ public class TutorialProggresion : MonoBehaviour
     private float StartTime;
     private bool showingHelp;
     private List<KeyCode> keysPressed = new List<KeyCode>();
-    private List<string> RequiredAction;
+    private List<string> RequiredAction = new List<string>();
     private bool ActionComplete;
     private bool IsDailogFinish;
+
     [SerializeField] private DialogSystem _dialogSystem;
+    [SerializeField] private PlayerCombat _playerCombat;
+
     public static TutorialProggresion Instance;
 
     private void OnEnable()
     {
         _dialogSystem.DailogFinish.AddListener(StartAfterDailog);
+        _playerCombat.OnAction += IfPlayerPerformAction;
     }
 
+    private void OnDisable()
+    {
+        _playerCombat.OnAction -= IfPlayerPerformAction;
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -112,10 +120,14 @@ public class TutorialProggresion : MonoBehaviour
     public void StartAfterDailog()
     {
         TutorialStep step = steps[currentStepIndex];
-
+        RequiredAction.Clear();
         StartTime = Time.time;
         showingHelp = false;
-        RequiredAction = steps[currentStepIndex].requiredAction;
+        foreach (string action in steps[currentStepIndex].requiredAction)
+        {
+            RequiredAction.Add(action);
+        }
+        //RequiredAction = steps[currentStepIndex].requiredAction;
         instructionText.text = step.Instruction;
 
         ActionComplete = false;
@@ -144,7 +156,12 @@ public class TutorialProggresion : MonoBehaviour
             IsDailogFinish = true;
             StartTime = Time.time;
             showingHelp = false;
-            RequiredAction = steps[StepPoint].requiredAction;
+            //RequiredAction = steps[StepPoint].requiredAction;
+            RequiredAction.Clear();
+            foreach (string action in steps[currentStepIndex].requiredAction)
+            {
+                RequiredAction.Add(action);
+            }
             instructionText.text = step.Instruction;
 
             ActionComplete = false;
@@ -192,11 +209,12 @@ public class TutorialProggresion : MonoBehaviour
         }
         else
         {
+
             foreach (string action in steps[currentStepIndex].requiredAction)
             {
                 if (action == actionName)
                 {
-                    RequiredAction.Remove(action);
+                    RequiredAction.Remove(actionName);
                 }
             }
 
