@@ -22,6 +22,8 @@ public class RangedEnemyController : Enemy
     Transform player;
 
     private bool hasSeenPlayer = false;
+    private float timeSinceLastSeen = 0f;
+    [SerializeField] private float forgetTime = 10f;
 
     protected override void Awake()
     {
@@ -49,11 +51,33 @@ public class RangedEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
-                if (!hasSeenPlayer && Vector3.Distance(transform.position, player.position) <= data.attackRange)
-                    hasSeenPlayer = true;
+                float distToPlayer = Vector3.Distance(transform.position, player.position);
 
-                if (hasSeenPlayer && attackTimer >= attackCooldown)
-                    state = State.Attack;
+                if (!hasSeenPlayer && distToPlayer <= data.attackRange)
+                {
+                    hasSeenPlayer = true;
+                    timeSinceLastSeen = 0f;
+                }
+
+                if (hasSeenPlayer)
+                {
+                    if (distToPlayer <= data.attackRange)
+                    {
+                        timeSinceLastSeen = 0f;
+                    }
+                    else
+                    {
+                        timeSinceLastSeen += Time.deltaTime;
+                        if (timeSinceLastSeen >= forgetTime)
+                        {
+                            hasSeenPlayer = false;
+                            timeSinceLastSeen = 0f;
+                        }
+                    }
+
+                    if (attackTimer >= attackCooldown)
+                        state = State.Attack;
+                }
 
                 break;
 
