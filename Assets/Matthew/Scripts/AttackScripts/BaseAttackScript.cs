@@ -141,7 +141,7 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     protected virtual void ApplyStatusEffect(GameObject target, StatusEffect effect)
     {
-        var receiver = target.GetComponent<StatusEffectReceiver>() ?? target.AddComponent<StatusEffectReceiver>();
+        var receiver = target.GetComponent<StatusEffectReceiver>() ? target.AddComponent<StatusEffectReceiver>() : null;
         receiver.ApplyEffect(effect);
     }
 

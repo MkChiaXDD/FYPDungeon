@@ -38,8 +38,8 @@ public class StatusEffectReceiver : MonoBehaviour
         //{
         //    GetComponent<StatusEffectReceiver>().DebugActiveEffects();
         //}
-    
-}
+
+    }
 
     public void ApplyEffect(StatusEffect effect)
     {
@@ -151,7 +151,7 @@ public class PoisonEffect : StatusEffect
     private Color originalColour;
     public Color damageEffectColour = Color.green;
 
- 
+
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         if (receiver.TryGetComponent<Renderer>(out var originalRenderer))
@@ -198,7 +198,7 @@ public class PoisonEffect : StatusEffect
 [CreateAssetMenu(menuName = "Status Effects/Fire")]
 public class FireEffect : StatusEffect
 {
-    
+
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Fire] Applying Fire to {receiver.gameObject.name}");
@@ -248,6 +248,8 @@ public class FireEffect : StatusEffect
 public class StunEffect : StatusEffect
 {
     public float StunDuration = 2f;
+    public GameObject StunVFXPrefab; // Assign in Inspector
+    public Vector3 VFXOffset = new Vector3(0, 2f, 0); // Position above target
     public override void ApplyEffect(StatusEffectReceiver receiver)
     {
         Debug.Log($"[Stun] Applying stun to {receiver.gameObject.name}");
@@ -261,6 +263,7 @@ public class StunEffect : StatusEffect
         if (receiver.TryGetComponent<Enemy>(out var enemyAI))
         {
             enemyAI.ApplyStun(StunDuration);
+            AttachStunVFX(receiver);
             Debug.Log($"[Stun] Applied stun to {receiver.gameObject.name}");
             return;
         }
@@ -275,21 +278,37 @@ public class StunEffect : StatusEffect
         {
             playerMovement.Unstun();
             Debug.Log($"[Stun] Removed stun from {receiver.gameObject.name}");
-            return ;
+            return;
 
         }
         if (receiver.TryGetComponent<Enemy>(out var enemyAI))
-        {           
+        {
+
             Debug.Log($"[Stun] Removed stun from {receiver.gameObject.name}");
             return;
         }
-        
+
     }
 
     public override void UpdateEffect(StatusEffectReceiver receiver)
     {
-        
         Debug.Log($"[Stun] {receiver.gameObject.name} is stunned ({duration:0.00}s remaining)");
+    }
+
+    private void AttachStunVFX(StatusEffectReceiver receiver)
+    {
+        if (StunVFXPrefab == null) return;
+
+
+        // Create new VFX instance
+        GameObject vfxInstance = Instantiate(
+            StunVFXPrefab,
+            receiver.transform.position + VFXOffset,
+            Quaternion.identity
+        );
+
+        // Parent to target and maintain world position
+        vfxInstance.transform.SetParent(receiver.transform, true);
     }
 }
 
@@ -342,7 +361,7 @@ public class SlownessEffect : StatusEffect
         if (receiver.TryGetComponent<Enemy>(out var movement))
         {
             originalSpeeds[receiver] = movement.GetOriginalSpeed();
-             movement.MultiplySpeed(speedMultiplier);
+            movement.MultiplySpeed(speedMultiplier);
             //Debug.Log($"[Speed Boost] Speed increased from {originalSpeeds[receiver]} to {movement.Speed}");
         }
     }

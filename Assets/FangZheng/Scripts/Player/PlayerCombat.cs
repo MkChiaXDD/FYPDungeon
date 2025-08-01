@@ -165,7 +165,7 @@ public class PlayerCombat : MonoBehaviour
 
         _currentBasicAttack = baseBasicAttack;
 
-        if (FindFirstObjectByType<TutorialProggresion>().isActiveAndEnabled)
+        if (FindFirstObjectByType<TutorialProggresion>())
         {
             Tutorial = true;
         }
@@ -287,7 +287,7 @@ public class PlayerCombat : MonoBehaviour
         // Start charging heavy attack
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.LogWarning("rtdtfyguhij");
+         
             if (Time.time > _lastAttackTime + _currentAttackCooldown)
             {
                 _isCharging = true;

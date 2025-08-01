@@ -69,16 +69,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 600269314523386180, guid: e66b033a508ec6641a650437192c8685,
     type: 3}
+  breakSFXName: 
   dropSystem: {fileID: 0}
-  attackTypeToBreak: 2
-  BreakSFXName: ConcreteBreakSFX
-  explodeRange: 1.5
   explosionRadius: 3
   explosionForce: 5
   explosionUpwardModifier: 1
-  everyMask:
+  forceAffectedLayers:
     serializedVersion: 2
     m_Bits: 0
+  damageAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  baseDestructionDamage: 5
+  stunDuration: 0.5
+  statusEffects: []
 --- !u!1001 &5814405933920784230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95,7 +99,7 @@ PrefabInstance:
     - target: {fileID: 2344627897710564329, guid: e1adfaacc5324b44ab6b9b1c93b2f877,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 46.199997
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2344627897710564329, guid: e1adfaacc5324b44ab6b9b1c93b2f877,
         type: 3}
