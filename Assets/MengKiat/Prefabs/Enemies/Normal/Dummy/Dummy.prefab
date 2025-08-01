@@ -106,7 +106,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7795807399572056805
 Rigidbody:
@@ -133,7 +133,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!114 &1244997264739974286
 MonoBehaviour:
@@ -150,6 +150,23 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 9007a943d0be9274abd198bb3f772ce3, type: 2}
   healthBar: {fileID: 5511342450481383767}
   currentHealth: 100000000
+  shieldPrefab: {fileID: 2094497034626437387, guid: 793c64fc489bda94a94fcb741af99dc2,
+    type: 3}
+  shieldHp: 4
+  currentMoveSpeed: 0
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitDuration: 1
+  enemyRenderer: {fileID: 0}
+  useEmission: 1
+  _totalFlashes: 1
+  dmgFlashSpeed: 8
+  pyroResistance: 1
+  hydroResistance: 1
+  electroResistance: 1
+  cryoResistance: 1
+  stunDuration: 1
+  DummyType: 2
+  attackCooldown: 0
 --- !u!1001 &8316794095392979732
 PrefabInstance:
   m_ObjectHideFlags: 0

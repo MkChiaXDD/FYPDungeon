@@ -41,6 +41,7 @@ public class RangedMiniBullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.LogWarning(other.name);
         if (other.CompareTag("Player"))
         {
             Debug.Log("RANGEDENEMY: HIT PLAYER");

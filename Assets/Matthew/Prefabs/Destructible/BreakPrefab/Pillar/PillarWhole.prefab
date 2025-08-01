@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9093937290214714991}
   - component: {fileID: 278980099953987708}
   - component: {fileID: 8709944838102666160}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PillarWhole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,16 +69,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 3337048090533833099, guid: 94b9646c5efb8f44991bdcba8faf70cd,
     type: 3}
+  breakSFXName: ConcreteBreakSFX
   dropSystem: {fileID: 0}
-  attackTypeToBreak: 0
-  BreakSFXName: ConcreteBreakSFX
-  explodeRange: 0
-  explosionRadius: 0
+  explosionRadius: 7
   explosionForce: 0
   explosionUpwardModifier: 0
-  everyMask:
+  forceAffectedLayers:
     serializedVersion: 2
     m_Bits: 0
+  damageAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  baseDestructionDamage: 3
+  stunDuration: 0.5
+  statusEffects:
+  - {fileID: 11400000, guid: f91401fca0808e74ea76c5b79473d0f5, type: 2}
 --- !u!1001 &6735680744660017114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100,8 +105,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6937765394784691807, guid: 264cee7c864bbb247ba0132bd854a66c,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6937765394784691807, guid: 264cee7c864bbb247ba0132bd854a66c,
+        type: 3}
       propertyPath: m_LocalScale.y
-      value: 100
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6937765394784691807, guid: 264cee7c864bbb247ba0132bd854a66c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6937765394784691807, guid: 264cee7c864bbb247ba0132bd854a66c,
         type: 3}
@@ -157,6 +172,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pillar_Whole
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713597930196958437, guid: 264cee7c864bbb247ba0132bd854a66c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -67732201706556363, guid: 264cee7c864bbb247ba0132bd854a66c, type: 3}

@@ -1,70 +1,140 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Breakable : MonoBehaviour, IDamageable
 {
+    [Header("Visuals")]
     [SerializeField] private GameObject brokenObject;
+    [SerializeField] private string breakSFXName;
+
+    [Header("Drops")]
     [SerializeField] private ItemDropSystem dropSystem;
-    [SerializeField] private PhysicalAttackType attackTypeToBreak;
-    [SerializeField] private string BreakSFXName;
 
-    [SerializeField] float explodeRange = 1.5f;
-    [SerializeField] float explosionRadius = 3f;
-    [SerializeField] float explosionForce = 5f;
+    [Header("Explosion")]
+    [SerializeField] private float explosionRadius = 3f;
+    [SerializeField] private float explosionForce = 5f;
     [SerializeField] private float explosionUpwardModifier = 1f;
-    [SerializeField] LayerMask everyMask;
-    // Start is called before the first frame update
-    private IEnumerator BreakObject()
+    [SerializeField] private LayerMask forceAffectedLayers;
+    [SerializeField] private LayerMask damageAffectedLayers;
+
+    [Header("Damage")]
+    [SerializeField] private float baseDestructionDamage = 5;
+    [SerializeField] private float stunDuration = 0.5f;
+
+    [Header("Effects")]
+    [SerializeField] private List<StatusEffect> statusEffects = new List<StatusEffect>();
+
+    private enum StatusEffectList
     {
-        if (brokenObject)
-        yield return Instantiate(brokenObject, transform.position, Quaternion.Euler(0, 0, 0));
+        STUN = 0,
+        NONE = 1,
+    }
 
-        if (dropSystem)
-        {
-            dropSystem.SpawnDropItem();
-        }
+    private Collider[] explosionResults = new Collider[32];
+    private static readonly Quaternion DefaultRotation = Quaternion.identity;
 
-        SelfExplode();
-        
-        PlayBreakSFX(BreakSFXName);
+    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType) => Die();
+    public void TakeElementalDamage(float damage, ElementType element) => Die();
+    public void TakeDamage(float damage) => Die();
+    public void Heal(float healAmount) { /* Intentionally empty */ }
+
+    public void Die()
+    {
+        SpawnBrokenObject();
+        TryDropItem();
+        ApplyExplosionEffects();
+        PlayBreakSound();
         Destroy(gameObject);
     }
-    //spreads itself outwards, does not affect anything else
-    void SelfExplode()
+
+    private void SpawnBrokenObject()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position,explosionRadius,~everyMask);
-        foreach (var hit in hits)
-        {   
-            if (hit.attachedRigidbody != null)
-            {
-                hit.attachedRigidbody.AddExplosionForce(
-                    explosionForce,            // base force
-                    transform.position,        // origin
-                    explosionRadius,           // radius
-                    explosionUpwardModifier,   // upwards modifier
-                    ForceMode.Force          // instant burst
-                );
-            }
+        if (brokenObject)
+            Instantiate(brokenObject, transform.position, DefaultRotation);
+    }
+
+    private void TryDropItem()
+    {
+        if (dropSystem)
+            dropSystem.SpawnDropItem();
+    }
+
+    private void ApplyExplosionEffects()
+    {
+        int hitCount = Physics.OverlapSphereNonAlloc(
+            transform.position,
+            explosionRadius,
+            explosionResults,
+            forceAffectedLayers | damageAffectedLayers
+        );
+
+        for (int i = 0; i < hitCount; i++)
+        {
+            ProcessForceApplication(explosionResults[i]);
+            ProcessDamageAndEffects(explosionResults[i]);
         }
     }
 
-    private void PlayBreakSFX(string BreakSFX)
+    private void ProcessForceApplication(Collider hit)
     {
-        SoundManager.Instance.PlaySFX(BreakSFX, this.gameObject);
-    }
-    public void TakeElementalDamage(float damage, ElementType element) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage"); }
-    public void TakeDamage(float damage) { Debug.Log("no implementation of TakeDamage in breakable currently, it is replaced by physicalDamage");  }
-    public void TakePhysicalDamage(float damage, PhysicalAttackType attackType)
-    {
-        //if (attackType == PhysicalAttackType.Blunt)
-        //{
-        //    Die();
-        //}
-        Die();
-    }
-    public void Die() => StartCoroutine(nameof(BreakObject));
-    public void DropItem() => dropSystem.SpawnDropItem();
+        if (!forceAffectedLayers.ContainsLayer(hit.gameObject.layer))
+            return;
 
-    public void Heal(float healAmoount){/*yes this function does nothing, do not implement*/}
+        Rigidbody rb = hit.attachedRigidbody;
+        if (rb && !rb.isKinematic)
+        {
+            rb.AddExplosionForce(
+                explosionForce,
+                transform.position,
+                explosionRadius,
+                explosionUpwardModifier,
+                ForceMode.Impulse
+            );
+        }
+    }
+
+    private void ProcessDamageAndEffects(Collider hit)
+    {
+        if (!damageAffectedLayers.ContainsLayer(hit.gameObject.layer))
+            return;
+
+        if (hit.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.TakeDamage(baseDestructionDamage);
+            ApplyStun(hit.gameObject);
+        }
+    }
+    
+    private void ApplyStun(GameObject target)
+    {     
+        ApplyStatusEffect(target, statusEffects[(int)StatusEffectList.STUN]);
+    }
+
+    protected virtual void ApplyStatusEffect(GameObject target, StatusEffect effect)
+    {
+        var receiver = target.GetComponent<StatusEffectReceiver>() ?? target.AddComponent<StatusEffectReceiver>();
+        receiver.ApplyEffect(effect);
+    }
+
+    private void PlayBreakSound()
+    {
+        if (!string.IsNullOrEmpty(breakSFXName) && SoundManager.Instance)
+        {
+            SoundManager.Instance.PlaySFX(breakSFXName);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+    }
+}
+
+public static class LayerMaskExtensions
+{
+    public static bool ContainsLayer(this LayerMask mask, int layer)
+    {
+        return (mask.value & (1 << layer)) != 0;
+    }
 }

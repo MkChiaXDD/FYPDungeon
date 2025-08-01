@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BuffItem : MonoBehaviour
 {
-
+    [SerializeField] private BuffSelectionUI Buff;
     [SerializeField] private GameObject CanCollectUI;
     private bool PlayerIsInBound;
+    private UnityEvent Collect;
 
-
+    private void Start()
+    {
+        if(Buff == null)
+        {
+            Buff = FindFirstObjectByType<BuffSelectionUI>();
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the colliding object is the player (you might want to add more specific checks)
+        
         if (other.CompareTag("Player"))
         {
             PlayerIsInBound = true;
@@ -30,9 +38,18 @@ public class BuffItem : MonoBehaviour
 
     private void CollectBuff()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
-
+            //Collect?.Invoke();
+            
+            Buff.Select();
+            Buff.CreateBuffCardUI();
+            Destroy(this.gameObject);
         }
+    }
+
+    private void Update()
+    {
+        CollectBuff();
     }
 }

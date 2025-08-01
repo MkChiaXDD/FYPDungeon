@@ -232,7 +232,7 @@ public class InventoryManager : MonoBehaviour
 
         
 
-        return inventory.GetItem(inventory.equippedSlotNum);
+        return inventory.GetItem(inventory.equippedSlotNum); // -1 to set to 0 (first)
     }
 
     public void RemoveCurrentHotbarItem()

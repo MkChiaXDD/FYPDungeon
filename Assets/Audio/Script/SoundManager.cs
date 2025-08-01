@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance;
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
 
     [Header("Music Clips")]
@@ -62,9 +62,9 @@ public class SoundManager : MonoBehaviour
     {
         if (musicDict.ContainsKey(clipName))
         {
-            musicSource.clip = musicDict[clipName];
-            musicSource.loop = loop;
-            musicSource.Play();
+            bgmSource.clip = musicDict[clipName];
+            bgmSource.loop = loop;
+            bgmSource.Play();
         }
         else
         {
@@ -74,9 +74,9 @@ public class SoundManager : MonoBehaviour
 
     public void StopMusic()
     {
-        if (musicSource.isPlaying)
+        if (bgmSource.isPlaying)
         {
-            musicSource.Stop();
+            bgmSource.Stop();
         }
     }
 
@@ -110,4 +110,70 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void PlaySFX(string clipName)
+    {
+        if (sfxDict.ContainsKey(clipName))
+        {
+            sfxSource.PlayOneShot(sfxDict[clipName]);
+        }
+        else
+        {
+            Debug.LogWarning("SFX clip " + clipName + " not found!");
+        }
+    }
+
+    public void PlayVariationSFX(string clipName)
+    {
+        if (!sfxDict.ContainsKey(clipName))
+        {
+            Debug.LogWarning("SFX clip " + clipName + " not found!");
+            return;
+        }
+
+
+        RandomisePitch();
+        sfxSource.PlayOneShot(sfxDict[clipName]);
+        ResetPitch();
+    }
+
+    public void StopBGM()
+    {
+        bgmSource.Stop();
+    }
+
+    public void ToggleMusic()
+    {
+        bgmSource.mute = !bgmSource.mute;
+    }
+    public void ToggleSFX()
+    {
+        sfxSource.mute = !sfxSource.mute;
+    }
+
+    public void MusicVolume(float volume)
+    {
+        bgmSource.volume = volume;
+    }
+    public void SFXVolume(float volume)
+    {
+        sfxSource.volume = volume;
+    }
+    public float GetMusicVolume()
+    {
+        return bgmSource.volume;
+    }
+    public float GetSFXVolume()
+    {
+        return sfxSource.volume;
+    }
+
+    public void RandomisePitch(float minRange = 0.9f, float maxRange = 1.1f)
+    {
+        sfxSource.pitch = Random.Range(minRange, maxRange);
+    }
+
+    public void ResetPitch()
+    {
+        sfxSource.pitch = 1;
+    }
 }

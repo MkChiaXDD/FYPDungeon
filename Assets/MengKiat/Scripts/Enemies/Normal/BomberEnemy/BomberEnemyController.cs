@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BomberEnemyController : Enemy
 {
-    enum State { Roam, Chase, Attack }
+    enum State { Idle, Roam, Chase, Attack }
 
     [Header("Ranges & Forces")]
     [SerializeField] float roamRadius = 5f;
@@ -20,6 +20,11 @@ public class BomberEnemyController : Enemy
 
     [Header("Roaming")]
     [SerializeField] float roamDelay = 3f;
+
+    [Header("Idle")]
+    [SerializeField] float idleDuration = 2f;
+    private float idleTimer;
+    private bool wasRoamingBeforeIdle = false;
 
     [Header("Avoidance")]
     [SerializeField] float feelerLength = 2f;
@@ -48,18 +53,18 @@ public class BomberEnemyController : Enemy
     private bool isExploding = false;
     public bool isPickedup = false;
 
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
-        state = State.Roam;
+        state = State.Idle;
         ChooseRoamTarget();
         currentDir = transform.forward;
 
-        if (currentRound < roundForScaling)
-            currentExplosionRadius = explosionRadius;
-        else
-            currentExplosionRadius = explosionRadius * explodingSizeMultiplier;
+        currentExplosionRadius = currentRound < roundForScaling
+            ? explosionRadius
+            : explosionRadius * explodingSizeMultiplier;
 
         if (explodingParticle != null)
             explodingParticle.Stop();
@@ -87,15 +92,27 @@ public class BomberEnemyController : Enemy
         if (state != State.Attack)
         {
             if (distToPlayerXZ <= data.attackRange - 1)
+            {
                 state = State.Attack;
+            }
             else if (distToPlayerXZ <= data.detectionRange)
+            {
                 state = State.Chase;
-            else
-                state = State.Roam;
+            }
+            else if (state != State.Idle && state != State.Roam)
+            {
+                state = State.Idle;
+                idleTimer = 0f;
+                wasRoamingBeforeIdle = false;
+            }
         }
 
         switch (state)
         {
+            case State.Idle:
+                HandleIdle();
+                break;
+
             case State.Roam:
                 HandleRoam();
                 break;
@@ -111,6 +128,28 @@ public class BomberEnemyController : Enemy
         }
     }
 
+    void HandleIdle()
+    {
+        idleTimer += Time.deltaTime;
+
+        if (idleTimer >= idleDuration)
+        {
+            idleTimer = 0f;
+            wasRoamingBeforeIdle = !wasRoamingBeforeIdle;
+
+            if (wasRoamingBeforeIdle)
+            {
+                ChooseRoamTarget();
+                roamTimer = 0f;
+                state = State.Roam;
+            }
+            else
+            {
+                state = State.Idle;
+            }
+        }
+    }
+
     void HandleRoam()
     {
         roamTimer += Time.deltaTime;
@@ -119,7 +158,7 @@ public class BomberEnemyController : Enemy
         if (Vector3.Distance(transform.position, roamTarget) < 0.2f || roamTimer >= roamDelay)
         {
             roamTimer = 0f;
-            ChooseRoamTarget();
+            state = State.Idle;
         }
     }
 
@@ -160,12 +199,17 @@ public class BomberEnemyController : Enemy
         desired.Normalize();
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        transform.position += currentDir * data.moveSpeed * Time.deltaTime;
+        transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentDir), Time.deltaTime * turnSpeed);
     }
 
     public IEnumerator ExplosionSequence()
     {
+        if (isExploding || boutaDie) yield break;
+
+        float originalSpeed = CurrentMoveSpeed;
+        SetSpeed(originalSpeed * 0.3f);
+
         if (circleIndicator != null)
             circleIndicator.SetActive(true);
 
@@ -178,7 +222,7 @@ public class BomberEnemyController : Enemy
         isExploding = true;
 
         float t = 0f;
-        float flashSpeed = 5f;
+        float flashSpeed = 2f;
         Vector3 initialScale = model.transform.localScale;
         Vector3 targetScale = initialScale * explodeGrowScale;
 
@@ -193,6 +237,7 @@ public class BomberEnemyController : Enemy
             yield return null;
         }
 
+        SetSpeed(originalSpeed);
         model.transform.localScale = targetScale;
         theLight.color = Color.red;
         Explode();
@@ -211,44 +256,34 @@ public class BomberEnemyController : Enemy
                     Vector3 direction = (hit.transform.position - transform.position).normalized;
                     Vector3 knockbackForce = direction * explosionForce;
 
-                    // Apply knockback manually
-                    hit.attachedRigidbody.velocity = Vector3.zero; // optional: reset current movement
+                    hit.attachedRigidbody.velocity = Vector3.zero;
                     hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
-
-                    // Apply damage
                     dmg.TakeDamage(data.damage);
-
                     ExplosionScreenShake();
                 }
             }
             else
             {
                 if (hit.gameObject.GetComponent<IDamageable>() == null)
-                {
                     continue;
-                }
+
                 if (hit.attachedRigidbody != null)
                 {
                     Vector3 dir = (hit.transform.position - transform.position).normalized;
-                    Vector3 knockbackForce = dir * (explosionForce / 3f); // scale it down for non-player
-
-                    // Apply knockback
-                    hit.attachedRigidbody.velocity = Vector3.zero; // optional reset
+                    Vector3 knockbackForce = dir * (explosionForce / 3f);
+                    hit.attachedRigidbody.velocity = Vector3.zero;
                     hit.attachedRigidbody.AddForce(knockbackForce * 3, ForceMode.Force);
                 }
 
-                // Still trigger bomber chain reactions
                 if (hit.TryGetComponent<BomberEnemyController>(out var bomber) && !bomber.boutaDie)
                 {
                     bomber.StartCoroutine(bomber.ExplosionSequence());
                 }
             }
-
         }
 
         PlayExplosionVFX();
     }
-
 
     void PlayExplosionVFX()
     {

@@ -69,16 +69,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 3337048090533833099, guid: 94b9646c5efb8f44991bdcba8faf70cd,
     type: 3}
+  breakSFXName: 
   dropSystem: {fileID: 0}
-  attackTypeToBreak: 2
-  BreakSFXName: ConcreteBreakSFX
-  explodeRange: 0
   explosionRadius: 0
   explosionForce: 0
   explosionUpwardModifier: 0
-  everyMask:
+  forceAffectedLayers:
     serializedVersion: 2
     m_Bits: 0
+  damageAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  baseDestructionDamage: 5
+  stunDuration: 0.5
+  statusEffects: []
 --- !u!1001 &6735680744660017114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87,12 +91,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9093937290214714991}
     m_Modifications:
-    - target: {fileID: -67732201706556363, guid: 264cee7c864bbb247ba0132bd854a66c,
-        type: 3}
-      propertyPath: brokenObject
-      value: 
-      objectReference: {fileID: 3337048090533833099, guid: 94b9646c5efb8f44991bdcba8faf70cd,
-        type: 3}
     - target: {fileID: 6937765394784691807, guid: 264cee7c864bbb247ba0132bd854a66c,
         type: 3}
       propertyPath: m_RootOrder
@@ -153,8 +151,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar_Whole
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -67732201706556363, guid: 264cee7c864bbb247ba0132bd854a66c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

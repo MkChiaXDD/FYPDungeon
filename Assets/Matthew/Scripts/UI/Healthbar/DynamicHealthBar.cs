@@ -55,8 +55,8 @@ public class DynamicHealthBar : MonoBehaviour
 
         GetComponent<Slider>().maxValue = newMaxHealth;
         GetComponent<Slider>().value = newMaxHealth;
-        Debug.Log("healthslider max value set at " + healthSlider.maxValue);
-        Debug.Log("healthslider base value set at " + healthSlider.value);
+        //Debug.Log("healthslider max value set at " + healthSlider.maxValue);
+        //Debug.Log("healthslider base value set at " + healthSlider.value);
     }
 
 

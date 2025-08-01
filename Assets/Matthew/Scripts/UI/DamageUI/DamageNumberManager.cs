@@ -25,8 +25,7 @@ public class DamageNumberManager : MonoBehaviour
         }
         else
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Instance = this;            
         }
         InitializeCanvas();
     }

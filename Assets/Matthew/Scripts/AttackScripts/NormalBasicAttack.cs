@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NormalBasicAttack : BaseAttackScript
 {
+
+    private int SlowStatusEffectID = 0;
     protected override void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
-        base.ProcessTargetHit(hit, target, damage, physicalType, intensity);  
+        base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
+       // ApplyStatusEffect(hit.gameObject, statusEffects[SlowStatusEffectID]);
     }
 
     public override void ExecuteLightAttack()
@@ -21,11 +25,8 @@ public class NormalBasicAttack : BaseAttackScript
 
         SoundManager.Instance.PlaySFX("BasicAttack", this.gameObject);
 
+        Debug.Log("Basic attack: " + baseAttackType);
+
         ApplyAttack(position, attackRadius, damageAmount, baseAttackType);
     }
-
-    
-   
-
-
 }

@@ -61,7 +61,9 @@ public class Inventory : MonoBehaviour
             ChangeSlot?.Invoke();
         }
     }
-    public ItemInstance GetItem(int num) => items[num];
+    public ItemInstance GetItem(int num) {       
+        return items[num];
+     }
     public int CheckItemCount(ItemInstance itemType)
     {
         int count = 0;
@@ -84,7 +86,6 @@ public class Inventory : MonoBehaviour
         else {
             Debug.Log("Breaking " + items[itemSlot].name);       
             RemoveItemAtSlot(itemSlot, 1); 
-
         }
     }
     private void SelectSlot()
@@ -94,7 +95,6 @@ public class Inventory : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
             {
                 SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject , false);
-                Debug.Log("sguds");
                 equippedSlot = items[i];
                 equippedSlotNum = i;
                 manager.HighlightEquippedSlot(i);

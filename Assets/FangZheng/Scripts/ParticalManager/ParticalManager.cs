@@ -4,7 +4,6 @@ public class ParticalManager : MonoBehaviour
 {
     public GameObject BleedPartical;
     public static ParticalManager Instance { get; private set; }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)

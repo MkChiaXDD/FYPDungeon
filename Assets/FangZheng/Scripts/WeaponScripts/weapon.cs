@@ -1,7 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
-
+public enum WeaponType { Unarmed, Hammer, Sword }
 public class Weapon : MonoBehaviour
 {
     [SerializeField] public WeaponData weaponData;
@@ -10,6 +10,12 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] public int baseDurabilityCost = 1;
     [SerializeField] public int skillDurabilityCost = 3;
+
+    public float _lightAttackCooldown = 0.5f;
+    public float _heavyAttackCooldown = 1.5f;
+    public float _minChargeTime = 0.1f;
+    public float _maxChargeTime = 2f;
+    public float movementModifier = 1;
     //[SerializeField] private List<SpellCast> spellCastList;
     public bool broke;
     public UnityEvent WeaponBreak;

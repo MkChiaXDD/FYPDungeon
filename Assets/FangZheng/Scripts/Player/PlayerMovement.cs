@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 
@@ -31,7 +32,15 @@ public class PlayerMovement : MonoBehaviour
     private float _speedMultiplier = 1f;
     private float _baseNormalSpeed;
     private float _baseDashSpeed;
+    private float baseMovementSpeedModifier = 1f;
     private Coroutine _speedModifierCoroutine;
+
+    [Header("Movement Modifiers")]
+    [SerializeField] private float _movementModifierDuration = 0f;
+    [SerializeField] private float _currentMovementModifier = 1f;
+    [SerializeField] private float _targetMovementModifier = 1f;
+    [SerializeField] private float _modifierChangeSpeed = 5f;
+
 
     private void Awake()
     {
@@ -159,17 +168,19 @@ public class PlayerMovement : MonoBehaviour
         _currentSpeed = _normalspeed;
     }
 
+
+
     private void Move()
     {
         _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
-        Vector3 force = _input.ToIso().normalized * _currentSpeed;
+        Vector3 force = _input.ToIso().normalized * (_currentSpeed * _currentMovementModifier);
 
         _rb.AddForce(force, ForceMode.VelocityChange);
 
-        if (_rb.velocity.magnitude > _currentSpeed)
+        if (_rb.velocity.magnitude > (_currentSpeed * _currentMovementModifier))
         {
-            _rb.velocity = _rb.velocity.normalized * _currentSpeed;
+            _rb.velocity = _rb.velocity.normalized * (_currentSpeed * _currentMovementModifier);
         }
     }
 
@@ -190,6 +201,69 @@ public class PlayerMovement : MonoBehaviour
             // Reset speed when unlocked
             _currentSpeed = _normalspeed;
         }
+    }
+
+    public void ChangePlayerMovementModifier(float modifier, float duration = 0f, bool immediate = false)
+    {
+        // Stop any existing modifier coroutine
+        if (_speedModifierCoroutine != null)
+        {
+            StopCoroutine(_speedModifierCoroutine);
+        }
+
+        _targetMovementModifier = Mathf.Clamp(modifier, 0f, 2f); // Clamp between 0% and 200% (dont handle the negative)
+        _movementModifierDuration = duration;
+
+        if (immediate || duration <= 0)
+        {
+            _currentMovementModifier = _targetMovementModifier;
+        }
+        else
+        {
+            _speedModifierCoroutine = StartCoroutine(UpdateMovementModifier());
+        }
+    }
+
+
+    public void ResetPlayerMovementModifier()
+    {
+        // Stop any existing modifier coroutine
+        if (_speedModifierCoroutine != null)
+        {
+            StopCoroutine(_speedModifierCoroutine);
+        }
+
+        _targetMovementModifier = 1; // Clamp between 0% and 200% (dont handle the negative)
+        _speedModifierCoroutine = StartCoroutine(UpdateMovementModifier());
+
+    }
+
+
+    private IEnumerator UpdateMovementModifier()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < _movementModifierDuration ||
+               Mathf.Abs(_currentMovementModifier - _targetMovementModifier) > 0.01f)
+        {
+            // Smoothly interpolate to target modifier
+            _currentMovementModifier = Mathf.Lerp(
+                _currentMovementModifier,
+                _targetMovementModifier,
+                _modifierChangeSpeed * Time.deltaTime
+            );
+
+            // Apply the modifier to the current speed
+            baseMovementSpeedModifier = _currentMovementModifier;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure we exactly reach the target
+        _currentMovementModifier = _targetMovementModifier;
+        baseMovementSpeedModifier = _currentMovementModifier;
+        _speedModifierCoroutine = null;
     }
 
     public Transform GetTransform()
