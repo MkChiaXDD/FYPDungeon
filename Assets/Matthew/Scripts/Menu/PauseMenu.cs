@@ -68,6 +68,10 @@ public class PauseMenu : MonoBehaviour
     }
 
 
+
+
+
+
     public void TogglePause()
     {
         isPaused = !isPaused;
@@ -86,7 +90,7 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("UNResumte game");
 
-       // Time.timeScale = 0f;
+        // Time.timeScale = 0f;
 
         pauseMenuCanvas.SetActive(true);
 

@@ -152,7 +152,7 @@ public class PlayerCombat : MonoBehaviour
         Instance = this;
 
         _inventory = GetComponent<Inventory>();
-       
+
     }
 
     private void Start()
@@ -287,19 +287,28 @@ public class PlayerCombat : MonoBehaviour
         // Start charging heavy attack
         if (Input.GetMouseButtonDown(0))
         {
-         
+
             if (Time.time > _lastAttackTime + _currentAttackCooldown)
             {
+                if (_currentWeapon)
+                {
+                    if (_currentWeapon.weaponData.weaponType == WeaponType.Sword)
+                    {
+                        _isLockedOn = true;
+                    }
+                }
                 _isCharging = true;
                 _chargeStartTime = Time.time;
                 _playerMovement.ChangePlayerMovementModifier(ChargedSlowDownEffect);
                 ChargeUp?.Invoke();
+
             }
         }
 
         // Execute attack on release
         if (Input.GetMouseButtonUp(0) && _isCharging)
         {
+
             _isCharging = false;
             _playerMovement.ChangePlayerMovementModifier(BaseMovementModifier);
 
@@ -309,7 +318,9 @@ public class PlayerCombat : MonoBehaviour
             ExecuteAttack(chargeTime);
 
             Uncharge?.Invoke();
+            ClearTargeting();
         }
+
 
         //// Cancel charge if moving during charge time
         //if (_isCharging && _playerMovement.IsMoving)
@@ -332,19 +343,13 @@ public class PlayerCombat : MonoBehaviour
     }
     private void ExecuteLightAttack()
     {
-        if (_isLockedOn && _targetEnemy != null)
-        {
-            Vector3 attackPosition = _targetEnemy.position + (_targetEnemy.forward * 1f);
-            StartCoroutine(DashToAttack(attackPosition, true));
-        }
-        else
-        {
-            Uncharge?.Invoke();
-            _currentBasicAttack.ExecuteLightAttack();
-            TriggerAttackAnimation("LightAttack");
-            PlayAttackSound("BasicAttack");
-            Debug.Log("LIGHT ATTACK");
-        }
+
+        Uncharge?.Invoke();
+        _currentBasicAttack.ExecuteLightAttack();
+        TriggerAttackAnimation("LightAttack");
+        PlayAttackSound("BasicAttack");
+        Debug.Log("LIGHT ATTACK");
+
 
         if (Tutorial)
         {
@@ -376,6 +381,22 @@ public class PlayerCombat : MonoBehaviour
 
     private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
     {
+
+
+        if (_currentWeapon)
+        {
+            if (_currentWeapon.weaponData.weaponType == WeaponType.Sword)
+            {
+                if (_isLockedOn && _targetEnemy != null)
+                {
+                    Vector3 DashPos = _targetEnemy.position + (_targetEnemy.forward * 1f);
+                    StartCoroutine(DashToAttack(DashPos, true));
+                }
+            }
+        }
+
+
+
         Vector3 attackPosition = _isLockedOn && _targetEnemy != null
             ? _targetEnemy.position
             : transform.position + _playerMovement.GetDirection() * 2f + Vector3.up * ATTACK_HEIGHT_OFFSET;
@@ -545,7 +566,7 @@ public class PlayerCombat : MonoBehaviour
     #region Equipment
     private void UpdateEquippedItem()
     {
-        ClearCurrentWeapon();      
+        ClearCurrentWeapon();
         EquipItem();
     }
 
@@ -555,11 +576,11 @@ public class PlayerCombat : MonoBehaviour
         CreateWeaponHoldingInstance(_currentItem);
 
         if (_currentWeapon != null)
-        {          
+        {
             UpdateWeaponHeld(_currentItem);
         }
         else
-        {         
+        {
             ResetWeaponHeld();
         }
     }
@@ -596,11 +617,13 @@ public class PlayerCombat : MonoBehaviour
 
     private void CreateWeaponHoldingInstance(ItemInstance item)
     {
-        if (item?.ItemPrefab == null) {
+        if (item?.ItemPrefab == null)
+        {
             Debug.LogWarning("no weapons found!");
             return;
 
-        };
+        }
+        ;
         _equippedWeapon = Instantiate(item.ItemPrefab, _weaponHoldPoint);
         ConfigureWeaponPhysics(_equippedWeapon);
 
@@ -761,6 +784,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void ClearTargeting()
     {
+        _isLockedOn = false;
         _currentTargetIndex = 0;
         _autoTargeting = true;
         _targetEnemy = null;
