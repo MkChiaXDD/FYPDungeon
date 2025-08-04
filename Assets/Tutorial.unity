@@ -1359,6 +1359,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &867652084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 867652085}
+  m_Layer: 10
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &867652085
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867652084}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1746152749}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &964123940 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2289756432238708944, guid: 95e8f75edcb3ddc42a2a87809afc5c42,
@@ -2258,6 +2294,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682458562}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!224 &1746152749 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5883238948927397481, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+    type: 3}
+  m_PrefabInstance: {fileID: 4069360668302586435}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1864458798
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2845,9 +2887,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8756981717446216084, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: steps.Array.data[1]._npc
+      value: 
+      objectReference: {fileID: 11400000, guid: ebe07cdcee324be4a8683b69477d8441,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5883238948927397481, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 867652085}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91ebeaa41d432b14db29cd4d15c567f7, type: 3}
 --- !u!1001 &4682274402254551644

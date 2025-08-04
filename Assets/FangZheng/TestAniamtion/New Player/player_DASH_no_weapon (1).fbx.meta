@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ce4e51c782f902e49be262c4e5a682f4
+guid: 385a87fe9fbd08545a310b4e5c5befa3
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -16,8 +16,8 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Avatar creation failed:\n\tCannot find root motion transform
-      'MESH'.\n"
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tTransform 'MAIN_CTRL' not found in HumanDescription.\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -84,18 +84,18 @@ ModelImporter:
     serializedVersion: 3
     human: []
     skeleton:
-    - name: Player (4)(Clone)
+    - name: Player_TPOSE(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: MESH
-      parentName: Player (4)(Clone)
+      parentName: Player_TPOSE(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: RIG
-      parentName: Player (4)(Clone)
+      parentName: Player_TPOSE(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -522,15 +522,16 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: player_rigged:MAIN_CTRL
+    rootMotionBoneName: RIG
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3cbfa92f5e874f54895fc7cc28798ac1,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
