@@ -4,16 +4,35 @@ using UnityEngine;
 
 public class DirectionTarget : MonoBehaviour
 {
-    private Vector3 m_Direction;
-    // Start is called before the first frame update
+    [SerializeField] private GameObject Target_position;
+    [SerializeField] private RectTransform PointerTransform;
+    [SerializeField] private GameObject Player;
+    [SerializeField] private Camera Camera;
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        
+        Vector3 Target = Target_position.transform.position;
+        Vector3 From = Player.transform.position;
+
+
+        Vector3 targetScreenPos = Camera.WorldToScreenPoint(Target_position.transform.position);
+        Vector3 playerScreenPos = Camera.WorldToScreenPoint(Player.transform.position);
+
+        //From.z = 0f;
+        //Target.z = 0f;
+
+        Vector3 direction = (playerScreenPos - targetScreenPos).normalized;
+
+        float angle = (Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg );
+
+        Debug.Log("Angle: " + (angle + 180f) );
+        //angle += 360f;
+
+        PointerTransform.localEulerAngles = new Vector3(0f, 0f, angle);
     }
 }
