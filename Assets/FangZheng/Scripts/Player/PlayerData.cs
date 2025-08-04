@@ -16,6 +16,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     [SerializeField] private int _MimicAmount = 1;
     [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
+    [SerializeField] private PlayerHitEffect _HitEffect;
 
     public bool _InVin;
     public float _LifeStealAmount;
@@ -94,6 +95,11 @@ public class PlayerData : MonoBehaviour, IDamageable
                 damagedVFX.TriggerDamageFlash();
             }
             SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+
+            if (_HitEffect != null)
+            {
+                _HitEffect.TriggerHit();
+            }
         }
 
         if (CurrentHealth <= 0)

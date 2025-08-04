@@ -1006,7 +1006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &526599771
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1043,6 +1043,7 @@ MonoBehaviour:
   Target_position: {fileID: 878552625}
   PointerTransform: {fileID: 663549954}
   Player: {fileID: 1851029381}
+  Camera: {fileID: 0}
 --- !u!1001 &662560942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2440,6 +2441,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4069360668302586435}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1851029383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 421958437608354420, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+    type: 3}
+  m_PrefabInstance: {fileID: 4069360668302586435}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851029381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7bab7a5410034a439dff5d62e1cbd93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1864458798
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2962,6 +2975,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LatestPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 421958437608354420, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: hitduration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4100360507101149488, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -3027,6 +3045,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8020644354835801182, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: _HitEffect
+      value: 
+      objectReference: {fileID: 1851029383}
     - target: {fileID: 8756981717446216084, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
       propertyPath: steps.Array.data[1]._npc
