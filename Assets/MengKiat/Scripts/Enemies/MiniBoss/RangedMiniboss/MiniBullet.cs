@@ -30,7 +30,7 @@ public class MiniBullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerBody"))
+        if (other.CompareTag("Player"))
         {
             Debug.Log("RANGEDBOSSENEMY: HIT PLAYER");
         }

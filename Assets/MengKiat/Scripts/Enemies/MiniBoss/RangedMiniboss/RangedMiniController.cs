@@ -5,33 +5,43 @@ public class RangedMiniController : Enemy
     enum State { Idle, Attack, Reposition }
     State state;
 
-    [Header("Diff Scaling Settings")]
-    [SerializeField] private int roundForScaling = 1;
-    [SerializeField] private int baseSplit;
-    [Tooltip("X is the lowest amount of bullets split, Y is the maximum amount")]
-    [SerializeField] private Vector2Int increasedSplit;
-    [SerializeField] private int moveSpeedMultiplier;
-    [SerializeField] private float increasedAttackCooldown = 1f;
+    [Header("Scaling Settings")]
+    [SerializeField] private int roundForScaling = 2;
 
     [Header("Attack Settings")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float fireOffset = 1f;
     [SerializeField] private float baseAttackCooldown = 2f;
     private float attackCooldown;
-    private int bulletSplitAmt;
+
+    [SerializeField] private int baseSplit = 1;
+    [SerializeField] private Vector2Int increasedSplit = new Vector2Int(3, 6);
+
+    [SerializeField] private GameObject homingBulletPrefab;
+    [SerializeField] private float homingBulletSpeed = 10f;
+    [SerializeField] private float homingForce = 5f;
+    [SerializeField] private float homingLifetime = 5f;
+    [SerializeField] private float homingDelay = 0.3f;
+
+    [Header("Rage Mode Settings")]
+    [SerializeField] private float rageSpeedMultiplier = 1.5f;
+    [SerializeField] private float rageRepositionDuration = 1.5f;
+
 
     [Header("Reposition Settings")]
     [SerializeField] private float repositionRadius = 5f;
-    [SerializeField] private float repositionDuration = 3f; // max time to reposition
+    [SerializeField] private float repositionDuration = 3f;
 
     [Header("Rotation")]
-    [SerializeField] private float rotationSpeed = 5f; // higher = faster turn
+    [SerializeField] private float rotationSpeed = 5f;
 
     private float attackTimer;
     private float repositionTimer;
     private Vector3 spawnPosition;
     private Vector3 repositionTarget;
     private Transform player;
+    private bool homingReady = false;
+    private int bulletSplitAmt;
 
     void Start()
     {
@@ -42,25 +52,15 @@ public class RangedMiniController : Enemy
 
     void Update()
     {
-        // always smooth-look at the player
         SmoothFacePlayer();
-
         attackTimer += Time.deltaTime;
-
-        if (currentRound >= roundForScaling)
-        {
-            attackCooldown = increasedAttackCooldown;
-        }
-        else
-        {
-            attackCooldown = baseAttackCooldown;
-        }
+        attackCooldown = baseAttackCooldown;
 
         switch (state)
         {
             case State.Idle:
-                if (Vector3.Distance(transform.position, player.position) <= data.attackRange
-                    && attackTimer >= attackCooldown)
+                if (Vector3.Distance(transform.position, player.position) <= data.attackRange &&
+                    attackTimer >= attackCooldown)
                 {
                     state = State.Attack;
                 }
@@ -70,6 +70,13 @@ public class RangedMiniController : Enemy
                 if (attackTimer >= attackCooldown)
                 {
                     Shoot();
+
+                    if (currentRound >= roundForScaling)
+                    {
+                        homingReady = true;
+                        Invoke(nameof(ShootHoming), homingDelay);
+                    }
+
                     attackTimer = 0f;
                     ChooseRepositionTarget();
                     repositionTimer = 0f;
@@ -86,14 +93,14 @@ public class RangedMiniController : Enemy
                     repositionTarget.z
                 );
 
-                float moveSpeed;
-                if (currentRound >= roundForScaling)
+                float moveSpeed = currentMoveSpeed;
+                float currentRepositionDuration = repositionDuration;
+
+                // Rage mode if HP < 50%
+                if (currentHealth / maxHealth < 0.5f)
                 {
-                    moveSpeed = data.moveSpeed * moveSpeedMultiplier;
-                }
-                else
-                {
-                    moveSpeed = data.moveSpeed;
+                    moveSpeed *= rageSpeedMultiplier;
+                    currentRepositionDuration = rageRepositionDuration;
                 }
 
                 transform.position = Vector3.MoveTowards(
@@ -102,8 +109,8 @@ public class RangedMiniController : Enemy
                     moveSpeed * Time.deltaTime
                 );
 
-                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f
-                    || repositionTimer >= repositionDuration)
+                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f ||
+                    repositionTimer >= currentRepositionDuration)
                 {
                     state = State.Attack;
                 }
@@ -128,20 +135,44 @@ public class RangedMiniController : Enemy
 
     private void Shoot()
     {
+        float healthPercent = currentHealth / maxHealth;
+
         if (currentRound >= roundForScaling)
         {
-            bulletSplitAmt = Random.Range(increasedSplit.x, increasedSplit.y);
+            bulletSplitAmt = Random.Range(increasedSplit.x, increasedSplit.y + 1);
         }
         else
         {
-            bulletSplitAmt = baseSplit;
+            if (healthPercent > 0.5f)
+                bulletSplitAmt = baseSplit;
+            else
+                bulletSplitAmt = Random.Range(increasedSplit.x, increasedSplit.y + 1);
         }
+
+        Vector3 shootDir = (player.position - transform.position).normalized;
         Vector3 spawnPos = transform.position + transform.forward * fireOffset;
-        var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
+
+        var go = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(player.position - transform.position, bulletSplitAmt);
+            b.Initialize(shootDir, bulletSplitAmt);
             b.SetDamage(data.damage / bulletSplitAmt);
+        }
+    }
+
+
+    private void ShootHoming()
+    {
+        if (!homingReady) return;
+        homingReady = false;
+
+        Vector3 shootDir = (player.position - transform.position).normalized;
+        Vector3 spawnPos = transform.position + transform.forward * fireOffset;
+
+        var go = Instantiate(homingBulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
+        if (go.TryGetComponent<HomingBullet>(out var b))
+        {
+            b.Init(data.damage, homingBulletSpeed, homingForce, homingLifetime);
         }
     }
 

@@ -262,6 +262,7 @@ MonoBehaviour:
   currentHealth: 0
   shieldPrefab: {fileID: 0}
   shieldHp: 0
+  currentMoveSpeed: 0
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitDuration: 1
   enemyRenderer: {fileID: 0}
@@ -282,6 +283,11 @@ MonoBehaviour:
     type: 3}
   fireOffset: 1
   baseAttackCooldown: 2
+  homingBulletPrefab: {fileID: 8003819692001746121, guid: 7d1243c9f161cb747907efac5c433070,
+    type: 3}
+  homingBulletSpeed: 10
+  homingForce: 15
+  homingLifetime: 5
   repositionRadius: 10
   repositionDuration: 3
   rotationSpeed: 100
