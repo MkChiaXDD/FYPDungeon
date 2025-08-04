@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
@@ -31,17 +31,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.296163
+      value: -1.9936371
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.4087367
+      value: 3.417777
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 994fdd47efd519f4c9087019265c7c43,
         type: 3}
@@ -129,16 +129,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 1254647782578227035, guid: e7f493f9b398c44478d434ed33098a12,
     type: 3}
+  breakSFXName: 
   dropSystem: {fileID: -5994782545432060766}
-  attackTypeToBreak: 0
-  BreakSFXName: Wood_BreakSFX
-  explodeRange: 1.5
   explosionRadius: 3
   explosionForce: 50
   explosionUpwardModifier: 1
-  everyMask:
+  forceAffectedLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
+  damageAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  baseDestructionDamage: 5
+  stunDuration: 0.5
+  statusEffects: []
 --- !u!54 &1527823125698759516
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -202,11 +206,14 @@ MonoBehaviour:
   _dropItem:
   - _dropItemPrefab: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
       type: 3}
-    _dropRate: 0
+    _dropRate: 60
   - _dropItemPrefab: {fileID: 2717010294961689509, guid: 7cb9ed8834a88894fa0b05fb41a9605b,
       type: 3}
-    _dropRate: 0
+    _dropRate: 30
   - _dropItemPrefab: {fileID: 8261268390143707118, guid: 9584937d0278e174ca139e6dfdc4c37a,
       type: 3}
-    _dropRate: 0
+    _dropRate: 40
+  - _dropItemPrefab: {fileID: 8449004803641222730, guid: 283dced21787f2549a3092b952a9fcfa,
+      type: 3}
+    _dropRate: 40
   _dropHeight: 3.5
