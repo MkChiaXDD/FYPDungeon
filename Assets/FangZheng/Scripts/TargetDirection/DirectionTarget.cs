@@ -36,23 +36,27 @@ public class DirectionTarget : MonoBehaviour
         #region Try my self
 
         Vector2 Pos_OnCam = Camera.WorldToScreenPoint(Target_position.transform.position);
+        Vector2 Player_Pos_OnCam = Camera.WorldToScreenPoint(Player.transform.position);
+        Vector2 direction = (Player_Pos_OnCam - Pos_OnCam).normalized;
+
+        //Pos_OnCam.x = Mathf.Clamp(Pos_OnCam.x, Range, Screen.width - Range);
+        //Pos_OnCam.y = Mathf.Clamp(Pos_OnCam.y, Range, Screen.height - Range);
 
 
 
-        Pos_OnCam.x = Mathf.Clamp(Pos_OnCam.x, Range, Screen.width - Range);
-        Pos_OnCam.y = Mathf.Clamp(Pos_OnCam.y, Range, Screen.height - Range);
+        if (Pos_OnCam.magnitude > Range)
+        {
+            Pos_OnCam = Player_Pos_OnCam + direction * -Range;
+        }
 
-        //if (Pos_OnCam.magnitude > Range)
-        //{
-        //    Pos_OnCam = Pos_OnCam.normalized * Range;
-        //}
-
-        //PointerTransform.anchoredPosition = Pos_OnCam;
+        PointerTransform.position = Pos_OnCam;
 
         Vector3 Dir = Camera.transform.InverseTransformDirection(Target_position.transform.position - Player.transform.position);
         Dir.y = 0;
         float angle = Mathf.Atan2(Dir.z, Dir.x) * Mathf.Rad2Deg;
         PointerTransform.localEulerAngles = new Vector3(0f , 0f , angle - 90.0f);
+
+        //PointerTransform.
         #endregion
         //Vector3 Target = Target_position.transform.position;
         //Vector3 From = Player.transform.position;
