@@ -6,6 +6,7 @@ public class Breakable : MonoBehaviour, IDamageable
     [Header("Visuals")]
     [SerializeField] private GameObject brokenObject;
     [SerializeField] private string breakSFXName;
+    [SerializeField] private ParticleSystem dustPrefab;
 
     [Header("Drops")]
     [SerializeField] private ItemDropSystem dropSystem;
@@ -43,8 +44,9 @@ public class Breakable : MonoBehaviour, IDamageable
         SpawnBrokenObject();
         TryDropItem();
         ApplyExplosionEffects();
-        PlayBreakSound();
-        Destroy(gameObject);
+        
+        PlayBreakFX();
+       // Destroy(gameObject);
     }
 
     private void SpawnBrokenObject()
@@ -119,6 +121,20 @@ public class Breakable : MonoBehaviour, IDamageable
         receiver.ApplyEffect(effect);
     }
 
+    private void PlayBreakFX()
+    {
+        PlayBreakSound();
+        PlayDustVFX();
+    }
+
+    private void PlayDustVFX()
+    {
+        if (dustPrefab != null)
+        {
+            dustPrefab.Play();
+        }
+    }
+
     private void PlayBreakSound()
     {
         if (!string.IsNullOrEmpty(breakSFXName) && SoundManager.Instance)
@@ -126,6 +142,8 @@ public class Breakable : MonoBehaviour, IDamageable
             SoundManager.Instance.PlaySFX(breakSFXName);
         }
     }
+
+   
 
     private void OnDrawGizmosSelected()
     {
