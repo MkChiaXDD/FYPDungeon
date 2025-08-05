@@ -50,7 +50,10 @@ public class Breakable : MonoBehaviour, IDamageable
     private void SpawnBrokenObject()
     {
         if (brokenObject)
-            Instantiate(brokenObject, transform.position, DefaultRotation);
+        {
+            GameObject broken = Instantiate(brokenObject, transform.position, DefaultRotation);
+            broken.transform.localScale = gameObject.transform.lossyScale;
+        }
     }
 
     private void TryDropItem()
