@@ -28,7 +28,6 @@ public class RangedMiniController : Enemy
     [SerializeField] private float rageSpeedMultiplier = 1.5f;
     [SerializeField] private float rageRepositionDuration = 1.5f;
 
-
     [Header("Reposition Settings")]
     [SerializeField] private float repositionRadius = 5f;
     [SerializeField] private float repositionDuration = 3f;
@@ -55,7 +54,8 @@ public class RangedMiniController : Enemy
     {
         SmoothFacePlayer();
         attackTimer += Time.deltaTime;
-        attackCooldown = baseAttackCooldown;
+
+        attackCooldown = IsRaging() ? baseAttackCooldown * 0.5f : baseAttackCooldown;
 
         switch (state)
         {
@@ -72,10 +72,10 @@ public class RangedMiniController : Enemy
                 {
                     Shoot();
 
-                    if (currentRound >= roundForScaling)
+                    if (currentRound >= roundForScaling || IsRaging())
                     {
                         homingReady = true;
-                        Invoke(nameof(ShootHoming), homingDelay);
+                        Invoke(nameof(ShootHoming), IsRaging() ? homingDelay * 0.5f : homingDelay);
                     }
 
                     attackTimer = 0f;
@@ -97,8 +97,7 @@ public class RangedMiniController : Enemy
                 float moveSpeed = currentMoveSpeed;
                 float currentRepositionDuration = repositionDuration;
 
-                // Rage mode if HP < 50%
-                if (currentHealth / maxHealth < 0.5f)
+                if (IsRaging())
                 {
                     moveSpeed *= rageSpeedMultiplier;
                     currentRepositionDuration = rageRepositionDuration;
@@ -114,6 +113,8 @@ public class RangedMiniController : Enemy
                     repositionTimer >= currentRepositionDuration)
                 {
                     state = State.Attack;
+                    repositionTarget = transform.position; // Reset to prevent jitter
+                    return;
                 }
                 break;
         }
@@ -144,10 +145,9 @@ public class RangedMiniController : Enemy
         }
         else
         {
-            if (healthPercent > 0.5f)
-                bulletSplitAmt = baseSplit;
-            else
-                bulletSplitAmt = Random.Range(increasedSplit.x, increasedSplit.y + 1);
+            bulletSplitAmt = (healthPercent > 0.5f)
+                ? baseSplit
+                : Random.Range(increasedSplit.x, increasedSplit.y + 1);
         }
 
         Vector3 shootDir = (player.position - transform.position).normalized;
@@ -160,7 +160,6 @@ public class RangedMiniController : Enemy
             b.SetDamage(data.damage / bulletSplitAmt);
         }
     }
-
 
     private void ShootHoming()
     {
@@ -179,11 +178,23 @@ public class RangedMiniController : Enemy
 
     private void ChooseRepositionTarget()
     {
-        Vector2 rnd = Random.insideUnitCircle * repositionRadius;
-        repositionTarget = new Vector3(
-            spawnPosition.x + rnd.x,
-            transform.position.y,
-            spawnPosition.z + rnd.y
-        );
+        Vector3 directionAwayFromPlayer = (transform.position - player.position).normalized;
+
+        if (directionAwayFromPlayer.sqrMagnitude < 0.01f)
+            directionAwayFromPlayer = (transform.position - spawnPosition).normalized;
+
+        float distance = repositionRadius;
+
+        Vector2 randomOffset = Random.insideUnitCircle * (repositionRadius * 0.3f);
+        Vector3 lateralOffset = new Vector3(randomOffset.x, 0f, randomOffset.y);
+
+        Vector3 target = transform.position + directionAwayFromPlayer * distance + lateralOffset;
+
+        repositionTarget = target;
+    }
+
+    private bool IsRaging()
+    {
+        return currentRound < roundForScaling && currentHealth / maxHealth < 0.5f;
     }
 }
