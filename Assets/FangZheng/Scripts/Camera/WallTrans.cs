@@ -109,37 +109,15 @@ public class WallTrans : MonoBehaviour
         Material[] Materials = new Material[WallRenderer.materials.Length];
         for (int i = 0; i < Materials.Length; i++)
         {
-            //This is for cloning a new material then do funny modifcation to it so it will not do modificcation to the orignial materail
-            Materials[i] = new Material(originalMaterials[WallRenderer][i]);
-            Color color = Materials[i].color;
-            color.a = transparencyAmount;
-            Materials[i].color = color;
-
-            //Enable for trans by configing the materail property
-            Materials[i].SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            Materials[i].SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            Materials[i].EnableKeyword("_ALPHABLEND_ON");
-
+            ////This is for cloning a new material then do funny modifcation to it so it will not do modificcation to the orignial materail
+            Materials[i] = new Material(originalMaterials[WallRenderer][i]);     
             Materials[i].renderQueue = 3000;
             Materials[i] = DitteringMat;
 
         }
-        //List<Material> Materials2 = new List<Material>();
-        //for (int i = 0; i < Materials.Length; i++)
-        //{
-        //    Materials2.Add(Materials[i]);
-        //}
-        //Materials2.Add(DitteringMat);
+
         WallRenderer.materials = Materials;
         
         currentlyTransparentWalls.Add(WallRenderer);
     }
-
-    //private void OnDrawGizmos()
-    //{
-
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawLine(transform.position, player.position );
-        
-    //}
 }
