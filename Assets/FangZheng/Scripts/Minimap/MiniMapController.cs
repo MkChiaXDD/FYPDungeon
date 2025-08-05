@@ -18,7 +18,7 @@ public class MiniMapController : MonoBehaviour
     private bool isDragging = false;
     public void Start()
     {
-        MiniCameraSize = _camera.fieldOfView;
+        MiniCameraSize = _camera.orthographicSize;
     }
     public void ToggelMinimap()
     {
@@ -35,13 +35,13 @@ public class MiniMapController : MonoBehaviour
             if (Map.activeSelf == false)
             {
                 Map.SetActive(true);
-                _camera.fieldOfView = NormalCameraSize;
+                _camera.orthographicSize = NormalCameraSize;
                 OrignialPosition = _camera.transform.position;
             }
             else
             {
                 Map.SetActive(false);
-                _camera.fieldOfView = MiniCameraSize;
+                _camera.orthographicSize = MiniCameraSize;
                 _camera.transform.position = OrignialPosition;
             }
         }
@@ -55,7 +55,7 @@ public class MiniMapController : MonoBehaviour
         Debug.Log("Scroll : " + scroll);
         if (scroll != 0)
         {
-            _camera.fieldOfView = Mathf.Clamp(_camera.fieldOfView - (scroll * zoomSpeed), MiniCameraSize, NormalCameraSize * 2);
+            _camera.orthographicSize = Mathf.Clamp(_camera.orthographicSize - (scroll * zoomSpeed), MiniCameraSize, NormalCameraSize * 2);
 
         }
 
