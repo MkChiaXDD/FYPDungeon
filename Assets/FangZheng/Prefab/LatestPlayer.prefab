@@ -224,7 +224,7 @@ Transform:
   - {fileID: 4712886342771834977}
   - {fileID: 8706445077026054717}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1258006238079371808
 Rigidbody:
@@ -338,6 +338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerData: {fileID: 8020644354835801182}
   Tutorial: 0
+  DisableCombat: 0
   _ignoreLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -17502,7 +17503,7 @@ RectTransform:
   m_GameObject: {fileID: 5660628148588411092}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6502770942110952884}
@@ -25973,7 +25974,7 @@ PrefabInstance:
     - target: {fileID: 7588383525794241382, guid: d58037aa97b925648b61379d5c6fea6a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
         type: 3}
