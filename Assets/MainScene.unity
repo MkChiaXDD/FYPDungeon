@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 5.25
+  m_AmbientIntensity: 1.4
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: d56b341fb6cba0e4f96669e4995bcbe6, type: 2}
@@ -1037,10 +1037,10 @@ MonoBehaviour:
   enemyKillsEachRound:
   - round: 1
     killCount: 0
-    killGoal: 10
+    killGoal: 1
   - round: 2
     killCount: 0
-    killGoal: 10
+    killGoal: 1
   difMgr: {fileID: 488337058}
   killCountText: {fileID: 2089138386}
 --- !u!4 &488337060 stripped
@@ -2873,7 +2873,7 @@ PrefabInstance:
     - target: {fileID: 3189193295382886323, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
       propertyPath: m_Size.x
-      value: 2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 3189193295382886323, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
@@ -2883,7 +2883,7 @@ PrefabInstance:
     - target: {fileID: 3189193295382886323, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
       propertyPath: m_Size.z
-      value: 2
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4100360507101149488, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
@@ -2894,6 +2894,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244568363282168807, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244568363282168807, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244568363282168807, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244568363282168807, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5305804742236948981, guid: 91ebeaa41d432b14db29cd4d15c567f7,
         type: 3}
@@ -3029,6 +3049,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020644354835801182, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: _Dash
+      value: 32.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020644354835801182, guid: 91ebeaa41d432b14db29cd4d15c567f7,
+        type: 3}
+      propertyPath: _Speed
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

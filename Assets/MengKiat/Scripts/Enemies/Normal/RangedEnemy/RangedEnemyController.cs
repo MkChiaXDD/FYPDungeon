@@ -99,7 +99,7 @@ public class RangedEnemyController : Enemy
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     horizontalTarget,
-                    CurrentMoveSpeed * Time.deltaTime
+                    CurrentMoveSpeed * 2 * Time.deltaTime
                 );
 
                 if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f)
@@ -137,11 +137,17 @@ public class RangedEnemyController : Enemy
 
     void ChooseRepositionTarget()
     {
-        Vector2 rnd = Random.insideUnitCircle * repositionRadius;
-        repositionTarget = new Vector3(
-            spawnPosition.x + rnd.x,
-            transform.position.y,
-            spawnPosition.z + rnd.y
-        );
+        Vector3 dirAwayFromPlayer = (transform.position - player.position).normalized;
+        float distance = repositionRadius;
+
+        // Add some randomness to avoid predictability
+        Vector2 offset = Random.insideUnitCircle * (repositionRadius * 0.5f);
+        Vector3 lateralOffset = new Vector3(offset.x, 0f, offset.y);
+
+        // Final target is away from player + a bit of randomness
+        Vector3 target = transform.position + dirAwayFromPlayer * distance + lateralOffset;
+
+        repositionTarget = target;
     }
+
 }

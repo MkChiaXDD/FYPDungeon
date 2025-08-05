@@ -9,11 +9,12 @@ public class RangedMiniBullet : MonoBehaviour
     public Vector3 direction;
     public GameObject minibulletPrefab; // Renamed for clarity
     private int splitAmount;
-    public float minibulletSpeed = 15f; // Separate speed for minibullets
+    public float minibulletSpeed = 10f; // Separate speed for minibullets
 
 
-    public void Initialize(Vector3 dir, int splitAmount)
+    public void Initialize(Vector3 dir, int splitAmount, float _speed)
     {
+        speed = _speed;
         dir = new Vector3(dir.x, 0, dir.z);
         direction = dir.normalized;
         this.splitAmount = splitAmount;

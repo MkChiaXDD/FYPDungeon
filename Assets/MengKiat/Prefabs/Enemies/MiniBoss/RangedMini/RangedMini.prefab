@@ -275,19 +275,21 @@ MonoBehaviour:
   cryoResistance: 1
   stunDuration: 1
   roundForScaling: 2
-  baseSplit: 4
-  increasedSplit: {x: 4, y: 8}
-  moveSpeedMultiplier: 3
-  increasedAttackCooldown: 1
   bulletPrefab: {fileID: 8003819692001746121, guid: 2c2338a92634b10499070cb4173b5c25,
     type: 3}
   fireOffset: 1
   baseAttackCooldown: 2
+  bulletSpeed: 15
+  baseSplit: 4
+  increasedSplit: {x: 4, y: 8}
   homingBulletPrefab: {fileID: 8003819692001746121, guid: 7d1243c9f161cb747907efac5c433070,
     type: 3}
   homingBulletSpeed: 10
   homingForce: 15
   homingLifetime: 5
+  homingDelay: 0.3
+  rageSpeedMultiplier: 1.5
+  rageRepositionDuration: 1.5
   repositionRadius: 10
   repositionDuration: 3
   rotationSpeed: 100

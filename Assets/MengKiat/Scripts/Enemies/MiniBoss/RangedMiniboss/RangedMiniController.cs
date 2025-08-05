@@ -12,6 +12,7 @@ public class RangedMiniController : Enemy
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float fireOffset = 1f;
     [SerializeField] private float baseAttackCooldown = 2f;
+    [SerializeField] private float bulletSpeed = 20f;
     private float attackCooldown;
 
     [SerializeField] private int baseSplit = 1;
@@ -155,7 +156,7 @@ public class RangedMiniController : Enemy
         var go = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(shootDir, bulletSplitAmt);
+            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed);
             b.SetDamage(data.damage / bulletSplitAmt);
         }
     }
