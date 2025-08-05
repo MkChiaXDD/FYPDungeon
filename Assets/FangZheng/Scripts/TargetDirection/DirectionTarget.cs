@@ -8,14 +8,27 @@ public class DirectionTarget : MonoBehaviour
     [SerializeField] private GameObject Target_position;
     [SerializeField] private RectTransform PointerTransform;
     [SerializeField] private GameObject Player;
+    [SerializeField] private GameObject TargetUI;
+    [SerializeField] private RectTransform Minimap;
     [SerializeField] private Camera Camera;
     [SerializeField] private float Range;
     void Update()
     {
+        if (FindFirstObjectByType<BossPortal>() != null)
+        {
+            Target_position = FindFirstObjectByType<BossPortal>().gameObject;
+        }
+        else
+        {
+            Target_position = null;
+        }
+        //Target_position = FindFirstObjectByType<Portal>().gameObject;
         if (Target_position == null || Player == null)
         {
+            TargetUI.SetActive(false);
             return;
         }
+        TargetUI.SetActive(true);
 
         #region Supported
         //Vector3 Screen_Target_Pos = Camera.WorldToScreenPoint(Target_position.transform.position);
@@ -51,11 +64,17 @@ public class DirectionTarget : MonoBehaviour
 
         PointerTransform.position = Pos_OnCam;
 
+
         Vector3 Dir = Camera.transform.InverseTransformDirection(Target_position.transform.position - Player.transform.position);
         Dir.y = 0;
         float angle = Mathf.Atan2(Dir.z, Dir.x) * Mathf.Rad2Deg;
         PointerTransform.localEulerAngles = new Vector3(0f , 0f , angle - 90.0f);
 
+        float Distance = Vector3.Distance(new Vector3(Player.transform.position.x , 0 ,Player.transform.position.z) , new Vector3(Target_position.transform.position.x, 0, Target_position.transform.position.z));
+        if (Distance <= 15)
+        {
+            PointerTransform.position = Camera.WorldToScreenPoint(Target_position.transform.position);
+        }
         //PointerTransform.
         #endregion
         //Vector3 Target = Target_position.transform.position;
