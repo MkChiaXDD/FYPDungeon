@@ -46,7 +46,7 @@ public class Breakable : MonoBehaviour, IDamageable
         ApplyExplosionEffects();
         
         PlayBreakFX();
-       // Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     private void SpawnBrokenObject()
