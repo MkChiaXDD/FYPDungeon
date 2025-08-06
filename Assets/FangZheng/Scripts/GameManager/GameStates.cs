@@ -10,8 +10,8 @@ public class GamStates : MonoBehaviour
         Paused
     }
 
-    public float Normal_Time;
-    public float StopTime;
+    private readonly float Normal_Time = 1;
+    private readonly float PausedTime = 0;
     public GameState State;
 
     public static GamStates instance;
@@ -31,12 +31,14 @@ public class GamStates : MonoBehaviour
     public void Play()
     {
         State = GameState.Playing;
-        HitStopManager.Instance.ResetHitstop();
+     
+        Time.timeScale = Normal_Time;
     }
 
     public void Pause()
     {
         State = GameState.Paused;
-        HitStopManager.ActivateHitStopGlobal();
+      
+        Time.timeScale = PausedTime;
     }
 }
