@@ -1,40 +1,49 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-[RequireComponent(typeof(Slider))]
+[RequireComponent(typeof(Image))]
 public class CooldownSystem : MonoBehaviour
 {
     [Header("Cooldown Settings")]
-    [Tooltip("The duration of the cooldown in seconds")]
-    [SerializeField] private float cooldownDuration = 3f;
+    [SerializeField] private float cooldownDuration = 1f;
+    [SerializeField] private bool startOnAwake = false;
+    [SerializeField] private bool reverseFill = true;
 
     [Header("Visual Settings")]
-    [Tooltip("If true, the cooldown will start automatically")]
-    [SerializeField] private bool startOnAwake = false;
-
-    [Tooltip("Optional text to display remaining time")]
     [SerializeField] private Text cooldownText;
+    [SerializeField] private Image cooldownOverlay;
+    [SerializeField] private GameObject cooldownFinishedEffect;
 
-    private Slider cooldownSlider;
+    private Image cooldownImage;
     private float currentCooldownTime;
     private bool isOnCooldown;
 
-    // Public property to check cooldown status
+    // Public properties
     public bool IsOnCooldown => isOnCooldown;
-
-    // Public property to get remaining time
     public float RemainingTime => currentCooldownTime;
+    public float Progress => 1f - (currentCooldownTime / cooldownDuration);
 
-    // Events for cooldown start and finish
-    public System.Action OnCooldownStarted;
-    public System.Action OnCooldownFinished;
+    // Events
+    public event Action OnCooldownStarted;
+    public event Action OnCooldownFinished;
 
     private void Awake()
     {
-        cooldownSlider = GetComponent<Slider>();
-        cooldownSlider.minValue = 0f;
-        cooldownSlider.maxValue = 1f;
-        cooldownSlider.value = 1f;
+        cooldownImage = GetComponent<Image>();
+
+        if (cooldownOverlay == null)
+        {
+            // If no overlay specified, use self
+            cooldownOverlay = cooldownImage;
+        }
+
+        cooldownOverlay.type = Image.Type.Filled;
+        cooldownOverlay.fillMethod = Image.FillMethod.Radial360;
+        cooldownOverlay.fillOrigin = (int)Image.Origin360.Top;
+        cooldownOverlay.fillClockwise = false;
+
+        ResetCooldownVisual();
 
         if (startOnAwake)
         {
@@ -46,19 +55,9 @@ public class CooldownSystem : MonoBehaviour
     {
         if (!isOnCooldown) return;
 
-        // Update cooldown time
         currentCooldownTime -= Time.deltaTime;
+        UpdateCooldownVisual();
 
-        // Update slider value (normalized from 1 to 0)
-        cooldownSlider.value = Mathf.Clamp01(currentCooldownTime / cooldownDuration);
-
-        // Update text if available
-        if (cooldownText != null)
-        {
-            cooldownText.text = Mathf.Ceil(currentCooldownTime).ToString();
-        }
-
-        // Check if cooldown is finished
         if (currentCooldownTime <= 0f)
         {
             FinishCooldown();
@@ -66,7 +65,7 @@ public class CooldownSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the cooldown with the specified duration
+    /// Starts the cooldown with default duration
     /// </summary>
     public void StartCooldown()
     {
@@ -74,9 +73,8 @@ public class CooldownSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the cooldown with a custom duration
+    /// Starts the cooldown with custom duration
     /// </summary>
-    /// <param name="duration">Duration in seconds</param>
     public void StartCooldown(float duration)
     {
         if (isOnCooldown) return;
@@ -84,8 +82,8 @@ public class CooldownSystem : MonoBehaviour
         cooldownDuration = Mathf.Max(0.01f, duration);
         currentCooldownTime = cooldownDuration;
         isOnCooldown = true;
-        cooldownSlider.value = 1f;
 
+        ResetCooldownVisual();
         OnCooldownStarted?.Invoke();
     }
 
@@ -95,7 +93,6 @@ public class CooldownSystem : MonoBehaviour
     public void StopCooldown()
     {
         if (!isOnCooldown) return;
-
         FinishCooldown();
     }
 
@@ -103,22 +100,57 @@ public class CooldownSystem : MonoBehaviour
     {
         isOnCooldown = false;
         currentCooldownTime = 0f;
-        cooldownSlider.value = 0f;
+        cooldownOverlay.fillAmount = reverseFill ? 0f : 1f;
 
         if (cooldownText != null)
         {
             cooldownText.text = "0";
         }
 
+        if (cooldownFinishedEffect != null)
+        {
+            Instantiate(cooldownFinishedEffect, transform.position, Quaternion.identity, transform);
+        }
+
         OnCooldownFinished?.Invoke();
+    }
+
+    private void UpdateCooldownVisual()
+    {
+        float progress = currentCooldownTime / cooldownDuration;
+        cooldownOverlay.fillAmount = reverseFill ? 1f - progress : progress;
+
+        if (cooldownText != null)
+        {
+            cooldownText.text = Mathf.Ceil(currentCooldownTime).ToString();
+        }
+    }
+
+    private void ResetCooldownVisual()
+    {
+        cooldownOverlay.fillAmount = reverseFill ? 1f : 0f;
+
+        if (cooldownText != null)
+        {
+            cooldownText.text = Mathf.Ceil(cooldownDuration).ToString();
+        }
     }
 
     /// <summary>
     /// Changes the cooldown duration (doesn't affect current cooldown)
     /// </summary>
-    /// <param name="newDuration">New duration in seconds</param>
     public void SetCooldownDuration(float newDuration)
     {
         cooldownDuration = Mathf.Max(0.01f, newDuration);
+    }
+
+    /// <summary>
+    /// Changes the fill method for the cooldown visual
+    /// </summary>
+    public void SetFillMethod(Image.FillMethod method, int origin = 0, bool clockwise = false)
+    {
+        cooldownOverlay.fillMethod = method;
+        cooldownOverlay.fillOrigin = origin;
+        cooldownOverlay.fillClockwise = clockwise;
     }
 }
