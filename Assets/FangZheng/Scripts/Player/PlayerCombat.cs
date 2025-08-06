@@ -22,6 +22,7 @@ public class PlayerCombat : MonoBehaviour
     [Header("Player Data")]
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private bool Tutorial;
+    [SerializeField] private bool DisableCombat;
 
     [Header("Layers & Masks")]
     [SerializeField] private LayerMask _ignoreLayerMask;
@@ -200,6 +201,11 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
+        if (DisableCombat == true)
+        {
+            return;
+        }
+
         HandleBlocking();
         HandleLockOn();
         // Update recovery timer
@@ -235,6 +241,7 @@ public class PlayerCombat : MonoBehaviour
         {
             _parryCooldown -= Time.deltaTime;
         }
+
     }
     #endregion
 
