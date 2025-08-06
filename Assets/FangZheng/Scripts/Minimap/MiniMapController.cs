@@ -37,14 +37,14 @@ public class MiniMapController : MonoBehaviour
                 Map.SetActive(true);
                 _camera.orthographicSize = NormalCameraSize;
                 OrignialPosition = _camera.transform.position;
-                GamStates.instance.Pause();
+                GamStates.instance.AddPauseStuff();
             }
             else
             {
                 Map.SetActive(false);
                 _camera.orthographicSize = MiniCameraSize;
                 _camera.transform.position = OrignialPosition;
-                GamStates.instance.Play();
+                GamStates.instance.RemovePauseStuff();
             }
         }
     }

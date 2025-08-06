@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _normalspeed = 4;
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private float _dashSpeed = 30;
+    [SerializeField] private bool _IsStun = false;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
@@ -68,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (GamStates.instance.State == GamStates.GameState.Paused) 
+        if (GamStates.instance.State == GamStates.GameState.Paused || _IsStun == true) 
         {
             ResetInput();
             return; 
@@ -172,8 +173,23 @@ public class PlayerMovement : MonoBehaviour
         _isDashing = false;
     }
 
+    public IEnumerator Stuned(float Duration)
+    {
+        _IsStun = true;
+        _normalspeed = 0;
+        _dashSpeed = 0;
+
+        yield return new WaitForSeconds(Duration);
+
+        _IsStun = false;
+        _normalspeed = playerData.Speed;
+        _dashSpeed = playerData.Dash;
+        _currentSpeed = _normalspeed;
+    }
+
     public void Stun()
     {
+        _IsStun = true;
         _normalspeed = 0;
         _dashSpeed = 0;
     }

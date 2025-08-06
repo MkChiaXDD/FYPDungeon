@@ -89,7 +89,7 @@ public class PauseMenu : MonoBehaviour
     private void PauseGame()
     {
         Debug.Log("UNResumte game");
-        GamStates.instance.Pause();
+        GamStates.instance.AddPauseStuff();
         // Time.timeScale = 0f;
 
         pauseMenuCanvas.SetActive(true);
@@ -107,7 +107,7 @@ public class PauseMenu : MonoBehaviour
     private void ResumeGame()
     {
         Debug.Log("Resumte game");
-        GamStates.instance.Play();
+        GamStates.instance.RemovePauseStuff();
         Time.timeScale = originalTimeScale;
         pauseMenuCanvas.SetActive(false);
 

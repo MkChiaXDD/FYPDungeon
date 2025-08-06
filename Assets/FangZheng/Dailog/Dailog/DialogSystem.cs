@@ -61,7 +61,7 @@ public class DialogSystem : MonoBehaviour
         if (npc == null || npc._Lines == null || npc._Lines.Count == 0) return;
 
         Debug.Log("Start Chat");
-        GamStates.instance.Pause();
+        GamStates.instance.AddPauseStuff();
 
         DailogEnd = false;
         _Current_Line = 0;
@@ -140,7 +140,7 @@ public class DialogSystem : MonoBehaviour
     {
         if (ChatlogsContainer != null)
         {
-            GamStates.instance.Play();
+            GamStates.instance.RemovePauseStuff();
             ChatlogsContainer.SetActive(false);
         }
     }
