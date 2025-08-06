@@ -16,10 +16,17 @@ public class RangedEnemyController : Enemy
     [SerializeField] float shootDelay = 0.5f;
     [SerializeField] int amountToShoot = 3;
 
+    [Header("Movement Tilt")]
+    [SerializeField] float maxTiltAngle = 15f;
+    [SerializeField] float tiltSmoothness = 5f;
+    [SerializeField] float returnToNeutralSpeed = 3f;
+
     float attackTimer;
     Vector3 spawnPosition;
     Vector3 repositionTarget;
     Transform player;
+    Quaternion baseRotation;
+    Vector3 lastPosition;
 
     private bool hasSeenPlayer = false;
     private float timeSinceLastSeen = 0f;
@@ -29,6 +36,8 @@ public class RangedEnemyController : Enemy
     {
         base.Awake();
         spawnPosition = transform.position;
+        lastPosition = transform.position;
+        baseRotation = transform.rotation;
     }
 
     void Start()
@@ -51,6 +60,13 @@ public class RangedEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
+                // Smoothly return to base rotation when idle
+                transform.rotation = Quaternion.Lerp(
+                    transform.rotation,
+                    baseRotation,
+                    returnToNeutralSpeed * Time.deltaTime
+                );
+
                 float distToPlayer = Vector3.Distance(transform.position, player.position);
 
                 if (!hasSeenPlayer && distToPlayer <= data.attackRange)
@@ -78,7 +94,6 @@ public class RangedEnemyController : Enemy
                     if (attackTimer >= attackCooldown)
                         state = State.Attack;
                 }
-
                 break;
 
             case State.Attack:
@@ -96,6 +111,31 @@ public class RangedEnemyController : Enemy
                     repositionTarget.z
                 );
 
+                // Calculate movement direction
+                Vector3 moveDirection = (horizontalTarget - transform.position).normalized;
+
+                // Apply tilt if moving
+                if (moveDirection != Vector3.zero)
+                {
+                    // Calculate tilt angle based on movement direction (sideways)
+                    float tiltAngle = -Vector3.Dot(transform.right, moveDirection) * maxTiltAngle;
+
+                    // Create tilted rotation while maintaining base y-rotation
+                    Quaternion targetRotation = Quaternion.Euler(
+                        transform.rotation.eulerAngles.x,
+                        transform.rotation.eulerAngles.y,
+                        tiltAngle
+                    );
+
+                    // Smoothly apply tilt
+                    transform.rotation = Quaternion.Lerp(
+                        transform.rotation,
+                        targetRotation,
+                        tiltSmoothness * Time.deltaTime
+                    );
+                }
+
+                // Move towards target
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     horizontalTarget,
@@ -103,17 +143,30 @@ public class RangedEnemyController : Enemy
                 );
 
                 if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f)
+                {
                     state = State.Idle;
+                }
                 break;
         }
     }
 
     void FacePlayer()
     {
+        // Store current tilt before facing player
+        float currentZTilt = transform.rotation.eulerAngles.z;
+
         Vector3 dir = player.position - transform.position;
         dir.y = 0;
         if (dir.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(dir);
+        {
+            // Only rotate around Y axis
+            Quaternion targetRotation = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Euler(
+                0,
+                targetRotation.eulerAngles.y,
+                currentZTilt // Maintain current tilt
+            );
+        }
     }
 
     private IEnumerator Shoot(int amtToShoot)
