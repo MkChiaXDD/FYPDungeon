@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3684741641751606401}
   - component: {fileID: -8953672129782568319}
   - component: {fileID: 7729651944842042634}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MiniBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 16392
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -147,6 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  lifetime: 5
   damage: 0
   direction: {x: 0, y: 0, z: 0}
+  lifetime: 5

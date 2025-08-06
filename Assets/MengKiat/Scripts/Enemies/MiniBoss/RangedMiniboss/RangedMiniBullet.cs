@@ -11,10 +11,11 @@ public class RangedMiniBullet : MonoBehaviour
     private int splitAmount;
     public float minibulletSpeed = 10f; // Separate speed for minibullets
 
-
-    public void Initialize(Vector3 dir, int splitAmount, float _speed)
+    public void Initialize(Vector3 dir, int splitAmount, float _speed, float _lifeTime, float _damage)
     {
         speed = _speed;
+        lifetime = _lifeTime;
+        damage = _damage;
         dir = new Vector3(dir.x, 0, dir.z);
         direction = dir.normalized;
         this.splitAmount = splitAmount;
@@ -35,14 +36,8 @@ public class RangedMiniBullet : MonoBehaviour
         }
     }
 
-    public void SetDamage(float dmg)
-    {
-        damage = dmg;
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        Debug.LogWarning(other.name);
         if (other.CompareTag("Player"))
         {
             Debug.Log("RANGEDENEMY: HIT PLAYER");

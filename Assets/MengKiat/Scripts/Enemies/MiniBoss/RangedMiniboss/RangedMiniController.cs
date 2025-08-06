@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RangedMiniController : Enemy
 {
-    enum State { Idle, Attack, Reposition }
+    enum State { Idle, Attack, Reposition, Dodge, Melee }
     State state;
 
     [Header("Scaling Settings")]
@@ -13,40 +13,61 @@ public class RangedMiniController : Enemy
     [SerializeField] private float fireOffset = 1f;
     [SerializeField] private float baseAttackCooldown = 2f;
     [SerializeField] private float bulletSpeed = 20f;
-    private float attackCooldown;
-
+    [SerializeField] private float bulletLifetime = 3f;
     [SerializeField] private int baseSplit = 1;
     [SerializeField] private Vector2Int increasedSplit = new Vector2Int(3, 6);
 
+    [Header("Homing Bullet Settings")]
     [SerializeField] private GameObject homingBulletPrefab;
     [SerializeField] private float homingBulletSpeed = 10f;
     [SerializeField] private float homingForce = 5f;
     [SerializeField] private float homingLifetime = 5f;
     [SerializeField] private float homingDelay = 0.3f;
 
-    [Header("Rage Mode Settings")]
-    [SerializeField] private float rageSpeedMultiplier = 1.5f;
-    [SerializeField] private float rageRepositionDuration = 1.5f;
+    [Header("Melee Settings")]
+    [SerializeField] private float meleeRange = 2f;
+    [SerializeField] private float meleeTriggerTime = 2f;
+    [SerializeField] private float meleeCooldown = 5f;
+    [SerializeField] private float meleeKnockbackForce = 20f;
+    [SerializeField] private int meleeDamage = 30;
 
     [Header("Reposition Settings")]
-    [SerializeField] private float repositionRadius = 5f;
     [SerializeField] private float repositionDuration = 3f;
+    [SerializeField] private float repositionRadius = 5f;
 
-    [Header("Rotation")]
+    [Header("Dodge Settings")]
+    [SerializeField] private float dodgeChance = 0.25f;
+    [SerializeField] private float dodgeRadius = 6f;
+    [SerializeField] private float rageRepositionDuration = 1.5f;
+
+    [Header("Movement Multipliers")]
+    [SerializeField] private float repositionSpeedMultiplier = 1.2f;
+    [SerializeField] private float dodgeSpeedMultiplier = 2f;
+    [SerializeField] private float rageSpeedMultiplier = 1.5f;
+
+    [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 5f;
 
-    private float attackTimer;
-    private float repositionTimer;
+    // Runtime/Private
+    private Rigidbody rb;
+    private Transform player;
     private Vector3 spawnPosition;
     private Vector3 repositionTarget;
-    private Transform player;
-    private bool homingReady = false;
+
+    private float attackCooldown;
+    private float attackTimer;
+    private float repositionTimer;
+    private float meleeCooldownTimer;
+    private float closeRangeTimer;
+
     private int bulletSplitAmt;
+    private bool homingReady = false;
 
     void Start()
     {
         spawnPosition = transform.position;
         player = GameObject.FindWithTag("Player").transform;
+        rb = GetComponent<Rigidbody>();
         state = State.Idle;
     }
 
@@ -54,14 +75,29 @@ public class RangedMiniController : Enemy
     {
         SmoothFacePlayer();
         attackTimer += Time.deltaTime;
+        meleeCooldownTimer += Time.deltaTime;
 
         attackCooldown = IsRaging() ? baseAttackCooldown * 0.5f : baseAttackCooldown;
+
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
+
+        // Track time in melee range
+        if (distToPlayer <= meleeRange)
+            closeRangeTimer += Time.deltaTime;
+        else
+            closeRangeTimer = 0f;
+
+        if (state != State.Melee && closeRangeTimer >= meleeTriggerTime && meleeCooldownTimer >= meleeCooldown)
+        {
+            state = State.Melee;
+            meleeCooldownTimer = 0f;
+            return;
+        }
 
         switch (state)
         {
             case State.Idle:
-                if (Vector3.Distance(transform.position, player.position) <= data.attackRange &&
-                    attackTimer >= attackCooldown)
+                if (distToPlayer <= data.attackRange && attackTimer >= attackCooldown)
                 {
                     state = State.Attack;
                 }
@@ -72,51 +108,90 @@ public class RangedMiniController : Enemy
                 {
                     Shoot();
 
-                    if (currentRound >= roundForScaling || IsRaging())
+                    if (currentRound >= roundForScaling)
                     {
                         homingReady = true;
-                        Invoke(nameof(ShootHoming), IsRaging() ? homingDelay * 0.5f : homingDelay);
+                        Invoke(nameof(ShootHoming), homingDelay);
                     }
 
                     attackTimer = 0f;
-                    ChooseRepositionTarget();
-                    repositionTimer = 0f;
-                    state = State.Reposition;
+
+                    if (Random.value < dodgeChance)
+                    {
+                        ChooseDodgeTarget();
+                        repositionTimer = 0f;
+                        state = State.Dodge;
+                    }
+                    else
+                    {
+                        ChooseRandomRepositionTarget();
+                        repositionTimer = 0f;
+                        state = State.Reposition;
+                    }
                 }
                 break;
 
             case State.Reposition:
                 repositionTimer += Time.deltaTime;
-
-                Vector3 horizontalTarget = new Vector3(
-                    repositionTarget.x,
-                    transform.position.y,
-                    repositionTarget.z
-                );
-
-                float moveSpeed = currentMoveSpeed;
-                float currentRepositionDuration = repositionDuration;
-
-                if (IsRaging())
-                {
-                    moveSpeed *= rageSpeedMultiplier;
-                    currentRepositionDuration = rageRepositionDuration;
-                }
-
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    horizontalTarget,
-                    moveSpeed * Time.deltaTime
-                );
-
-                if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f ||
-                    repositionTimer >= currentRepositionDuration)
-                {
-                    state = State.Attack;
-                    repositionTarget = transform.position; // Reset to prevent jitter
-                    return;
-                }
+                MoveTowardTarget(repositionSpeedMultiplier, repositionDuration);
                 break;
+
+            case State.Dodge:
+                repositionTimer += Time.deltaTime;
+                MoveTowardTarget(dodgeSpeedMultiplier, rageRepositionDuration);
+                break;
+
+            case State.Melee:
+                PerformMeleeAttack();
+                state = State.Attack;
+                break;
+        }
+    }
+
+    private void MoveTowardTarget(float speedMultiplier, float duration)
+    {
+        Vector3 horizontalTarget = new Vector3(
+            repositionTarget.x,
+            transform.position.y,
+            repositionTarget.z
+        );
+
+        float moveSpeed = data.moveSpeed * speedMultiplier;
+        if (IsRaging()) moveSpeed *= rageSpeedMultiplier;
+
+        Vector3 moveDir = (horizontalTarget - transform.position).normalized;
+        float moveDist = moveSpeed * Time.deltaTime;
+
+        if (!Physics.Raycast(transform.position, moveDir, moveDist + 0.1f, LayerMask.GetMask("Wall")))
+        {
+            rb.MovePosition(transform.position + moveDir * moveDist);
+        }
+        else
+        {
+            state = State.Attack;
+            repositionTarget = transform.position;
+            return;
+        }
+
+        if (Vector3.Distance(transform.position, horizontalTarget) < 0.1f || repositionTimer >= duration)
+        {
+            state = State.Attack;
+            repositionTarget = transform.position;
+        }
+    }
+
+    private void PerformMeleeAttack()
+    {
+        if (player.TryGetComponent<Rigidbody>(out var prb))
+        {
+            Vector3 knockDir = (player.position - transform.position).normalized;
+            knockDir.y = 0f;
+            prb.AddForce(knockDir * meleeKnockbackForce, ForceMode.Impulse);
+        }
+
+        if (player.TryGetComponent<IDamageable>(out var dmg))
+        {
+            dmg.TakeDamage(meleeDamage);
         }
     }
 
@@ -156,8 +231,7 @@ public class RangedMiniController : Enemy
         var go = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed);
-            b.SetDamage(data.damage / bulletSplitAmt);
+            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt);
         }
     }
 
@@ -176,22 +250,38 @@ public class RangedMiniController : Enemy
         }
     }
 
-    private void ChooseRepositionTarget()
+    private void ChooseDodgeTarget()
     {
-        Vector3 directionAwayFromPlayer = (transform.position - player.position).normalized;
+        Vector3 dirAway = (transform.position - player.position).normalized;
+        if (dirAway.sqrMagnitude < 0.01f) dirAway = transform.right;
 
-        if (directionAwayFromPlayer.sqrMagnitude < 0.01f)
-            directionAwayFromPlayer = (transform.position - spawnPosition).normalized;
+        Vector2 offset = Random.insideUnitCircle * 1.5f;
+        Vector3 lateral = new Vector3(offset.x, 0f, offset.y);
 
-        float distance = repositionRadius;
-
-        Vector2 randomOffset = Random.insideUnitCircle * (repositionRadius * 0.3f);
-        Vector3 lateralOffset = new Vector3(randomOffset.x, 0f, randomOffset.y);
-
-        Vector3 target = transform.position + directionAwayFromPlayer * distance + lateralOffset;
-
-        repositionTarget = target;
+        repositionTarget = transform.position + dirAway * dodgeRadius + lateral;
     }
+
+    private void ChooseRandomRepositionTarget()
+    {
+        for (int i = 0; i < 10; i++) // Try 10 times to find a valid spot
+        {
+            Vector2 offset = Random.insideUnitCircle * repositionRadius;
+            Vector3 potentialTarget = transform.position + new Vector3(offset.x, 0f, offset.y);
+
+            // Check if position is not inside a wall using an OverlapCapsule
+            Vector3 point1 = potentialTarget + Vector3.up * (1f - 0.5f); // example height
+            Vector3 point2 = potentialTarget + Vector3.down * (1f - 0.5f);
+            if (!Physics.CheckCapsule(point1, point2, 0.5f, LayerMask.GetMask("Obstacle")))
+            {
+                repositionTarget = potentialTarget;
+                return;
+            }
+        }
+
+        // Fallback if all attempts fail
+        repositionTarget = transform.position + transform.right * 2f;
+    }
+
 
     private bool IsRaging()
     {

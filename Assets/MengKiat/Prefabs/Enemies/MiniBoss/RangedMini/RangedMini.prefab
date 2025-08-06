@@ -280,6 +280,7 @@ MonoBehaviour:
   fireOffset: 1
   baseAttackCooldown: 2
   bulletSpeed: 15
+  bulletLifetime: 1
   baseSplit: 4
   increasedSplit: {x: 4, y: 8}
   homingBulletPrefab: {fileID: 8003819692001746121, guid: 7d1243c9f161cb747907efac5c433070,
@@ -287,11 +288,20 @@ MonoBehaviour:
   homingBulletSpeed: 10
   homingForce: 15
   homingLifetime: 5
-  homingDelay: 0.3
-  rageSpeedMultiplier: 1.5
-  rageRepositionDuration: 1.5
-  repositionRadius: 20
+  homingDelay: 0.5
+  meleeRange: 8
+  meleeTriggerTime: 1
+  meleeCooldown: 2
+  meleeKnockbackForce: 400
+  meleeDamage: 10
   repositionDuration: 1.5
+  repositionRadius: 20
+  dodgeChance: 0.3
+  dodgeRadius: 6
+  rageRepositionDuration: 1.5
+  repositionSpeedMultiplier: 1.5
+  dodgeSpeedMultiplier: 2
+  rageSpeedMultiplier: 1.5
   rotationSpeed: 100
 --- !u!114 &2972188434460100755
 MonoBehaviour:
