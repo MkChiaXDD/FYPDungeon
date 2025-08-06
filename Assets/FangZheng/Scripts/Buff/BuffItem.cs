@@ -38,6 +38,8 @@ public class BuffItem : MonoBehaviour
 
     private void CollectBuff()
     {
+        if(GamStates.instance.State == GamStates.GameState.Paused) return;
+
         if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
             //Collect?.Invoke();

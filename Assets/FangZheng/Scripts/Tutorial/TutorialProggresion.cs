@@ -9,6 +9,14 @@ public class TutorialProggresion : MonoBehaviour
     [System.Serializable]
     public class TutorialStep
     {
+        public enum TrainingType
+        {
+            Movement,
+            Combat,
+            Misc,
+
+        }
+
         public string _StepName;
         public string Instruction;
         public string HelpStuff;
@@ -19,6 +27,8 @@ public class TutorialProggresion : MonoBehaviour
         public bool isCompleted;
         public float TimeForHint = 5.0f;
         public Npc _npc;
+        public TrainingType Tutorial_Type;
+
     }
 
     public List<TutorialStep> steps = new List<TutorialStep>();
@@ -37,6 +47,7 @@ public class TutorialProggresion : MonoBehaviour
 
     [SerializeField] private DialogSystem _dialogSystem;
     [SerializeField] private PlayerCombat _playerCombat;
+
 
     public static TutorialProggresion Instance;
 
@@ -78,6 +89,8 @@ public class TutorialProggresion : MonoBehaviour
 
     private void Update()
     {
+        if (GamStates.instance.State == GamStates.GameState.Paused) return;
+
         if (currentStepIndex >= steps.Count) return;
         
 
@@ -142,6 +155,7 @@ public class TutorialProggresion : MonoBehaviour
 
     public void startStep(int StepPoint)
     {
+        
         if (StepPoint >= steps.Count)
         {
             EndTutorial();
@@ -151,6 +165,10 @@ public class TutorialProggresion : MonoBehaviour
         currentStepIndex = StepPoint;
         TutorialStep step = steps[StepPoint];
 
+        if (step.Tutorial_Type != TutorialStep.TrainingType.Combat)
+        {
+            _playerCombat.DisableCombat = true;
+        }
 
         if (step._npc == null) {
             IsDailogFinish = true;
@@ -185,6 +203,7 @@ public class TutorialProggresion : MonoBehaviour
     public void CompleteStep()
     {
         steps[currentStepIndex].isCompleted = true;
+        _playerCombat.DisableCombat = false;
         ActionComplete = false;
         startStep(currentStepIndex + 1);
     }

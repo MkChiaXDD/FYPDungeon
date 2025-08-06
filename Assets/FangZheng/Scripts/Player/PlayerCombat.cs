@@ -22,7 +22,7 @@ public class PlayerCombat : MonoBehaviour
     [Header("Player Data")]
     [SerializeField] private PlayerData _playerData;
     [SerializeField] private bool Tutorial;
-    [SerializeField] private bool DisableCombat;
+    [SerializeField] public bool DisableCombat;
 
     [Header("Layers & Masks")]
     [SerializeField] private LayerMask _ignoreLayerMask;
@@ -201,7 +201,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (DisableCombat == true)
+        if (DisableCombat == true || GamStates.instance.State == GamStates.GameState.Paused)
         {
             return;
         }

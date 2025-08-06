@@ -68,6 +68,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (GamStates.instance.State == GamStates.GameState.Paused) 
+        {
+            ResetInput();
+            return; 
+        }
+
         MousePosition();
         GatherInput();
         look();
@@ -86,6 +92,12 @@ public class PlayerMovement : MonoBehaviour
     {
         _input.x = Input.GetAxisRaw("Horizontal");
         _input.z = Input.GetAxisRaw("Vertical");
+    }
+
+    void ResetInput()
+    {
+        _input.x = 0;
+        _input.z = 0;
     }
 
     void ResetSpeedModifiers()
