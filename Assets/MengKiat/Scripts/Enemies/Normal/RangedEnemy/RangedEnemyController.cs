@@ -18,15 +18,17 @@ public class RangedEnemyController : Enemy
 
     [Header("Movement Tilt")]
     [SerializeField] float maxTiltAngle = 15f;
-    [SerializeField] float tiltSmoothness = 5f;
-    [SerializeField] float returnToNeutralSpeed = 3f;
+    [SerializeField] float tiltResponseSpeed = 8f;
+    [SerializeField] float tiltReturnSpeed = 5f;
+    [SerializeField] float velocityThreshold = 0.1f;
 
     float attackTimer;
     Vector3 spawnPosition;
     Vector3 repositionTarget;
     Transform player;
-    Quaternion baseRotation;
+    Vector3 velocity;
     Vector3 lastPosition;
+    Quaternion targetRotation;
 
     private bool hasSeenPlayer = false;
     private float timeSinceLastSeen = 0f;
@@ -37,7 +39,7 @@ public class RangedEnemyController : Enemy
         base.Awake();
         spawnPosition = transform.position;
         lastPosition = transform.position;
-        baseRotation = transform.rotation;
+        targetRotation = transform.rotation;
     }
 
     void Start()
@@ -50,7 +52,12 @@ public class RangedEnemyController : Enemy
     {
         if (player == null || isStunned) return;
 
+        // Calculate velocity
+        velocity = (transform.position - lastPosition) / Time.deltaTime;
+        lastPosition = transform.position;
+
         FacePlayer();
+        UpdateTilt();
 
         if (state != State.Reposition)
         {
@@ -60,13 +67,6 @@ public class RangedEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
-                // Smoothly return to base rotation when idle
-                transform.rotation = Quaternion.Lerp(
-                    transform.rotation,
-                    baseRotation,
-                    returnToNeutralSpeed * Time.deltaTime
-                );
-
                 float distToPlayer = Vector3.Distance(transform.position, player.position);
 
                 if (!hasSeenPlayer && distToPlayer <= data.attackRange)
@@ -111,31 +111,6 @@ public class RangedEnemyController : Enemy
                     repositionTarget.z
                 );
 
-                // Calculate movement direction
-                Vector3 moveDirection = (horizontalTarget - transform.position).normalized;
-
-                // Apply tilt if moving
-                if (moveDirection != Vector3.zero)
-                {
-                    // Calculate tilt angle based on movement direction (sideways)
-                    float tiltAngle = -Vector3.Dot(transform.right, moveDirection) * maxTiltAngle;
-
-                    // Create tilted rotation while maintaining base y-rotation
-                    Quaternion targetRotation = Quaternion.Euler(
-                        transform.rotation.eulerAngles.x,
-                        transform.rotation.eulerAngles.y,
-                        tiltAngle
-                    );
-
-                    // Smoothly apply tilt
-                    transform.rotation = Quaternion.Lerp(
-                        transform.rotation,
-                        targetRotation,
-                        tiltSmoothness * Time.deltaTime
-                    );
-                }
-
-                // Move towards target
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     horizontalTarget,
@@ -150,21 +125,52 @@ public class RangedEnemyController : Enemy
         }
     }
 
+    void UpdateTilt()
+    {
+        if (velocity.magnitude > velocityThreshold)
+        {
+            // Calculate tilt based on movement direction relative to forward
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+            float tiltAmount = Mathf.Clamp(-localVelocity.x * 2f, -maxTiltAngle, maxTiltAngle);
+
+            // Create target rotation with tilt
+            targetRotation = Quaternion.Euler(
+                transform.rotation.eulerAngles.x,
+                transform.rotation.eulerAngles.y,
+                tiltAmount
+            );
+        }
+        else
+        {
+            // Return to no tilt when not moving
+            targetRotation = Quaternion.Euler(
+                transform.rotation.eulerAngles.x,
+                transform.rotation.eulerAngles.y,
+                0
+            );
+        }
+
+        // Smoothly apply rotation
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            targetRotation,
+            (velocity.magnitude > velocityThreshold ? tiltResponseSpeed : tiltReturnSpeed) * Time.deltaTime
+        );
+    }
+
     void FacePlayer()
     {
-        // Store current tilt before facing player
-        float currentZTilt = transform.rotation.eulerAngles.z;
-
         Vector3 dir = player.position - transform.position;
         dir.y = 0;
         if (dir.sqrMagnitude > 0.001f)
         {
-            // Only rotate around Y axis
-            Quaternion targetRotation = Quaternion.LookRotation(dir);
+            // Only rotate around Y axis while preserving tilt
+            float currentTilt = transform.rotation.eulerAngles.z;
+            Quaternion yRotation = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Euler(
                 0,
-                targetRotation.eulerAngles.y,
-                currentZTilt // Maintain current tilt
+                yRotation.eulerAngles.y,
+                currentTilt
             );
         }
     }
