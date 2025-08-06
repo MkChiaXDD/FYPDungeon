@@ -80,6 +80,11 @@ public class PlayerMovement : MonoBehaviour
         look();
         if (_isMovementLocked) return;
         Dash();
+
+        if (_IsStun)
+        {
+            Debug.Log(_rb.velocity);
+        }
     }
 
     private void FixedUpdate()

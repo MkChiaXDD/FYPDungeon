@@ -196,16 +196,12 @@ public class RangedMiniController : Enemy
 
 
     private void PerformMeleeAttack()
-    {
-        if (player.TryGetComponent<Rigidbody>(out var prb))
+    {        
+        if (player.TryGetComponent<PlayerMovement>(out var playerMove))
         {
             Vector3 knockDir = (player.position - transform.position).normalized;
             knockDir.y = 0f;
-            StartCoroutine(lowDrag(prb, knockbackDuration, knockDir));
-        }
-        
-        if (player.TryGetComponent<PlayerMovement>(out var playerMove))
-        {
+            StartCoroutine(lowDrag(playerMove._rb, knockbackDuration, knockDir));
             playerMove.StunPlayer(knockbackDuration);
         }
 
