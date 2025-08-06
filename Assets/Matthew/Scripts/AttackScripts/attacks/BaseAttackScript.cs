@@ -186,10 +186,10 @@ public abstract class BaseAttackScript : MonoBehaviour
         var shakeParams = new StaticScreenShake.ShakeParams
         {
             ShakeType = ShakeType.Translational,
-            ShakeDuration = 0.35f * intensity,
-            ShakeMagnitude = 3f * intensity,
+            ShakeDuration = 0.35f,
+            ShakeMagnitude = 3f,
             DampingSpeed = 10f,
-            TranslationalShakeMagnitude = new Vector3(0.4f * intensity, 0.4f * intensity, 0f),
+            TranslationalShakeMagnitude = new Vector3(0.4f , 0.4f , 0f),
             TranslationalNoiseSpeed = 70f,
             EnableX = true,
             EnableY = true
