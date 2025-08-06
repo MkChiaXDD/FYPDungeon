@@ -104,6 +104,11 @@ public class HitStopManager : MonoBehaviour
         currentHitStop = null;
     }
 
+    public void ResetHitstop()
+    {
+        Time.timeScale = originalTimeScale;
+    }
+
 
 
     

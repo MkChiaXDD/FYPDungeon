@@ -68,9 +68,16 @@ public abstract class BaseAttackScript : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(center, radius);
         foreach (var hit in hits)
         {
+            
+
             if (!hit.CompareTag("Player") && hit.TryGetComponent<IDamageable>(out var target))
             {
+                Debug.LogWarning(hit);
+                Debug.LogWarning(target);
+                Debug.LogWarning(physicalType);
                 ProcessTargetHit(hit, target, damage, physicalType, intensity);
+            
+
             }
         }
     }
@@ -141,8 +148,12 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     protected virtual void ApplyStatusEffect(GameObject target, StatusEffect effect)
     {
-        var receiver = target.GetComponent<StatusEffectReceiver>() ? target.AddComponent<StatusEffectReceiver>() : null;
-        receiver.ApplyEffect(effect);
+        if (target.GetComponent<IDamageable>() != null)
+        {
+            var receiver = target.GetComponent<StatusEffectReceiver>() ? target.AddComponent<StatusEffectReceiver>() : null;
+
+            receiver.ApplyEffect(effect);
+        }
     }
 
     protected virtual void PlayAttackVFX()
