@@ -126,8 +126,18 @@ public class TankEnemyController : Enemy
                 break;
 
             case State.RushToBomber:
+                if (carriedBomber == null)
+                {
+                    // The bomber was destroyed/exploded, reset state and flags
+                    isCarrying = false;
+                    hasThrown = false;
+                    hasEvaluatedThrowChance = false;
+                    state = State.Idle; // Or Chase if you want
+                    break;
+                }
                 RushToBomber(carriedBomber);
                 break;
+
         }
     }
 
@@ -210,7 +220,12 @@ public class TankEnemyController : Enemy
 
     private void RushToBomber(BomberEnemyController chosenBomber)
     {
-        if (chosenBomber == null || isCarrying) return;
+        // If no bomber or already carrying, go back to Idle or Chase
+        if (chosenBomber == null || isCarrying)
+        {
+            state = State.Idle; // or State.Chase if you want it to keep chasing player
+            return;
+        }
 
         smoothing = 15f;
         MultiplySpeed(rushToBomberSpeedMultiplier); // Use speed multiplier for rushing
@@ -230,6 +245,13 @@ public class TankEnemyController : Enemy
 
         if (distanceToBomber <= 1f && !hasThrown)
         {
+            // Check again if carriedBomber is not null (it could have been destroyed)
+            if (carriedBomber == null)
+            {
+                state = State.Idle; // reset state to safe one
+                return;
+            }
+
             carriedBomber.transform.position = carryZone.position;
             carriedBomber.transform.SetParent(carryZone);
 
@@ -246,6 +268,7 @@ public class TankEnemyController : Enemy
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
         }
     }
+
 
     private BomberEnemyController FindClosestBomber()
     {

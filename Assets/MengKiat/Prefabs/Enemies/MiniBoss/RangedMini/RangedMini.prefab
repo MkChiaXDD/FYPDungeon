@@ -279,7 +279,7 @@ MonoBehaviour:
     type: 3}
   fireOffset: 1
   baseAttackCooldown: 2
-  bulletSpeed: 15
+  bulletSpeed: 10
   bulletLifetime: 1
   baseSplit: 4
   increasedSplit: {x: 4, y: 8}
@@ -290,9 +290,10 @@ MonoBehaviour:
   homingLifetime: 5
   homingDelay: 0.5
   meleeRange: 8
-  meleeTriggerTime: 1
+  meleeTriggerTime: 3
   meleeCooldown: 2
-  meleeKnockbackForce: 400
+  meleeKnockbackForce: 100
+  knockbackDuration: 0.5
   meleeDamage: 10
   repositionDuration: 1.5
   repositionRadius: 20

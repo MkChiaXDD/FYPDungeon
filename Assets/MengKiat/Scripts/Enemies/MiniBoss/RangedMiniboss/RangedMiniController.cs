@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RangedMiniController : Enemy
@@ -29,6 +30,7 @@ public class RangedMiniController : Enemy
     [SerializeField] private float meleeTriggerTime = 2f;
     [SerializeField] private float meleeCooldown = 5f;
     [SerializeField] private float meleeKnockbackForce = 20f;
+    [SerializeField] private float knockbackDuration = 1f;
     [SerializeField] private int meleeDamage = 30;
 
     [Header("Reposition Settings")]
@@ -150,6 +152,18 @@ public class RangedMiniController : Enemy
 
     private void MoveTowardTarget(float speedMultiplier, float duration)
     {
+        // Check if currently overlapping an obstacle
+        float checkRadius = 0.5f; // adjust based on your enemy collider size
+        bool isColliding = Physics.CheckSphere(transform.position, checkRadius, LayerMask.GetMask("Obstacle"));
+
+        if (isColliding)
+        {
+            // Stop moving and reset state
+            state = State.Attack;
+            repositionTarget = transform.position;
+            return;
+        }
+
         Vector3 horizontalTarget = new Vector3(
             repositionTarget.x,
             transform.position.y,
@@ -180,12 +194,14 @@ public class RangedMiniController : Enemy
         }
     }
 
+
     private void PerformMeleeAttack()
     {
         if (player.TryGetComponent<Rigidbody>(out var prb))
         {
             Vector3 knockDir = (player.position - transform.position).normalized;
             knockDir.y = 0f;
+            StartCoroutine(lowDrag(prb, 1));
             prb.AddForce(knockDir * meleeKnockbackForce, ForceMode.Impulse);
         }
 
@@ -194,6 +210,30 @@ public class RangedMiniController : Enemy
             dmg.TakeDamage(meleeDamage);
         }
     }
+
+    private IEnumerator lowDrag(Rigidbody playerRb, float duration)
+    {
+        float originalDrag = playerRb.drag;
+        playerRb.drag = 0f;
+
+        // Wait the specified duration with drag = 0
+        yield return new WaitForSeconds(duration);
+
+        // Smoothly interpolate drag back to original over 1 second
+        float elapsed = 0f;
+        float lerpDuration = 0.5f; // time to go back to original drag
+
+        while (elapsed < lerpDuration)
+        {
+            elapsed += Time.deltaTime;
+            playerRb.drag = Mathf.Lerp(0f, originalDrag, elapsed / lerpDuration);
+            yield return null;
+        }
+
+        // Make sure drag is exactly original at the end
+        playerRb.drag = originalDrag;
+    }
+
 
     private void SmoothFacePlayer()
     {
