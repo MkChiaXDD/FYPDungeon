@@ -61,6 +61,8 @@ public class PlayerCombat : MonoBehaviour
 
     public float _currentlightAttackCooldown = 0.5f;
     public float _currentheavyAttackCooldown = 1.5f;
+
+    public float _ultimateAttackCooldown = 1.5f;
     public float _currentminChargeTime = 0.1f;
     public float _currentmaxChargeTime = 2f;
     [SerializeField] private float _currentheavyAttackMoveDistance = 1.5f;
@@ -69,6 +71,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float _currentlightAttackMoveDistance = 1.5f;
     [SerializeField] private float _currentlightAttackMoveDuration = 0.3f;
     [SerializeField, Range(0, 100)] private int _comboWindowPercentage = 30;
+
+
 
     [Header("Attack Recovery")]
     [SerializeField] private float _attackRecoveryTime = 0.1f; // Time to recover after each attack
@@ -90,6 +94,11 @@ public class PlayerCombat : MonoBehaviour
 
     [SerializeField] private GameObject swordBasicAttackIcon;
     [SerializeField] private GameObject swordUltAttackIcon;
+
+    [Header("Skill References")]
+    [SerializeField] private CooldownSystem basicAttackCooldown;
+    [SerializeField] private CooldownSystem ultimateCooldown;
+
 
 
     #endregion
@@ -289,6 +298,12 @@ public class PlayerCombat : MonoBehaviour
     }
     private void HandleChargedAttack()
     {
+        if (basicAttackCooldown.IsOnCooldown)
+        {
+            Debug.Log("Basic is on cooldown!");
+            return;
+        }
+
         float ChargedSlowDownEffect = 0.25f;
         float BaseMovementModifier = 1f;
         // Start charging heavy attack
@@ -325,6 +340,7 @@ public class PlayerCombat : MonoBehaviour
 
             ExecuteAttack(chargeTime);
 
+            basicAttackCooldown.StartCooldown(_baselightAttackCooldown);
             Uncharge?.Invoke();
             ClearTargeting();
         }
@@ -346,7 +362,15 @@ public class PlayerCombat : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            if (ultimateCooldown.IsOnCooldown)
+            {
+                Debug.Log("Basic is on cooldown!");
+                return;
+            }
+
+
             _currentWeapon.Cast();
+            ultimateCooldown.StartCooldown(_ultimateAttackCooldown);
         }
     }
     private void ExecuteLightAttack()

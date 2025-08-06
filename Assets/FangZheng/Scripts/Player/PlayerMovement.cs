@@ -41,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _targetMovementModifier = 1f;
     [SerializeField] private float _modifierChangeSpeed = 5f;
 
+    [SerializeField] private CooldownSystem dashCooldown;
+
 
     private void Awake()
     {
