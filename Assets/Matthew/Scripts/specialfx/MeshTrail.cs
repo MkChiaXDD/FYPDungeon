@@ -61,6 +61,15 @@ public class MeshTrail : MonoBehaviour
         }
     }
 
+    public void HandleTrailActivation2()
+    {
+        if (!isTrailActive)
+        {
+            isTrailActive = true;
+            StartCoroutine(ActivateTrail(activeTime));
+        }
+    }
+
     public IEnumerator ActivateTrail(float timeActive)
     {
         while (timeActive > 0)

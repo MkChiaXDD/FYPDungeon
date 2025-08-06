@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (GamStates.instance.State == GamStates.GameState.Paused || _IsStun == true) 
+        if (GamStates.instance.State == GamStates.GameState.Paused) 
         {
             ResetInput();
             return; 
@@ -173,18 +173,19 @@ public class PlayerMovement : MonoBehaviour
         _isDashing = false;
     }
 
-    public IEnumerator Stuned(float Duration)
+    public void StunPlayer(float duration)
+    {
+        StartCoroutine(Stunned(duration));
+    }
+
+    private IEnumerator Stunned(float Duration)
     {
         _IsStun = true;
-        _normalspeed = 0;
-        _dashSpeed = 0;
+        _meshTrail.HandleTrailActivation2();
 
         yield return new WaitForSeconds(Duration);
 
         _IsStun = false;
-        _normalspeed = playerData.Speed;
-        _dashSpeed = playerData.Dash;
-        _currentSpeed = _normalspeed;
     }
 
     public void Stun()
@@ -209,7 +210,14 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 force = _input.ToIso().normalized * (_currentSpeed * _currentMovementModifier);
 
-        _rb.AddForce(force, ForceMode.VelocityChange);
+        if (_IsStun)
+        {
+            _rb.AddForce(force, ForceMode.Force);
+        }
+        else
+        {
+            _rb.AddForce(force, ForceMode.VelocityChange);
+        }
 
         if (_rb.velocity.magnitude > (_currentSpeed * _currentMovementModifier))
         {

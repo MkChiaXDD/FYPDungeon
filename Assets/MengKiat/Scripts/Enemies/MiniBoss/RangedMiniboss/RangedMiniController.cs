@@ -201,8 +201,12 @@ public class RangedMiniController : Enemy
         {
             Vector3 knockDir = (player.position - transform.position).normalized;
             knockDir.y = 0f;
-            StartCoroutine(lowDrag(prb, 1));
-            prb.AddForce(knockDir * meleeKnockbackForce, ForceMode.Impulse);
+            StartCoroutine(lowDrag(prb, knockbackDuration, knockDir));
+        }
+        
+        if (player.TryGetComponent<PlayerMovement>(out var playerMove))
+        {
+            playerMove.StunPlayer(knockbackDuration);
         }
 
         if (player.TryGetComponent<IDamageable>(out var dmg))
@@ -211,10 +215,11 @@ public class RangedMiniController : Enemy
         }
     }
 
-    private IEnumerator lowDrag(Rigidbody playerRb, float duration)
+    private IEnumerator lowDrag(Rigidbody playerRb, float duration, Vector3 dir)
     {
         float originalDrag = playerRb.drag;
         playerRb.drag = 0f;
+        playerRb.AddForce(dir * meleeKnockbackForce, ForceMode.Impulse);
 
         // Wait the specified duration with drag = 0
         yield return new WaitForSeconds(duration);
