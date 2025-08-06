@@ -30,28 +30,25 @@ public class EnemyBullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerBody"))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("RANGEDBOSSENEMY: HIT PLAYER");
-        }
-        else if (other.CompareTag("Parry"))
-        {
-            BounceBack();
-            Debug.Log("Minibullet Parry");
-            return;
+            Debug.Log("BULLET: HIT PLAYER");
+            if (other.TryGetComponent<IDamageable>(out var damageable))
+            {
+                damageable.TakeDamage(damage);
+            }
         }
 
-        if (!other.TryGetComponent<IDamageable>(out var damageable)) return;
-        damageable.TakeDamage(damage);
+        Debug.Log(other.name);
 
         Destroy(gameObject);
     }
 
-    void BounceBack()
-    {
-        direction = -direction;
-        // Rotate to face new direction
-        if (direction != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(direction);
-    }
+    //void BounceBack()
+    //{
+    //    direction = -direction;
+    //    // Rotate to face new direction
+    //    if (direction != Vector3.zero)
+    //        transform.rotation = Quaternion.LookRotation(direction);
+    //}
 }

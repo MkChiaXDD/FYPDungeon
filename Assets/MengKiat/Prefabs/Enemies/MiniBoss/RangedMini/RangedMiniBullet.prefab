@@ -4856,7 +4856,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8864200802084884671}
   m_RootOrder: -1
@@ -4872,9 +4872,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 100
-  m_Range: 1.2
+  m_Range: 2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -5094,11 +5094,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda7a6b47a8d1fb439d3f90efc937b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  lifetime: 2
+  speed: 0
+  lifetime: 0
   damage: 0
   direction: {x: 0, y: 0, z: 0}
   minibulletPrefab: {fileID: 8003819692001746121, guid: f3591220aa0a4b24fbd677174f2dee77,
     type: 3}
   minibulletSpeed: 10
-  minibulletDamage: 5
