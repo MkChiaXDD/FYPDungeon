@@ -261,8 +261,10 @@ public class Enemy : MonoBehaviour, IDamageable
             gameObject.GetComponent<BossCheckDeath>().SummonPortal();
             Destroy(gameObject.GetComponent<BossCheckDeath>());
         }
-
-        FindFirstObjectByType<EnemyTracker>()?.IncreaseKills();
+        else
+        {
+            FindFirstObjectByType<EnemyTracker>()?.IncreaseKills();
+        }
         StaticScreenShake.Shake(Camera.main, deathParams);
         Destroy(gameObject);
     }
