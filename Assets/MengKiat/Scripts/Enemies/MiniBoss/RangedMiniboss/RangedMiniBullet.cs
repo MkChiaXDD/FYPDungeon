@@ -16,7 +16,8 @@ public class RangedMiniBullet : MonoBehaviour
         speed = _speed;
         lifetime = _lifeTime;
         damage = _damage;
-        dir = new Vector3(dir.x, 0, dir.z);
+        dir = new Vector3(dir.x, dir.y, dir.z);
+        dir.y -= 0.2f;
         direction = dir.normalized;
         this.splitAmount = splitAmount;
 
@@ -66,7 +67,7 @@ public class RangedMiniBullet : MonoBehaviour
         if (minibulletPrefab == null || splitAmount <= 0) return;
 
         float angleStep = 360f / splitAmount;
-        Vector3 startDirection = transform.forward;
+        Vector3 startDirection = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
 
         for (int i = 0; i < splitAmount; i++)
         {
