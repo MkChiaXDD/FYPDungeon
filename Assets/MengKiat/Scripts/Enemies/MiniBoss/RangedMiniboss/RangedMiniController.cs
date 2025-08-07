@@ -6,6 +6,8 @@ public class RangedMiniController : Enemy
     enum State { Idle, Attack, Reposition, Dodge, Melee }
     State state;
 
+    [SerializeField] private GameObject shootingPoint;
+
     [Header("Scaling Settings")]
     [SerializeField] private int roundForScaling = 2;
 
@@ -267,9 +269,8 @@ public class RangedMiniController : Enemy
         }
 
         Vector3 shootDir = (player.position - transform.position).normalized;
-        Vector3 spawnPos = transform.position + transform.forward * fireOffset;
 
-        var go = Instantiate(bulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
+        var go = Instantiate(bulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
             b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt);
@@ -282,9 +283,8 @@ public class RangedMiniController : Enemy
         homingReady = false;
 
         Vector3 shootDir = (player.position - transform.position).normalized;
-        Vector3 spawnPos = transform.position + transform.forward * fireOffset;
 
-        var go = Instantiate(homingBulletPrefab, spawnPos, Quaternion.LookRotation(shootDir));
+        var go = Instantiate(homingBulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<HomingBullet>(out var b))
         {
             b.Init(data.damage, homingBulletSpeed, homingForce, homingLifetime);
