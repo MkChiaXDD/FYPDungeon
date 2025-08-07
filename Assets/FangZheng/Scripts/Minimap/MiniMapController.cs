@@ -14,6 +14,9 @@ public class MiniMapController : MonoBehaviour
     [SerializeField] private float dragSpeed = 0.5f;
     [SerializeField] private Vector3 OrignialPosition;
 
+    [SerializeField] public LayerMask MiniCam;
+    [SerializeField] public LayerMask OrignalCam;
+
     private Vector3 dragOrigin;
     private bool isDragging = false;
     public void Start()
@@ -37,6 +40,7 @@ public class MiniMapController : MonoBehaviour
                 Map.SetActive(true);
                 _camera.orthographicSize = NormalCameraSize;
                 OrignialPosition = _camera.transform.position;
+                _camera.cullingMask = OrignalCam;
                 GamStates.instance.AddPauseStuff();
             }
             else
@@ -44,6 +48,7 @@ public class MiniMapController : MonoBehaviour
                 Map.SetActive(false);
                 _camera.orthographicSize = MiniCameraSize;
                 _camera.transform.position = OrignialPosition;
+                _camera.cullingMask = MiniCam;
                 GamStates.instance.RemovePauseStuff();
             }
         }
