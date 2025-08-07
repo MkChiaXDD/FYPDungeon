@@ -13,6 +13,7 @@ public class TutorialProggresion : MonoBehaviour
         {
             Movement,
             Combat,
+            FightEnemy,
             Misc,
 
         }
@@ -36,6 +37,15 @@ public class TutorialProggresion : MonoBehaviour
 
     }
 
+    [System.Serializable]
+    public class WaypointData
+    {
+        public Transform waypointTarget;
+        public float waypointRadius = 2f;
+        public string arrivalMessage = "";
+        public bool isReached = false;
+    }
+
     public List<TutorialStep> steps = new List<TutorialStep>();
     public GameObject TutorialUI;
     public GameObject HelpPrompt;
@@ -54,7 +64,7 @@ public class TutorialProggresion : MonoBehaviour
 
     [SerializeField] private DialogSystem _dialogSystem;
     [SerializeField] private PlayerCombat _playerCombat;
-
+    [SerializeField] private GameObject _player;
 
     public static TutorialProggresion Instance;
 
@@ -130,7 +140,7 @@ public class TutorialProggresion : MonoBehaviour
                 }
             }
 
-            if (allKeysPressed && ActionComplete)
+            if (allKeysPressed && ActionComplete && AllwaypointReached)
             {
                 CompleteStep();
             }
@@ -141,11 +151,18 @@ public class TutorialProggresion : MonoBehaviour
     {
         TutorialStep step = steps[currentStepIndex];
         RequiredAction.Clear();
+        WayPointStore.Clear();
         StartTime = Time.time;
         showingHelp = false;
+
         foreach (string action in steps[currentStepIndex].requiredAction)
         {
             RequiredAction.Add(action);
+        }
+
+        foreach (Transform targets in steps[currentStepIndex].waypointTarget)
+        {
+            WayPointStore.Add(targets);
         }
         //RequiredAction = steps[currentStepIndex].requiredAction;
         instructionText.text = step.Instruction;
@@ -155,6 +172,13 @@ public class TutorialProggresion : MonoBehaviour
         {
             ActionComplete = true;
         }
+
+        AllwaypointReached = false;
+        if (WayPointStore.Count <= 0)
+        {
+            AllwaypointReached = true;
+        }
+
         IsDailogFinish = _dialogSystem.DailogEnd;
         TutorialUI.SetActive(true);
         HelpPrompt.SetActive(false);
@@ -182,18 +206,27 @@ public class TutorialProggresion : MonoBehaviour
             StartTime = Time.time;
             showingHelp = false;
             //RequiredAction = steps[StepPoint].requiredAction;
+
             RequiredAction.Clear();
             foreach (string action in steps[currentStepIndex].requiredAction)
             {
                 RequiredAction.Add(action);
             }
-            instructionText.text = step.Instruction;
 
-            ActionComplete = false;
-            if (RequiredAction.Count <= 0)
+            WayPointStore.Clear();
+            foreach (Transform targets in steps[currentStepIndex].waypointTarget)
             {
-                ActionComplete = true;
+                WayPointStore.Add(targets);
             }
+
+
+            AllwaypointReached = false;
+            if (WayPointStore.Count <= 0)
+            {
+                AllwaypointReached = true;
+            }
+
+            instructionText.text = step.Instruction;
 
             TutorialUI.SetActive(true);
             HelpPrompt.SetActive(false);
@@ -252,6 +285,23 @@ public class TutorialProggresion : MonoBehaviour
         }
     }
 
+    public void CheckWayPoint()
+    {
+        List<Transform> waypointsDelete = new List<Transform>();
+
+        foreach (Transform t in WayPointStore)
+        {
+            if (Vector3.Distance(new Vector3(_player.transform.position.x, 0, _player.transform.position.z), new Vector3(t.position.x , 0 , t.position.z)) <= steps[currentStepIndex].waypointRadius)
+            {
+                waypointsDelete.Add(t);
+            }
+        }
+
+        foreach (Transform t in waypointsDelete)
+        {
+            WayPointStore.Remove(t);
+        }
+    }
     public void Help()
     {
         showingHelp = true;
