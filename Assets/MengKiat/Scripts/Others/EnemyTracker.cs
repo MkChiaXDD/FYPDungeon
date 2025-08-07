@@ -60,9 +60,19 @@ public class EnemyTracker : MonoBehaviour
             currentEntry.killCount++;
             Debug.Log($"Round {currentRound}: {currentEntry.killCount} / {currentEntry.killGoal} kills");
 
+            int killsRemaining = currentEntry.killGoal - currentEntry.killCount;
+
+            // Show popup for last 5 kills (but only if not already completed)
+            if (killsRemaining <= 5 && killsRemaining > 0)
+            {
+                PopUpManager.ShowPopUp($"{killsRemaining} kill{(killsRemaining == 1 ? "" : "s")} left!", 1f, Color.yellow);
+            }
+
             if (currentEntry.killCount >= currentEntry.killGoal)
             {
                 Debug.Log($"✅ Quest complete for Round {currentRound}! Kill Goal: {currentEntry.killGoal}");
+
+                PopUpManager.ShowPopUp("Kill goal reached! Proceed to the portal.", 3f, Color.green);
 
                 if (bossPortal != null && !bossPortal.activeSelf)
                 {
@@ -98,11 +108,12 @@ public class EnemyTracker : MonoBehaviour
         {
             if (currentEntry.killCount < currentEntry.killGoal)
             {
-                killCountText.text = $"Kills: {currentEntry.killCount}/{currentEntry.killGoal}";
+                killCountText.text = $"Round: {currentRound} | Kills: {currentEntry.killCount}/{currentEntry.killGoal}";
             }
             else
             {
-                killCountText.text = "Proceed to the portal";
+                PopUpManager.ShowPopUp("Kill goal reached! Proceed to the portal.", 1f, Color.green);
+                killCountText.text = "Kill goal completed";
             }
         }
         else
@@ -140,5 +151,11 @@ public class EnemyTracker : MonoBehaviour
         {
             Debug.Log($"Round {entry.round}: {entry.killCount}/{entry.killGoal} kills");
         }
+    }
+
+    public void SetCustomText(string message)
+    {
+        if (killCountText == null) return;
+        killCountText.text = message;
     }
 }

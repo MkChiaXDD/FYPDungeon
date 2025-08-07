@@ -19,6 +19,7 @@ public class Portal : MonoBehaviour
                 if (round < maxRound)
                 {
                     ProceedNextLevel();
+                    PopUpManager.ShowPopUp("Things won't get easier from now", 2, Color.red);
                     FindFirstObjectByType<EnemyTracker>()?.DefaultText();
                 }
                 else
