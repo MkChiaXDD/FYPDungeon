@@ -17,7 +17,7 @@ public class DirectionTarget : MonoBehaviour
 
     [SerializeField] private GameObject PointerContainer;
     [SerializeField] private RectTransform PointerPrefab;
-    private List<GameObject> targets = new List<GameObject>();
+    [SerializeField] private List<GameObject> targets = new List<GameObject>();
     private Dictionary<GameObject, RectTransform> TargetDirection = new Dictionary<GameObject, RectTransform>();
 
     private void UpdatePointerPos(GameObject target, RectTransform pointer)
@@ -70,11 +70,11 @@ public class DirectionTarget : MonoBehaviour
 
                 //if (Target.GetComponent<BossPortal>() != null)
                 //{
-                //    Pointer.GetComponent<Image>().tintColor = Color.blue;
+                //    Pointer.GetComponent<Image>().tintColor = Color.yellow;
                 //}
                 //else
                 //{
-                //    Pointer.GetComponent<Image>().tintColor = Color.red;
+                //    Pointer.GetComponent<Image>().tintColor = Color.blue;
                 //}
 
                 TargetDirection.Add(Target, Pointer);
@@ -93,6 +93,11 @@ public class DirectionTarget : MonoBehaviour
     public void AddTargets(GameObject Obj)
     {
         targets.Add(Obj);
+    }
+
+    public void RemoveTargets(GameObject Obj)
+    {
+        targets.Remove(Obj);
     }
 
     private void AutoTarget()

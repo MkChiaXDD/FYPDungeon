@@ -29,6 +29,11 @@ public class TutorialProggresion : MonoBehaviour
         public Npc _npc;
         public TrainingType Tutorial_Type;
 
+        public bool hasWaypoint = false;
+        public List<Transform> waypointTarget = new List<Transform>();
+        public float waypointRadius = 2f;
+        
+
     }
 
     public List<TutorialStep> steps = new List<TutorialStep>();
@@ -44,6 +49,8 @@ public class TutorialProggresion : MonoBehaviour
     private List<string> RequiredAction = new List<string>();
     private bool ActionComplete;
     private bool IsDailogFinish;
+    private bool AllwaypointReached = false;
+    private List<Transform> WayPointStore = new List<Transform>();
 
     [SerializeField] private DialogSystem _dialogSystem;
     [SerializeField] private PlayerCombat _playerCombat;
