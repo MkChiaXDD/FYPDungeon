@@ -152,4 +152,10 @@ public class EnemyTracker : MonoBehaviour
             Debug.Log($"Round {entry.round}: {entry.killCount}/{entry.killGoal} kills");
         }
     }
+
+    public void SetCustomText(string message)
+    {
+        if (killCountText == null) return;
+        killCountText.text = message;
+    }
 }

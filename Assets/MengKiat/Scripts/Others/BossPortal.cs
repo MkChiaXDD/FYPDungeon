@@ -22,6 +22,7 @@ public class BossPortal : MonoBehaviour
                 if (playerObject != null && bossRoomSpawn != null)
                 {
                     playerObject.transform.position = new Vector3(bossRoomSpawn.transform.position.x, playerObject.transform.position.y, bossRoomSpawn.transform.position.z);
+                    FindFirstObjectByType<EnemyTracker>().SetCustomText("Kill the boss");
                     Destroy(gameObject);
                 }
             }

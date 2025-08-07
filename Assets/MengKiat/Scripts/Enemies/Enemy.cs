@@ -259,6 +259,8 @@ public class Enemy : MonoBehaviour, IDamageable
         if (gameObject.GetComponent<BossCheckDeath>() != null)
         {
             gameObject.GetComponent<BossCheckDeath>().SummonPortal();
+            PopUpManager.ShowPopUp("Boss Killed, Carry on to the next level", 3, Color.green);
+            FindFirstObjectByType<EnemyTracker>().SetCustomText("Proceed to the portal");
             Destroy(gameObject.GetComponent<BossCheckDeath>());
         }
         else
