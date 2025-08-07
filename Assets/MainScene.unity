@@ -1056,6 +1056,16 @@ PrefabInstance:
       propertyPath: bossRoomRotation.Array.data[2]
       value: 270
       objectReference: {fileID: 0}
+    - target: {fileID: 6917053924442385991, guid: b8a12971664a0434a92e65e3a8eaac00,
+        type: 3}
+      propertyPath: enemyKillsEachRound.Array.data[0].killGoal
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6917053924442385991, guid: b8a12971664a0434a92e65e3a8eaac00,
+        type: 3}
+      propertyPath: enemyKillsEachRound.Array.data[1].killGoal
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7484879007682907384, guid: b8a12971664a0434a92e65e3a8eaac00,
         type: 3}
       propertyPath: m_RenderMode
@@ -1078,10 +1088,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9105909926050582623, guid: b8a12971664a0434a92e65e3a8eaac00,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 488337059}
-    - targetCorrespondingSourceObject: {fileID: 9105909926050582623, guid: b8a12971664a0434a92e65e3a8eaac00,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 488337061}
   m_SourcePrefab: {fileID: 100100000, guid: b8a12971664a0434a92e65e3a8eaac00, type: 3}
 --- !u!1 &488337057 stripped
@@ -1090,39 +1096,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 488337056}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &488337058 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2680024654600473551, guid: b8a12971664a0434a92e65e3a8eaac00,
-    type: 3}
-  m_PrefabInstance: {fileID: 488337056}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488337057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13b6929e98a8e9b46b80a41093efa8dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &488337059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488337057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2e81e70f8bacc34aae433a252ceac8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyKillsEachRound:
-  - round: 1
-    killCount: 0
-    killGoal: 1
-  - round: 2
-    killCount: 0
-    killGoal: 1
-  difMgr: {fileID: 488337058}
-  killCountText: {fileID: 1980762257}
 --- !u!224 &488337060 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7469710868516461265, guid: b8a12971664a0434a92e65e3a8eaac00,
@@ -2322,18 +2295,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ac3f8d9d16db33489127b41db16ed1c, type: 3}
---- !u!114 &1980762257 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2445089042304101801, guid: b8a12971664a0434a92e65e3a8eaac00,
-    type: 3}
-  m_PrefabInstance: {fileID: 488337056}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2076318177
 PrefabInstance:
   m_ObjectHideFlags: 0
