@@ -157,7 +157,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _rb.velocity != Vector3.zero && !_isMovementLocked)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift)) && _rb.velocity != Vector3.zero && !_isMovementLocked)
         {
             StartCoroutine(Dashing());
             dashCooldown.StartCooldown(0.1f);
