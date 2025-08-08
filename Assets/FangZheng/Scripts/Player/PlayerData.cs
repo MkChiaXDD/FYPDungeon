@@ -13,7 +13,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private float _Dash = 40;
     [SerializeField] private float _ParryDuration = 4;
     [SerializeField] private float _ParryThreshold = 0.5f;
-
+    [SerializeField] private float _DashCooldown = 0.5f;
     [SerializeField] private int _MimicAmount = 1;
     [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
     [SerializeField] private PlayerHitEffect _HitEffect;
@@ -50,6 +50,8 @@ public class PlayerData : MonoBehaviour, IDamageable
     public float Health { get; private set; }
     public float MimicSpawnChance { get; private set; }
     public int MimicCount { get; private set; }
+
+    public float DashCooldown { get; private set; }
     public static PlayerData Instance { get; private set; }
     // Elemental status effects
     private Dictionary<ElementType, float> activeElementalEffects = new Dictionary<ElementType, float>();
@@ -173,6 +175,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         ParryThreshhold = _ParryThreshold;
         MimicSpawnChance = _MimicSpawnChance;
         MimicCount = _MimicAmount;
+        DashCooldown = _DashCooldown;
 
         _LifeStealAmount = 0f;
         _CritChance = 0f;
