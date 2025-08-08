@@ -18,9 +18,11 @@ public class Weapon : MonoBehaviour
     public float movementModifier = 1;
     //[SerializeField] private List<SpellCast> spellCastList;
     public bool broke;
+    private TutorialProggresion _Tutorial;
     public UnityEvent WeaponBreak;
     protected void Start()
     {
+        _Tutorial = FindFirstObjectByType<TutorialProggresion>();
         spellCastList = weaponData.spells;
         spellCastList.Initialize(this.transform);
     }
@@ -30,6 +32,10 @@ public class Weapon : MonoBehaviour
     /// </summary>
     public void Cast()
     {
+        if (_Tutorial != null)
+        {
+            _Tutorial.IfPlayerPerformAction("SpecialSkill");
+        }
         spellCastList.spell?.Attack(spellCastList);
         Debug.Log("Casted " +  spellCastList.spell.name);
     }
