@@ -42,12 +42,12 @@ public class InventoryManager : MonoBehaviour
             inventorySlots[i].GetComponent<InventorySlot>().SetManager(this);
         }
 
-        // Create inventory slots
-        for (int i = hotbarSize; i < inventory.maxItemSlots; i++)
-        {
-            inventorySlots[i] = Instantiate(inventorySlotPrefab, inventoryUI.transform);
-            inventorySlots[i].GetComponent<InventorySlot>().SetManager(this);
-        }
+        //// Create inventory slots
+        //for (int i = hotbarSize; i < inventory.maxItemSlots; i++)
+        //{
+        //    inventorySlots[i] = Instantiate(inventorySlotPrefab, inventoryUI.transform);
+        //    inventorySlots[i].GetComponent<InventorySlot>().SetManager(this);
+        //}
 
         // Populate with existing items
         for (int i = 0; i < inventory.maxItemSlots; i++)
