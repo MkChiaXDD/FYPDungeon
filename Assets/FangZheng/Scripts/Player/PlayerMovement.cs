@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _dashSpeed = 30;
     [SerializeField] private bool _IsStun = false;
     [SerializeField] private float _DashCooldownTimer = 0;
+    [SerializeField] private Animator _animator;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
@@ -164,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift)) && _rb.velocity != Vector3.zero && !_isMovementLocked && _DashCooldownTimer >= playerData.DashCooldown)
         {
-
+            _animator.SetTrigger("Dash");
             StartCoroutine(Dashing());
             dashCooldown.StartCooldown(playerData.DashCooldown);
             _DashCooldownTimer = 0;
@@ -220,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
+        _animator.SetBool("_IsRun" , false);
         _rb.velocity = new Vector3(_rb.velocity.x, _rb.velocity.y, _rb.velocity.z);
 
         Vector3 force = _input.ToIso().normalized * (_currentSpeed * _currentMovementModifier);
@@ -235,6 +237,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (_rb.velocity.magnitude > (_currentSpeed * _currentMovementModifier))
         {
+            _animator.SetBool("_IsRun", true);
             _rb.velocity = _rb.velocity.normalized * (_currentSpeed * _currentMovementModifier);
         }
     }
