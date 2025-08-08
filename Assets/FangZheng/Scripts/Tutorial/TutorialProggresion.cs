@@ -28,6 +28,7 @@ public class TutorialProggresion : MonoBehaviour
         public GameObject objectToHighlight;
         public GameObject UiNeeded;
         public List<GameObject> ObjToInactive;
+        public List<GameObject> ObjToActivate;
         public bool isCompleted;
         public float TimeForHint = 5.0f;
         public Npc _npc;
@@ -190,6 +191,12 @@ public class TutorialProggresion : MonoBehaviour
             _TargetingSystem.AddTargets(targets.gameObject);
             Debug.Log("Obj Target: " + targets.name);
         }
+
+        foreach (GameObject gameObject in steps[currentStepIndex].ObjToActivate)
+        {
+            gameObject.SetActive(true);
+        }
+
         //RequiredAction = steps[currentStepIndex].requiredAction;
         instructionText.text = step.Instruction;
 
@@ -244,6 +251,11 @@ public class TutorialProggresion : MonoBehaviour
             {
                 WayPointStore.Add(targets);
                 _TargetingSystem.AddTargets(targets.gameObject);
+            }
+
+            foreach (GameObject gameObject in steps[currentStepIndex].ObjToActivate)
+            {
+                gameObject.SetActive(true);
             }
 
             ActionComplete = false;
