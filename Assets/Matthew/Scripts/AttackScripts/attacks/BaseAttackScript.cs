@@ -72,9 +72,7 @@ public abstract class BaseAttackScript : MonoBehaviour
 
             if (!hit.CompareTag("Player") && hit.TryGetComponent<IDamageable>(out var target))
             {
-                Debug.LogWarning(hit);
-                Debug.LogWarning(target);
-                Debug.LogWarning(physicalType);
+         
                 ProcessTargetHit(hit, target, damage, physicalType, intensity);
             
 
@@ -148,12 +146,11 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     protected virtual void ApplyStatusEffect(GameObject target, StatusEffect effect)
     {
-        if (target.GetComponent<IDamageable>() != null)
-        {
-            var receiver = target.GetComponent<StatusEffectReceiver>() ? target.AddComponent<StatusEffectReceiver>() : null;
+        var damageable = target.GetComponent<IDamageable>();
+        if (damageable == null) return;
 
-            receiver.ApplyEffect(effect);
-        }
+        var receiver = target.GetComponent<StatusEffectReceiver>() ?? target.AddComponent<StatusEffectReceiver>();
+        receiver.ApplyEffect(effect);
     }
 
     protected virtual void PlayAttackVFX()
