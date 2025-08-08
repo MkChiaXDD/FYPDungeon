@@ -93,11 +93,24 @@ public class DirectionTarget : MonoBehaviour
     public void AddTargets(GameObject Obj)
     {
         targets.Add(Obj);
+        //Debug.Log("Obj Target: " + Obj.name);
     }
 
     public void RemoveTargets(GameObject Obj)
     {
         targets.Remove(Obj);
+        
+
+        foreach (var kvp in TargetDirection)
+        {
+            if (kvp.Key == Obj)
+            {
+                Destroy(kvp.Value.gameObject);
+                
+            }
+        }
+
+        TargetDirection.Remove(Obj);
     }
 
     private void AutoTarget()
@@ -142,6 +155,17 @@ public class DirectionTarget : MonoBehaviour
         }
 
         
+    }
+
+    private void ClearDestroyedItems()
+    {
+        foreach (GameObject target in targets)
+        {
+            if (TargetDirection.ContainsKey(target))
+            {
+
+            }
+        }
     }
 
     void Update()

@@ -23,6 +23,7 @@ public class DialogSystem : MonoBehaviour
     [SerializeField] public GameObject ChatlogsContainer;
 
     public bool DailogEnd = true;
+    public bool DailogStart = false;
     public UnityEvent DailogFinish;
 
     void Start()
@@ -34,7 +35,7 @@ public class DialogSystem : MonoBehaviour
 
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && Cooldown > Cooldown_Duration)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && Cooldown > Cooldown_Duration && DailogStart == true)
         {
             Cooldown = 0;
 
@@ -64,6 +65,8 @@ public class DialogSystem : MonoBehaviour
         GamStates.instance.AddPauseStuff();
 
         DailogEnd = false;
+        DailogStart = true;
+
         _Current_Line = 0;
         _Dialog_Length = npc._Lines.Count;
 
@@ -130,8 +133,10 @@ public class DialogSystem : MonoBehaviour
             else
             {
                 DailogEnd = true;
+                DailogStart = false;
                 Deactivate();
                 DailogFinish?.Invoke();
+                Debug.Log("ChatEnd");
             }
         }
     }
@@ -140,6 +145,7 @@ public class DialogSystem : MonoBehaviour
     {
         if (ChatlogsContainer != null)
         {
+            
             GamStates.instance.RemovePauseStuff();
             ChatlogsContainer.SetActive(false);
         }

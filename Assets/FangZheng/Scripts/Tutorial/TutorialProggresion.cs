@@ -25,6 +25,7 @@ public class TutorialProggresion : MonoBehaviour
         public List<string> requiredAction;
         public GameObject objectToHighlight;
         public GameObject UiNeeded;
+        public List<GameObject> ObjToInactive;
         public bool isCompleted;
         public float TimeForHint = 5.0f;
         public Npc _npc;
@@ -55,15 +56,16 @@ public class TutorialProggresion : MonoBehaviour
     private int currentStepIndex = 0;
     private float StartTime;
     private bool showingHelp;
-    private List<KeyCode> keysPressed = new List<KeyCode>();
+    public List<KeyCode> keysPressed = new List<KeyCode>();
     private List<string> RequiredAction = new List<string>();
-    private bool ActionComplete;
     private bool IsDailogFinish;
-    private bool AllwaypointReached = false;
-    private List<Transform> WayPointStore = new List<Transform>();
+    public bool ActionComplete;
+    public bool AllwaypointReached = false;
+    [SerializeField] private List<Transform> WayPointStore = new List<Transform>();
 
     [SerializeField] private DialogSystem _dialogSystem;
     [SerializeField] private PlayerCombat _playerCombat;
+    [SerializeField] private DirectionTarget _TargetingSystem;
     [SerializeField] private GameObject _player;
 
     public static TutorialProggresion Instance;
@@ -112,6 +114,9 @@ public class TutorialProggresion : MonoBehaviour
         
 
         if (IsDailogFinish == true) {
+
+
+
             TutorialStep currentStep = steps[currentStepIndex];
             if (!currentStep.isCompleted && !showingHelp &&
                 Time.time - StartTime > currentStep.TimeForHint)
@@ -136,8 +141,22 @@ public class TutorialProggresion : MonoBehaviour
                 if (!keysPressed.Contains(key))
                 {
                     allKeysPressed = false;
-                    break;
+                    continue;
                 }
+            }
+
+            if (RequiredAction.Count <= 0)
+            {
+                if (currentStepIndex < steps.Count)
+                {
+                    ActionComplete = true;
+                }
+            }
+
+            CheckWayPoint();
+            if (WayPointStore.Count <= 0)
+            {
+                AllwaypointReached = true;
             }
 
             if (allKeysPressed && ActionComplete && AllwaypointReached)
@@ -163,6 +182,8 @@ public class TutorialProggresion : MonoBehaviour
         foreach (Transform targets in steps[currentStepIndex].waypointTarget)
         {
             WayPointStore.Add(targets);
+            _TargetingSystem.AddTargets(targets.gameObject);
+            Debug.Log("Obj Target: " + targets.name);
         }
         //RequiredAction = steps[currentStepIndex].requiredAction;
         instructionText.text = step.Instruction;
@@ -217,8 +238,14 @@ public class TutorialProggresion : MonoBehaviour
             foreach (Transform targets in steps[currentStepIndex].waypointTarget)
             {
                 WayPointStore.Add(targets);
+                _TargetingSystem.AddTargets(targets.gameObject);
             }
 
+            ActionComplete = false;
+            if (RequiredAction.Count <= 0)
+            {
+                ActionComplete = true;
+            }
 
             AllwaypointReached = false;
             if (WayPointStore.Count <= 0)
@@ -245,6 +272,10 @@ public class TutorialProggresion : MonoBehaviour
         steps[currentStepIndex].isCompleted = true;
         _playerCombat.DisableCombat = false;
         ActionComplete = false;
+        foreach (GameObject inact in steps[currentStepIndex].ObjToInactive)
+        {
+            inact.SetActive(false);
+        }
         startStep(currentStepIndex + 1);
     }
 
@@ -291,15 +322,21 @@ public class TutorialProggresion : MonoBehaviour
 
         foreach (Transform t in WayPointStore)
         {
-            if (Vector3.Distance(new Vector3(_player.transform.position.x, 0, _player.transform.position.z), new Vector3(t.position.x , 0 , t.position.z)) <= steps[currentStepIndex].waypointRadius)
-            {
-                waypointsDelete.Add(t);
+            if (t != null) {
+                if (Vector3.Distance(new Vector3(_player.transform.position.x, 0, _player.transform.position.z), new Vector3(t.position.x, 0, t.position.z)) <= steps[currentStepIndex].waypointRadius)
+                {
+                    waypointsDelete.Add(t);
+                }
             }
         }
 
         foreach (Transform t in waypointsDelete)
         {
-            WayPointStore.Remove(t);
+            if (t != null)
+            {
+                _TargetingSystem.RemoveTargets(t.gameObject);
+                WayPointStore.Remove(t);
+            }
         }
     }
     public void Help()
