@@ -71,6 +71,8 @@ public class TutorialProggresion : MonoBehaviour
     [SerializeField] private DirectionTarget _TargetingSystem;
     [SerializeField] private GameObject _player;
 
+    private List<GameObject> _TempObj = new List<GameObject>();
+
     public static TutorialProggresion Instance;
 
     private void OnEnable()
@@ -118,7 +120,7 @@ public class TutorialProggresion : MonoBehaviour
 
         if (IsDailogFinish == true) {
 
-
+            LocateItems();
 
             TutorialStep currentStep = steps[currentStepIndex];
             if (!currentStep.isCompleted && !showingHelp &&
@@ -279,6 +281,9 @@ public class TutorialProggresion : MonoBehaviour
         {
             inact.SetActive(false);
         }
+
+        ClearTempForTarget();
+        _TempObj.Clear();   
         startStep(currentStepIndex + 1);
     }
 
@@ -342,6 +347,45 @@ public class TutorialProggresion : MonoBehaviour
             }
         }
     }
+
+    public void LocateItems()
+    {
+        ClearTempForTarget();
+
+        _TempObj.Clear();
+
+        if (steps[currentStepIndex].Tutorial_Type == TutorialStep.TrainingType.BreakCrate)
+        {
+
+            ItemDropSystem[] allCrate = FindObjectsOfType<ItemDropSystem>();
+
+            foreach (ItemDropSystem C in allCrate)
+            {
+                _TempObj.Add(C.gameObject);
+                _TargetingSystem.AddTargets(C.gameObject);
+            }
+        }
+        else if (steps[currentStepIndex].Tutorial_Type == TutorialStep.TrainingType.PickUpItems)
+        {
+            Pickupable[] allCrate = FindObjectsOfType<Pickupable>();
+
+            foreach (Pickupable C in allCrate)
+            {
+                _TempObj.Add(C.gameObject);
+                _TargetingSystem.AddTargets(C.gameObject);
+            }
+        }
+    }
+
+    public void ClearTempForTarget()
+    {
+        foreach (GameObject t in _TempObj)
+        {
+            _TargetingSystem.RemoveTargets(t);
+        }
+
+    }
+
     public void Help()
     {
         showingHelp = true;
