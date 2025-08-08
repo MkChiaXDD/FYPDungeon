@@ -9,6 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8157078652929919661}
+  - component: {fileID: 8959843409845228927}
+  - component: {fileID: 1041104652834355843}
+  - component: {fileID: -1470763479499148787}
+  - component: {fileID: -7634521589802691057}
   m_Layer: 0
   m_Name: VaseVariant1
   m_TagString: Untagged
@@ -32,6 +36,100 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8959843409845228927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7605718803773473866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2767a9125394ef24fa516714d88f5a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brokenObject: {fileID: 0}
+  breakSFXName: 
+  dustPrefab: {fileID: 0}
+  dropSystem: {fileID: -7634521589802691057}
+  explosionRadius: 3
+  explosionForce: 5
+  explosionUpwardModifier: 1
+  forceAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  damageAffectedLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  baseDestructionDamage: 1
+  stunDuration: 0.5
+  statusEffects: []
+--- !u!54 &1041104652834355843
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7605718803773473866}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &-1470763479499148787
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7605718803773473866}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7634521589802691057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7605718803773473866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bad6ce9f8de69e47a62a9ea5e9a50b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropItem:
+  - _dropItemPrefab: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
+      type: 3}
+    _dropRate: 70.1
+  _dropHeight: 3.5
+  _throwForce: 5
 --- !u!1001 &5986057548747940088
 PrefabInstance:
   m_ObjectHideFlags: 0
