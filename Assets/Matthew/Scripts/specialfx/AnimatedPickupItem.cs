@@ -10,13 +10,16 @@ public class AnimatedPickupItem : MonoBehaviour
     [SerializeField] private float bobHeight = 0.5f; // How high the bob goes
     [SerializeField] private float bobSpeed = 1f; // How fast the bob is
     [SerializeField] private float bobOffset = 0f; // Phase offset for multiple items
+    [SerializeField] private float minVelocityForBobbing = 0.1f; // When to start bobbing
 
-    private Vector3 startPosition;
+    private Rigidbody rb;
+    private float baseY;
     private float timer;
 
     private void Start()
     {
-        startPosition = transform.position;
+        rb = GetComponent<Rigidbody>();
+        baseY = transform.position.y;
         timer = bobOffset;
     }
 
@@ -24,8 +27,12 @@ public class AnimatedPickupItem : MonoBehaviour
     {
         Rotation();
 
-        BobbingMotion();
-    }   
+        // Start bobbing only when object is almost still
+        if (rb != null && rb.velocity.magnitude < minVelocityForBobbing)
+        {
+            BobbingMotion();
+        }
+    }
 
     private void Rotation()
     {
@@ -37,9 +44,11 @@ public class AnimatedPickupItem : MonoBehaviour
     {
         // Calculate bobbing motion
         timer += Time.deltaTime * bobSpeed;
-        float newY = startPosition.y + Mathf.Sin(timer) * bobHeight;
+        float offsetY = Mathf.Sin(timer) * bobHeight;
 
-        // Apply position with bobbing
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        // Apply bobbing only to Y position
+        Vector3 pos = transform.position;
+        pos.y = baseY + offsetY;
+        transform.position = pos;
     }
 }
