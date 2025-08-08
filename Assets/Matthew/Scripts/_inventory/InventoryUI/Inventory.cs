@@ -90,18 +90,41 @@ public class Inventory : MonoBehaviour
     }
     private void SelectSlot()
     {
+        // --- Number key selection ---
         for (int i = 0; i < 7; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
             {
-                SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject , false);
-                equippedSlot = items[i];
-                equippedSlotNum = i;
-                manager.HighlightEquippedSlot(i);
-                ChangeSlot.Invoke();
+                ChangeEquippedSlot(i);
+                return;
             }
         }
+
+        // --- Scroll wheel selection ---
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll > 0f) // Scroll up
+        {
+            equippedSlotNum--;
+            if (equippedSlotNum < 0) equippedSlotNum = hotbarSize - 1;
+            ChangeEquippedSlot(equippedSlotNum);
+        }
+        else if (scroll < 0f) // Scroll down
+        {
+            equippedSlotNum++;
+            if (equippedSlotNum >= hotbarSize) equippedSlotNum = 0;
+            ChangeEquippedSlot(equippedSlotNum);
+        }
     }
+
+    private void ChangeEquippedSlot(int slotIndex)
+    {
+        SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject, false);
+        equippedSlotNum = slotIndex;
+        equippedSlot = items[equippedSlotNum];
+        manager.HighlightEquippedSlot(equippedSlotNum);
+        ChangeSlot.Invoke();
+    }
+
     private void PopulateList()
     {
         // Initialize the items list with null entries up to maxItemSlots
