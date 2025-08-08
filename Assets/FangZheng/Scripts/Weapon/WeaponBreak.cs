@@ -19,10 +19,14 @@ public class WeaponBreak : MonoBehaviour
         gameObject.GetComponent<BoxCollider>().enabled = false;
         weaponRenderer = GetComponent<Renderer>();
 
-        Original_M = weaponRenderer.materials;
-        currentDissolve = 0;
+        if (weaponRenderer != null)
+        {
+            Original_M = weaponRenderer.materials;
 
-        StartDisolve();
+            currentDissolve = 0;
+
+            StartDisolve();
+        }
     }
 
 
