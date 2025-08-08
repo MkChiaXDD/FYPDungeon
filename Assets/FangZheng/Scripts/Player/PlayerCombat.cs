@@ -344,16 +344,6 @@ public class PlayerCombat : MonoBehaviour
             Uncharge?.Invoke();
             ClearTargeting();
         }
-
-
-        //// Cancel charge if moving during charge time
-        //if (_isCharging && _playerMovement.IsMoving)
-        //{
-        //    _isCharging = false;
-        //    _playerMovement.ChangePlayerMovementModifier(0.25f);
-
-        //    Uncharge?.Invoke();
-        //}
     }
     private void HandleSpecialAttack()
     {
@@ -370,6 +360,7 @@ public class PlayerCombat : MonoBehaviour
 
 
             _currentWeapon.Cast();
+            ApplyDurabilityCost(23);
             ultimateCooldown.StartCooldown(_ultimateAttackCooldown);
         }
     }
@@ -519,6 +510,13 @@ public class PlayerCombat : MonoBehaviour
             : _currentWeapon.baseDurabilityCost * 2;
 
         _inventory.BreakItem(_inventory.equippedSlotNum, durabilityCost);
+    }
+
+    private void ApplyDurabilityCost(int durabilityUsage)
+    {
+        if (_currentWeapon == null) return;
+
+        _inventory.BreakItem(_inventory.equippedSlotNum, durabilityUsage);
     }
 
     private void TrySpawnMimic()

@@ -9,7 +9,8 @@ public class NormalHammerAttack : BaseAttackScript
     {
         base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
 
-        if(statusEffects[StunStatusEffectID])
+        if (!statusEffects[StunStatusEffectID])
+            return;
         ApplyStatusEffect(hit.gameObject, statusEffects[StunStatusEffectID]);
     }
 
