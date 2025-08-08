@@ -12,7 +12,13 @@ public class Pickupable : MonoBehaviour
     private InventoryManager InventoryManager;
     private const string PlayerTag = "Player";
 
+    private TutorialProggresion _Tutorial;
+
     private UnityEvent PuckUpItem;
+    private void Start()
+    {
+        _Tutorial = FindFirstObjectByType<TutorialProggresion>();
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (PickupAlready == false)
@@ -50,6 +56,10 @@ public class Pickupable : MonoBehaviour
         //AudioManager.Instance.PlaySFX("Pickup");
         AddToInventory(FindObjectOfType<InventoryManager>());
         PuckUpItem?.Invoke();
+        if (_Tutorial != null)
+        {
+            _Tutorial.IfPlayerPerformAction("PickUpItem");
+        }
         Destroy(gameObject);
     }
 
