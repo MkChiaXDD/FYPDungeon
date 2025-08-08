@@ -250,6 +250,10 @@ MonoBehaviour:
   roundForScaling: 2
   shootDelay: 0.5
   amountToShoot: 3
+  maxTiltAngle: 15
+  tiltResponseSpeed: 8
+  tiltReturnSpeed: 5
+  velocityThreshold: 0.1
   forgetTime: 10
 --- !u!1 &4188190321821507243
 GameObject:
@@ -279,7 +283,7 @@ RectTransform:
   m_GameObject: {fileID: 4188190321821507243}
   m_LocalRotation: {x: 0.6532815, y: -0.27059805, z: 0.27059805, w: 0.6532815}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4395814056755872381}
