@@ -38,6 +38,10 @@ public class TankEnemyController : Enemy
     private bool hasThrown = false;
     private bool hasEvaluatedThrowChance = false;
 
+    [SerializeField] private float chaseTimeBeforeSearchingBomber = 5f;
+    private float chaseTimer = 0f;
+
+
     private bool hasSeenPlayer = false;
 
     private enum State { Idle, Chase, Attack, RushToBomber }
@@ -91,31 +95,38 @@ public class TankEnemyController : Enemy
         switch (state)
         {
             case State.Idle:
+                chaseTimer = 0f;
                 attackTimer = attackCooldown;
-                ResetSpeed(); // Return to normal speed when idle
+                ResetSpeed();
                 break;
 
             case State.Chase:
                 attackTimer = attackCooldown;
                 ChaseWithAvoidance();
-                break;
 
-            case State.Attack:
-                if (!hasEvaluatedThrowChance)
+                chaseTimer += Time.deltaTime;
+
+                if (chaseTimer >= chaseTimeBeforeSearchingBomber)
                 {
-                    float rand = Random.value;
                     chosenBomber = FindClosestBomber();
-                    hasEvaluatedThrowChance = true;
+                    chaseTimer = 0f;
 
-                    if (rand <= chanceToGoThrow && currentRound >= roundForScaling && chosenBomber != null)
+                    if (chosenBomber != null && currentRound >= roundForScaling)
                     {
-                        state = State.RushToBomber;
                         carriedBomber = chosenBomber;
+                        state = State.RushToBomber;
                         hasEvaluatedThrowChance = false;
                         return;
                     }
+                    else
+                    {
+                        state = State.Chase;
+                    }
                 }
+                break;
 
+            case State.Attack:
+                chaseTimer = 0f;
                 FacePlayer();
                 attackTimer -= Time.deltaTime;
                 if (attackTimer <= 0f)
@@ -128,18 +139,17 @@ public class TankEnemyController : Enemy
             case State.RushToBomber:
                 if (carriedBomber == null)
                 {
-                    // The bomber was destroyed/exploded, reset state and flags
                     isCarrying = false;
                     hasThrown = false;
                     hasEvaluatedThrowChance = false;
-                    state = State.Idle; // Or Chase if you want
+                    state = State.Chase;
                     break;
                 }
                 RushToBomber(carriedBomber);
                 break;
-
         }
     }
+
 
     void FacePlayer()
     {
@@ -220,35 +230,67 @@ public class TankEnemyController : Enemy
 
     private void RushToBomber(BomberEnemyController chosenBomber)
     {
-        // If no bomber or already carrying, go back to Idle or Chase
         if (chosenBomber == null || isCarrying)
         {
-            state = State.Idle; // or State.Chase if you want it to keep chasing player
+            state = State.Idle;
             return;
         }
 
         smoothing = 15f;
-        MultiplySpeed(rushToBomberSpeedMultiplier); // Use speed multiplier for rushing
+        MultiplySpeed(rushToBomberSpeedMultiplier);
 
         Transform bomberPos = chosenBomber.transform;
-        Vector3 toBomber = bomberPos.position - transform.position;
-        toBomber.y = 0;
-        Vector3 dir = toBomber.normalized;
 
-        currentDir = Vector3.Slerp(currentDir, dir, smoothing * Time.deltaTime);
+        // Calculate seek direction
+        Vector3 seekDir = bomberPos.position - transform.position;
+        seekDir.y = 0;
+        seekDir.Normalize();
+
+        // Calculate avoidance vector
+        Vector3 avoidDir = Vector3.zero;
+        Vector3[] feelers = new Vector3[]
+        {
+        transform.forward,
+        (transform.forward + transform.right).normalized,
+        (transform.forward - transform.right).normalized
+        };
+
+        foreach (var f in feelers)
+        {
+            Vector3 dir = f;
+            dir.y = 0;
+            dir.Normalize();
+
+            if (Physics.SphereCast(transform.position, feelerRadius, dir, out RaycastHit hit, feelerLength, obstacleMask))
+            {
+                Vector3 n = hit.normal;
+                n.y = 0;
+                n.Normalize();
+                float strength = (feelerLength - hit.distance) / feelerLength;
+                avoidDir += n * strength;
+            }
+        }
+
+        if (avoidDir != Vector3.zero)
+            avoidDir.Normalize();
+
+        float avoidWeightRush = 0.5f; // Less avoidance during rush to bomber
+
+        Vector3 desiredDir = (seekDir + avoidDir * avoidWeightRush).normalized;
+
+        // Use higher smoothing speed for faster correction
+        currentDir = Vector3.Slerp(currentDir, desiredDir, smoothing * 5f * Time.deltaTime);
+
         transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
-
-        Quaternion targetRot = Quaternion.LookRotation(currentDir);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentDir), Time.deltaTime * turnSpeed);
 
         float distanceToBomber = Vector3.Distance(transform.position, bomberPos.position);
 
         if (distanceToBomber <= 1f && !hasThrown)
         {
-            // Check again if carriedBomber is not null (it could have been destroyed)
             if (carriedBomber == null)
             {
-                state = State.Idle; // reset state to safe one
+                state = State.Idle;
                 return;
             }
 
@@ -264,11 +306,10 @@ public class TankEnemyController : Enemy
             isCarrying = true;
             hasThrown = true;
             smoothing = originalSmoothing;
-            ResetSpeed(); // Return to normal speed when carrying
+            ResetSpeed();
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
         }
     }
-
 
     private BomberEnemyController FindClosestBomber()
     {
@@ -279,6 +320,7 @@ public class TankEnemyController : Enemy
         foreach (BomberEnemyController bomber in bombers)
         {
             if (bomber.isPickedup) continue;
+            if (bomber.isExploding) continue;
 
             float dist = Vector3.Distance(transform.position, bomber.transform.position);
             if (dist <= detectionRange && dist < closestDist)

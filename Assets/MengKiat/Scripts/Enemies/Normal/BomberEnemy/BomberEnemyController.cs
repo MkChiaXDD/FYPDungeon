@@ -50,7 +50,7 @@ public class BomberEnemyController : Enemy
 
     private State state;
     private bool boutaDie = false;
-    private bool isExploding = false;
+    public bool isExploding = false;
     public bool isPickedup = false;
 
     protected override void Awake()
