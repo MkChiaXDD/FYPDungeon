@@ -14,6 +14,8 @@ public class TutorialProggresion : MonoBehaviour
             Movement,
             Combat,
             FightEnemy,
+            PickUpItems,
+            BreakCrate,
             Misc,
 
         }
@@ -59,10 +61,11 @@ public class TutorialProggresion : MonoBehaviour
     public List<KeyCode> keysPressed = new List<KeyCode>();
     private List<string> RequiredAction = new List<string>();
     private bool IsDailogFinish;
-    public bool ActionComplete;
-    public bool AllwaypointReached = false;
-    [SerializeField] private List<Transform> WayPointStore = new List<Transform>();
+    private bool ActionComplete;
+    private bool AllwaypointReached = false;
 
+    [SerializeField] private List<Transform> Targets = new List<Transform>();
+    [SerializeField] private List<Transform> WayPointStore = new List<Transform>();
     [SerializeField] private DialogSystem _dialogSystem;
     [SerializeField] private PlayerCombat _playerCombat;
     [SerializeField] private DirectionTarget _TargetingSystem;
@@ -217,7 +220,7 @@ public class TutorialProggresion : MonoBehaviour
         currentStepIndex = StepPoint;
         TutorialStep step = steps[StepPoint];
 
-        if (step.Tutorial_Type != TutorialStep.TrainingType.Combat)
+        if (step.Tutorial_Type == TutorialStep.TrainingType.Movement)
         {
             _playerCombat.DisableCombat = true;
         }
