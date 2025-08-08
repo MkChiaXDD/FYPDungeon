@@ -375,6 +375,16 @@ public class TutorialProggresion : MonoBehaviour
                 _TargetingSystem.AddTargets(C.gameObject);
             }
         }
+        else if (steps[currentStepIndex].Tutorial_Type == TutorialStep.TrainingType.FightEnemy)
+        {
+            Enemy[] allCrate = FindObjectsOfType<Enemy>();
+
+            foreach (Enemy C in allCrate)
+            {
+                _TempObj.Add(C.gameObject);
+                _TargetingSystem.AddTargets(C.gameObject);
+            }
+        }
     }
 
     public void ClearTempForTarget()
