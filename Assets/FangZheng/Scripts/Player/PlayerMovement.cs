@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _turnspeed = 360;
     [SerializeField] private float _dashSpeed = 30;
     [SerializeField] private bool _IsStun = false;
+    [SerializeField] private float _DashCooldownTimer = 0;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
@@ -85,7 +86,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log(_rb.velocity);
         }
+
+        _DashCooldownTimer += Time.deltaTime;
     }
+
+    
 
     private void FixedUpdate()
     {
@@ -157,10 +162,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift)) && _rb.velocity != Vector3.zero && !_isMovementLocked)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift)) && _rb.velocity != Vector3.zero && !_isMovementLocked && _DashCooldownTimer >= playerData.DashCooldown)
         {
+
             StartCoroutine(Dashing());
-            dashCooldown.StartCooldown(0.1f);
+            dashCooldown.StartCooldown(playerData.DashCooldown);
+            _DashCooldownTimer = 0;
         }
     }
 
@@ -173,7 +180,9 @@ public class PlayerMovement : MonoBehaviour
         _isDashing = true;
         _meshTrail.HandleTrailActivation();
         _currentSpeed = playerData.Dash + playerData.Speed;
+        playerData.SetInv(true);
         yield return new WaitForSeconds(0.1f);
+        playerData.SetInv(false);
         _currentSpeed = playerData.Speed;
         _isDashing = false;
     }
