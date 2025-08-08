@@ -8,6 +8,8 @@ public class NormalHammerAttack : BaseAttackScript
     protected override void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
         base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
+
+        if(statusEffects[StunStatusEffectID])
         ApplyStatusEffect(hit.gameObject, statusEffects[StunStatusEffectID]);
     }
 
