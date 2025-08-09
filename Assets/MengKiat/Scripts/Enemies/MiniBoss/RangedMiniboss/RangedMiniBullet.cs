@@ -86,7 +86,7 @@ public class RangedMiniBullet : MonoBehaviour
             Debug.Log("Instantiated bullet");
 
             MiniBullet controller = minibullet.GetComponent<MiniBullet>();
-            controller.Initialize(minibulletDir, minibulletSpeed, damage / 2);
+            controller.Initialize(minibulletDir, minibulletSpeed, damage / 3);
         }
 
         Destroy(gameObject);
