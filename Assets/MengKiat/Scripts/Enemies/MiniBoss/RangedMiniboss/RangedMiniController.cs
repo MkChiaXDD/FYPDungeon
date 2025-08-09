@@ -7,6 +7,7 @@ public class RangedMiniController : Enemy
     State state;
 
     [SerializeField] private GameObject shootingPoint;
+    [SerializeField] private BossAnimation bossAnim;
 
     [Header("Scaling Settings")]
     [SerializeField] private int roundForScaling = 2;
@@ -250,7 +251,16 @@ public class RangedMiniController : Enemy
 
 
     private void PerformMeleeAttack()
-    {        
+    {
+        bossAnim.PlaySpinAttack();
+
+        StartCoroutine(SpinAttack());
+    }
+
+    private IEnumerator SpinAttack()
+    {
+        yield return new WaitForSeconds(0.5f);
+
         if (player.TryGetComponent<PlayerMovement>(out var playerMove))
         {
             Vector3 knockDir = (player.position - transform.position).normalized;
