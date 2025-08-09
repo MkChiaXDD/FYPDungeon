@@ -52,6 +52,16 @@ public class RangedMiniController : Enemy
     [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 5f;
 
+    [Header("Health Drop Settings")]
+    [SerializeField] private GameObject healthDrop;
+    [SerializeField] private int minDrops = 1;
+    [SerializeField] private int maxDrops = 3;
+    // Example: 0.75, 0.5, 0.25 means drop at 75%, 50%, 25% health
+    [SerializeField] private float[] dropHealthThresholds = { 0.75f, 0.5f, 0.25f };
+    [SerializeField] private float launchForce = 30f;
+
+    private bool[] hasDropped;
+
     // Runtime/Private
     private Rigidbody rb;
     private Transform player;
@@ -73,6 +83,9 @@ public class RangedMiniController : Enemy
         player = GameObject.FindWithTag("Player").transform;
         rb = GetComponent<Rigidbody>();
         state = State.Idle;
+
+        // Track whether each threshold was triggered
+        hasDropped = new bool[dropHealthThresholds.Length];
     }
 
     void Update()
@@ -82,6 +95,8 @@ public class RangedMiniController : Enemy
         meleeCooldownTimer += Time.deltaTime;
 
         attackCooldown = IsRaging() ? baseAttackCooldown * 0.5f : baseAttackCooldown;
+
+        CheckHealthDrop();
 
         float distToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -151,6 +166,43 @@ public class RangedMiniController : Enemy
                 break;
         }
     }
+
+    private void CheckHealthDrop()
+    {
+        float healthPercent = currentHealth / maxHealth;
+
+        for (int i = 0; i < dropHealthThresholds.Length; i++)
+        {
+            if (!hasDropped[i] && healthPercent <= dropHealthThresholds[i])
+            {
+                DropHealth();
+                hasDropped[i] = true;
+            }
+        }
+    }
+
+    private void DropHealth()
+    {
+        if (healthDrop == null) return;
+
+        int dropCount = Random.Range(minDrops, maxDrops + 1);
+        for (int i = 0; i < dropCount; i++)
+        {
+            // Spawn just above the boss so they don't clip into the ground
+            Vector3 spawnPos = transform.position + Vector3.up * 1f;
+
+            GameObject drop = Instantiate(healthDrop, spawnPos, Quaternion.identity);
+
+            // Launch in a random horizontal direction
+            if (drop.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                Vector3 randomDir = Random.insideUnitSphere;
+                randomDir.y = 0.5f; // give a little upward force
+                rb.AddForce(randomDir.normalized * launchForce, ForceMode.Impulse);
+            }
+        }
+    }
+
 
     private void MoveTowardTarget(float speedMultiplier, float duration)
     {
