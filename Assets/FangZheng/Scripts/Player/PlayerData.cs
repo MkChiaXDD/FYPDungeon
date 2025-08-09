@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class PlayerData : MonoBehaviour, IDamageable
 {
+    [SerializeField] private Animator _animator;
     [Space, Header("Base Stats")]
     [SerializeField] private float _MaxHealth = 100;
     [SerializeField] private int _Dmg = 5;
@@ -17,6 +18,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private int _MimicAmount = 1;
     [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
     [SerializeField] private PlayerHitEffect _HitEffect;
+
 
     public bool _InVin;
     public float _LifeStealAmount;
@@ -89,6 +91,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         }
         if (_isInvulnerable == false)
         {
+            _animator.SetTrigger("Hurt");
             CurrentHealth = CurrentHealth - damage;
             Debug.Log("ouch");
             // Trigger flash effect
