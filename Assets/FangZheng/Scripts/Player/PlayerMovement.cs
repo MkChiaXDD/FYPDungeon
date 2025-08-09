@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift)) && _rb.velocity != Vector3.zero && !_isMovementLocked && _DashCooldownTimer >= playerData.DashCooldown)
         {
-            _animator.SetTrigger("Dash");
+            //_animator.SetTrigger("Dash");
             StartCoroutine(Dashing());
             dashCooldown.StartCooldown(playerData.DashCooldown);
             _DashCooldownTimer = 0;
@@ -178,11 +178,13 @@ public class PlayerMovement : MonoBehaviour
         {
             SoundManager.Instance.PlaySFX("PlayerDash", this.gameObject);
         }
+        _animator.SetBool("Is_Dashing" , true);
         _isDashing = true;
         _meshTrail.HandleTrailActivation();
         _currentSpeed = playerData.Dash + playerData.Speed;
         playerData.SetInv(true);
         yield return new WaitForSeconds(0.1f);
+        _animator.SetBool("Is_Dashing", false);
         playerData.SetInv(false);
         _currentSpeed = playerData.Speed;
         _isDashing = false;
