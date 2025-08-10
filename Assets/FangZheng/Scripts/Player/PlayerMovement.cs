@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _isMovementLocked = false;
     private bool _isDashing = false;
 
+    private Vector3 OriginalInput;
+
     public static PlayerMovement Instance { get; private set; }
 
     // Public property to check movement state
@@ -164,13 +166,15 @@ public class PlayerMovement : MonoBehaviour
 
             if (direction != Vector3.zero)
             {
+                OriginalInput = direction;
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-                _body.rotation = Quaternion.RotateTowards(_body.rotation, targetRotation, _turnspeed * Time.deltaTime);
+                _body.rotation = Quaternion.Slerp(_body.rotation, targetRotation, 10 * Time.deltaTime);
+
             }
         }
         else if (_mousePos != Vector3.zero )
         {
-            LookAtMousePos();
+            //LookAtMousePos();
         }
     }
 
