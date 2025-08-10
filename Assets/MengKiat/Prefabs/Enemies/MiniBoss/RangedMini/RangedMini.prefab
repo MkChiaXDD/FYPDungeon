@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 18.75}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: 5, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &9051519415039721598
@@ -249,7 +249,7 @@ Transform:
   - {fileID: 4940935121397922208}
   - {fileID: 2040627581633579519}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &929040658841641266
 MeshFilter:
@@ -379,6 +379,7 @@ MonoBehaviour:
   cryoResistance: 1
   stunDuration: 1
   shootingPoint: {fileID: 6170922056043243201}
+  bossAnim: {fileID: 4326091675798015865}
   roundForScaling: 2
   bulletPrefab: {fileID: 8003819692001746121, guid: 2c2338a92634b10499070cb4173b5c25,
     type: 3}
@@ -772,8 +773,18 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2618978479436070674}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be713388e06399943b69321c732a5623,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4326091675798015865}
   m_SourcePrefab: {fileID: 100100000, guid: be713388e06399943b69321c732a5623, type: 3}
+--- !u!95 &3479125035574656363 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: be713388e06399943b69321c732a5623,
+    type: 3}
+  m_PrefabInstance: {fileID: 6999368292009296122}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4867186237894298578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2497659925480917800, guid: be713388e06399943b69321c732a5623,
@@ -786,3 +797,22 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6999368292009296122}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7918359149624556971 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be713388e06399943b69321c732a5623,
+    type: 3}
+  m_PrefabInstance: {fileID: 6999368292009296122}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4326091675798015865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7918359149624556971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3eedd196313f2e4fb1c3aa527b4e997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 3479125035574656363}

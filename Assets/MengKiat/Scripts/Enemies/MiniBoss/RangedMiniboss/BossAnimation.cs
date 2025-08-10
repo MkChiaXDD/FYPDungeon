@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class BossAnimation : MonoBehaviour
 {
-    [SerializeField] Animator _animator;
+    [SerializeField] public Animator _animator;
 
     public void PlaySpinAttack()
     {
         _animator.SetTrigger("TurnAttack");
+    }
+
+    public void PlayShootAttack()
+    {
+        _animator.SetTrigger("Shoot");
     }
 }
