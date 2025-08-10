@@ -37,6 +37,6 @@ public class Weapon : MonoBehaviour
             _Tutorial.IfPlayerPerformAction("SpecialSkill");
         }
         spellCastList.spell?.Attack(spellCastList);
-        Debug.Log("Casted " +  spellCastList.spell.name);
+        //Debug.Log("Casted " +  spellCastList.spell.name);
     }
 }

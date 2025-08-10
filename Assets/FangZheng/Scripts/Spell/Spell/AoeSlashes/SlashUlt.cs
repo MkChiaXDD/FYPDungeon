@@ -8,6 +8,7 @@ public class SlashUlt : Projectile
     [SerializeField] private SpellHitbox Hitbox;
     [SerializeField] private ParticleSystem ParticleSystem;
 
+
     private void Start()
     {
         if (Hitbox == null)
@@ -31,11 +32,10 @@ public class SlashUlt : Projectile
 
         this.GetComponent<SphereCollider>().radius = Radius;
 
-        //if (ParticleSystem != null)
-        //{
-        //    var shape = GetComponent<ParticleSystem>().shape;
-        //    shape.radius = Radius;
-        //}
+        if (ParticleSystem != null)
+        {
+            ParticleSystem.gameObject.transform.localScale = Vector3.one * Radius;
+        }
 
         //transform.localScale = Vector3.one * Radius * 2;
         Destroy(this.gameObject, duration);
