@@ -249,7 +249,7 @@ Transform:
   - {fileID: 4940935121397922208}
   - {fileID: 2040627581633579519}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &929040658841641266
 MeshFilter:
@@ -279,7 +279,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6d6e1fbb2a4f76e43aafaa5c07ae9021, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -380,7 +380,7 @@ MonoBehaviour:
   stunDuration: 1
   shootingPoint: {fileID: 6170922056043243201}
   bossAnim: {fileID: 4326091675798015865}
-  roundForScaling: 2
+  roundForScaling: 1
   bulletPrefab: {fileID: 8003819692001746121, guid: 2c2338a92634b10499070cb4173b5c25,
     type: 3}
   fireOffset: 1
@@ -403,7 +403,7 @@ MonoBehaviour:
   meleeDamage: 10
   repositionDuration: 1.5
   repositionRadius: 20
-  dodgeChance: 0.3
+  dodgeChance: 0.2
   dodgeRadius: 6
   rageRepositionDuration: 1.5
   repositionSpeedMultiplier: 1.5
@@ -765,7 +765,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 784562ba8c3531a4bac9ee588621c7ff, type: 2}
+      objectReference: {fileID: 2100000, guid: ba72742a1cc254b4da9010583fdbf770, type: 2}
     - target: {fileID: 5866666021909216657, guid: be713388e06399943b69321c732a5623,
         type: 3}
       propertyPath: m_Controller
