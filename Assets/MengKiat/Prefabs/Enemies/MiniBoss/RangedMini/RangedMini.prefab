@@ -249,7 +249,7 @@ Transform:
   - {fileID: 4940935121397922208}
   - {fileID: 2040627581633579519}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &929040658841641266
 MeshFilter:
@@ -761,6 +761,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: boss_idleboss_idle_animation
       objectReference: {fileID: 0}
+    - target: {fileID: 3727956284482021115, guid: be713388e06399943b69321c732a5623,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 784562ba8c3531a4bac9ee588621c7ff, type: 2}
     - target: {fileID: 5866666021909216657, guid: be713388e06399943b69321c732a5623,
         type: 3}
       propertyPath: m_Controller
