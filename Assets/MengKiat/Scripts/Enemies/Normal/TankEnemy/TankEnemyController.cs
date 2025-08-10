@@ -41,11 +41,12 @@ public class TankEnemyController : Enemy
     [SerializeField] private float chaseTimeBeforeSearchingBomber = 5f;
     private float chaseTimer = 0f;
 
-
     private bool hasSeenPlayer = false;
 
     private enum State { Idle, Chase, Attack, RushToBomber }
     private State state;
+
+    [SerializeField] private TankAnim tankanim;
 
     protected override void Awake()
     {
@@ -213,6 +214,8 @@ public class TankEnemyController : Enemy
 
     private void Attack()
     {
+        tankanim.PlayAttackAnim();
+
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)

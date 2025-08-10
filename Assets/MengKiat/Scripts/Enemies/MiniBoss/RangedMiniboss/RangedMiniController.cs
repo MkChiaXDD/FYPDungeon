@@ -35,6 +35,7 @@ public class RangedMiniController : Enemy
     [SerializeField] private float meleeKnockbackForce = 20f;
     [SerializeField] private float knockbackDuration = 1f;
     [SerializeField] private int meleeDamage = 30;
+    private bool meleeShotLock = false;
 
     [Header("Reposition Settings")]
     [SerializeField] private float repositionDuration = 3f;
@@ -124,7 +125,7 @@ public class RangedMiniController : Enemy
                 break;
 
             case State.Attack:
-                if (attackTimer >= attackCooldown)
+                if (attackTimer >= attackCooldown && !meleeShotLock)
                 {
                     Shoot();
 
@@ -255,6 +256,8 @@ public class RangedMiniController : Enemy
         bossAnim.PlaySpinAttack();
 
         StartCoroutine(SpinAttack());
+
+        StartCoroutine(LockShootingAfterMelee());
     }
 
     private IEnumerator SpinAttack()
@@ -273,6 +276,13 @@ public class RangedMiniController : Enemy
         {
             dmg.TakeDamage(meleeDamage);
         }
+    }
+
+    private IEnumerator LockShootingAfterMelee()
+    {
+        meleeShotLock = true;
+        yield return new WaitForSeconds(1f);
+        meleeShotLock = false;
     }
 
     private IEnumerator lowDrag(Rigidbody playerRb, float duration, Vector3 dir)
@@ -317,6 +327,15 @@ public class RangedMiniController : Enemy
 
     private void Shoot()
     {
+        bossAnim.PlayShootAttack();
+
+        StartCoroutine(ShootAttack());
+    }
+
+    private IEnumerator ShootAttack()
+    {
+        yield return new WaitForSeconds(0.5f);
+
         float healthPercent = currentHealth / maxHealth;
 
         if (currentRound >= roundForScaling)
