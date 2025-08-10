@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -206,6 +207,7 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
 
+        SetWeaponAnim();
         HandleBlocking();
         HandleLockOn();
         // Update recovery timer
@@ -629,6 +631,23 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    private void SetWeaponAnim()
+    {
+        if (_currentWeapon == null)
+        {
+            _animator.SetInteger("Weapon", 0);
+            return;
+        }
+
+        if (_currentWeapon.weaponData.weaponType == WeaponType.Sword)
+        {
+            _animator.SetInteger("Weapon" , 1);
+        }
+        else if (_currentWeapon.weaponData.weaponType == WeaponType.Hammer)
+        {
+            _animator.SetInteger("Weapon", 2);
+        }
+    }
     private void ClearCurrentWeapon()
     {
         if (_equippedWeapon != null)
@@ -848,6 +867,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void EnableComboWindow(float animationDuration)
     {
+        _animator.SetBool("Combo", false);
         float windowStartTime = animationDuration * (_comboWindowPercentage / 100f);
         StartCoroutine(OpenComboWindow(windowStartTime));
     }
