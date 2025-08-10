@@ -15,6 +15,7 @@ public class PlayerHitEffect : MonoBehaviour
     [SerializeField] private float hitduration;
     [SerializeField] private Color HitColor = Color.red;
     [SerializeField] private float ColorSpeed = 2.0f;
+    [SerializeField] private bool fixthenactive = false;
     private bool hitActive = false;
 
     public void Start()
@@ -57,7 +58,10 @@ public class PlayerHitEffect : MonoBehaviour
 
     public void TriggerHit()
     {
-        StartCoroutine(HitEffectDuration());
+        if (fixthenactive == true)
+        {
+            StartCoroutine(HitEffectDuration());
+        }
     }
 
     public IEnumerator HitEffectDuration()

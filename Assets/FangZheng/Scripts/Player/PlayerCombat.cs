@@ -293,6 +293,7 @@ public class PlayerCombat : MonoBehaviour
     private void HandleAttacks()
     {
         if (_isInRecovery) return; // Prevent charging during recovery
+
         HandleChargedAttack();
         HandleSpecialAttack();
     }
@@ -309,7 +310,7 @@ public class PlayerCombat : MonoBehaviour
         // Start charging heavy attack
         if (Input.GetMouseButtonDown(0))
         {
-
+            _playerMovement.LockMouse();
             if (Time.time > _lastAttackTime + _currentAttackCooldown)
             {
                 if (_currentWeapon)
@@ -357,7 +358,7 @@ public class PlayerCombat : MonoBehaviour
                 Debug.Log("Basic is on cooldown!");
                 return;
             }
-
+            _playerMovement.LockMouse();
 
             _currentWeapon.Cast();
             ApplyDurabilityCost(23);
@@ -842,6 +843,7 @@ public class PlayerCombat : MonoBehaviour
         _animator.SetBool("Combo", false);
         _canComboContinue = false;
         _isInComboWindow = false;
+        _playerMovement.UnLockMouse();
     }
 
     public void EnableComboWindow(float animationDuration)

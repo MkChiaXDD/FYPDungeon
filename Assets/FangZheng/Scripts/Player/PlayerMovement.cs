@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool _IsStun = false;
     [SerializeField] private float _DashCooldownTimer = 0;
     [SerializeField] private Animator _animator;
+    [SerializeField] private float MoveDirection;
+    [SerializeField] private bool MouseLock = false;
 
     [Space, Header("PlayerData")]
     [SerializeField] private PlayerData playerData;
@@ -83,6 +85,11 @@ public class PlayerMovement : MonoBehaviour
         if (_isMovementLocked) return;
         Dash();
 
+        if (MouseLock == true)
+        {
+            LookAtMousePos();
+        }
+
         if (_IsStun)
         {
             Debug.Log(_rb.velocity);
@@ -91,7 +98,15 @@ public class PlayerMovement : MonoBehaviour
         _DashCooldownTimer += Time.deltaTime;
     }
 
-    
+    public void LockMouse()
+    {
+        MouseLock = true;
+    }
+
+    public void UnLockMouse()
+    {
+        MouseLock = false;
+    }
 
     private void FixedUpdate()
     {
@@ -121,10 +136,49 @@ public class PlayerMovement : MonoBehaviour
 
     void look()
     {
-        if (_input != Vector3.zero || _mousePos != Vector3.zero)
+        //if (_input != Vector3.zero || _mousePos != Vector3.zero)
+        //{
+        //    Vector3 flatMousePos = new Vector3(_mousePos.x, _body.position.y, _mousePos.z);
+
+        //    Vector3 direction = (flatMousePos - _body.position).normalized;
+
+        //    if (_input != Vector3.zero)
+        //    {
+        //        Debug.Log("hi");
+
+        //        //_body.rotation 
+        //    }
+
+        //    if (direction != Vector3.zero)
+        //    {
+        //        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+        //        _body.rotation = Quaternion.RotateTowards(_body.rotation, targetRotation, _turnspeed * Time.deltaTime);
+        //    }
+        //}
+
+
+        if (_input != Vector3.zero)
+        {
+
+            Vector3 direction = _input.ToIso().normalized;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+                _body.rotation = Quaternion.RotateTowards(_body.rotation, targetRotation, _turnspeed * Time.deltaTime);
+            }
+        }
+        else if (_mousePos != Vector3.zero )
+        {
+            LookAtMousePos();
+        }
+    }
+
+    public void LookAtMousePos()
+    {
+        if (_mousePos != Vector3.zero)
         {
             Vector3 flatMousePos = new Vector3(_mousePos.x, _body.position.y, _mousePos.z);
-
             Vector3 direction = (flatMousePos - _body.position).normalized;
 
             if (direction != Vector3.zero)
