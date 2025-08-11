@@ -6,34 +6,63 @@ public class RangedMiniBullet : MonoBehaviour
     private float timer = 0f;
     public float lifetime = 5f;
     public float damage;
-    public Vector3 direction;
-    public GameObject minibulletPrefab; // Renamed for clarity
+    private Vector3 direction;
+    public GameObject minibulletPrefab;
     private int splitAmount;
-    public float minibulletSpeed = 10f; // Separate speed for minibullets
+    public float minibulletSpeed = 10f;
 
-    public void Initialize(Vector3 dir, int splitAmount, float _speed, float _lifeTime, float _damage)
+    private Vector3 lockOnPosition;
+    private bool reachedTarget = false;
+    private float splitDistanceThreshold = 0.2f; // How close before splitting
+
+    // Updated Initialize with lockOnPosition
+    public void Initialize(Vector3 dir, int splitAmount, float _speed, float _lifeTime, float _damage, Vector3 targetPosition)
     {
         speed = _speed;
         lifetime = _lifeTime;
         damage = _damage;
-        dir = new Vector3(dir.x, dir.y, dir.z);
-        dir.y -= 0.2f;
-        direction = dir.normalized;
         this.splitAmount = splitAmount;
 
-        // Make bullet face its direction
+        lockOnPosition = targetPosition;
+
+        // Calculate initial direction toward lockOnPosition
+        direction = (lockOnPosition - transform.position).normalized;
+
+        // Optional: slightly adjust direction's y if needed (your original code had dir.y -= 0.2f)
+        direction = direction.normalized;
+
+        // Face the initial direction
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
     }
 
     void Update()
     {
-        transform.position += direction * speed * Time.deltaTime;
+        if (reachedTarget)
+        {
+            // Already reached target, no movement, wait for destruction or other logic
+            return;
+        }
+
+        // Move toward the lockOnPosition
+        Vector3 move = direction * speed * Time.deltaTime;
+        transform.position += move;
+
+        // Check distance to target position
+        float dist = Vector3.Distance(transform.position, lockOnPosition);
+        if (dist <= splitDistanceThreshold)
+        {
+            reachedTarget = true;
+            SplitAttack();
+            return; // Stop further update
+        }
+
         timer += Time.deltaTime;
 
         if (timer >= lifetime)
         {
-            if (splitAmount > 0) SplitAttack();
+            // If lifetime expires before reaching target, split anyway or just destroy
+            SplitAttack();
         }
     }
 
@@ -57,7 +86,6 @@ public class RangedMiniBullet : MonoBehaviour
     public void BounceBack()
     {
         direction = new Vector3(-direction.x, direction.y, -direction.z);
-        // Rotate to face new direction
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
     }
@@ -71,19 +99,11 @@ public class RangedMiniBullet : MonoBehaviour
 
         for (int i = 0; i < splitAmount; i++)
         {
-            // Calculate direction for each minibullet
             float angle = angleStep * i;
             Quaternion rot = Quaternion.AngleAxis(angle, Vector3.up);
             Vector3 minibulletDir = rot * startDirection;
 
-            // Create and initialize minibullet
-            GameObject minibullet = Instantiate(
-                minibulletPrefab,
-                transform.position,
-                Quaternion.LookRotation(minibulletDir)
-            );
-
-            Debug.Log("Instantiated bullet");
+            GameObject minibullet = Instantiate(minibulletPrefab, transform.position, Quaternion.LookRotation(minibulletDir));
 
             MiniBullet controller = minibullet.GetComponent<MiniBullet>();
             controller.Initialize(minibulletDir, minibulletSpeed, damage / 3);
