@@ -270,6 +270,8 @@ public class PlayerCombat : MonoBehaviour
                 OnAction?.Invoke("HeavyAttack");
             }
             Uncharge?.Invoke();
+
+            //Remove and put at aniamtion event
             ExecuteHeavyAttack(damageMultiplier, aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
@@ -285,6 +287,7 @@ public class PlayerCombat : MonoBehaviour
                 OnAction?.Invoke("NormalAttack");
             }
 
+            //Remove and put at aniamtion event
             ExecuteLightAttack();
             StartCoroutine(LightAttackMovement());
         }
