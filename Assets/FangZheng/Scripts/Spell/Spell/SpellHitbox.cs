@@ -46,6 +46,7 @@ public class SpellHitbox : MonoBehaviour
     
     void OnTriggerStay(Collider other)
     {
+
         if (other.GetComponent<Enemy>() != null)
         {
             GameObject enemy = other.gameObject;
@@ -54,7 +55,10 @@ public class SpellHitbox : MonoBehaviour
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     EnemyHitAlready.Add(enemy, Time.time);
-                    damageable.TakeElementalDamage(Attack.dmg,ElementType.Pyro);
+                    if (attackElement != ElementType.None) {
+                        damageable.TakeElementalDamage(Attack.dmg, ElementType.Pyro);
+                    }
+                    damageable.TakeDamage(Attack.dmg);
                     ApplyKnockBack(other);
                 }
             }

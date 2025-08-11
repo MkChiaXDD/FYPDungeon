@@ -37,6 +37,7 @@ public class Smash : Projectile
         Tornado_created = Instantiate(Tornado.gameObject, new Vector3(Player.transform.position.x, 0, Player.transform.position.z), Quaternion.identity);
         Tornado_created.GetComponent<Tornado>().PullRadius = Radius;
         Tornado_created.transform.localScale = new Vector3(Radius * 10 , Radius / 2 , Radius * 10);
+        Tornado_created.GetComponentInChildren<ParticleSystem>().gameObject.transform.localScale = new Vector3(Radius , 1 , Radius );
         TorandoActivate = true;
         hasSmashed = false;
     }
@@ -48,20 +49,22 @@ public class Smash : Projectile
         hasSmashed = true;
         Player.GetComponent<PlayerMovement>().StunPlayer(SmashDelay);
 
+        if (Tornado_created != null)
+        {
+            Destroy(Tornado_created.gameObject);
+        }
+
         PerformSmash();
 
+        Player.GetComponent<PlayerData>().SetInv(true);
         yield return new WaitForSeconds(SmashDelay);
-
+        Player.GetComponent<PlayerData>().SetInv(false);
 
         if (Hitbox != null)
         {
             Destroy(Hitbox.gameObject);
         }
 
-        if (Tornado_created != null)
-        {
-            Destroy(Tornado_created.gameObject);
-        }
 
         Destroy(gameObject);
 

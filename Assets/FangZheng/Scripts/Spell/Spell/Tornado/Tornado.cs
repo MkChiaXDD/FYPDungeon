@@ -42,7 +42,7 @@ public class Tornado : Projectile
                 Rigidbody rb = StuffToPull.GetComponent<Rigidbody>();
                 float PercentageOfForce = Mathf.Min(PullRadius / (DirectionOfPull.magnitude + PullRadius), 1);
                 rb.AddForce(DirectionOfPull * PullForce * PercentageOfForce * Time.deltaTime, ForceMode.VelocityChange);
-
+                
                 Vector3 RotateDirection = Vector3.Cross(DirectionOfPull, Vector3.up).normalized;
                 rb.AddForce(RotateDirection * OrbitForce * Time.deltaTime , ForceMode.VelocityChange);
             }
