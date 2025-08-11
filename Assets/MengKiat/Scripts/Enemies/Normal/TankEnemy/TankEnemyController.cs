@@ -199,7 +199,7 @@ public class TankEnemyController : Enemy
 
         // Dynamic speed adjustment based on distance
         float distToPlayer = Vector3.Distance(transform.position, player.position);
-        if (distToPlayer > data.detectionRange * 0.7f)
+        if (distToPlayer > data.detectionRange * 0.7f && !isCarrying)
         {
             MultiplySpeed(2f); // Chase faster when far away
         }
@@ -310,9 +310,20 @@ public class TankEnemyController : Enemy
             hasThrown = true;
             smoothing = originalSmoothing;
             ResetSpeed();
+
+            // Stop tank movement just before throwing
+            StopMovement();
+
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
         }
+
     }
+
+    private void StopMovement()
+    {
+        CurrentMoveSpeed = 0f; // Assuming CurrentMoveSpeed controls translation
+    }
+
 
     private BomberEnemyController FindClosestBomber()
     {
@@ -356,8 +367,13 @@ public class TankEnemyController : Enemy
 
         carriedBomber = null;
         isCarrying = false;
+
+        // Restore tank's original speed after throw
+        ResetSpeed();
+
         StartCoroutine(ThrownTimer());
     }
+
 
     private IEnumerator ThrownTimer()
     {
