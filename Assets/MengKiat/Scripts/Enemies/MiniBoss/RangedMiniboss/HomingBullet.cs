@@ -14,6 +14,9 @@ public class HomingBullet : MonoBehaviour
     private Rigidbody rb;
     private float timer = 0f;
 
+    private bool isYLocked = false; // Add this at class level
+    private float lockedY = 0f; // Store the locked Y height
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -31,27 +34,72 @@ public class HomingBullet : MonoBehaviour
     {
         if (target == null) return;
 
-        // Keep the bullet's Y position fixed
-        Vector3 targetPos = target.position;
-        targetPos.y = transform.position.y;
+        float bulletY = transform.position.y;
+        float targetY = target.position.y;
+        float yThreshold = 0.5f;
 
-        // Steering behavior (XZ only)
+        if (!isYLocked && Mathf.Abs(bulletY - targetY) <= yThreshold)
+        {
+            isYLocked = true;
+            lockedY = bulletY; // Store locked height
+        }
+
+        Vector3 targetPos;
+
+        if (isYLocked)
+        {
+            targetPos = new Vector3(target.position.x, lockedY, target.position.z);
+        }
+        else
+        {
+            targetPos = target.position;
+        }
+
         Vector3 desiredVelocity = (targetPos - transform.position).normalized * speed;
         Vector3 steering = desiredVelocity - rb.velocity;
-        steering.y = 0f; // ignore vertical steering
+
+        if (isYLocked)
+        {
+            steering.y = 0f;
+        }
+
         steering = Vector3.ClampMagnitude(steering, homingForce);
 
         Vector3 newVelocity = rb.velocity + steering * Time.fixedDeltaTime;
-        newVelocity.y = 0f; // lock Y movement
+
+        if (isYLocked)
+        {
+            newVelocity.y = 0f; // Force vertical velocity zero to prevent downward movement
+        }
+
         rb.velocity = Vector3.ClampMagnitude(newVelocity, speed);
 
         if (rb.velocity.sqrMagnitude > 0.001f)
-            transform.forward = rb.velocity.normalized;
+        {
+            Vector3 forwardDir = rb.velocity.normalized;
+
+            if (isYLocked)
+            {
+                forwardDir.y = 0f;
+                forwardDir.Normalize();
+            }
+
+            transform.forward = forwardDir;
+        }
+
+        if (isYLocked)
+        {
+            // Lock Y position exactly
+            Vector3 pos = transform.position;
+            pos.y = lockedY;
+            transform.position = pos;
+        }
 
         timer += Time.fixedDeltaTime;
         if (timer >= lifetime)
             Destroy(gameObject);
     }
+
 
 
     private void OnTriggerEnter(Collider other)
