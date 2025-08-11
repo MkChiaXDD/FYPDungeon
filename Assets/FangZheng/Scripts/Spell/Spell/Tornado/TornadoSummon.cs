@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TornadoSummon : MonoBehaviour
+public class TornadoSummon : Spell
 {
     // Start is called before the first frame update
     void Start()
