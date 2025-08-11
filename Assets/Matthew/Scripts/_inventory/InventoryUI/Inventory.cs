@@ -88,6 +88,12 @@ public class Inventory : MonoBehaviour
             RemoveItemAtSlot(itemSlot, 1); 
         }
     }
+
+    public int GetItemDurability()
+    {
+        return items[equippedSlotNum].Durability;
+    }
+
     private void SelectSlot()
     {
         // --- Number key selection ---

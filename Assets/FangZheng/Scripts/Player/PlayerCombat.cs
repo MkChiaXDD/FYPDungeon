@@ -361,9 +361,10 @@ public class PlayerCombat : MonoBehaviour
                 return;
             }
 
-            if (_currentWeapon.CurrDurability == _currentWeapon.weaponData.MaxDurability)
+            if (_inventory.GetItemDurability() == _currentWeapon.weaponData.MaxDurability)
             {
                 
+                Debug.Log(_currentWeapon.CurrDurability + " " + _currentWeapon.weaponData.MaxDurability);
 
                 _playerMovement.LockMouse();
 
