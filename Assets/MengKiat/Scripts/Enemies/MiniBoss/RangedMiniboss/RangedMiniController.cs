@@ -456,7 +456,7 @@ public class RangedMiniController : Enemy
 
     private IEnumerator DeathCooldown()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
 
         Destroy(gameObject);
     }
