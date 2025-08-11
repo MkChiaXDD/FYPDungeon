@@ -22,6 +22,8 @@ public class RangedEnemyController : Enemy
     [SerializeField] float tiltReturnSpeed = 5f;
     [SerializeField] float velocityThreshold = 0.1f;
 
+    [SerializeField] private Transform shootingPoint;
+
     float attackTimer;
     Vector3 spawnPosition;
     Vector3 repositionTarget;
@@ -179,14 +181,12 @@ public class RangedEnemyController : Enemy
     {
         for (int i = 0; i < amtToShoot; i++)
         {
-            Vector3 spawnPos = transform.position + transform.forward * fireOffset;
-            var go = Instantiate(bulletPrefab, spawnPos, transform.rotation);
+            var go = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
             var b = go.GetComponent<EnemyBullet>();
 
             if (b != null)
             {
                 Vector3 dir = player.position - transform.position;
-                dir = new Vector3(dir.x, 0, dir.z);
                 b.Initialize(dir, 10, data.damage);
             }
 
