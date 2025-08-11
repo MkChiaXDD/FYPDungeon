@@ -48,6 +48,8 @@ public class TankEnemyController : Enemy
 
     [SerializeField] private TankAnim tankanim;
 
+    private bool isMoving = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -98,11 +100,17 @@ public class TankEnemyController : Enemy
             case State.Idle:
                 chaseTimer = 0f;
                 attackTimer = attackCooldown;
+                if (isMoving)
+                {
+                    isMoving = false;
+                    tankanim.PlayWalkingAnimation(isMoving, false);
+                }
                 ResetSpeed();
                 break;
 
             case State.Chase:
                 attackTimer = attackCooldown;
+
                 ChaseWithAvoidance();
 
                 chaseTimer += Time.deltaTime;
@@ -130,6 +138,11 @@ public class TankEnemyController : Enemy
                 chaseTimer = 0f;
                 FacePlayer();
                 attackTimer -= Time.deltaTime;
+                if (isMoving)
+                {
+                    isMoving = false;
+                    tankanim.PlayWalkingAnimation(isMoving, false);
+                }
                 if (attackTimer <= 0f)
                 {
                     Attack();
@@ -202,10 +215,21 @@ public class TankEnemyController : Enemy
         if (distToPlayer > data.detectionRange * 0.7f && !isCarrying)
         {
             MultiplySpeed(2f); // Chase faster when far away
+            if (!isMoving)
+            {
+                isMoving = true;
+                tankanim.PlayWalkingAnimation(isMoving, true);
+            }
         }
         else
         {
             MultiplySpeed(0.75f); // Slow down when getting close
+
+            if (!isMoving)
+            {
+                isMoving = true;
+                tankanim.PlayWalkingAnimation(isMoving, false);
+            }
         }
 
         transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
@@ -241,6 +265,11 @@ public class TankEnemyController : Enemy
 
         smoothing = 15f;
         MultiplySpeed(rushToBomberSpeedMultiplier);
+        if (!isMoving)
+        {
+            isMoving = true;
+            tankanim.PlayWalkingAnimation(isMoving, true);
+        }
 
         Transform bomberPos = chosenBomber.transform;
 
@@ -307,6 +336,7 @@ public class TankEnemyController : Enemy
             }
 
             isCarrying = true;
+            tankanim.PlayCarryBomber();
             hasThrown = true;
             smoothing = originalSmoothing;
             ResetSpeed();
@@ -350,10 +380,12 @@ public class TankEnemyController : Enemy
     private IEnumerator ThrowBomberAfterDelay(float delay)
     {
         carriedBomber.isPickedup = true;
+
         yield return new WaitForSeconds(delay);
 
         if (carriedBomber == null) yield break;
 
+        tankanim.PlayThrowBomber();
         carriedBomber.transform.SetParent(null);
 
         Rigidbody bomberRb = carriedBomber.GetComponent<Rigidbody>();

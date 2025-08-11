@@ -10,4 +10,20 @@ public class TankAnim : MonoBehaviour
     {
         _anim.SetTrigger("Attack");
     }
+
+    public void PlayWalkingAnimation(bool isWalking, bool fasterWalk)
+    {
+        _anim.SetBool("IsChasing", isWalking);
+        _anim.SetBool("IsFasterWalk", fasterWalk);
+    }
+
+    public void PlayCarryBomber()
+    {
+        _anim.SetTrigger("CarryBomber");
+    }
+
+    public void PlayThrowBomber()
+    {
+        _anim.SetTrigger("ThrowBomber");
+    }
 }
