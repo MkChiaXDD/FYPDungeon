@@ -364,6 +364,7 @@ public class PlayerCombat : MonoBehaviour
 
             _currentWeapon.Cast();
             ApplyDurabilityCost(23);
+            _playerMovement.UnLockMouse();
             ultimateCooldown.StartCooldown(_ultimateAttackCooldown);
         }
     }

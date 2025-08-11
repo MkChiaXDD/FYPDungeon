@@ -32,5 +32,10 @@ public class NormalHammerAttack : BaseAttackScript
 
     }
 
+    public override void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
+    {
+        base.ExecuteHeavyAttack(center, damageMultiplier, radius);
+    }
+
 
 }
