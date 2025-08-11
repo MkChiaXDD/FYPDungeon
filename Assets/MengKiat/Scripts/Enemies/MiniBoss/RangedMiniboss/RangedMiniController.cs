@@ -145,10 +145,7 @@ public class RangedMiniController : Enemy
                     }
                     else
                     {
-                        if (Random.value < 0.6f)
-                            MoveNearToPlayer();
-                        else
-                            ChooseRandomRepositionTarget();
+                        ChooseRandomRepositionTarget();
                         repositionTimer = 0f;
                         state = State.Reposition;
                     }
@@ -353,15 +350,13 @@ public class RangedMiniController : Enemy
         }
 
         Vector3 shootDir = (player.position - transform.position).normalized;
-        Vector3 lockOnPosition = player.position;  // capture exact position
 
         var go = Instantiate(bulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt, lockOnPosition);
+            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt);
         }
     }
-
 
     private void ShootHoming()
     {
@@ -407,30 +402,6 @@ public class RangedMiniController : Enemy
 
         // Fallback if all attempts fail
         repositionTarget = transform.position + transform.right * 2f;
-    }
-
-    private void MoveNearToPlayer()
-    {
-        // Attempts to find a random point near the player within a smaller radius
-        float nearRadius = 3f; // closer radius, tweak as needed
-
-        for (int i = 0; i < 10; i++) // Try up to 10 times
-        {
-            Vector2 offset = Random.insideUnitCircle * nearRadius;
-            Vector3 potentialTarget = player.position + new Vector3(offset.x, 0f, offset.y);
-
-            // Check if position is not inside an obstacle using OverlapCapsule (same as your reposition)
-            Vector3 point1 = potentialTarget + Vector3.up * (1f - 0.5f);
-            Vector3 point2 = potentialTarget + Vector3.down * (1f - 0.5f);
-            if (!Physics.CheckCapsule(point1, point2, 0.5f, LayerMask.GetMask("Obstacle")))
-            {
-                repositionTarget = potentialTarget;
-                return;
-            }
-        }
-
-        // Fallback: just near player to right
-        repositionTarget = player.position + player.right * 2f;
     }
 
 
