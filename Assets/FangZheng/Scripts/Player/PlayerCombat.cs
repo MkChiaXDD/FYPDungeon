@@ -360,12 +360,23 @@ public class PlayerCombat : MonoBehaviour
                 Debug.Log("Basic is on cooldown!");
                 return;
             }
-            _playerMovement.LockMouse();
 
-            _currentWeapon.Cast();
-            ApplyDurabilityCost(23);
-            _playerMovement.UnLockMouse();
-            ultimateCooldown.StartCooldown(_ultimateAttackCooldown);
+            if (_currentWeapon.CurrDurability == _currentWeapon.weaponData.MaxDurability)
+            {
+                
+
+                _playerMovement.LockMouse();
+
+                _currentWeapon.Cast();
+                ApplyDurabilityCost(23);
+                _playerMovement.UnLockMouse();
+                ultimateCooldown.StartCooldown(_ultimateAttackCooldown);
+            }
+            else
+            {
+                Debug.Log("Need to be max!");
+                return;
+            }
         }
     }
     private void ExecuteLightAttack()
@@ -521,6 +532,10 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_currentWeapon == null) return;
 
+        //if (_currentWeapon.CurrDurability != _currentWeapon.weaponData.MaxDurability)
+        //{
+        //    return;
+        //}
         _inventory.BreakItem(_inventory.equippedSlotNum, durabilityUsage);
     }
 
