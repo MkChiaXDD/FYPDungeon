@@ -122,6 +122,72 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public bool Pickup(ItemInstance itemToPickup, int amount = 1)
+    {
+        // Early return if invalid parameters
+        if (itemToPickup == null || amount <= 0)
+        {
+            Debug.LogWarning("Attempted to pickup invalid item or amount");
+            return false;
+        }
+
+        // Check if inventory can fit the item
+        if (!CanFitItem(itemToPickup, amount))
+        {
+            Debug.Log("Inventory full, cannot pickup item");
+            return false;
+        }
+
+        // Add the item to inventory
+        bool success = manager.AddItem(itemToPickup, amount);
+
+        if (success)
+        {
+            // Update UI
+            manager.UpdateInventory();
+            manager.UpdateAllCount();
+
+            // Play pickup sound if available
+            SoundManager.Instance.PlaySFX("PickupSword");
+        }
+        return success;
+    }
+
+    private bool CanFitItem(ItemInstance item, int amount)
+    {
+        if (item == null) return false;
+
+        int remaining = amount;
+
+        // First check existing stacks
+        for (int i = 0; i < maxItemSlots; i++)
+        {
+            if (items[i] != null && items[i].itemType == item.itemType)
+            {
+                int spaceAvailable = items[i].maxStack - items[i].itemCount;
+                remaining -= Mathf.Min(spaceAvailable, remaining);
+
+                if (remaining <= 0) return true;
+            }
+        }
+
+        // Then check empty slots
+        int emptySlots = 0;
+        for (int i = 0; i < maxItemSlots; i++)
+        {
+            if (items[i] == null)
+            {
+                emptySlots++;
+                // Each empty slot can hold up to item.maxStack
+                remaining -= item.maxStack;
+
+                if (remaining <= 0) return true;
+            }
+        }
+
+        return remaining <= 0;
+    }
+
     private void ChangeEquippedSlot(int slotIndex)
     {
         SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject, false);

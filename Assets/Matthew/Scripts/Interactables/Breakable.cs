@@ -103,6 +103,11 @@ public class Breakable : MonoBehaviour, IDamageable
         if (!damageAffectedLayers.ContainsLayer(hit.gameObject.layer))
             return;
 
+        if (baseDestructionDamage <= 0)
+        {
+            return;//dont deal 0 damage
+        }
+
         if (hit.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.TakeDamage(baseDestructionDamage);
