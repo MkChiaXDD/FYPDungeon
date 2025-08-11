@@ -19,7 +19,7 @@ MonoBehaviour:
 
 '
   itemType: 3
-  MaxDurability: 7
+  MaxDurability: 12
   ItemPrefab: {fileID: 2559788273133413441, guid: f0817f2e29f282a429c13749a8a8bca4,
     type: 3}
   maxStack: 1
@@ -27,15 +27,15 @@ MonoBehaviour:
   spells:
     SpellPrefab: {fileID: 1070103179766844408, guid: 9d706220a66c8c9458fa2902a0130577,
       type: 3}
-    dmg: 10
-    Radius: 10
+    dmg: 15
+    Radius: 12.5
     Size: {x: 0, y: 0, z: 0}
-    Range: 100
+    Range: 40
     spell: {fileID: 0}
     duration: 5
-    AtkPerSec: 0
+    AtkPerSec: 1000
     Speed: 0
-    collisionType: 0
+    collisionType: 1
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
