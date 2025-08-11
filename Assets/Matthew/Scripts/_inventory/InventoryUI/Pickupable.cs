@@ -51,7 +51,7 @@ public class Pickupable : MonoBehaviour
     {
         if (!playerObject.CompareTag(PlayerTag)) return;
 
-        
+
 
         //AudioManager.Instance.PlaySFX("Pickup");
         AddToInventory(FindObjectOfType<InventoryManager>());
@@ -60,7 +60,7 @@ public class Pickupable : MonoBehaviour
         {
             _Tutorial.IfPlayerPerformAction("PickUpItem");
         }
-        Destroy(gameObject);
+
     }
 
     private void TryTimedPickup(GameObject playerObject)
@@ -82,11 +82,14 @@ public class Pickupable : MonoBehaviour
     private void AddToInventory(InventoryManager inventory)
     {
         ItemInstance newDrop = new ItemInstance(dropData);
-        
-        inventory.AddItem(newDrop, dropAmt);
-        inventory.UpdateInventory();
+
+        if (inventory.GetInventory().Pickup(newDrop, newDrop.itemCount))
+        {
+            Destroy(gameObject);
+        }
+        ;
         PickupAlready = true;
-        
+
         GetComponent<Collider>().isTrigger = true;
     }
 }
