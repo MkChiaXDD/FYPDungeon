@@ -488,6 +488,7 @@ public class PlayerCombat : MonoBehaviour
             if (_isInComboWindow)
             {
                 _animator.SetBool("Combo", true);
+                Debug.Log("Combo ");
             }
         }
         else
@@ -869,13 +870,20 @@ public class PlayerCombat : MonoBehaviour
     public void EnableComboWindow(float animationDuration)
     {
         _animator.SetBool("Combo", false);
+        if (_comboWindowPercentage == 0)
+        {
+            StartCoroutine(OpenComboWindow(0));
+            return;
+        }
         float windowStartTime = animationDuration * (_comboWindowPercentage / 100f);
+        
         StartCoroutine(OpenComboWindow(windowStartTime));
     }
 
     private IEnumerator OpenComboWindow(float delay)
     {
         yield return new WaitForSeconds(delay);
+        Debug.Log("Combo Can Start");
         _isInComboWindow = true;
     }
     #endregion
