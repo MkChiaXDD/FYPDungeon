@@ -115,7 +115,7 @@ Transform:
   - {fileID: 3781839464315149503}
   - {fileID: 8848580427830463294}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2952238114786236348
 MeshFilter:
@@ -258,6 +258,7 @@ MonoBehaviour:
   velocityThreshold: 0.1
   shootingPoint: {fileID: 8848580427830463294}
   forgetTime: 10
+  rangeAnim: {fileID: 7618420640878032204}
 --- !u!1 &4188190321821507243
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,17 +677,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2846b43d82b618547bb91657bbd0c2ce,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2846b43d82b618547bb91657bbd0c2ce,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2846b43d82b618547bb91657bbd0c2ce,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2846b43d82b618547bb91657bbd0c2ce,
         type: 3}
@@ -821,6 +822,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6cfe15bedddc84aa425f4aaccd099b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 7105525862915835589}
+--- !u!95 &7105525862915835589 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 2846b43d82b618547bb91657bbd0c2ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 3742899801104300884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &8790043840586916678 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 2846b43d82b618547bb91657bbd0c2ce,

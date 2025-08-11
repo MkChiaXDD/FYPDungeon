@@ -35,6 +35,7 @@ public class RangedEnemyController : Enemy
     private bool hasSeenPlayer = false;
     private float timeSinceLastSeen = 0f;
     [SerializeField] private float forgetTime = 10f;
+    [SerializeField] private RangedAnimation rangeAnim;
 
     protected override void Awake()
     {
@@ -181,6 +182,7 @@ public class RangedEnemyController : Enemy
     {
         for (int i = 0; i < amtToShoot; i++)
         {
+            rangeAnim.PlayAttack();
             var go = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
             var b = go.GetComponent<EnemyBullet>();
 
