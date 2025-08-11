@@ -78,6 +78,8 @@ public class RangedMiniController : Enemy
 
     private int bulletSplitAmt;
     private bool homingReady = false;
+    private bool isDead = false;
+    
 
     void Start()
     {
@@ -92,6 +94,8 @@ public class RangedMiniController : Enemy
 
     void Update()
     {
+        if (isDead) return;
+
         SmoothFacePlayer();
         attackTimer += Time.deltaTime;
         meleeCooldownTimer += Time.deltaTime;
@@ -438,4 +442,24 @@ public class RangedMiniController : Enemy
     {
         return currentRound < roundForScaling && currentHealth / maxHealth < 0.5f;
     }
+
+    public override void Die()
+    {
+        isDead = true;
+        gameObject.GetComponent<BossCheckDeath>().SummonPortal();
+        PopUpManager.ShowPopUp("Boss Killed, Carry on to the next level", 3, Color.green);
+        FindFirstObjectByType<EnemyTracker>().SetCustomText("Proceed to the portal");
+        Destroy(gameObject.GetComponent<BossCheckDeath>());
+        bossAnim.PlayDeadAnim();
+        StartCoroutine(DeathCooldown());
+    }
+
+    private IEnumerator DeathCooldown()
+    {
+        yield return new WaitForSeconds(10f);
+
+        Destroy(gameObject);
+    }
+
+
 }

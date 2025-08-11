@@ -15,4 +15,9 @@ public class BossAnimation : MonoBehaviour
     {
         _animator.SetTrigger("Shoot");
     }
+
+    public void PlayDeadAnim()
+    {
+        _animator.SetTrigger("Die");
+    }
 }

@@ -256,17 +256,15 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void Die()
     {
-        if (gameObject.GetComponent<BossCheckDeath>() != null)
-        {
-            gameObject.GetComponent<BossCheckDeath>().SummonPortal();
-            PopUpManager.ShowPopUp("Boss Killed, Carry on to the next level", 3, Color.green);
-            FindFirstObjectByType<EnemyTracker>().SetCustomText("Proceed to the portal");
-            Destroy(gameObject.GetComponent<BossCheckDeath>());
-        }
-        else
-        {
-            FindFirstObjectByType<EnemyTracker>()?.IncreaseKills();
-        }
+        //if (gameObject.GetComponent<BossCheckDeath>() != null)
+        //{
+        //    gameObject.GetComponent<BossCheckDeath>().SummonPortal();
+        //    PopUpManager.ShowPopUp("Boss Killed, Carry on to the next level", 3, Color.green);
+        //    FindFirstObjectByType<EnemyTracker>().SetCustomText("Proceed to the portal");
+        //    Destroy(gameObject.GetComponent<BossCheckDeath>());
+        //}
+
+        FindFirstObjectByType<EnemyTracker>()?.IncreaseKills();
         StaticScreenShake.Shake(Camera.main, deathParams);
         Destroy(gameObject);
     }
