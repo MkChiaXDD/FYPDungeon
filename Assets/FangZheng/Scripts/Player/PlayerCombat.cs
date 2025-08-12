@@ -387,7 +387,7 @@ public class PlayerCombat : MonoBehaviour
     {
 
         Uncharge?.Invoke();
-        _currentBasicAttack.ExecuteLightAttack();
+        //_currentBasicAttack.ExecuteLightAttack();
         TriggerAttackAnimation("LightAttack");
         PlayAttackSound("BasicAttack");
         Debug.Log("LIGHT ATTACK");
@@ -399,12 +399,13 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void StartLightAttack()
+    public void StartLightAttack()
     {
         _currentBasicAttack.ExecuteLightAttack();
+
     }
 
-    private void StartHeavyAttack()
+    public void StartHeavyAttack()
     {
         _currentBasicAttack.ExecuteLightAttack();
     }

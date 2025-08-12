@@ -34,17 +34,25 @@ public class DirectionTarget : MonoBehaviour
 
         pointer.position = Pos_OnCam;
 
+        float Distance = Vector3.Distance(new Vector3(Player.transform.position.x, 0, Player.transform.position.z), new Vector3(target.transform.position.x, 0, target.transform.position.z));
+        if (Distance <= 15)
+        {
+            pointer.position = Camera.WorldToScreenPoint(target.transform.position);
+            Vector3 origin = pointer.position;
+            pointer.position = new Vector3(pointer.position.x, pointer.position.y + 250, pointer.position.z);
+            Vector3 Direction = Camera.transform.InverseTransformDirection(Camera.WorldToScreenPoint(target.transform.position) - pointer.position);
+            float angle2 = Mathf.Atan2(Direction.z, Direction.x) * Mathf.Rad2Deg;
+            pointer.localEulerAngles = new Vector3(0f, 0f, angle2 + 90);
+            return;
+        }
+
 
         Vector3 Dir = Camera.transform.InverseTransformDirection(target.transform.position - Player.transform.position);
         Dir.y = 0;
         float angle = Mathf.Atan2(Dir.z, Dir.x) * Mathf.Rad2Deg;
         pointer.localEulerAngles = new Vector3(0f, 0f, angle - 90.0f);
 
-        float Distance = Vector3.Distance(new Vector3(Player.transform.position.x, 0, Player.transform.position.z), new Vector3(target.transform.position.x, 0, target.transform.position.z));
-        if (Distance <= 15)
-        {
-            pointer.position = Camera.WorldToScreenPoint(target.transform.position);
-        }
+
     }
 
     private void UpdateTarget()
