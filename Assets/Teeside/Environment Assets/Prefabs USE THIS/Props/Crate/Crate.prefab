@@ -93,6 +93,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 994fdd47efd519f4c9087019265c7c43,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -157,8 +162,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4376475487152208472}
   serializedVersion: 4
-  m_Mass: 15
-  m_Drag: 0
+  m_Mass: 20
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -212,18 +217,18 @@ MonoBehaviour:
   _dropItem:
   - _dropItemPrefab: {fileID: 2717010294961689509, guid: 7cb9ed8834a88894fa0b05fb41a9605b,
       type: 3}
-    _dropRate: 25.4
+    _dropRate: 10.9
   - _dropItemPrefab: {fileID: 8261268390143707118, guid: 398fd5c3979fd224ab623e862b3b7153,
       type: 3}
-    _dropRate: 25.4
+    _dropRate: 10.9
   - _dropItemPrefab: {fileID: 2039829510881157028, guid: 809cd4e1469b56649b258593ddd00ac1,
       type: 3}
-    _dropRate: 7.1
+    _dropRate: 3.8
   - _dropItemPrefab: {fileID: 8261268390143707118, guid: f608f8d8a7351f8419b1f4c3acd0b191,
       type: 3}
-    _dropRate: 7.1
+    _dropRate: 3.8
   - _dropItemPrefab: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
       type: 3}
-    _dropRate: 100
+    _dropRate: 22.3
   _dropHeight: 2
   _throwForce: 15

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1041104652834355843}
   - component: {fileID: -1470763479499148787}
   - component: {fileID: -7634521589802691057}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: VaseVariant1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,8 +72,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7605718803773473866}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 20
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -202,6 +202,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: vase 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b1a40a32e074d214c9146294e63959fc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
