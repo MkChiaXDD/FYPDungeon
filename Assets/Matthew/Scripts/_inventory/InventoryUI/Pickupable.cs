@@ -85,11 +85,11 @@ public class Pickupable : MonoBehaviour
 
         if (inventory.GetInventory().Pickup(newDrop, newDrop.itemCount))
         {
+            Debug.LogWarning("Picked up " + newDrop.name);
             Destroy(gameObject);
-        }
-        ;
-        PickupAlready = true;
+            return;
+        };
+        Debug.LogWarning("Fail to pick up " + newDrop.name);
 
-        GetComponent<Collider>().isTrigger = true;
     }
 }
