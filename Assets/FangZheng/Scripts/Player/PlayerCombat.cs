@@ -1,3 +1,4 @@
+using MaykerStudio.Demo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -409,12 +410,23 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartLightAttack()
     {
+        if (_playerData.elementType == ElementType.Pyro)
+        {
+          
+            _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
+            return;
+        }
         _currentBasicAttack.ExecuteLightAttack();
 
     }
 
     public void StartHeavyAttack()
     {
+        if (_playerData.elementType == ElementType.Pyro)
+        {
+            _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
+            return;
+        }
         _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier, _aoeRadius);
     }
 
@@ -833,7 +845,7 @@ public class PlayerCombat : MonoBehaviour
         Vector3 direction = (targetPos - origin).normalized;
         float distance = Vector3.Distance(origin, targetPos);
 
-        Debug.Log(!Physics.Raycast(origin, direction, distance, _ignoreLayerMask));
+        
 
         return !Physics.Raycast(origin, direction, distance, _ignoreLayerMask);
     }
@@ -951,6 +963,7 @@ public class PlayerCombat : MonoBehaviour
     private void ApplyPlayerStats()
     {
         _parryDuration = _playerData.ParryDuration;
+
     }
     #endregion
 }

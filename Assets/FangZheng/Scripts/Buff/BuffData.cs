@@ -22,6 +22,7 @@ public class BuffData : ScriptableObject
 
     [Header("Dependencies")]
     public List<BuffData> RequiredBuffs;
+    public List<BuffData> CorrespondingBuffs;
     public bool IsHiddenIfLocked = true;
     public bool OneTimeUnlock = false;
 
@@ -40,6 +41,10 @@ public class Effect
         ParryCooldown,
         Health,
 
+
+        Fire_Element,
+        Electric_Element,
+        
         LifeSteal,
         DamageStore,
         CritChance,
@@ -62,6 +67,7 @@ public class Effect
         TimedEffect,
         ChanceBased,
         Ability,
+        
     }
 
     public EffectType Type;

@@ -63,22 +63,56 @@ public abstract class BaseAttackScript : MonoBehaviour
         PlayHeavyAttackVFX(scaledDamage);
     }
 
+    public virtual void ExecuteLightAttack(ElementType attackElement)
+    {
+        Quaternion vfxRotation = transform.rotation * Quaternion.Euler(-90, 0, 0);
+        ParticleSystem LightVfxInstance = Instantiate(lightAttackVFX, transform.position, vfxRotation);
+        LightVfxInstance.Play();
+        Destroy(LightVfxInstance.gameObject, 1f);
+        ApplyAttack(transform.position, attackRadius, damageAmount, attackElement);
+
+        Debug.LogWarning(baseAttackType);
+
+        PlayLightScreenShakeVFX();
+    }
+
+    public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius, ElementType attackElement)
+    {
+        Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
+        ParticleSystem HeavyVfxInstance = Instantiate(heavyAttackVFX, center, rotation);
+        HeavyVfxInstance.Play();
+        Destroy(HeavyVfxInstance.gameObject, 2f);
+
+        int scaledDamage = Mathf.RoundToInt(damageAmount * damageMultiplier);
+        ApplyAttack(center, radius, scaledDamage, attackElement, damageMultiplier);
+        PlayHeavyAttackVFX(scaledDamage);
+    }
+
     protected virtual void ApplyAttack(Vector3 center, float radius, int damage, PhysicalAttackType physicalType, float intensity = 1f)
     {
         Collider[] hits = Physics.OverlapSphere(center, radius);
         foreach (var hit in hits)
         {
-            
-
             if (!hit.CompareTag("Player") && hit.TryGetComponent<IDamageable>(out var target))
             {
-         
                 ProcessTargetHit(hit, target, damage, physicalType, intensity);
-            
-
             }
         }
     }
+
+    protected virtual void ApplyAttack(Vector3 center, float radius, int damage, ElementType elementalType, float intensity = 1f)
+    {
+        Collider[] hits = Physics.OverlapSphere(center, radius);
+        foreach (var hit in hits)
+        {
+            if (!hit.CompareTag("Player") && hit.TryGetComponent<IDamageable>(out var target))
+            {
+                ProcessTargetHit(hit, target, damage, elementalType, intensity);
+            }
+        }
+    }
+
+
 
     protected virtual void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
@@ -103,6 +137,7 @@ public abstract class BaseAttackScript : MonoBehaviour
         else
         {
             ApplyElementalEffects(hit.gameObject);
+            Debug.LogWarning("ultra dog shit");
             target.TakeElementalDamage(damage, elementType);
             ApplyKnockBack(hit.gameObject, knockbackForce * intensity);
             PlayAttackVFX();

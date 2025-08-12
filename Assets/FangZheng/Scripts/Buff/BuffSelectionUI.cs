@@ -219,6 +219,16 @@ public class BuffSelectionUI : MonoBehaviour
                 return false;
             }
         }
+
+
+        foreach (BuffData BuffReq in PlayerData.Instance._BuffObtain)
+        {
+            if (Buff.CorrespondingBuffs.Contains(BuffReq) )
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 

@@ -20,6 +20,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private PlayerHitEffect _HitEffect;
 
 
+    public ElementType elementType;
     public bool _InVin;
     public float _LifeStealAmount;
     public float _DmgStoreAmount;
@@ -33,6 +34,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     public bool _Influence;
     public bool _Link;
     public bool _Perfection;
+    public bool _fire;
 
     public MimicSpawner mimic;
 
@@ -188,6 +190,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         _Influence = false;
         _Link = false;
         _Perfection = false;
+        elementType = ElementType.None;  
     }
 
     public void AddBuff(BuffData buff)
@@ -303,6 +306,10 @@ public class PlayerData : MonoBehaviour, IDamageable
                         break;
                     case Effect.EffectType.MimicCastAmount:
                         MimicCount += (int)effect.ModifierValue;
+                        break;
+                    case Effect.EffectType.Fire_Element:
+                        elementType = ElementType.Pyro;
+                        
                         break;
                 }
             }
