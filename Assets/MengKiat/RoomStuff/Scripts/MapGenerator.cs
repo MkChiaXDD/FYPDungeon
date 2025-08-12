@@ -315,12 +315,27 @@ namespace RMG
         public void NextLevel()
         {
             Debug.Log("Generating new map");
+
+            // 🔹 Destroy everything on the "Pickup" layer
+            int pickupLayer = LayerMask.NameToLayer("pickup");
+            foreach (GameObject obj in FindObjectsOfType<GameObject>())
+            {
+                if (obj.layer == pickupLayer)
+                {
+                    Destroy(obj);
+                }
+            }
+
+            // Existing logic
             FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
             FindFirstObjectByType<DifficultyManager>()?.IncreaseRound();
             Generate();
+
+            // Reset player position
             GameObject player = GameObject.FindWithTag("Player");
             player.transform.position = new Vector3(0, -0.02000004f, 0);
         }
+
 
         public void Restart()
         {
