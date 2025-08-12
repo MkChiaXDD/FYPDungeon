@@ -1329,6 +1329,7 @@ MonoBehaviour:
   _playerCombat: {fileID: 0}
   _TargetingSystem: {fileID: 0}
   _player: {fileID: 0}
+  _TempObj: []
 --- !u!1 &644165383773223571
 GameObject:
   m_ObjectHideFlags: 0
@@ -15351,7 +15352,7 @@ Transform:
   - {fileID: 7876173157557805446}
   - {fileID: 2674042247662967670}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1106217290509717449
 Rigidbody:
@@ -15550,6 +15551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92967eaca333dae428804917e760299a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
   _MaxHealth: 200
   _Dmg: 5
   _Speed: 5
@@ -15599,6 +15601,8 @@ MonoBehaviour:
   _IsStun: 0
   _DashCooldownTimer: 0
   _animator: {fileID: 3469178131035983405}
+  MoveDirection: 0
+  MouseLock: 0
   playerData: {fileID: 2473077083020788162}
   _currentSpeed: 0
   _movementModifierDuration: 0
@@ -15679,6 +15683,7 @@ MonoBehaviour:
   hitduration: 1
   HitColor: {r: 1, g: 0, b: 0, a: 1}
   ColorSpeed: 25
+  fixthenactive: 0
 --- !u!114 &8880941553813833572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26228,7 +26233,7 @@ Transform:
   m_Father: {fileID: 7474373161490837075}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &960360359830108585
+--- !u!1001 &490362115957148206
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -26236,723 +26241,111 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3557140342797005772}
     m_Modifications:
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_RootOrder
       value: -1
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.716917
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 16.678635
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -40.33321
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7588383525794241382, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 7120935978159646945, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: m_Name
       value: TutorialManagerNewest
       objectReference: {fileID: 0}
-    - target: {fileID: 7588383525794241382, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: _player
       value: 
       objectReference: {fileID: 5024980380186809271}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: HelpPrompt
       value: 
       objectReference: {fileID: 263099263536636968}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: TutorialUI
       value: 
       objectReference: {fileID: 6787613406232534780}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: _dialogSystem
       value: 
       objectReference: {fileID: 2720806989610759025}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: _playerCombat
       value: 
       objectReference: {fileID: 8923286265028916287}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: instructionText
       value: 
       objectReference: {fileID: 3737885518320499705}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: _TargetingSystem
       value: 
       objectReference: {fileID: 2150103151586033484}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.size
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[1]._npc
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].HelpStuff
-      value: Press M1 or Left Mouse Button to do a light attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2]._StepName
-      value: NormalAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].HelpStuff
-      value: Break the crate use basic attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3]._StepName
-      value: BreakCrate
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].HelpStuff
-      value: Pick up the weapon dropped from the crate
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4]._StepName
-      value: PickUpWeapon
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].HelpStuff
-      value: Hold M1 or Left Mouse Button until the bar turn colour to do a heavy
-        attack the more the charge the more the dmg
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5]._StepName
-      value: HeavyAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].HelpStuff
-      value: Press Right mouse button with a weapon use a special attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6]._StepName
-      value: SpellCast
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].HelpStuff
-      value: Attack the enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7]._StepName
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].HelpStuff
-      value: Kill the enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8]._StepName
-      value: KillEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].HelpStuff
-      value: Press Tab To Open Map
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9]._StepName
-      value: OpenMap
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].HelpStuff
-      value: Go to portal
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10]._StepName
-      value: ToPortal?
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].HelpStuff
-      value: You got ambushed kill them
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11]._StepName
-      value: Fight
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].HelpStuff
-      value: You have completed the tutorial
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12]._StepName
-      value: Complete
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].HelpStuff
-      value: Use HeavyAttack to break shield
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13]._StepName
-      value: BreakShield
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].HelpStuff
-      value: Nothing
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14]._StepName
-      value: Nothing
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].Instruction
-      value: Press M1 or Left Mouse Button to do a light attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].Instruction
-      value: Break the crate use basic attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].Instruction
-      value: Pick up the weapon dropped from the crate
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].Instruction
-      value: Hold M1 or Left Mouse Button until the bar turn colour to do a heavy
-        attack the more the charge the more the dmg
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].Instruction
-      value: Press Right mouse button with a weapon use a special attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].Instruction
-      value: Attack the enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].Instruction
-      value: Kill the enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].Instruction
-      value: Press Tab To Open Map
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].Instruction
-      value: Go to portal
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].Instruction
-      value: You got ambushed kill them
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].Instruction
-      value: You have completed the tutorial
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].Instruction
-      value: Use HeavyAttack to break shield
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].Instruction
-      value: Nothing
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].TimeForHint
-      value: 100000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[0].Tutorial_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].Tutorial_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].Tutorial_Type
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].Tutorial_Type
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].Tutorial_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].Tutorial_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].Tutorial_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].Tutorial_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].Tutorial_Type
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[0].waypointRadius
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].Tutorial_Type
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].Tutorial_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].Tutorial_Type
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].Tutorial_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].Tutorial_Type
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].waypointRadius
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].waypointRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[0].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].requiredKeys.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[0].ObjToInactive.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].requiredKeys.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[1].ObjToInactive.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].ObjToInactive.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].ObjToInactive.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[0].waypointTarget.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].ObjToActivate.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].ObjToInactive.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].ObjToActivate.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[1].waypointTarget.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].requiredAction.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].requiredAction.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].waypointTarget.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].requiredAction.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].requiredAction.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[2].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].requiredKeys.Array.data[0]
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[3].requiredAction.Array.data[0]
-      value: BreakCrate
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[4].requiredAction.Array.data[0]
-      value: PickUpItem
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[5].requiredAction.Array.data[0]
-      value: HeavyAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[6].requiredAction.Array.data[0]
-      value: SpecialSkill
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[7].requiredAction.Array.data[0]
-      value: AttackEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[8].requiredAction.Array.data[0]
-      value: DeadEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[9].requiredAction.Array.data[0]
-      value: BreakEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[10].requiredAction.Array.data[0]
-      value: BreakEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[11].requiredAction.Array.data[0]
-      value: KillAll
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[12].requiredAction.Array.data[0]
-      value: Compledte
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[13].requiredAction.Array.data[0]
-      value: BreakEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674627504144983192, guid: d58037aa97b925648b61379d5c6fea6a,
-        type: 3}
-      propertyPath: steps.Array.data[14].requiredAction.Array.data[0]
-      value: BreakEnemy
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d58037aa97b925648b61379d5c6fea6a, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 25736e9a31fb7e2478576597aec044b4, type: 3}
 --- !u!4 &5296468877370397262 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4959365654564645863, guid: d58037aa97b925648b61379d5c6fea6a,
+  m_CorrespondingSourceObject: {fileID: 5714729135205275744, guid: 25736e9a31fb7e2478576597aec044b4,
     type: 3}
-  m_PrefabInstance: {fileID: 960360359830108585}
+  m_PrefabInstance: {fileID: 490362115957148206}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4760705225226012600
 PrefabInstance:

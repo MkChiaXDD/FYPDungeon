@@ -215,21 +215,14 @@ public class TankEnemyController : Enemy
         if (distToPlayer > data.detectionRange * 0.7f && !isCarrying)
         {
             MultiplySpeed(2f); // Chase faster when far away
-            if (!isMoving)
-            {
-                isMoving = true;
-                tankanim.PlayWalkingAnimation(isMoving, true);
-            }
+            isMoving = true;
+            tankanim.PlayWalkingAnimation(isMoving, true);
         }
         else
         {
             MultiplySpeed(0.75f); // Slow down when getting close
-
-            if (!isMoving)
-            {
-                isMoving = true;
-                tankanim.PlayWalkingAnimation(isMoving, false);
-            }
+            isMoving = true;
+            tankanim.PlayWalkingAnimation(isMoving, false);
         }
 
         transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;

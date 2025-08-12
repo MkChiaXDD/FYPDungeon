@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -72,7 +73,10 @@ public class TutorialProggresion : MonoBehaviour
     [SerializeField] private DirectionTarget _TargetingSystem;
     [SerializeField] private GameObject _player;
 
-    private List<GameObject> _TempObj = new List<GameObject>();
+    public List<GameObject> _TempObj = new List<GameObject>();
+    public List<GameObject> _previousItems = new List<GameObject>();
+    public List<GameObject> _AddItem = new List<GameObject>();
+    public List<GameObject> _RemoveItem = new List<GameObject>();
 
     public static TutorialProggresion Instance;
 
@@ -294,6 +298,7 @@ public class TutorialProggresion : MonoBehaviour
             inact.SetActive(false);
         }
 
+        Debug.Log("asd");
         ClearTempForTarget();
         _TempObj.Clear();   
         startStep(currentStepIndex + 1);
@@ -362,9 +367,10 @@ public class TutorialProggresion : MonoBehaviour
 
     public void LocateItems()
     {
-        ClearTempForTarget();
+        List<GameObject> currentItems = new List<GameObject>(_TempObj);
 
         _TempObj.Clear();
+        //ClearTempForTarget();
 
         if (steps[currentStepIndex].Tutorial_Type == TutorialStep.TrainingType.BreakCrate)
         {
@@ -397,14 +403,70 @@ public class TutorialProggresion : MonoBehaviour
                 _TargetingSystem.AddTargets(C.gameObject);
             }
         }
+
+        //foreach (GameObject i in currentItems)
+        //{
+        //    _TargetingSystem.RemoveTargets(i);
+        //}
+
+        //foreach(GameObject i in _TempObj)
+        //{
+        //    _TargetingSystem.AddTargets(i);
+        //}
+
+        //List<GameObject> diff1 = currentItems.Except(_TempObj).ToList();
+        //List<GameObject> diff2 = _TempObj.Except(currentItems).ToList();
+
+        //foreach (GameObject C in diff1)
+        //{
+        //    Debug.Log(C);
+        //}
+
+        //foreach(GameObject C in diff2)
+        //{
+        //    Debug.Log(C);
+        //}
+        //foreach (GameObject i in _TempObj)
+        //{
+        //    _TargetingSystem.AddTargets(i);
+        //}
+        //List<GameObject> addedItems = _TempObj.Except(_previousItems).ToList();
+        //List<GameObject> removedItems = _previousItems.Except(_TempObj).ToList();
+
+        //foreach (GameObject t in _TempObj)
+        //{
+        //    _TargetingSystem.AddTargets(t);
+        //}
+
+        //foreach (GameObject t in removedItems)
+        //{
+
+        //    _TargetingSystem.RemoveTargets(t);
+        //}
+
+        //_previousItems = new List<GameObject>(_TempObj);    
+        //ClearTempForTarget();
+        //foreach (GameObject t in _TempObj)
+        //{
+
+        //    if (!items_ToDelete.Contains(t)) {
+
+        //        _TargetingSystem.RemoveTargets(t);
+
+        //    }
+
+        //}
     }
 
     public void ClearTempForTarget()
     {
         foreach (GameObject t in _TempObj)
         {
+
             _TargetingSystem.RemoveTargets(t);
         }
+        _TempObj.Clear();
+        _previousItems.Clear();
 
     }
 
