@@ -43,6 +43,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject _parryZone;
 
     [Header("Combat & Weapons")]
+    [SerializeField] private float _damageMultiplier;
+    [SerializeField] private float _aoeRadius;
+    [SerializeField] private Vector3 _attackPosition;
     [SerializeField] private Transform _weaponHoldPoint;
     [SerializeField] private Animator _animator;
     [SerializeField] private BaseAttackScript _currentBasicAttack;
@@ -262,8 +265,8 @@ public class PlayerCombat : MonoBehaviour
             _lastAttackType = AttackType.Heavy;
 
             float chargePercent = Mathf.Clamp01((chargeTime - _currentminChargeTime) / (_currentmaxChargeTime - _currentminChargeTime));
-            float damageMultiplier = 1f + chargePercent;
-            float aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
+            _damageMultiplier = 1f + chargePercent;
+            _aoeRadius = Mathf.Lerp(2f, 5f, chargePercent);
 
             if (Tutorial)
             {
@@ -272,7 +275,7 @@ public class PlayerCombat : MonoBehaviour
             Uncharge?.Invoke();
 
             //Remove and put at aniamtion event
-            ExecuteHeavyAttack(damageMultiplier, aoeRadius);
+            ExecuteHeavyAttack(_damageMultiplier, _aoeRadius);
             StartCoroutine(HeavyAttackMovement());
         }
         else
@@ -407,7 +410,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartHeavyAttack()
     {
-        _currentBasicAttack.ExecuteLightAttack();
+        _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier, _aoeRadius);
     }
 
     private IEnumerator LightAttackMovement()
@@ -432,6 +435,7 @@ public class PlayerCombat : MonoBehaviour
         _playerMovement._rb.velocity = Vector3.zero;
     }
 
+    
     private void ExecuteHeavyAttack(float damageMultiplier, float aoeRadius)
     {
 
@@ -450,11 +454,11 @@ public class PlayerCombat : MonoBehaviour
 
 
 
-        Vector3 attackPosition = _isLockedOn && _targetEnemy != null
+        _attackPosition = _isLockedOn && _targetEnemy != null
             ? _targetEnemy.position
             : transform.position + _playerMovement.GetDirection() * 2f + Vector3.up * ATTACK_HEIGHT_OFFSET;
 
-        _currentBasicAttack.ExecuteHeavyAttack(attackPosition, damageMultiplier, aoeRadius);
+        //_currentBasicAttack.ExecuteHeavyAttack(_attackPosition, damageMultiplier, aoeRadius);
         TriggerAttackAnimation("HeavyAttack");
     }
 

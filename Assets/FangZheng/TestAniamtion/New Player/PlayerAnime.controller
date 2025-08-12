@@ -122,6 +122,7 @@ AnimatorState:
   - {fileID: 8203567676492807336}
   m_StateMachineBehaviours:
   - {fileID: 5346498894248330683}
+  - {fileID: 6113617714314001684}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -220,6 +221,20 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-8004382708906446979
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: HeavyAttack
+  TriggerTime: 0.35
 --- !u!114 &-7882109432237861488
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -249,6 +264,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: 8200411933570541378}
   - {fileID: -7882109432237861488}
+  - {fileID: -5007762773643578298}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -279,6 +295,7 @@ AnimatorState:
   - {fileID: 6526715467572387481}
   m_StateMachineBehaviours:
   - {fileID: -301976784642161709}
+  - {fileID: -1658038206136601912}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -461,6 +478,20 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-5007762773643578298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: LightAttack
+  TriggerTime: 0.135
 --- !u!1102 &-4599843944859475968
 AnimatorState:
   serializedVersion: 6
@@ -562,6 +593,7 @@ AnimatorState:
   - {fileID: 7036910002037446046}
   m_StateMachineBehaviours:
   - {fileID: 8163721112277769138}
+  - {fileID: 1638404653068454213}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -589,7 +621,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6789645381126959430}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -8004382708906446979}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -720,6 +753,20 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-1658038206136601912
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: FistAttack
+  TriggerTime: 0.3
 --- !u!1101 &-1448599652481714336
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -922,6 +969,20 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-333956137432958942
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: HeavyAttack
+  TriggerTime: 0.6
 --- !u!114 &-301976784642161709
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -948,6 +1009,7 @@ AnimatorState:
   - {fileID: 3690521114256904428}
   m_StateMachineBehaviours:
   - {fileID: 2996231416331727771}
+  - {fileID: 5340207790421659276}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1216,7 +1278,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6790502826266713553}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 9014853719905642439}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1244,6 +1307,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b66fb9f7d7a04694180ebc1fb89ab2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1638404653068454213
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: LightAttack
+  TriggerTime: 0.35
 --- !u!1107 &2196849350340604176
 AnimatorStateMachine:
   serializedVersion: 6
@@ -1318,7 +1395,7 @@ AnimatorStateMachine:
     m_Position: {x: 370, y: 730, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -254697611700192738}
-    m_Position: {x: 860, y: 330, z: 0}
+    m_Position: {x: 790, y: 720, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3610033688730456956}
     m_Position: {x: 20, y: 650, z: 0}
@@ -1503,7 +1580,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 5296477312898289291}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -333956137432958942}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1647,6 +1725,20 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &5340207790421659276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: LightAttack
+  TriggerTime: 0.338
 --- !u!114 &5346498894248330683
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1761,6 +1853,20 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &6113617714314001684
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: LightAttack
+  TriggerTime: 0.15
 --- !u!1101 &6305233353370292428
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -2088,3 +2194,17 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &9014853719905642439
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea13cdaaa93ba2d4691424c779c38521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventName: HeavyAttack
+  TriggerTime: 0.36
