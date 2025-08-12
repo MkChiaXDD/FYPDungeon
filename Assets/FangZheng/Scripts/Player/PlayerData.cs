@@ -309,7 +309,10 @@ public class PlayerData : MonoBehaviour, IDamageable
                         break;
                     case Effect.EffectType.Fire_Element:
                         elementType = ElementType.Pyro;
-                        
+
+                        break;
+                    case Effect.EffectType.Electric_Element:
+                        elementType = ElementType.Electro;
                         break;
                 }
             }

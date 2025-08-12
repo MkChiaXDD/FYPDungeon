@@ -32,7 +32,7 @@ public class BurningEffect : MonoBehaviour
 
     private IEnumerator BurningRoutine()
     {
-        Debug.Log("burn bitcheres");
+       
         float elapsed = 0f;
 
         while (elapsed < duration)

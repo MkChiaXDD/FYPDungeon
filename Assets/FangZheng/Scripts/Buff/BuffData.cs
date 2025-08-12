@@ -44,7 +44,8 @@ public class Effect
 
         Fire_Element,
         Electric_Element,
-        
+ 
+
         LifeSteal,
         DamageStore,
         CritChance,

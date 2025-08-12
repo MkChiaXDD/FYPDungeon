@@ -54,7 +54,7 @@ Transform:
   - {fileID: 4712886342771834977}
   - {fileID: 8706445077026054717}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1258006238079371808
 Rigidbody:
@@ -269,6 +269,7 @@ MonoBehaviour:
   _MimicAmount: 1
   _MimicSpawnChance: 0.05
   _HitEffect: {fileID: 421958437608354420}
+  elementType: 0
   _InVin: 0
   _LifeStealAmount: 0
   _DmgStoreAmount: 0
@@ -279,6 +280,7 @@ MonoBehaviour:
   _Influence: 0
   _Link: 0
   _Perfection: 0
+  _fire: 0
   mimic: {fileID: 6009049315522451444, guid: 48cd934ff714a224b9de4165d17d17f7, type: 3}
   _BuffObtain: []
   DataChange:
@@ -16490,7 +16492,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FireVFX: {fileID: 8829451551789304542, guid: e91fa0fac941e714e8c4d5709097019f, type: 3}
-  ElectricVFX: {fileID: 0}
+  ElectricVFX: {fileID: 7397422707470137135, guid: 6dc3f78dcfbc6a34aa7c09ff34f0eea3,
+    type: 3}
   WaterVFX: {fileID: 0}
   OverloadedVFX: {fileID: 9121785925235969624, guid: 9902a1e514a90d84d977f1cfd9b96d18,
     type: 3}
@@ -18875,6 +18878,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 41c2a9998bf493846ada9d8650e3a753, type: 2}
   - {fileID: 11400000, guid: 10a18c45553369840a4282c601b50fbe, type: 2}
   - {fileID: 11400000, guid: 2a5639467bd5a5a4b976a9ac8d5fa4a3, type: 2}
+  - {fileID: 11400000, guid: e91306db2fbebfc4bac0adddb9d2749f, type: 2}
+  - {fileID: 11400000, guid: ae858b1fbdadf684892bfde6689374b7, type: 2}
   CardPrefab: {fileID: 2775634570030109601, guid: d03820b66cdc1bd45a7be608b4423640,
     type: 3}
   SelectedBuffs: []

@@ -410,7 +410,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartLightAttack()
     {
-        if (_playerData.elementType == ElementType.Pyro)
+        if (_playerData.elementType != ElementType.None)
         {
           
             _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
@@ -422,7 +422,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartHeavyAttack()
     {
-        if (_playerData.elementType == ElementType.Pyro)
+        if (_playerData.elementType == ElementType.None)
         {
             _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
             return;
