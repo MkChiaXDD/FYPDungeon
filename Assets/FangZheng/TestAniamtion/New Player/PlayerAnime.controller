@@ -836,7 +836,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 1
+  m_ExitTime: 0.45
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1018,7 +1018,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 8fd7d314313fc9f4c9fd9cc3b32a544d,
+  m_Motion: {fileID: 1827226128182048838, guid: 9d41b1e6a8565aa4492b0ae3db7148a0,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -1260,7 +1260,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 1
+  m_ExitTime: 0.45
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1353,10 +1353,10 @@ AnimatorStateMachine:
     m_Position: {x: 650, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7442695940288954568}
-    m_Position: {x: 660, y: 570, z: 0}
+    m_Position: {x: 890, y: 560, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 839577937159827300}
-    m_Position: {x: 340, y: 140, z: 0}
+    m_Position: {x: 320, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3449085219705746624}
     m_Position: {x: 330, y: -80, z: 0}
@@ -1368,16 +1368,16 @@ AnimatorStateMachine:
     m_Position: {x: -760, y: 540, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4549096226751259277}
-    m_Position: {x: 340, y: 60, z: 0}
+    m_Position: {x: 320, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7083204952135291022}
     m_Position: {x: -390, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8143930477484346959}
-    m_Position: {x: 330, y: 450, z: 0}
+    m_Position: {x: 340, y: 510, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3316260305580081976}
-    m_Position: {x: 760, y: 450, z: 0}
+    m_Position: {x: 780, y: 510, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8065679710457415603}
     m_Position: {x: -400, y: -80, z: 0}
@@ -1389,13 +1389,13 @@ AnimatorStateMachine:
     m_Position: {x: -960, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3237276931956271932}
-    m_Position: {x: 320, y: 230, z: 0}
+    m_Position: {x: 320, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7547896486772790718}
-    m_Position: {x: 370, y: 730, z: 0}
+    m_Position: {x: 440, y: 630, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -254697611700192738}
-    m_Position: {x: 790, y: 720, z: 0}
+    m_Position: {x: 1000, y: 640, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3610033688730456956}
     m_Position: {x: 20, y: 650, z: 0}
@@ -1472,7 +1472,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 1
+  m_ExitTime: 0.45
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1738,7 +1738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventName: LightAttack
-  TriggerTime: 0.338
+  TriggerTime: 0.05
 --- !u!114 &5346498894248330683
 MonoBehaviour:
   m_ObjectHideFlags: 1
