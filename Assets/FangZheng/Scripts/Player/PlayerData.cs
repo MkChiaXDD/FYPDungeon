@@ -181,6 +181,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         MimicSpawnChance = _MimicSpawnChance;
         MimicCount = _MimicAmount;
         DashCooldown = _DashCooldown;
+        
 
         _LifeStealAmount = 0f;
         _CritChance = 0f;
@@ -206,6 +207,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         float CurHealth = CurrentHealth;
         foreach (var buff in _BuffObtain)
         {
+            Debug.Log("Apply Buff");
             foreach (Effect effect in buff.EffectList)
             {
                 switch (effect.Type)
@@ -277,12 +279,24 @@ public class PlayerData : MonoBehaviour, IDamageable
                         break;
                     case Effect.EffectType.Mimic:
                         _Mimic = true;
-                        //PlayerCombat.Instance.EnableMimic(_Mimic);
                         if (mimic == null)
                         {
                             mimic = this.AddComponent<MimicSpawner>();
                             PlayerCombat.Instance.SetUpMimic(mimic);
                         }
+                        //Debug.Log("Hi");
+                        //PlayerCombat.Instance.EnableMimic(_Mimic);
+                        //if (this.GetComponent<MimicSpawner>() != null)
+                        //{
+                        //    //Debug.Log("Hi");
+                        //    //this.AddComponent<MimicSpawner>();
+                        //    //mimic = this.GetComponent<MimicSpawner>();
+                        //    //if (mimic.enabled == false)
+                        //    //{
+                        //    //    mimic.enabled = true;
+                        //    //}
+                        //    //PlayerCombat.Instance.SetUpMimic(mimic);
+                        //}
                         break;
                     case Effect.EffectType.Influence:
                         _Influence = true;
@@ -314,6 +328,19 @@ public class PlayerData : MonoBehaviour, IDamageable
                     case Effect.EffectType.Electric_Element:
                         elementType = ElementType.Electro;
                         break;
+                    case Effect.EffectType.DashCoolDown:
+
+                        if (effect.ValueModifierType == Effect.ModifierType.MultiplierValue)
+                        {
+                            DashCooldown += (_DashCooldown * effect.ModifierValue) - _DashCooldown;
+                        }
+                        else
+                        {
+                            DashCooldown += effect.ModifierValue;
+                        }
+
+                        //DashCooldown += effect.ModifierValue;
+                        break;  
                 }
             }
         }
@@ -348,12 +375,16 @@ public class PlayerData : MonoBehaviour, IDamageable
             ParryDuration = 0.1f;
         }
 
+        if (DashCooldown <= 0)
+        {
+            DashCooldown = 0.1f;
+        }
         //if (MimicSpawnChance > 0.75f)
         //{
         //    MimicSpawnChance = 0.75f;
         //}
         DataChange?.Invoke();
-
+        //TakeDamage(-20);
     }
 
 

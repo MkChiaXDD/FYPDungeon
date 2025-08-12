@@ -54,7 +54,7 @@ Transform:
   - {fileID: 4712886342771834977}
   - {fileID: 8706445077026054717}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1258006238079371808
 Rigidbody:
@@ -265,7 +265,7 @@ MonoBehaviour:
   _Dash: 32.5
   _ParryDuration: 4
   _ParryThreshold: 0.5
-  _DashCooldown: 0.5
+  _DashCooldown: 2
   _MimicAmount: 1
   _MimicSpawnChance: 0.05
   _HitEffect: {fileID: 421958437608354420}
@@ -281,7 +281,7 @@ MonoBehaviour:
   _Link: 0
   _Perfection: 0
   _fire: 0
-  mimic: {fileID: 6009049315522451444, guid: 48cd934ff714a224b9de4165d17d17f7, type: 3}
+  mimic: {fileID: 0}
   _BuffObtain: []
   DataChange:
     m_PersistentCalls:
@@ -18880,6 +18880,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a5639467bd5a5a4b976a9ac8d5fa4a3, type: 2}
   - {fileID: 11400000, guid: e91306db2fbebfc4bac0adddb9d2749f, type: 2}
   - {fileID: 11400000, guid: ae858b1fbdadf684892bfde6689374b7, type: 2}
+  - {fileID: 11400000, guid: d3324945a7024dd449954fdcec632cb2, type: 2}
+  - {fileID: 11400000, guid: f347d8e2088a15f4eaa5b278d1ac5037, type: 2}
   CardPrefab: {fileID: 2775634570030109601, guid: d03820b66cdc1bd45a7be608b4423640,
     type: 3}
   SelectedBuffs: []

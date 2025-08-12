@@ -40,7 +40,7 @@ public class Effect
         DashSpeed,
         ParryCooldown,
         Health,
-
+        DashCoolDown,
 
         Fire_Element,
         Electric_Element,
