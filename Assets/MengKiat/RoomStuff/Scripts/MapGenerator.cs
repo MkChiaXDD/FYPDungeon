@@ -301,7 +301,7 @@ namespace RMG
 
             if (farthestRoom != null)
             {
-                farthestRoom.gameObject.name = "Farthest Room";
+                //farthestRoom.gameObject.name = "Farthest Room";
                 Debug.Log($"Farthest room renamed: {farthestRoom.name} at distance {maxDistance}");
 
                 // ✅ Spawn the boss portal in the center of the farthest room
