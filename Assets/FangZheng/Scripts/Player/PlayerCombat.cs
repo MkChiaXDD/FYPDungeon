@@ -37,6 +37,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private GameObject _targetIndicator;
 
+    [SerializeField] private GameObject _TestObj;
+
     [Header("Blocking & Parry")]
     [SerializeField] private float _parryThreshold = 0.5f;
     [SerializeField] private float _parryDuration = 4f;
@@ -118,6 +120,7 @@ public class PlayerCombat : MonoBehaviour
     private int _currentTargetIndex;
     private Dictionary<GameObject, float> _nearbyEnemies = new Dictionary<GameObject, float>();
     private Dictionary<GameObject, float> _visibleEnemies = new Dictionary<GameObject, float>();
+    public List<GameObject> _Enemy = new List<GameObject>();
 
     // Blocking/Parry
     private float _parryCooldown;
@@ -209,6 +212,8 @@ public class PlayerCombat : MonoBehaviour
         {
             return;
         }
+
+        //HasLineOfSightTesting(_TestObj);
 
         SetWeaponAnim();
         HandleBlocking();
@@ -784,6 +789,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void UpdateVisibleEnemies()
     {
+        _Enemy.Clear();
         _visibleEnemies.Clear();
         ScanForNearbyEnemies();
 
@@ -792,6 +798,7 @@ public class PlayerCombat : MonoBehaviour
             if (enemy.Key != null && IsEnemyVisible(enemy.Key))
             {
                 _visibleEnemies.Add(enemy.Key, enemy.Value);
+                _Enemy.Add(enemy.Key);
             }
         }
     }
@@ -821,13 +828,31 @@ public class PlayerCombat : MonoBehaviour
 
     private bool HasLineOfSight(GameObject target)
     {
-        Vector3 origin = transform.position + Vector3.up * 0.5f;
-        Vector3 targetPos = target.transform.position + Vector3.up * 0.5f;
+        Vector3 origin = new Vector3(transform.position.x, 1, transform.position.z) + Vector3.up * 0.5f;
+        Vector3 targetPos = new Vector3(target.transform.position.x, 1, target.transform.position.z) + Vector3.up * 0.5f;
         Vector3 direction = (targetPos - origin).normalized;
         float distance = Vector3.Distance(origin, targetPos);
 
+        Debug.Log(!Physics.Raycast(origin, direction, distance, _ignoreLayerMask));
+
         return !Physics.Raycast(origin, direction, distance, _ignoreLayerMask);
     }
+
+    //private bool HasLineOfSightTesting(GameObject target)
+    //{
+    //    Vector3 origin = transform.position + Vector3.up * 0.5f;
+    //    Vector3 targetPos = target.transform.position + Vector3.up * 0.5f;
+    //    Vector3 direction = (targetPos - origin).normalized;
+    //    float distance = Vector3.Distance(origin, targetPos);
+
+
+    //    Debug.DrawLine(origin, targetPos, Color.red, 1.0f);
+
+    //    bool hasObstacle = Physics.Raycast(origin, direction, distance, _ignoreLayerMask);
+    //    Debug.Log(hasObstacle);
+
+    //    return hasObstacle;
+    //}
 
     private void FindNearestVisibleEnemy()
     {
