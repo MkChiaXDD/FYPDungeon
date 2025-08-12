@@ -399,6 +399,16 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    private void StartLightAttack()
+    {
+        _currentBasicAttack.ExecuteLightAttack();
+    }
+
+    private void StartHeavyAttack()
+    {
+        _currentBasicAttack.ExecuteLightAttack();
+    }
+
     private IEnumerator LightAttackMovement()
     {
         float elapsed = 0;
