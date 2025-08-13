@@ -15,6 +15,10 @@ public class OrbitingCast : Spell
         SummonOrbs(spellCastList);
     }
 
+    public override void Attack(SpellCast spellCastList, bool IsMimic)
+    {
+        SummonOrbs(spellCastList);
+    }
 
     public void SummonOrbs(SpellCast spellCastList)
     {

@@ -9,6 +9,11 @@ public class BomerangCast : Spell
         SummonWave(spellCastList);
     }
 
+    public override void Attack(SpellCast spellCastList, bool IsMimic)
+    {
+        SummonWave(spellCastList);
+    }
+
     public void SummonWave(SpellCast spellCastList)
     {
         GameObject SpawnedWave = Instantiate(Boom, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));

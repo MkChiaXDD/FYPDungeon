@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class PlayerData : MonoBehaviour, IDamageable
 {
-    [SerializeField] private Animator _animator;
+    [SerializeField] public Animator _animator;
     [Space, Header("Base Stats")]
     [SerializeField] private float _MaxHealth = 100;
     [SerializeField] private int _Dmg = 5;

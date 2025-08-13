@@ -11,6 +11,11 @@ public abstract class Spell : MonoBehaviour
         return;
     }
 
+    public virtual void Attack(SpellCast spellCastList , bool mimic)
+    {
+        return;
+    }
+
     protected virtual void Awake()
     {
         damage = data.damage;

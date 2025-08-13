@@ -16,6 +16,7 @@ public class Smash : Projectile
     private bool hasSmashed = false;
     private bool TorandoActivate = false;
     private GameObject Tornado_created;
+    private GameObject PlaceToSpawn;
     private void Start()
     {
         //if (Hitbox == null)
@@ -27,9 +28,26 @@ public class Smash : Projectile
         //{
         //    Hitbox.enabled = false;
         //}
-        Player = FindFirstObjectByType<PlayerMovement>().gameObject;
-        SummonTornado();
-        StartCoroutine(PrepSmash());
+        
+        //Player = FindFirstObjectByType<PlayerMovement>().gameObject;
+        //SummonTornado();
+        //StartCoroutine(PrepSmash());
+    }
+
+    public void activ(GameObject gameobj)
+    {
+        //Player = this.gameObject;
+        if (gameobj == null)
+        {
+            Player = this.transform.gameObject;
+            SummonTornado();
+            StartCoroutine(PrepSmash());
+        }
+        else {
+            Player = FindFirstObjectByType<PlayerMovement>().gameObject;
+            SummonTornado();
+            StartCoroutine(PrepSmash());
+        }
     }
 
     private void SummonTornado()
@@ -44,21 +62,31 @@ public class Smash : Projectile
 
     private IEnumerator PrepSmash()
     {
+        if (Player != this.transform.gameObject) {
+            Player.GetComponent<PlayerData>().SetInv(true);
+        }
 
         yield return new WaitForSeconds(duration - SmashDelay);
         hasSmashed = true;
-        Player.GetComponent<PlayerMovement>().StunPlayer(SmashDelay);
 
-        if (Tornado_created != null)
+        if (Player != this.transform.gameObject)
+        {
+            Player.GetComponent<PlayerMovement>().StunPlayer(SmashDelay);
+        }
+
+        if (Tornado_created != this.transform.gameObject)
         {
             Destroy(Tornado_created.gameObject);
         }
 
         PerformSmash();
 
-        Player.GetComponent<PlayerData>().SetInv(true);
+        //Player.GetComponent<PlayerData>().SetInv(true);
         yield return new WaitForSeconds(SmashDelay);
-        Player.GetComponent<PlayerData>().SetInv(false);
+        if (Player != this.transform.gameObject)
+        {
+            Player.GetComponent<PlayerData>().SetInv(false);
+        }
 
         if (Hitbox != null)
         {
@@ -74,7 +102,10 @@ public class Smash : Projectile
     private void PerformSmash()
     {
         TorandoActivate = true;
-
+        if (Player != this.transform.gameObject)
+        {
+            Player.GetComponent<PlayerData>()._animator.SetTrigger("CastHammer");
+        }
         
 
         if (HitboxPrefab != null)

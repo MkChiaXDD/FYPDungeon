@@ -39,7 +39,10 @@ public class MimicSpawner : MonoBehaviour
             MimicClone mimicClone = Mimic.GetComponent<MimicClone>();
             if (mimicClone != null)
             {
-                mimicClone.Initialize(PlayerCombat.Instance._currentWeapon, PlayerMovement.Instance._body, _lifetime, 1);
+                if (PlayerCombat.Instance._currentWeapon != null) {
+                    mimicClone.Initialize(PlayerCombat.Instance._currentWeapon, PlayerMovement.Instance._body, _lifetime, 1);
+
+                }
             }
             else
             {

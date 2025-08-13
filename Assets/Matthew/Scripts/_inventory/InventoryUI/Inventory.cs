@@ -20,6 +20,11 @@ public class Inventory : MonoBehaviour
     private void Update()
     {
         //equippedSlotNum = 0;
+        if (GamStates.instance.State == GamStates.GameState.Paused)
+        {
+            return;
+        }
+
         SelectSlot();
         
     }

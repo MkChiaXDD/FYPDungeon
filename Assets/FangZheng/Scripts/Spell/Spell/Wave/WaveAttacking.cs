@@ -9,6 +9,11 @@ public class WaveAttacking : Spell
         SummonWave(spellCastList);
     }
 
+    public override void Attack(SpellCast spellCastList, bool IsMimic)
+    {
+        SummonWave(spellCastList);
+    }
+
     public void SummonWave(SpellCast spellCastList)
     {
         GameObject SpawnedWave =  Instantiate(Wave, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));

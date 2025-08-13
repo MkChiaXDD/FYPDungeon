@@ -9,6 +9,11 @@ public class BoomCast : Spell
         SummonEx(spellCastList);
     }
 
+    public override void Attack(SpellCast spellCastList, bool IsMimic)
+    {
+        SummonEx(spellCastList);
+    }
+
     public void SummonEx(SpellCast spellCastList)
     {
         GameObject SpawnedEx = Instantiate(Explosive, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));

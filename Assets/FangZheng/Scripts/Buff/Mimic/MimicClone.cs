@@ -56,7 +56,7 @@ public class MimicClone : MonoBehaviour
         if (!_hasAttacked && _weaponCopy != null)
         {
             _hasAttacked = true;
-            _weaponCopy.Cast();
+            _weaponCopy.MimicCast();
         }
         
         yield return null;

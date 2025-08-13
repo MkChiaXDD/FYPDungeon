@@ -10,6 +10,11 @@ public class SlashSumon : Spell
         SummonUlt(spellCastList);
     }
 
+    public override void Attack(SpellCast spellCastList, bool IsMimic)
+    {
+        SummonUlt(spellCastList);
+    }
+
     public void SummonUlt(SpellCast spellCastList)
     {
         GameObject SpawnedUlt = Instantiate(Slash, transform.position, Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0));

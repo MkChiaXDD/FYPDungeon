@@ -39,4 +39,9 @@ public class Weapon : MonoBehaviour
         spellCastList.spell?.Attack(spellCastList);
         //Debug.Log("Casted " +  spellCastList.spell.name);
     }
+
+    public void MimicCast()
+    {
+        spellCastList.spell?.Attack(spellCastList , true);
+    }
 }
