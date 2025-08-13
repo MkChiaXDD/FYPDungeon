@@ -182,7 +182,13 @@ public class RangedEnemyController : Enemy
     {
         for (int i = 0; i < amtToShoot; i++)
         {
+            // Play animation first
             rangeAnim.PlayAttack();
+
+            // Wait 0.5s so animation matches timing before firing
+            yield return new WaitForSeconds(0.3f);
+
+            // Now spawn and shoot the bullet
             var go = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
             var b = go.GetComponent<EnemyBullet>();
 
@@ -192,9 +198,11 @@ public class RangedEnemyController : Enemy
                 b.Initialize(dir, 10, data.damage);
             }
 
+            // Wait for the delay between shots
             yield return new WaitForSeconds(shootDelay);
         }
     }
+
 
     void ChooseRepositionTarget()
     {
