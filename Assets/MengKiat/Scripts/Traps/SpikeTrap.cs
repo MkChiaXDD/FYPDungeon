@@ -13,6 +13,7 @@ public class SpikeTrap : MonoBehaviour
 
     private float timer;
     private bool isActivated = false;
+    private bool haveHitPlayer = false;
 
     private Vector3 initialPos;
     private Vector3 extendedPos;
@@ -36,6 +37,7 @@ public class SpikeTrap : MonoBehaviour
                     SoundManager.Instance.PlaySFX("Spike", this.gameObject);
                 }
                 isActivated = true;
+                haveHitPlayer = false;
                 timer = 0;
             }
 
@@ -57,7 +59,7 @@ public class SpikeTrap : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!isActivated) return;
+        if (!isActivated || haveHitPlayer) return;
 
         if (other.CompareTag("Player"))
         {
@@ -71,6 +73,7 @@ public class SpikeTrap : MonoBehaviour
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(damage);
+                    haveHitPlayer = true;
                 }
             }
         }
