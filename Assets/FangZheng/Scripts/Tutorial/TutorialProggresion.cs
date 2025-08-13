@@ -30,6 +30,7 @@ public class TutorialProggresion : MonoBehaviour
         public GameObject UiNeeded;
         public List<GameObject> ObjToInactive;
         public List<GameObject> ObjToActivate;
+        public List<GameObject> NeedToBeDisabled;
         public bool isCompleted;
         public float TimeForHint = 5.0f;
         public Npc _npc;
@@ -169,7 +170,15 @@ public class TutorialProggresion : MonoBehaviour
                 AllwaypointReached = true;
             }
 
-            if (allKeysPressed && ActionComplete && AllwaypointReached)
+            bool IsAllClear = true;
+            foreach (GameObject Item in currentStep.NeedToBeDisabled) {
+                if (Item.activeSelf == true)
+                {
+                    GamStates.instance.AddPauseStuff();
+                }
+            }
+
+            if (allKeysPressed && ActionComplete && AllwaypointReached && IsAllClear)
             {
                 CompleteStep();
             }
