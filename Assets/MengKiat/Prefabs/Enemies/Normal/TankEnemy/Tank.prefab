@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 19}
+  m_AnchoredPosition: {x: 0, y: 15}
   m_SizeDelta: {x: 5, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4210721236621166592
@@ -377,21 +377,21 @@ MonoBehaviour:
   cryoResistance: 1
   stunDuration: 1
   attackCooldown: 1
-  roundForScaling: 1
+  roundForScaling: 2
   chanceToGoThrow: 0.823
   detectionRange: 30
   rushToBomberSpeedMultiplier: 2
   carryZone: {fileID: 6367771711553426131}
   feelerLength: 8
-  feelerRadius: 0.2
-  avoidWeight: 200
+  feelerRadius: 0.1
+  avoidWeight: 300
   obstacleMask:
     serializedVersion: 2
     m_Bits: 2048
   turnSpeed: 200
-  smoothing: 3
+  smoothing: 6
   throwingForce: 500
-  chaseTimeBeforeSearchingBomber: 5
+  chaseTimeBeforeSearchingBomber: 15
   tankanim: {fileID: 4017141878667792138}
 --- !u!1001 &1091327457358116251
 PrefabInstance:
