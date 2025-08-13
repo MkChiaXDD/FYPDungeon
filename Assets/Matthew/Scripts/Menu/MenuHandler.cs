@@ -8,10 +8,12 @@ public class MenuHandler : MonoBehaviour
 {
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "GameScene";
+    [SerializeField] private string tutorialSceneName = "TutorialScene";
 
     [Header("UI References")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button settingsButton;
+    [SerializeField] private Button tutorialButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject loadingScreen;
@@ -35,6 +37,7 @@ public class MenuHandler : MonoBehaviour
         // Set up button listeners
         playButton.onClick.AddListener(StartGame);
         settingsButton.onClick.AddListener(ToggleSettings);
+        tutorialButton.onClick.AddListener(StartTutorial);
         quitButton.onClick.AddListener(QuitGame);
 
         // Ensure settings panel is hidden on start
@@ -58,6 +61,18 @@ public class MenuHandler : MonoBehaviour
 
         // Start loading process
         StartCoroutine(LoadGameScene());
+    }
+
+    private void StartTutorial()
+    {
+        if (isLoading) return;
+
+        // Disable button to prevent multiple clicks
+        playButton.interactable = false;
+        isLoading = true;
+
+        // Start loading process
+        StartCoroutine(LoadTutorialScene());
     }
 
     private IEnumerator LoadGameScene()
@@ -107,6 +122,56 @@ public class MenuHandler : MonoBehaviour
             yield return null;
         }
     }
+
+    private IEnumerator LoadTutorialScene()
+    {
+        // Show loading screen
+        loadingScreen.SetActive(true);
+
+        float startTime = Time.time;
+        float progress = 0f;
+
+        // Initialize scene loading
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(tutorialSceneName);
+        asyncLoad.allowSceneActivation = false;
+
+        // Simulate slow load for testing if enabled
+        if (simulateSlowLoad)
+        {
+            yield return new WaitForSeconds(simulatedLoadDelay);
+        }
+
+        // Loading progress loop
+        while (!asyncLoad.isDone)
+        {
+            // Calculate progress (0-0.9 for loading, 0.9-1.0 for activation)
+            progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+
+            // Update UI
+            loadingBar.value = progress;
+            loadingText.text = $"LOADING... {Mathf.Round(progress * 100)}%";
+
+            // Check if loading is complete
+            if (asyncLoad.progress >= 0.9f)
+            {
+                // Enforce minimum loading time
+                if (Time.time - startTime < minLoadingTime)
+                {
+                    // Continue showing loading screen
+                    loadingText.text = "COMPLETING INITIALIZATION...";
+                }
+                else
+                {
+                    // Allow scene activation
+                    asyncLoad.allowSceneActivation = true;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+
 
     private void ToggleSettings()
     {
