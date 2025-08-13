@@ -63,7 +63,8 @@ public class Smash : Projectile
     private IEnumerator PrepSmash()
     {
         if (Player != this.transform.gameObject) {
-            Player.GetComponent<PlayerData>().SetInv(true);
+            //Player.GetComponent<PlayerData>().SetInv(true);
+            Player.GetComponent<PlayerData>().SetInvDur(duration);
         }
 
         yield return new WaitForSeconds(duration - SmashDelay);
@@ -85,7 +86,7 @@ public class Smash : Projectile
         yield return new WaitForSeconds(SmashDelay);
         if (Player != this.transform.gameObject)
         {
-            Player.GetComponent<PlayerData>().SetInv(false);
+            //Player.GetComponent<PlayerData>().SetInv(false);
         }
 
         if (Hitbox != null)

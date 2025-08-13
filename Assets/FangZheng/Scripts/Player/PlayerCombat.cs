@@ -212,7 +212,7 @@ public class PlayerCombat : MonoBehaviour
         //HasLineOfSightTesting(_TestObj);
 
         SetWeaponAnim();
-        HandleBlocking();
+        //HandleBlocking();
         HandleLockOn();
         // Update recovery timer
         if (_isInRecovery && Time.time > _lastAttackTime + _currentAttackCooldown + _attackRecoveryTime)

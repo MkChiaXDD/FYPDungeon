@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     [SerializeField] private int _MimicAmount = 1;
     [SerializeField, Range(0f, 1f)] private float _MimicSpawnChance = 0.05f;
     [SerializeField] private PlayerHitEffect _HitEffect;
-
+    [SerializeField] private GameObject ShieldToShowInvince;
 
     public ElementType elementType;
     public bool _InVin;
@@ -118,16 +119,33 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        ShieldToShowInvince.SetActive(false);
+        if (_isInvulnerable == true)
         {
-            SetInv();
+            ShieldToShowInvince.SetActive(true);
         }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    SetInv();
+        //}
 
         if (Input.GetKeyDown(KeyCode.F12))
         {
             playerCheating = !playerCheating;
             PlayerGeCheat();
         }
+    }
+
+    public void SetInvDur(float Duration)
+    {
+        StartCoroutine(Invinve(Duration));
+    }
+
+    public IEnumerator Invinve(float duration)
+    {
+        _isInvulnerable = true;
+        yield return new WaitForSeconds(duration);
+        _isInvulnerable = false;
     }
 
     public void SetInv()

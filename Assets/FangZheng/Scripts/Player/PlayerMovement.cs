@@ -240,10 +240,12 @@ public class PlayerMovement : MonoBehaviour
         _isDashing = true;
         _meshTrail.HandleTrailActivation();
         _currentSpeed = playerData.Dash + playerData.Speed;
-        playerData.SetInv(true);
+        //playerData.SetInv(true);
+
+        playerData.SetInvDur(0.1f);
         yield return new WaitForSeconds(0.1f);
         _animator.SetBool("Is_Dashing", false);
-        playerData.SetInv(false);
+       // playerData.SetInv(false);
         _currentSpeed = playerData.Speed;
         _isDashing = false;
     }
