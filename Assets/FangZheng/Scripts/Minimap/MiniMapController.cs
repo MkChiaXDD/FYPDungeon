@@ -46,7 +46,7 @@ public class MiniMapController : MonoBehaviour
             }
             else
             {
-                MinimapObj.SetActive(false);
+                MinimapObj.SetActive(true);
                 Map.SetActive(false);
                 _camera.orthographicSize = MiniCameraSize;
                 _camera.transform.position = OrignialPosition;
