@@ -55,11 +55,26 @@ public class BuffSelectionUI : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+
+        if (GamStates.instance.State == GamStates.GameState.Paused)
+        {
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
         {
             Select();
             CreateBuffCardUI();
         }
+
+        //if (CardStorage.childCount > 0)
+        //{
+        //    Ga
+        //}
+        //else
+        //{
+
+        //}
     }
     public void Select()
     {
@@ -185,7 +200,7 @@ public class BuffSelectionUI : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(DelayTime);
+        yield return new WaitForSecondsRealtime(DelayTime);
 
         foreach (Button button in cardButtons)
         {

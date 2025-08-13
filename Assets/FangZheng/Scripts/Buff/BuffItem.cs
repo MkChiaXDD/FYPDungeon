@@ -40,13 +40,15 @@ public class BuffItem : MonoBehaviour
     {
         if(GamStates.instance.State == GamStates.GameState.Paused) return;
 
+        
         if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
             //Collect?.Invoke();
-            
+            GamStates.instance.AddPauseStuff();
             Buff.Select();
             Buff.CreateBuffCardUI();
             Destroy(this.gameObject);
+            
         }
     }
 

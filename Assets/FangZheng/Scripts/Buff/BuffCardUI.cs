@@ -26,7 +26,11 @@ public class BuffCardUI : MonoBehaviour
             PlayerData.Instance.AddBuff(buffdata);
             Container.GetComponentInParent<BuffSelectionUI>().ClearCard();                    
         });
+
     }
 
-
+    public void UnStopTime()
+    {
+        GamStates.instance.RemovePauseStuff();
+    }
 }
