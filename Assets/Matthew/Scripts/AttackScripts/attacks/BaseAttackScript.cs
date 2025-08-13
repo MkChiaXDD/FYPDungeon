@@ -173,7 +173,7 @@ public abstract class BaseAttackScript : MonoBehaviour
     {
         if (target.TryGetComponent<Rigidbody>(out var rb))
         {
-            Vector3 direction = (target.transform.position - transform.position).normalized;
+            Vector3 direction = (target.transform.position - PlayerMovement.Instance.GetPosition()).normalized;
             direction.y = 0.3f;
             rb.AddForce(direction * force, ForceMode.Impulse);
         }
