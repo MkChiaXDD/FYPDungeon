@@ -10,7 +10,7 @@ namespace RMG
         public int minRooms = 20;
         public int maxRooms = 40;
 
-        [SerializeField] private Room startRoom;
+        [SerializeField] private Room[] startRoom;
         [SerializeField] private GameObject bossPortalObject;
         [SerializeField] private Vector3 bossRoomPosition;
         [SerializeField] private float[] bossRoomRotation;
@@ -86,7 +86,7 @@ namespace RMG
         {
             Clear();
 
-            Room start = Instantiate(startRoom, transform);
+            Room start = Instantiate(startRoom[Random.Range(0, startRoom.Count())], transform);
             start.Init();
 
             seed = newSeed;
