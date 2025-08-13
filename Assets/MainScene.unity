@@ -3108,7 +3108,7 @@ MonoBehaviour:
   secondaryAttackType: 1
   elementalDuration: 0
   damageAmount: 10
-  knockbackForce: 5
+  knockbackForce: 1000
   attackRadius: 5
   statusEffects:
   - {fileID: 0}
@@ -8199,8 +8199,6 @@ GameObject:
   - component: {fileID: 188558647066161251}
   - component: {fileID: 3853082184945247511}
   - component: {fileID: 871483382859913092}
-  - component: {fileID: 4695678722832176576}
-  - component: {fileID: 6608576041259307575}
   - component: {fileID: 8114620237879015733}
   - component: {fileID: 4649649255417203814}
   - component: {fileID: 3661343241884644566}
@@ -10275,28 +10273,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4695678722832176576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3495982311138721221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afb4e932c08038249bdbcee7e91e3dc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackElement: 4
-  baseAttackType: 0
-  secondaryAttackType: 1
-  elementalDuration: 5
-  damageAmount: 1
-  knockbackForce: 1
-  attackRadius: 5
-  statusEffects: []
-  lightAttackVFX: {fileID: 0}
-  heavyAttackVFX: {fileID: 0}
 --- !u!224 &4701786507309367578
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18002,31 +17978,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &6608576041259307575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3495982311138721221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36d7fef34ccd8b4eaa66d901b6b09a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackElement: 4
-  baseAttackType: 1
-  secondaryAttackType: 1
-  elementalDuration: 5
-  damageAmount: 2
-  knockbackForce: 50
-  attackRadius: 5
-  statusEffects:
-  - {fileID: 0}
-  lightAttackVFX: {fileID: 5602121190653108760, guid: 99b7c958253db8e4394048701b462fbb,
-    type: 3}
-  heavyAttackVFX: {fileID: 4308418088350387192, guid: 77ecc56b83ca04347bdb9522d8365c85,
-    type: 3}
 --- !u!114 &6620095035018376350
 MonoBehaviour:
   m_ObjectHideFlags: 0
