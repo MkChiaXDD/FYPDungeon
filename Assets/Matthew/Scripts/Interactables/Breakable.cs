@@ -54,7 +54,7 @@ public class Breakable : MonoBehaviour, IDamageable
         if (brokenObject)
         {
             GameObject broken = Instantiate(brokenObject, transform.position, DefaultRotation);
-            broken.transform.localScale = gameObject.transform.lossyScale;
+            //broken.transform.localScale = gameObject.transform.lossyScale;
         }
     }
 

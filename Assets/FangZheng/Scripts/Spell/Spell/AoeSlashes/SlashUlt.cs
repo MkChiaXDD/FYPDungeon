@@ -29,13 +29,13 @@ public class SlashUlt : Projectile
         {
             this.AddComponent<SphereCollider>();
         }
+        this.transform.localScale = Vector3.one * Radius; 
+        //this.GetComponent<SphereCollider>().radius = Radius;
 
-        this.GetComponent<SphereCollider>().radius = Radius;
-
-        if (ParticleSystem != null)
-        {
-            ParticleSystem.gameObject.transform.localScale = Vector3.one * Radius;
-        }
+        //if (ParticleSystem != null)
+        //{
+        //    ParticleSystem.gameObject.transform.localScale = Vector3.one * Radius;
+        //}
 
         //transform.localScale = Vector3.one * Radius * 2;
         Destroy(this.gameObject, duration);
