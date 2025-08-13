@@ -225,8 +225,12 @@ public class PlayerCombat : MonoBehaviour
             _isInRecovery = false;
         }
 
+
+        _targetIndicator.SetActive(false);
+        
         if (_isLockedOn)
         {
+            _targetIndicator.SetActive(true);
             UpdateVisibleEnemies();
             HandleTargetSwitching();
 
@@ -373,7 +377,7 @@ public class PlayerCombat : MonoBehaviour
                 return;
             }
 
-            if (_inventory.GetItemDurability() == _currentWeapon.weaponData.MaxDurability / 2)
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
             {
                 
                 Debug.Log(_currentWeapon.CurrDurability + " " + _currentWeapon.weaponData.MaxDurability);
