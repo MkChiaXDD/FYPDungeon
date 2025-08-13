@@ -212,7 +212,7 @@ public class TankEnemyController : Enemy
 
         // Dynamic speed adjustment based on distance
         float distToPlayer = Vector3.Distance(transform.position, player.position);
-        if (distToPlayer > data.detectionRange * 0.7f && !isCarrying)
+        if (distToPlayer > data.detectionRange * 0.5f && !isCarrying)
         {
             MultiplySpeed(2f); // Chase faster when far away
             isMoving = true;

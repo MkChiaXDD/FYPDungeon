@@ -10,9 +10,8 @@ public class Gespining : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
-        rotation.y += rotationspeed;
+    {     
+       rotation.y += rotationspeed;
        transform.rotation = Quaternion.Euler(rotation); 
     }
 }
