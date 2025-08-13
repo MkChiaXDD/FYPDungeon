@@ -54,7 +54,7 @@ public class DialogSystem : MonoBehaviour
             }
         }
 
-        Cooldown += Time.deltaTime;
+        Cooldown += Time.unscaledDeltaTime;
     }
 
     public void Activate(Npc npc)
@@ -162,7 +162,7 @@ public class DialogSystem : MonoBehaviour
             if (_Current_Dialog != null)
                 _Current_Dialog.text = new string(_Current_Char.ToArray());
 
-            yield return new WaitForSeconds(0.12f / Mathf.Max(1, _Speed));
+            yield return new WaitForSecondsRealtime(0.12f / Mathf.Max(1, _Speed));
         }
 
         if (_npc != null && _npc._Lines != null && _Current_Line < _npc._Lines.Count)
