@@ -59,6 +59,8 @@ public class Effect
         MimicDuration,
         MimicCastAmount,
         MimicCastChance,
+        
+        End
     }
 
     public enum ModifierType
