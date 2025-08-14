@@ -24,13 +24,12 @@ public class InventoryManager : MonoBehaviour
     private void Awake()
     {
         canvas = GetComponent<Canvas>();
-        //canvas.enabled = true;
         inventorySlots = new GameObject[inventory.maxItemSlots];
         hotbarSize = inventory.hotbarSize;
 
         InitializeSlots();
         inventory.SetManager(this);
-        HighlightEquippedSlot(0);
+        HighlightEquippedSlot(0); //highlight first slot
     }
 
     private void InitializeSlots()
@@ -42,6 +41,7 @@ public class InventoryManager : MonoBehaviour
             inventorySlots[i].GetComponent<InventorySlot>().SetManager(this);
         }
 
+        //not applicable due to intentional low inventory
         //// Create inventory slots
         //for (int i = hotbarSize; i < inventory.maxItemSlots; i++)
         //{
@@ -61,10 +61,11 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            ToggleInventory();
-        }
+        //not applicable due to intentional low inventory
+        //if (Input.GetKeyDown(KeyCode.B))
+        //{
+        //    ToggleInventory();
+        //}
     }
 
     public void ToggleInventory()

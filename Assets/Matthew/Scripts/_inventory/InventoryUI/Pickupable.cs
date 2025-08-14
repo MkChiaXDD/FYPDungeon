@@ -14,7 +14,7 @@ public class Pickupable : MonoBehaviour
 
     private TutorialProggresion _Tutorial;
 
-    private UnityEvent PuckUpItem;
+    private UnityEvent PickUpItem;
     private void Start()
     {
         _Tutorial = FindFirstObjectByType<TutorialProggresion>();
@@ -55,7 +55,7 @@ public class Pickupable : MonoBehaviour
 
         //AudioManager.Instance.PlaySFX("Pickup");
         AddToInventory(FindObjectOfType<InventoryManager>());
-        PuckUpItem?.Invoke();
+        PickUpItem?.Invoke();
         if (_Tutorial != null)
         {
             _Tutorial.IfPlayerPerformAction("PickUpItem");
@@ -63,21 +63,21 @@ public class Pickupable : MonoBehaviour
 
     }
 
-    private void TryTimedPickup(GameObject playerObject)
-    {
-        if (!playerObject.CompareTag(PlayerTag)) return;
+    //private void TryTimedPickup(GameObject playerObject)
+    //{
+    //    if (!playerObject.CompareTag(PlayerTag)) return;
 
-        InventoryManager = FindObjectOfType<InventoryManager>();
-        if (timer >= timeToObtain)
-        {
-            AddToInventory(InventoryManager);
-            Destroy(gameObject);
-        }
-        else
-        {
-            timer += Time.deltaTime;
-        }
-    }
+    //    InventoryManager = FindObjectOfType<InventoryManager>();
+    //    if (timer >= timeToObtain)
+    //    {
+    //        AddToInventory(InventoryManager);
+    //        Destroy(gameObject);
+    //    }
+    //    else
+    //    {
+    //        timer += Time.deltaTime;
+    //    }
+    //}
 
     private void AddToInventory(InventoryManager inventory)
     {

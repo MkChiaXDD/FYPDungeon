@@ -17,16 +17,16 @@ public class ItemDropSystem : MonoBehaviour
     [SerializeField] private float _dropHeight = 3.5f;
     [SerializeField] private float _throwForce = 5f;
 
-    private TutorialProggresion _proggresion;
+    private TutorialProggresion _progression;
     private void Start()
     {
-        _proggresion = FindFirstObjectByType<TutorialProggresion>();
+        _progression = FindFirstObjectByType<TutorialProggresion>();
     }
     public void SpawnDropItem()
     {
-        if (_proggresion != null)
+        if (_progression != null)
         {
-            _proggresion.IfPlayerPerformAction("BreakCrate");
+            _progression.IfPlayerPerformAction("BreakCrate");
         }
         foreach (var _drop in _dropItem)
         {
