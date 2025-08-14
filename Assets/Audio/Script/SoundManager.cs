@@ -141,6 +141,11 @@ public class SoundManager : MonoBehaviour
         bgmSource.Stop();
     }
 
+    public void StopSFX()
+    {
+        sfxSource.Stop();
+    }
+
     public void ToggleMusic()
     {
         bgmSource.mute = !bgmSource.mute;

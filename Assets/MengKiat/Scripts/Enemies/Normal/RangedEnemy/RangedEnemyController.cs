@@ -51,6 +51,14 @@ public class RangedEnemyController : Enemy
         state = State.Idle;
     }
 
+    public override void Die()
+    {
+        FindFirstObjectByType<EnemyTracker>()?.IncreaseKills();
+        SoundManager.Instance.PlayVariationSFX("JellyFishDeadSFX");
+        StaticScreenShake.Shake(Camera.main, deathParams);
+        Destroy(gameObject);
+    }
+
     void Update()
     {
         if (player == null || isStunned) return;

@@ -449,7 +449,7 @@ public class RangedMiniController : Enemy
         gameObject.GetComponent<BossCheckDeath>().SummonPortal();
         PopUpManager.ShowPopUp("Boss Killed, Carry on to the next level", 3, Color.green);
         FindFirstObjectByType<EnemyTracker>().SetCustomText("Proceed to the portal");
-        Destroy(gameObject.GetComponent<BossCheckDeath>());
+       // Destroy(gameObject.GetComponent<BossCheckDeath>());
         bossAnim.PlayDeadAnim();
         StartCoroutine(DeathCooldown());
     }
