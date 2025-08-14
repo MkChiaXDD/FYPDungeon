@@ -9,6 +9,7 @@ public class NormalBasicAttack : BaseAttackScript
     private int SlowStatusEffectID = 0;
     protected override void ProcessTargetHit(Collider hit, IDamageable target, int damage, PhysicalAttackType physicalType, float intensity)
     {
+        SoundManager.Instance.PlayVariationSFX("PunchSFX");
         base.ProcessTargetHit(hit, target, damage, physicalType, intensity);
        // ApplyStatusEffect(hit.gameObject, statusEffects[SlowStatusEffectID]);
     }
@@ -23,7 +24,7 @@ public class NormalBasicAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("BasicAttack");
+        SoundManager.Instance.PlaySFX("SwingSFX");
 
         Debug.Log("Basic attack: " + baseAttackType);
 
@@ -40,7 +41,7 @@ public class NormalBasicAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("BasicAttack");
+        SoundManager.Instance.PlaySFX("SwingSFX");
 
         Debug.Log("Basic attack: " + baseAttackType);
 
