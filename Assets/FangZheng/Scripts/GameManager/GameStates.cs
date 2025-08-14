@@ -15,7 +15,7 @@ public class GamStates : MonoBehaviour
     public GameState State;
     private int AmountPause;
     public static GamStates instance;
-
+    public SoundManager _SoundManager;
     private void Awake()
     {
         if (instance == null)
@@ -26,6 +26,11 @@ public class GamStates : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if (_SoundManager == null)
+        {
+            _SoundManager = FindFirstObjectByType<SoundManager>();
+        }
     }
 
     public void Play()
@@ -33,6 +38,8 @@ public class GamStates : MonoBehaviour
         State = GameState.Playing;
 
         Time.timeScale = Normal_Time;
+
+
     }
 
     public void Pause()
@@ -40,16 +47,33 @@ public class GamStates : MonoBehaviour
         State = GameState.Paused;
 
         Time.timeScale = PausedTime;
+
+        //_SoundManager.PauseBGMSound();
+        //_SoundManager.PauseSFXSound();
+        //_SoundManager.SFXVolume(0);
+
+        
     }
 
     public void AddPauseStuff()
     {
         ++AmountPause;
+
+        
     }
 
     public void RemovePauseStuff()
     {
         --AmountPause;
+
+        if (AmountPause <= 0)
+        {
+            //Change this with start
+            //SoundManager.Instance.StopBGM();
+            //SoundManager.Instance.StopSFX();
+            //_SoundManager.ResumeBGMSound();
+            //_SoundManager.SFXVolume(100);
+        }
     }
 
     private void Update()
