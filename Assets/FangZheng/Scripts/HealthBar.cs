@@ -51,8 +51,10 @@ public class HealthBar : MonoBehaviour
         if (PlayerData == null) return;
 
         // Update text display
-        healthText.text = $"{PlayerData.CurrentHealth} / {PlayerData.MaxHealth}";
-
+        double rounded = System.Math.Round(PlayerData.CurrentHealth, 1);
+        float currenthealth = (float)rounded; 
+        healthText.text = $"{currenthealth} / {PlayerData.MaxHealth}";
+        
         // Calculate new target
         float newTarget = PlayerData.CurrentHealth / PlayerData.MaxHealth;
 

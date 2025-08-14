@@ -209,6 +209,7 @@ public class Enemy : MonoBehaviour, IDamageable
             healAmount = Mathf.Max(healAmount, 0.1f);
             double rounded = System.Math.Round(healAmount, 1);
             float e = (float)rounded;
+            Debug.Log(e);
             PlayerData.Instance.Heal(e);
         }
         if (currentHealth <= 0f)

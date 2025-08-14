@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseAttackScript : MonoBehaviour
@@ -137,7 +138,7 @@ public abstract class BaseAttackScript : MonoBehaviour
         else
         {
             ApplyElementalEffects(hit.gameObject);
-            Debug.LogWarning("ultra dog shit");
+            Debug.LogWarning(elementType);
             target.TakeElementalDamage(damage, elementType);
             ApplyKnockBack(hit.gameObject, knockbackForce * intensity);
             PlayAttackVFX();
