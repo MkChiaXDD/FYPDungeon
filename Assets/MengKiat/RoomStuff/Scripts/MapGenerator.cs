@@ -101,6 +101,7 @@ namespace RMG
 
         public void Generate()
         {
+            SpawnBossRoom();
             Generate(System.DateTime.Now.Millisecond);
         }
 
