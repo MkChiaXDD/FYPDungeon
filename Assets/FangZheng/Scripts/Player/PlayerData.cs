@@ -403,6 +403,7 @@ public class PlayerData : MonoBehaviour, IDamageable
         //}
         DataChange?.Invoke();
         Heal(0);
+        TakeDamage(0);
     }
 
 

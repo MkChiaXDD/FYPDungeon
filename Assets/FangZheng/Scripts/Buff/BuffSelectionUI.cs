@@ -176,19 +176,19 @@ public class BuffSelectionUI : MonoBehaviour
                 }
                 else if (data.rarity == Rarity.UnCommon)
                 {
-                    color = Color.green;
+                    color = new Color(0.757f, 1, 0.627f);
                 }
                 else if (data.rarity == Rarity.Rare)
                 {
-                    color = Color.blue;
+                    color = new Color(0.596f, 0.792f, 0.941f);
                 }
                 else if (data.rarity == Rarity.Epic)
                 {
-                    color = Color.yellow;
+                    color = new Color(0.843f, 0.663f, 0.988f);
                 }
                 else
                 {
-                    color = Color.red;
+                    color = new Color(1, 0.824f, 0.49f);
                 }
                 card.GetComponent<Image>().color = color;
             }
