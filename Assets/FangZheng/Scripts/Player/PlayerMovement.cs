@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private CooldownSystem dashCooldown;
 
     [Header("SFX")]
-    [SerializeField] private AudioSource audiosource;
+    [SerializeField] public AudioSource audiosource;
 
 
     private void Awake()
