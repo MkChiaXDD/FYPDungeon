@@ -261,6 +261,7 @@ public class RangedMiniController : Enemy
     private void PerformMeleeAttack()
     {
         bossAnim.PlaySpinAttack();
+        SoundManager.Instance.PlayVariationSFX("MiniAttack");
 
         StartCoroutine(SpinAttack());
 
@@ -334,6 +335,7 @@ public class RangedMiniController : Enemy
 
     private void Shoot()
     {
+        SoundManager.Instance.PlayVariationSFX("MiniAttack");
         bossAnim.PlayShootAttack();
 
         StartCoroutine(ShootAttack());

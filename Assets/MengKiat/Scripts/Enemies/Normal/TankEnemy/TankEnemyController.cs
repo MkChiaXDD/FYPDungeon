@@ -232,6 +232,8 @@ public class TankEnemyController : Enemy
     private void Attack()
     {
         tankanim.PlayAttackAnim();
+        SoundManager.Instance.PlayVariationSFX("TankAttack");
+        Debug.Log("warning");
 
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),

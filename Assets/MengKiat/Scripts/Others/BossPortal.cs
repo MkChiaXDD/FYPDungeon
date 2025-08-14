@@ -17,6 +17,7 @@ public class BossPortal : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 SoundManager.Instance.PlayVariationSFX("TeleportSFX");
+                SoundManager.Instance.PlaySFX("Bossgrowl");
                 GameObject playerObject = GameObject.FindWithTag("Player");
                 GameObject bossRoomSpawn = GameObject.Find("PlayerSpawn");
                 if (playerObject != null && bossRoomSpawn != null)
