@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
     private Dictionary<string, AudioClip> sfxDict;
 
 
-    private float pauseTime; // To store the position where we paused
+    private float pauseTime; //store position where pause
 
     private void Awake()
     {
@@ -140,7 +140,7 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    // Toggle between pause and resume for sfx
+    //Toggle between pause and resume for sfx
     public void TogglePauseSFX()
     {
         if (sfxSource == null) return;
