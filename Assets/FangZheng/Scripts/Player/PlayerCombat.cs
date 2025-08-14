@@ -414,6 +414,7 @@ public class PlayerCombat : MonoBehaviour
         {
           
             _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
+            ApplyDurabilityCost();
             return;
         }
         _currentBasicAttack.ExecuteLightAttack();
@@ -422,12 +423,16 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartHeavyAttack()
     {
-        if (_playerData.elementType == ElementType.None)
+       
+        if (_playerData.elementType != ElementType.None)
         {
-            _currentBasicAttack.ExecuteLightAttack(_playerData.elementType);
+            _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier , _aoeRadius,_playerData.elementType);
+            
+            ApplyDurabilityCost();
             return;
         }
-        _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier, _aoeRadius);
+        _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier , _aoeRadius);
+        //Debug.Log("Hi: " + _attackPosition + "No: " + _damageMultiplier);
         ApplyDurabilityCost();
     }
 
@@ -558,9 +563,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_currentWeapon == null) return;
 
-        int durabilityCost = _lastAttackType == AttackType.Light
-            ? _currentWeapon.baseDurabilityCost
-            : _currentWeapon.baseDurabilityCost * 2;
+        int durabilityCost = _currentWeapon.baseDurabilityCost;
+            
 
         _inventory.BreakItem(_inventory.equippedSlotNum, durabilityCost);
     }

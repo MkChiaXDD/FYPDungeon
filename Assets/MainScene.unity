@@ -1341,6 +1341,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuffItem
       objectReference: {fileID: 0}
+    - target: {fileID: 8889065516600572496, guid: db56bba1f96da8b4fb021a98ed34c501,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 8910388306697683574, guid: db56bba1f96da8b4fb021a98ed34c501,
         type: 3}
       propertyPath: m_Layer
@@ -1351,6 +1356,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db56bba1f96da8b4fb021a98ed34c501, type: 3}
+--- !u!1 &1253871929 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6245285880207331751, guid: b8a12971664a0434a92e65e3a8eaac00,
+    type: 3}
+  m_PrefabInstance: {fileID: 488337056}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1345597628 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ce137e7837d9beb4a8f9f549e6bda48e,
@@ -23828,7 +23839,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 4244750992696412631}
           m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
-          m_MethodName: StartLightAttack
+          m_MethodName: StartHeavyAttack
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -25088,6 +25099,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinimapObj: {fileID: 3031661893442077526}
   Map: {fileID: 4172578125992265201}
+  MinimapExtraObj: {fileID: 1253871929}
   _camera: {fileID: 2695004663308759584}
   MiniCameraSize: 0
   NormalCameraSize: 100
