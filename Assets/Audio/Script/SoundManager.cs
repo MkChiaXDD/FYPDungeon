@@ -158,9 +158,9 @@ public class SoundManager : MonoBehaviour
     // Toggle between pause and resume for bgm
     public void TogglePauseBGM()
     {
-        if (sfxSource == null) return;
+        if (bgmSource == null) return;
 
-        if (sfxSource.isPlaying)
+        if (bgmSource.isPlaying)
         {
             PauseBGMSound();
         }
