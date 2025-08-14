@@ -716,7 +716,7 @@ public class PlayerCombat : MonoBehaviour
         {
             var weaponBreak = _equippedWeapon.AddComponent<WeaponBreak>();
             weaponBreak.Dissolve_Shader = breakMaterial;
-            weaponBreak.dissolveSpeed = 2;
+            weaponBreak.dissolveSpeed = 4;
 
             _equippedWeapon.transform.SetParent(null, true);
             _equippedWeapon = null;
