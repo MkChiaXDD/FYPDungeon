@@ -402,8 +402,9 @@ public class PlayerData : MonoBehaviour, IDamageable
         //    MimicSpawnChance = 0.75f;
         //}
         DataChange?.Invoke();
-        Heal(0);
+        //Heal(0.1f);
         TakeDamage(0);
+        Heal(0);
     }
 
 
