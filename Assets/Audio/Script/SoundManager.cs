@@ -23,6 +23,8 @@ public class SoundManager : MonoBehaviour
     private Dictionary<string, AudioClip> musicDict;
     private Dictionary<string, AudioClip> sfxDict;
 
+    [SerializeField] private string starterBGMName;
+
 
     private float pauseTime; //store position where pause
 
@@ -38,6 +40,11 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        PlayMusic(starterBGMName);
     }
 
     private void InitializeDictionaries()
