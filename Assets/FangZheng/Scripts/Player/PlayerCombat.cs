@@ -427,7 +427,7 @@ public class PlayerCombat : MonoBehaviour
         if (_playerData.elementType != ElementType.None)
         {
             _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier , _aoeRadius,_playerData.elementType);
-            Debug.Log("Hi: " + _attackPosition + "bigga nigga " + _damageMultiplier);
+            
             ApplyDurabilityCost();
             return;
         }
