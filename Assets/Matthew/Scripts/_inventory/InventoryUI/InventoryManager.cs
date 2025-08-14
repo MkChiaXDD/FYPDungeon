@@ -263,9 +263,10 @@ public class InventoryManager : MonoBehaviour
             if (inventorySlots[i].TryGetComponent<Image>(out var slotImage))
             {
                 Vector3 defaultSize = new Vector3(0.88f, 0.88f, 0.88f);
-                Vector3 highlightedSize = new Vector3(1.1f, 1.1f, 1.1f);
+                Vector3 highlightedSize = new Vector3(1, 1, 1);
                 slotImage.sprite = (i == slotIndex) ? highlightedTex : normalTex;
                 slotImage.rectTransform.localScale = (i == slotIndex) ? highlightedSize : defaultSize;
+                slotImage.rectTransform.SetAsLastSibling();
 
 
             }
