@@ -112,7 +112,7 @@ public class Smash : Projectile
         if (HitboxPrefab != null)
         {
             Hitbox = Instantiate( HitboxPrefab, new Vector3(Player.transform.position.x, 0, Player.transform.position.z), Quaternion.identity);
-            Hitbox.transform.localScale = Vector3.one * Range ;
+            Hitbox.transform.localScale = Vector3.one * Range;
             Hitbox.GetComponent<SpellHitbox>().Initit(spellCast);
 
         }

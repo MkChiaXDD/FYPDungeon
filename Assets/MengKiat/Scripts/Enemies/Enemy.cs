@@ -133,7 +133,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void PlayDamagedVFX()
     {
-        SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+        SoundManager.Instance.PlaySFX("HitSFX");
         hitSquashEffect.PlaySquashEffect();
         PlayHitEffects();
         PlayHitStopVFX();
