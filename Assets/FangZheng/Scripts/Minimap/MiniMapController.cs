@@ -6,6 +6,7 @@ public class MiniMapController : MonoBehaviour
 {
     [SerializeField] private GameObject MinimapObj;
     [SerializeField] private GameObject Map;
+    [SerializeField] private GameObject MinimapExtraObj;
     [SerializeField] private Camera _camera;
 
     [SerializeField] private float MiniCameraSize;
@@ -39,6 +40,7 @@ public class MiniMapController : MonoBehaviour
             {
                 MinimapObj.SetActive(false);
                 Map.SetActive(true);
+                MinimapExtraObj.SetActive(false);
                 _camera.orthographicSize = NormalCameraSize;
                 OrignialPosition = _camera.transform.position;
                 _camera.cullingMask = OrignalCam;
@@ -48,6 +50,7 @@ public class MiniMapController : MonoBehaviour
             {
                 MinimapObj.SetActive(true);
                 Map.SetActive(false);
+                MinimapExtraObj.SetActive(true);
                 _camera.orthographicSize = MiniCameraSize;
                 _camera.transform.position = OrignialPosition;
                 _camera.cullingMask = MiniCam;
