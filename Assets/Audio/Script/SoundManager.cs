@@ -23,6 +23,9 @@ public class SoundManager : MonoBehaviour
     private Dictionary<string, AudioClip> musicDict;
     private Dictionary<string, AudioClip> sfxDict;
 
+
+    private float pauseTime; // To store the position where we paused
+
     private void Awake()
     {
         if (Instance == null)
@@ -134,6 +137,77 @@ public class SoundManager : MonoBehaviour
         RandomisePitch();
         sfxSource.PlayOneShot(sfxDict[clipName]);
         ResetPitch();
+    }
+
+
+    // Toggle between pause and resume for sfx
+    public void TogglePauseSFX()
+    {
+        if (sfxSource == null) return;
+
+        if (sfxSource.isPlaying)
+        {
+            PauseSFXSound();
+        }
+        else
+        {
+            ResumeSFXSound();
+        }
+    }
+
+    // Toggle between pause and resume for bgm
+    public void TogglePauseBGM()
+    {
+        if (sfxSource == null) return;
+
+        if (sfxSource.isPlaying)
+        {
+            PauseBGMSound();
+        }
+        else
+        {
+            ResumeBGMSound();
+        }
+    }
+
+    // Call this to pause the sound
+    public void PauseBGMSound()
+    {
+        if (bgmSource != null && bgmSource.isPlaying)
+        {
+            pauseTime = bgmSource.time;
+            bgmSource.Pause();
+        }
+    }
+
+    // Call this to resume the sound from where it was paused
+    public void ResumeBGMSound()
+    {
+        if (bgmSource != null && !bgmSource.isPlaying)
+        {
+            bgmSource.time = pauseTime;
+            bgmSource.Play();
+        }
+    }
+
+    // Call this to pause the sound
+    public void PauseSFXSound()
+    {
+        if (sfxSource != null && sfxSource.isPlaying)
+        {
+            pauseTime = sfxSource.time;
+            sfxSource.Pause();
+        }
+    }
+
+    // Call this to resume the sound from where it was paused
+    public void ResumeSFXSound()
+    {
+        if (sfxSource != null && !sfxSource.isPlaying)
+        {
+            sfxSource.time = pauseTime;
+            sfxSource.Play();
+        }
     }
 
     public void StopBGM()
