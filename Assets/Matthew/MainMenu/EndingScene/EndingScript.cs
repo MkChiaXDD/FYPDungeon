@@ -9,6 +9,7 @@ public class EndingScript : MonoBehaviour
 
     public void ProceedToWinscreen()
     {
-        EndingPanel.SetActive(true);     
+        EndingPanel.SetActive(true);
+        GamStates.instance.AddPauseStuff();
     }
 }

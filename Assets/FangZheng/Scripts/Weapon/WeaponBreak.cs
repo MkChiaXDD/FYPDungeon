@@ -17,7 +17,7 @@ public class WeaponBreak : MonoBehaviour
     {
         if (gameObject.GetComponent<BoxCollider>())
         gameObject.GetComponent<BoxCollider>().enabled = false;
-        weaponRenderer = GetComponent<Renderer>();
+        weaponRenderer = GetComponentInChildren<Renderer>();
 
         if (weaponRenderer != null)
         {

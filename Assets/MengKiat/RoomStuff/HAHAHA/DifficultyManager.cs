@@ -18,6 +18,10 @@ public class DifficultyManager : MonoBehaviour
     [SerializeField] private int currentRound = 1;
     [SerializeField] private int maxRounds = 2;
 
+    [Header("Ending")]
+    [SerializeField] private EndingScript ending;
+    [SerializeField] private int RoundToWin = 2;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -60,6 +64,7 @@ public class DifficultyManager : MonoBehaviour
     public void IncreaseRound()
     {
         currentRound++;
+        PlayEndingScreen();
     }
 
     public int GetRound()
@@ -70,5 +75,11 @@ public class DifficultyManager : MonoBehaviour
     public int GetMaxRound()
     {
         return maxRounds;
+    }
+
+    public void PlayEndingScreen()
+    {
+        if (currentRound == RoundToWin + 1) 
+        ending.ProceedToWinscreen();
     }
 }
