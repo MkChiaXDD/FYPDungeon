@@ -63,6 +63,7 @@ public class BuffSelectionUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
+            GamStates.instance.AddPauseStuff();
             Select();
             CreateBuffCardUI();
         }
