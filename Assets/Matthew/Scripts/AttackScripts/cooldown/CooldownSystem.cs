@@ -7,7 +7,7 @@ public class CooldownSystem : MonoBehaviour
 {
     [Header("Cooldown Settings")]
     [SerializeField] private float cooldownDuration = 1f;
-    [SerializeField] private bool startOnAwake = false;
+    [SerializeField] private bool startOnAwake = true;
     [SerializeField] private bool reverseFill = true;
 
     [Header("Visual Settings")]
@@ -28,7 +28,8 @@ public class CooldownSystem : MonoBehaviour
     public event Action OnCooldownStarted;
     public event Action OnCooldownFinished;
 
-    private void Awake()
+
+    private void Start()
     {
         cooldownImage = GetComponent<Image>();
 

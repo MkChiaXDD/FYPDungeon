@@ -165,6 +165,7 @@ public class PlayerCombat : MonoBehaviour
         Instance = this;
 
         _inventory = GetComponent<Inventory>();
+        UpdateSkillIcons(WeaponType.Unarmed);
 
     }
 
