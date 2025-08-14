@@ -93,7 +93,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private GameObject _mimicClonePrefab;
 
     [Header("AbilityIcons")]
-    [SerializeField] private GameObject dashBasicAttackIcon;
+    [SerializeField] private GameObject dashIcon;
     [SerializeField] private GameObject scratchBasicAttackIcon;
 
     [SerializeField] private GameObject hammerBasicAttackIcon;
@@ -746,7 +746,7 @@ public class PlayerCombat : MonoBehaviour
     private void UpdateSkillIcons(WeaponType weaponType)
     {
         // First, deactivate all icons
-        dashBasicAttackIcon.SetActive(false);
+        
         scratchBasicAttackIcon.SetActive(false);
         hammerBasicAttackIcon.SetActive(false);
         hammerUltAttackIcon.SetActive(false);
@@ -769,7 +769,7 @@ public class PlayerCombat : MonoBehaviour
             case WeaponType.Unarmed:
             default:
                 // Default to scratch/dash icons when no weapon equipped
-                dashBasicAttackIcon.SetActive(true);
+                
                 scratchBasicAttackIcon.SetActive(true);
                 break;
         }
