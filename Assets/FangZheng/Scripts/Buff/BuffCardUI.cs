@@ -13,8 +13,11 @@ public class BuffCardUI : MonoBehaviour
     [SerializeField] private Transform Transform;
     [SerializeField] private Button Button;
     [SerializeField] private PlayerData PlayerData;
+
+    private TutorialProggresion _Tutorial;
     public void Init(Transform Container , BuffData Data)
     {
+        _Tutorial = FindFirstObjectByType<TutorialProggresion>();
         buffdata = Data;
         image.sprite = buffdata.Icon;
         Name.text = buffdata.Name;
@@ -32,5 +35,13 @@ public class BuffCardUI : MonoBehaviour
     public void UnStopTime()
     {
         GamStates.instance.RemovePauseStuff();
+    }
+
+    public void SlecetCard()
+    {
+        if (_Tutorial != null)
+        {
+            _Tutorial.IfPlayerPerformAction("SelectCard");
+        }
     }
 }

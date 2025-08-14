@@ -9,6 +9,7 @@ public class BuffItem : MonoBehaviour
     [SerializeField] private GameObject CanCollectUI;
     private bool PlayerIsInBound;
     private UnityEvent Collect;
+    private TutorialProggresion _Tutorial;
 
     private void Start()
     {
@@ -16,6 +17,8 @@ public class BuffItem : MonoBehaviour
         {
             Buff = FindFirstObjectByType<BuffSelectionUI>();
         }
+
+        _Tutorial = FindFirstObjectByType<TutorialProggresion>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -44,6 +47,11 @@ public class BuffItem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
             //Collect?.Invoke();
+            if (_Tutorial != null)
+            {
+                _Tutorial.IfPlayerPerformAction("PickUpBuff");
+            }
+
             GamStates.instance.AddPauseStuff();
             Buff.Select();
             Buff.CreateBuffCardUI();

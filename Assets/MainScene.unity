@@ -1336,25 +1336,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2892344718981573101, guid: db56bba1f96da8b4fb021a98ed34c501,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
     - target: {fileID: 5047510887184404655, guid: db56bba1f96da8b4fb021a98ed34c501,
         type: 3}
       propertyPath: m_Name
       value: BuffItem
       objectReference: {fileID: 0}
-    - target: {fileID: 5191413803478726723, guid: db56bba1f96da8b4fb021a98ed34c501,
+    - target: {fileID: 8910388306697683574, guid: db56bba1f96da8b4fb021a98ed34c501,
         type: 3}
       propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 7189234617061321412, guid: db56bba1f96da8b4fb021a98ed34c501,
-        type: 3}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 4294967295
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6744,36 +6734,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &116712122414867535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345597628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1bf70b5dde7474cb03a4573ee32602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  events:
-  - eventName: FistAttack
-    OnAniamtionEvent:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: SayHi, Assembly-CSharp
-          m_MethodName: Hello
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  Player: {fileID: 0}
 --- !u!225 &116874706164325039
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -8258,18 +8218,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8628035714040390}
   m_CullTransparentMesh: 1
---- !u!114 &848534522988215801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345597628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5240d746cf0a9b408d545f17e23c263, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &849203534776186609
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12692,6 +12640,151 @@ PrefabInstance:
       objectReference: {fileID: 2387999523893584368}
     - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
+      propertyPath: steps.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].HelpStuff
+      value: Go and pick up the upgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10]._StepName
+      value: Picking Up buff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].HelpStuff
+      value: Go to portal
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11]._StepName
+      value: ToPortal?
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12].HelpStuff
+      value: You got ambushed kill them
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12]._StepName
+      value: Fight
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[13].HelpStuff
+      value: You have completed the tutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[13]._StepName
+      value: Complete
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14].HelpStuff
+      value: Use HeavyAttack to break shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14]._StepName
+      value: BreakShield
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15].HelpStuff
+      value: Nothing
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15]._StepName
+      value: Nothing
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].Instruction
+      value: Go and pick up the upgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].Instruction
+      value: Go to portal
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12].Instruction
+      value: You got ambushed kill them
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[13].Instruction
+      value: You have completed the tutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14].Instruction
+      value: Use HeavyAttack to break shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15].Instruction
+      value: Nothing
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15].TimeForHint
+      value: 100000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[9].Tutorial_Type
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].Tutorial_Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12].Tutorial_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[13].Tutorial_Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14].Tutorial_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15].Tutorial_Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].waypointRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].waypointRadius
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[15].waypointRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
       propertyPath: steps.Array.data[0].ObjToInactive.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -12708,12 +12801,72 @@ PrefabInstance:
     - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: steps.Array.data[10].ObjToActivate.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
         type: 3}
       propertyPath: steps.Array.data[10].ObjToInactive.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].ObjToActivate.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].ObjToInactive.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12].ObjToActivate.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].requiredAction.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].waypointTarget.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].requiredAction.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[11].waypointTarget.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14].requiredAction.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[10].requiredAction.Array.data[0]
+      value: PickUpBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[12].requiredAction.Array.data[0]
+      value: KillAll
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[13].requiredAction.Array.data[0]
+      value: Compledte
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358549888601970463, guid: 25736e9a31fb7e2478576597aec044b4,
+        type: 3}
+      propertyPath: steps.Array.data[14].requiredAction.Array.data[0]
+      value: BreakEnemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12956,18 +13109,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7630895400391099760}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce137e7837d9beb4a8f9f549e6bda48e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7145052830632901565}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce137e7837d9beb4a8f9f549e6bda48e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 848534522988215801}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce137e7837d9beb4a8f9f549e6bda48e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 116712122414867535}
   m_SourcePrefab: {fileID: 100100000, guid: ce137e7837d9beb4a8f9f549e6bda48e, type: 3}
 --- !u!1 &3178209965967210429
 GameObject:
@@ -24064,36 +24205,6 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &7145052830632901565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345597628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1bf70b5dde7474cb03a4573ee32602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  events:
-  - eventName: FistAttack
-    OnAniamtionEvent:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 848534522988215801}
-          m_TargetAssemblyTypeName: SayHi, Assembly-CSharp
-          m_MethodName: Hello
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  Player: {fileID: 0}
 --- !u!1 &7160869677514943505
 GameObject:
   m_ObjectHideFlags: 0

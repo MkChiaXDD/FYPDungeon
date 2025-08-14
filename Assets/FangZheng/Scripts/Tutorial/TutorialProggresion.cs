@@ -17,6 +17,7 @@ public class TutorialProggresion : MonoBehaviour
             FightEnemy,
             PickUpItems,
             BreakCrate,
+            PicpUpBuff,
             Misc,
 
         }
@@ -407,6 +408,16 @@ public class TutorialProggresion : MonoBehaviour
             Enemy[] allCrate = FindObjectsOfType<Enemy>();
 
             foreach (Enemy C in allCrate)
+            {
+                _TempObj.Add(C.gameObject);
+                _TargetingSystem.AddTargets(C.gameObject);
+            }
+        }
+        else if (steps[currentStepIndex].Tutorial_Type == TutorialStep.TrainingType.PicpUpBuff)
+        {
+            BuffItem[] allCrate = FindObjectsOfType<BuffItem>();
+
+            foreach (BuffItem C in allCrate)
             {
                 _TempObj.Add(C.gameObject);
                 _TargetingSystem.AddTargets(C.gameObject);

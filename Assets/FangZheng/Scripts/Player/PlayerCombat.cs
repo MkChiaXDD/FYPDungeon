@@ -206,6 +206,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (DisableCombat == true || GamStates.instance.State == GamStates.GameState.Paused)
         {
+            Uncharge?.Invoke();
             return;
         }
 
@@ -300,7 +301,7 @@ public class PlayerCombat : MonoBehaviour
             StartCoroutine(LightAttackMovement());
         }
 
-        ApplyDurabilityCost();
+        //ApplyDurabilityCost();
         TrySpawnMimic();
     }
     private void HandleAttacks()
@@ -416,7 +417,7 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
         _currentBasicAttack.ExecuteLightAttack();
-
+        ApplyDurabilityCost();
     }
 
     public void StartHeavyAttack()
@@ -427,6 +428,7 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
         _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier, _aoeRadius);
+        ApplyDurabilityCost();
     }
 
     private IEnumerator LightAttackMovement()
