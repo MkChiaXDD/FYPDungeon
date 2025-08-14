@@ -35,6 +35,7 @@ public class BuffCardUI : MonoBehaviour
     public void UnStopTime()
     {
         GamStates.instance.RemovePauseStuff();
+        SoundManager.Instance.PlayVariationSFX("SelecetedBuffSFX");
     }
 
     public void SlecetCard()

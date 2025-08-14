@@ -102,7 +102,7 @@ public class PlayerData : MonoBehaviour, IDamageable
             {
                 damagedVFX.TriggerDamageFlash();
             }
-            SoundManager.Instance.PlaySFX("HitSFX", this.gameObject);
+            SoundManager.Instance.PlayVariationSFX("PlayerHurtSFX2");
 
             if (_HitEffect != null)
             {

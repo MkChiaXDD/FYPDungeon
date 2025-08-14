@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2998039610064119818
 MonoBehaviour:
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846e6ffa78e1c4d4687152c5fb955629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSource: {fileID: 958915585056910843}
+  bgmSource: {fileID: 0}
   sfxSource: {fileID: 8478316970480772350}
   musicClips: []
   sfxClips:
@@ -69,8 +69,18 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a0b78bdf73481af4692d3468ab9fca3e, type: 3}
   - {fileID: 8300000, guid: 87b573d5ef3bb7c4e99507da4c0d5e56, type: 3}
   - {fileID: 8300000, guid: f60dae19301eb4145ba9b75f1998283b, type: 3}
+  - {fileID: 8300000, guid: 2da0f4226d614492eaf48171c98f5ccb, type: 3}
+  - {fileID: 8300000, guid: 0fcccacff396a4e2b86aaab9fc07aaec, type: 3}
+  - {fileID: 8300000, guid: 17a64018f41d043169872a142113c3dc, type: 3}
+  - {fileID: 8300000, guid: dabb91186bc1f4ff3ae7107a41e50bb7, type: 3}
+  - {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+  - {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+  - {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
+  - {fileID: 8300000, guid: 7e26c9daf4c32483b9c2790e662d3f1b, type: 3}
+  - {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  - {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
   Player: {fileID: 0}
-  Hearing_Distance: 10
+  Hearing_Distance: 20
 --- !u!82 &958915585056910843
 AudioSource:
   m_ObjectHideFlags: 0

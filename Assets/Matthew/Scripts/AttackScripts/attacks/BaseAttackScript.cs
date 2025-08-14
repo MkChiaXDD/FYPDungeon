@@ -41,6 +41,7 @@ public abstract class BaseAttackScript : MonoBehaviour
     /// </summary>
     public virtual void ExecuteLightAttack()
     {
+        SoundManager.Instance.PlaySFX("SwingSFX");
         Quaternion vfxRotation = transform.rotation * Quaternion.Euler(-90, 0, 0);
         ParticleSystem LightVfxInstance = Instantiate(lightAttackVFX, transform.position, vfxRotation);
         LightVfxInstance.Play();
@@ -54,6 +55,7 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
     {
+        SoundManager.Instance.PlaySFX("SwingSFX");
         Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
         ParticleSystem HeavyVfxInstance = Instantiate(heavyAttackVFX, center, rotation);
         HeavyVfxInstance.Play();
@@ -66,6 +68,7 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     public virtual void ExecuteLightAttack(ElementType attackElement)
     {
+        SoundManager.Instance.PlaySFX("SwingSFX");
         Quaternion vfxRotation = transform.rotation * Quaternion.Euler(-90, 0, 0);
         ParticleSystem LightVfxInstance = Instantiate(lightAttackVFX, transform.position, vfxRotation);
         LightVfxInstance.Play();
@@ -79,6 +82,7 @@ public abstract class BaseAttackScript : MonoBehaviour
 
     public virtual void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius, ElementType attackElement)
     {
+        SoundManager.Instance.PlaySFX("SwingSFX");
         Quaternion rotation = FindObjectOfType<PlayerMovement>().GetDirectionQuaternion() * Quaternion.Euler(-90, 0, 0);
         ParticleSystem HeavyVfxInstance = Instantiate(heavyAttackVFX, center, rotation);
         HeavyVfxInstance.Play();
@@ -192,6 +196,7 @@ public abstract class BaseAttackScript : MonoBehaviour
     protected virtual void PlayAttackVFX()
     {
         ActivateHitStop(0.25f, 0.01f);
+      
     }
 
     protected virtual void ActivateHitStop(float duration, float timescale)

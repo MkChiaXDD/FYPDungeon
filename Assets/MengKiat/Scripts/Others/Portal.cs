@@ -13,6 +13,8 @@ public class Portal : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+
+                SoundManager.Instance.PlayVariationSFX("TeleportSFX");
                 int round = FindFirstObjectByType<DifficultyManager>().GetRound();
                 int maxRound = FindFirstObjectByType<DifficultyManager>().GetMaxRound();
                 Debug.Log($"Round: {round} / Max Round: {maxRound}");

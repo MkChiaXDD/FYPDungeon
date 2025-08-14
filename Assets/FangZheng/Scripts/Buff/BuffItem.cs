@@ -47,6 +47,7 @@ public class BuffItem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
             //Collect?.Invoke();
+            SoundManager.Instance.PlayVariationSFX("CollectBuffSFX");
             if (_Tutorial != null)
             {
                 _Tutorial.IfPlayerPerformAction("PickUpBuff");

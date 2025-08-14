@@ -50,6 +50,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private CooldownSystem dashCooldown;
 
+    [Header("SFX")]
+    [SerializeField] private AudioSource audiosource;
+
 
     private void Awake()
     {
@@ -235,6 +238,7 @@ public class PlayerMovement : MonoBehaviour
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.PlaySFX("PlayerDash", this.gameObject);
+            SoundManager.Instance.PlayVariationSFX("DashSFX");
         }
         _animator.SetBool("Is_Dashing" , true);
         _isDashing = true;
@@ -297,11 +301,19 @@ public class PlayerMovement : MonoBehaviour
             _rb.AddForce(force, ForceMode.VelocityChange);
         }
 
+
+
         if (_rb.velocity.magnitude > (_currentSpeed * _currentMovementModifier))
         {
+            audiosource.enabled = true;
             _animator.SetBool("_IsRun", true);
             _rb.velocity = _rb.velocity.normalized * (_currentSpeed * _currentMovementModifier);
         }
+        else
+        {
+            audiosource.enabled = false;
+        }
+        
     }
 
 

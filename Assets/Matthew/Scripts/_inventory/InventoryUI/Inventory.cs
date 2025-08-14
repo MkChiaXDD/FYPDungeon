@@ -195,7 +195,7 @@ public class Inventory : MonoBehaviour
 
     private void ChangeEquippedSlot(int slotIndex)
     {
-        SoundManager.Instance.PlaySFX("InventorySelect", this.gameObject, false);
+        SoundManager.Instance.PlaySFX("SelectSFX");
         equippedSlotNum = slotIndex;
         equippedSlot = items[equippedSlotNum];
         manager.HighlightEquippedSlot(equippedSlotNum);

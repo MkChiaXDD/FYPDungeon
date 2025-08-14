@@ -24,7 +24,7 @@ public class NormalHammerAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("HammerSlam", gameObject);
+        SoundManager.Instance.PlaySFX("HammerSlam");
 
 
 
@@ -34,6 +34,7 @@ public class NormalHammerAttack : BaseAttackScript
 
     public override void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius)
     {
+        SoundManager.Instance.PlaySFX("HammerHitSFX");
         base.ExecuteHeavyAttack(center, damageMultiplier, radius);
     }
 
@@ -48,7 +49,7 @@ public class NormalHammerAttack : BaseAttackScript
         if (vfx.TryGetComponent<ParticleSystem>(out var ps)) ps.Play();
         Destroy(vfx, 2f);
 
-        SoundManager.Instance.PlaySFX("HammerSlam", gameObject);
+        SoundManager.Instance.PlaySFX("HammerSlam");
 
 
 
@@ -58,6 +59,8 @@ public class NormalHammerAttack : BaseAttackScript
 
     public override void ExecuteHeavyAttack(Vector3 center, float damageMultiplier, float radius, ElementType attackElement)
     {
+        SoundManager.Instance.PlaySFX("HammerHitSFX");
+
         base.ExecuteHeavyAttack(center, damageMultiplier, radius, attackElement);
     }
 

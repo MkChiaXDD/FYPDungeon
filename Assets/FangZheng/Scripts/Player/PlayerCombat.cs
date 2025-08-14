@@ -289,7 +289,7 @@ public class PlayerCombat : MonoBehaviour
             // Light attack
             _currentAttackCooldown = _currentlightAttackCooldown;
             _lastAttackType = AttackType.Light;
-
+           
 
             if (Tutorial)
             {
@@ -423,7 +423,8 @@ public class PlayerCombat : MonoBehaviour
 
     public void StartHeavyAttack()
     {
-       
+        
+
         if (_playerData.elementType != ElementType.None)
         {
             _currentBasicAttack.ExecuteHeavyAttack(_attackPosition, _damageMultiplier , _aoeRadius,_playerData.elementType);
@@ -530,6 +531,8 @@ public class PlayerCombat : MonoBehaviour
 
     private void TriggerAttackAnimation(string triggerName)
     {
+        SoundManager.Instance.PlayVariationSFX("PlayerAttackSFX");
+
         if (triggerName == "LightAttack")
         {
             if (!_canComboContinue)
