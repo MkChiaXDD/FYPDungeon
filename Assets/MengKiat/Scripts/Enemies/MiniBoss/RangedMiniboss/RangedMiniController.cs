@@ -55,7 +55,7 @@ public class RangedMiniController : Enemy
     [SerializeField] private float rotationSpeed = 5f;
 
     [Header("Health Drop Settings")]
-    [SerializeField] private GameObject healthDrop;
+    [SerializeField] private GameObject[] drops;
     [SerializeField] private int minDrops = 1;
     [SerializeField] private int maxDrops = 3;
     // Example: 0.75, 0.5, 0.25 means drop at 75%, 50%, 25% health
@@ -192,7 +192,7 @@ public class RangedMiniController : Enemy
 
     private void DropHealth()
     {
-        if (healthDrop == null) return;
+        if (drops == null) return;
 
         int dropCount = Random.Range(minDrops, maxDrops + 1);
         for (int i = 0; i < dropCount; i++)
@@ -200,7 +200,7 @@ public class RangedMiniController : Enemy
             // Spawn just above the boss so they don't clip into the ground
             Vector3 spawnPos = transform.position + Vector3.up * 1f;
 
-            GameObject drop = Instantiate(healthDrop, spawnPos, Quaternion.identity);
+            GameObject drop = Instantiate(drops[Random.Range(0, drops.Length)], spawnPos, Quaternion.identity);
 
             // Launch in a random horizontal direction
             if (drop.TryGetComponent<Rigidbody>(out Rigidbody rb))
@@ -362,7 +362,7 @@ public class RangedMiniController : Enemy
         var go = Instantiate(bulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt, lockOnPosition);
+            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage, lockOnPosition);
         }
     }
 

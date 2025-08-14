@@ -249,7 +249,7 @@ Transform:
   - {fileID: 4940935121397922208}
   - {fileID: 2040627581633579519}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &929040658841641266
 MeshFilter:
@@ -410,8 +410,9 @@ MonoBehaviour:
   dodgeSpeedMultiplier: 2
   rageSpeedMultiplier: 1.5
   rotationSpeed: 100
-  healthDrop: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
-    type: 3}
+  drops:
+  - {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d, type: 3}
+  - {fileID: 5047510887184404655, guid: db56bba1f96da8b4fb021a98ed34c501, type: 3}
   minDrops: 1
   maxDrops: 2
   dropHealthThresholds:
