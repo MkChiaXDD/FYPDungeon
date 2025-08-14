@@ -204,7 +204,12 @@ public class Enemy : MonoBehaviour, IDamageable
         UpdateHealthBar();
         PlayDamagedVFX();
         if (PlayerData.Instance._LifeStealAmount > 0) {
-            PlayerData.Instance.Heal(amount * PlayerData.Instance._LifeStealAmount);
+
+            float healAmount = amount * PlayerData.Instance._LifeStealAmount;
+            healAmount = Mathf.Max(healAmount, 0.1f);
+            double rounded = System.Math.Round(healAmount, 1);
+            float e = (float)rounded;
+            PlayerData.Instance.Heal(e);
         }
         if (currentHealth <= 0f)
             Die();
