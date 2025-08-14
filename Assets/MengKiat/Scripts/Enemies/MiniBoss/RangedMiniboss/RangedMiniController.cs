@@ -362,7 +362,7 @@ public class RangedMiniController : Enemy
         var go = Instantiate(bulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
         {
-            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage / bulletSplitAmt, lockOnPosition);
+            b.Initialize(shootDir, bulletSplitAmt, bulletSpeed, bulletLifetime, data.damage, lockOnPosition);
         }
     }
 
