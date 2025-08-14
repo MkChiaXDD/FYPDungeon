@@ -13,7 +13,7 @@ public class BuffSelectionUI : MonoBehaviour
 
     [SerializeField] List<BuffData> ObtainAbleBuffs;
 
-    [SerializeField] Transform CardStorage;
+    [SerializeField] public Transform CardStorage;
     [SerializeField] float DelayTime = 1;
 
     [SerializeField] List<BuffData> ListOfBuffsCommon;

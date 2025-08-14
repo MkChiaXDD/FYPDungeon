@@ -7,6 +7,7 @@ public class BuffItem : MonoBehaviour
 {
     [SerializeField] private BuffSelectionUI Buff;
     [SerializeField] private GameObject CanCollectUI;
+    [SerializeField] private GameObject CardContainer;
     private bool PlayerIsInBound;
     private UnityEvent Collect;
     private TutorialProggresion _Tutorial;
@@ -19,6 +20,9 @@ public class BuffItem : MonoBehaviour
         }
 
         _Tutorial = FindFirstObjectByType<TutorialProggresion>();
+
+        CardContainer = FindFirstObjectByType<BuffSelectionUI>().CardStorage.gameObject;
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -46,6 +50,12 @@ public class BuffItem : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && PlayerIsInBound == true)
         {
+            if (CardContainer != null && CardContainer.transform.childCount > 0)
+            {
+                Debug.Log("CardContainer has children, cannot collect buff");
+                return;
+            }
+
             //Collect?.Invoke();
             SoundManager.Instance.PlayVariationSFX("CollectBuffSFX");
             if (_Tutorial != null)
