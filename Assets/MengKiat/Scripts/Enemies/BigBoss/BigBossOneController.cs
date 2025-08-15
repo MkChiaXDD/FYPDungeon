@@ -112,7 +112,7 @@ public class BigBossOneController : Enemy
             }
             else
             {
-                state = (State)Random.Range(1, 4); // 1=Dash,2=SpinShoot,3=Hop
+                state = (State)Random.Range(1, 4); 
                 attackCounter++;
 
                 if (!hasDetectedPlayer)

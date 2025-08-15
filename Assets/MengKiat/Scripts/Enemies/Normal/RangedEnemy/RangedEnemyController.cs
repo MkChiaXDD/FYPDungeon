@@ -63,7 +63,6 @@ public class RangedEnemyController : Enemy
     {
         if (player == null || isStunned) return;
 
-        // Calculate velocity
         velocity = (transform.position - lastPosition) / Time.deltaTime;
         lastPosition = transform.position;
 
@@ -140,11 +139,9 @@ public class RangedEnemyController : Enemy
     {
         if (velocity.magnitude > velocityThreshold)
         {
-            // Calculate tilt based on movement direction relative to forward
             Vector3 localVelocity = transform.InverseTransformDirection(velocity);
             float tiltAmount = Mathf.Clamp(-localVelocity.x * 2f, -maxTiltAngle, maxTiltAngle);
 
-            // Create target rotation with tilt
             targetRotation = Quaternion.Euler(
                 transform.rotation.eulerAngles.x,
                 transform.rotation.eulerAngles.y,
@@ -153,7 +150,6 @@ public class RangedEnemyController : Enemy
         }
         else
         {
-            // Return to no tilt when not moving
             targetRotation = Quaternion.Euler(
                 transform.rotation.eulerAngles.x,
                 transform.rotation.eulerAngles.y,
@@ -161,7 +157,6 @@ public class RangedEnemyController : Enemy
             );
         }
 
-        // Smoothly apply rotation
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
             targetRotation,
@@ -175,7 +170,6 @@ public class RangedEnemyController : Enemy
         dir.y = 0;
         if (dir.sqrMagnitude > 0.001f)
         {
-            // Only rotate around Y axis while preserving tilt
             float currentTilt = transform.rotation.eulerAngles.z;
             Quaternion yRotation = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Euler(
@@ -190,13 +184,10 @@ public class RangedEnemyController : Enemy
     {
         for (int i = 0; i < amtToShoot; i++)
         {
-            // Play animation first
             rangeAnim.PlayAttack();
 
-            // Wait 0.5s so animation matches timing before firing
             yield return new WaitForSeconds(0.3f);
 
-            // Now spawn and shoot the bullet
             var go = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
             var b = go.GetComponent<EnemyBullet>();
 
@@ -206,7 +197,6 @@ public class RangedEnemyController : Enemy
                 b.Initialize(dir, 10, data.damage);
             }
 
-            // Wait for the delay between shots
             yield return new WaitForSeconds(shootDelay);
         }
     }

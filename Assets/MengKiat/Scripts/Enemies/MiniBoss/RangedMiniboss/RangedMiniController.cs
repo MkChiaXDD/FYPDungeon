@@ -59,13 +59,11 @@ public class RangedMiniController : Enemy
     [SerializeField] private GameObject buffDrop;
     [SerializeField] private int minDrops = 1;
     [SerializeField] private int maxDrops = 3;
-    // Example: 0.75, 0.5, 0.25 means drop at 75%, 50%, 25% health
     [SerializeField] private float[] dropHealthThresholds = { 0.75f, 0.5f, 0.25f };
     [SerializeField] private float launchForce = 30f;
 
     private bool[] hasDropped;
 
-    // Runtime/Private
     private Rigidbody rb;
     private Transform player;
     private Vector3 spawnPosition;
@@ -90,7 +88,6 @@ public class RangedMiniController : Enemy
         rb = GetComponent<Rigidbody>();
         state = State.Idle;
 
-        // Track whether each threshold was triggered
         hasDropped = new bool[dropHealthThresholds.Length];
     }
 
@@ -99,7 +96,7 @@ public class RangedMiniController : Enemy
         if (isDead && !dropped)
         {
             Debug.Log("Buff Item dropped");
-            DropItem(buffDrop); // or whatever you want to drop on death
+            DropItem(buffDrop);
             dropped = true;
         }
 
@@ -115,7 +112,6 @@ public class RangedMiniController : Enemy
 
         float distToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Track time in melee range
         if (distToPlayer <= meleeRange)
             closeRangeTimer += Time.deltaTime;
         else
@@ -189,7 +185,6 @@ public class RangedMiniController : Enemy
     {
         float healthPercent = currentHealth / maxHealth;
 
-        // Check all thresholds
         for (int i = 0; i < dropHealthThresholds.Length; i++)
         {
             if (!hasDropped[i] && healthPercent <= dropHealthThresholds[i])
@@ -208,16 +203,14 @@ public class RangedMiniController : Enemy
         int dropCount = Random.Range(minDrops, maxDrops + 1);
         for (int i = 0; i < dropCount; i++)
         {
-            // Spawn just above the boss so they don't clip into the ground
             Vector3 spawnPos = transform.position + Vector3.up * 1f;
 
             GameObject drop = Instantiate(itemToDrop, spawnPos, Quaternion.identity);
 
-            // Launch in a random horizontal direction
             if (drop.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
                 Vector3 randomDir = Random.insideUnitSphere;
-                randomDir.y = 0.5f; // give a little upward force
+                randomDir.y = 0.5f;
                 rb.AddForce(randomDir.normalized * launchForce, ForceMode.Impulse);
             }
         }
@@ -226,13 +219,11 @@ public class RangedMiniController : Enemy
 
     private void MoveTowardTarget(float speedMultiplier, float duration)
     {
-        // Check if currently overlapping an obstacle
-        float checkRadius = 0.5f; // adjust based on your enemy collider size
+        float checkRadius = 0.5f;
         bool isColliding = Physics.CheckSphere(transform.position, checkRadius, LayerMask.GetMask("Obstacle"));
 
         if (isColliding)
         {
-            // Stop moving and reset state
             state = State.Attack;
             repositionTarget = transform.position;
             return;
@@ -310,12 +301,10 @@ public class RangedMiniController : Enemy
         playerRb.drag = 0f;
         playerRb.AddForce(dir * meleeKnockbackForce, ForceMode.Impulse);
 
-        // Wait the specified duration with drag = 0
         yield return new WaitForSeconds(duration);
 
-        // Smoothly interpolate drag back to original over 1 second
         float elapsed = 0f;
-        float lerpDuration = 0.5f; // time to go back to original drag
+        float lerpDuration = 0.5f;
 
         while (elapsed < lerpDuration)
         {
@@ -324,7 +313,6 @@ public class RangedMiniController : Enemy
             yield return null;
         }
 
-        // Make sure drag is exactly original at the end
         playerRb.drag = originalDrag;
     }
 
@@ -370,7 +358,7 @@ public class RangedMiniController : Enemy
         }
 
         Vector3 shootDir = (player.position - transform.position).normalized;
-        Vector3 lockOnPosition = player.position;  // capture exact position
+        Vector3 lockOnPosition = player.position; 
 
         var go = Instantiate(bulletPrefab, shootingPoint.transform.position, Quaternion.LookRotation(shootDir));
         if (go.TryGetComponent<RangedMiniBullet>(out var b))
@@ -407,36 +395,11 @@ public class RangedMiniController : Enemy
 
     private void ChooseRandomRepositionTarget()
     {
-        for (int i = 0; i < 10; i++) // Try 10 times to find a valid spot
+        for (int i = 0; i < 10; i++)
         {
             Vector2 offset = Random.insideUnitCircle * repositionRadius;
             Vector3 potentialTarget = transform.position + new Vector3(offset.x, 0f, offset.y);
 
-            // Check if position is not inside a wall using an OverlapCapsule
-            Vector3 point1 = potentialTarget + Vector3.up * (1f - 0.5f); // example height
-            Vector3 point2 = potentialTarget + Vector3.down * (1f - 0.5f);
-            if (!Physics.CheckCapsule(point1, point2, 0.5f, LayerMask.GetMask("Obstacle")))
-            {
-                repositionTarget = potentialTarget;
-                return;
-            }
-        }
-
-        // Fallback if all attempts fail
-        repositionTarget = transform.position + transform.right * 2f;
-    }
-
-    private void MoveNearToPlayer()
-    {
-        // Attempts to find a random point near the player within a smaller radius
-        float nearRadius = 3f; // closer radius, tweak as needed
-
-        for (int i = 0; i < 10; i++) // Try up to 10 times
-        {
-            Vector2 offset = Random.insideUnitCircle * nearRadius;
-            Vector3 potentialTarget = player.position + new Vector3(offset.x, 0f, offset.y);
-
-            // Check if position is not inside an obstacle using OverlapCapsule (same as your reposition)
             Vector3 point1 = potentialTarget + Vector3.up * (1f - 0.5f);
             Vector3 point2 = potentialTarget + Vector3.down * (1f - 0.5f);
             if (!Physics.CheckCapsule(point1, point2, 0.5f, LayerMask.GetMask("Obstacle")))
@@ -446,7 +409,27 @@ public class RangedMiniController : Enemy
             }
         }
 
-        // Fallback: just near player to right
+        repositionTarget = transform.position + transform.right * 2f;
+    }
+
+    private void MoveNearToPlayer()
+    {
+        float nearRadius = 3f;
+
+        for (int i = 0; i < 10; i++)
+        {
+            Vector2 offset = Random.insideUnitCircle * nearRadius;
+            Vector3 potentialTarget = player.position + new Vector3(offset.x, 0f, offset.y);
+
+            Vector3 point1 = potentialTarget + Vector3.up * (1f - 0.5f);
+            Vector3 point2 = potentialTarget + Vector3.down * (1f - 0.5f);
+            if (!Physics.CheckCapsule(point1, point2, 0.5f, LayerMask.GetMask("Obstacle")))
+            {
+                repositionTarget = potentialTarget;
+                return;
+            }
+        }
+
         repositionTarget = player.position + player.right * 2f;
     }
 

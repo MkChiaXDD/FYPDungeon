@@ -32,7 +32,6 @@ public class FastEnemyController : Enemy
     void Update()
     {
         if (player == null || isStunned) return;
-        // distance only on XZ
         float dist = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
             new Vector3(player.position.x, 0, player.position.z)
@@ -64,12 +63,10 @@ public class FastEnemyController : Enemy
 
     private void ChaseWithAvoidance()
     {
-        // 1) pure XZ seek
         Vector3 toPlayer = player.position - transform.position;
         toPlayer.y = 0;
         Vector3 seekDir = toPlayer.normalized;
 
-        // 2) avoidance with SphereCasts
         Vector3 avoidDir = Vector3.zero;
         Vector3[] feelers = new Vector3[]
         {
@@ -94,16 +91,13 @@ public class FastEnemyController : Enemy
             }
         }
 
-        // 3) desired
         Vector3 desired = seekDir + avoidDir * avoidWeight;
         desired.y = 0;
         if (desired == Vector3.zero) desired = transform.forward;
         desired.Normalize();
 
-        // 4) smooth
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        // 5) move & rotate
         transform.position += currentDir * data.moveSpeed * Time.deltaTime;
         Quaternion targetRot = Quaternion.LookRotation(currentDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
@@ -146,7 +140,6 @@ public class FastEnemyController : Enemy
             Gizmos.DrawLine(transform.position, transform.position + dir * feelerLength);
         }
 
-        // draw a little sphere at origin to show radius
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, feelerRadius);
     }

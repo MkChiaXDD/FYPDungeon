@@ -90,7 +90,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            Rigidbody rb = hit.GetComponentInParent<Rigidbody>(); // Changed line
+            Rigidbody rb = hit.GetComponentInParent<Rigidbody>();
             if (hit.TryGetComponent<IDamageable>(out var dmg) && rb != null)
             {
                 Vector3 direction = (hit.transform.position - transform.position).normalized;

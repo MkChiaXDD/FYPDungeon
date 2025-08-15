@@ -18,7 +18,6 @@ public class MiniBullet : MonoBehaviour
         speed = spd;
         damage = dmg;
 
-        // Face movement direction
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
     }
@@ -50,7 +49,6 @@ public class MiniBullet : MonoBehaviour
     void BounceBack()
     {
         direction = -direction;
-        // Rotate to face new direction
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
     }

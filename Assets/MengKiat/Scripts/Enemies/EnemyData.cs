@@ -24,5 +24,5 @@ public class EnemyData : ScriptableObject
     }
 
     [Tooltip("Type of enemy behavior pattern")]
-    public EnemyType enemyType; // ← this will show up in the Inspector as a dropdown
+    public EnemyType enemyType;
 }

@@ -16,7 +16,6 @@ public class Dummy : Enemy
     private Transform player;
     private float attackTimer;
     private Vector3 currentDir;
-    //1 = have shield 2 = have shield before but broke 0 is no shield at all
     private int HaveShield = 0;
     private bool Shieldbreak;
     [SerializeField] private GameObject EnemyShield;
@@ -55,10 +54,7 @@ public class Dummy : Enemy
 
     private void Update()
     {
-        //if (isStunned )
-        //{
-        //    return;
-        //}
+
 
         attackTimer -= Time.deltaTime;
 
@@ -83,11 +79,6 @@ public class Dummy : Enemy
                 OnAction?.Invoke("BreakEnemy");
             }
         }
-
-        //if (EnemyShield.active == false)
-        //{
-
-        //}
 
     }
 
