@@ -18,7 +18,6 @@ public class EnemyBullet : MonoBehaviour
         speed = spd;
         damage = dmg;
 
-        // Face movement direction
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(direction);
     }

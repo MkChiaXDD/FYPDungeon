@@ -45,7 +45,6 @@ public class SummonerMiniController : Enemy
             new Vector3(player.position.x, 0, player.position.z)
         );
 
-        // Only enter Summon state once the player is in range
         if (currentState == State.Idle && dist <= data.detectionRange)
         {
             currentState = State.Summon;
@@ -54,7 +53,6 @@ public class SummonerMiniController : Enemy
         switch (currentState)
         {
             case State.Idle:
-                // Idle logic (optional animation or idle movement)
                 break;
 
             case State.Summon:

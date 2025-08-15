@@ -16,10 +16,10 @@ namespace RMG
         [SerializeField] private float[] bossRoomRotation;
         [SerializeField] private GameObject[] bossRoom;
         [SerializeField] private Room[] rooms;
-        [SerializeField] private Room[] uniqueRooms; // NEW: rooms allowed only once
+        [SerializeField] private Room[] uniqueRooms;
         private GameObject currentBossRoomInstance;
 
-        private HashSet<Room> usedUniqueRooms = new HashSet<Room>(); // NEW: track used unique rooms
+        private HashSet<Room> usedUniqueRooms = new HashSet<Room>();
 
         private Dictionary<Dir, List<Room>> sortedRooms = new Dictionary<Dir, List<Room>>() {
             {Dir.bottom, new List<Room>()},
@@ -161,7 +161,7 @@ namespace RMG
                 Destroy(spawned.gameObject);
             }
             spawnedRooms.Clear();
-            usedUniqueRooms.Clear(); // Reset unique room tracking
+            usedUniqueRooms.Clear();
         }
 
         private Room GetRndRoom(Dir dir, Room parent, RoomSpawn parentSpawn)
@@ -225,7 +225,7 @@ namespace RMG
 
                     if (uniqueRooms.Contains(curr))
                     {
-                        usedUniqueRooms.Add(curr); // Mark as used
+                        usedUniqueRooms.Add(curr);
                     }
 
                     break;
@@ -324,10 +324,8 @@ namespace RMG
 
             if (farthestRoom != null)
             {
-                //farthestRoom.gameObject.name = "Farthest Room";
                 Debug.Log($"Farthest room renamed: {farthestRoom.name} at distance {maxDistance}");
 
-                // ✅ Spawn the boss portal in the center of the farthest room
                 Vector3 centerPos = farthestRoom.transform.localPosition * roomSizeMultiplier;
                 centerPos = new Vector3(centerPos.x, 4, centerPos.z);
                 GameObject portalInstance = Instantiate(bossPortalObject, centerPos, Quaternion.identity);
@@ -339,7 +337,6 @@ namespace RMG
         {
             Debug.Log("Generating new map");
 
-            // 🔹 Destroy everything on the "Pickup" layer
             int pickupLayer = LayerMask.NameToLayer("pickup");
             foreach (GameObject obj in FindObjectsOfType<GameObject>())
             {
@@ -349,12 +346,10 @@ namespace RMG
                 }
             }
 
-            // Existing logic
             FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
             FindFirstObjectByType<DifficultyManager>()?.IncreaseRound();
             Generate();
 
-            // Reset player position
             GameObject player = GameObject.FindWithTag("Player");
             player.transform.position = new Vector3(0, -0.02000004f, 0);
         }
@@ -364,7 +359,6 @@ namespace RMG
         {
             Debug.Log("Generating new map");
 
-            // 🔹 Destroy everything on the "Pickup" layer
             int pickupLayer = LayerMask.NameToLayer("pickup");
             foreach (GameObject obj in FindObjectsOfType<GameObject>())
             {
@@ -374,11 +368,9 @@ namespace RMG
                 }
             }
 
-            // Existing logic
             FindFirstObjectByType<EnemySpawner>()?.ClearEnemies();
             Generate();
 
-            // Reset player position
             GameObject player = GameObject.FindWithTag("Player");
             player.transform.position = new Vector3(0, -0.02000004f, 0);
         }

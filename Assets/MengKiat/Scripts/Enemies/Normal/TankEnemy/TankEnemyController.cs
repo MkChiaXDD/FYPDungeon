@@ -210,17 +210,16 @@ public class TankEnemyController : Enemy
 
         currentDir = Vector3.Slerp(currentDir, desired, smoothing * Time.deltaTime);
 
-        // Dynamic speed adjustment based on distance
         float distToPlayer = Vector3.Distance(transform.position, player.position);
         if (distToPlayer > data.detectionRange * 0.5f && !isCarrying)
         {
-            MultiplySpeed(2f); // Chase faster when far away
+            MultiplySpeed(2f);
             isMoving = true;
             tankanim.PlayWalkingAnimation(isMoving, true);
         }
         else
         {
-            MultiplySpeed(0.75f); // Slow down when getting close
+            MultiplySpeed(0.75f);
             isMoving = true;
             tankanim.PlayWalkingAnimation(isMoving, false);
         }
@@ -268,12 +267,10 @@ public class TankEnemyController : Enemy
 
         Transform bomberPos = chosenBomber.transform;
 
-        // Calculate seek direction
         Vector3 seekDir = bomberPos.position - transform.position;
         seekDir.y = 0;
         seekDir.Normalize();
 
-        // Calculate avoidance vector
         Vector3 avoidDir = Vector3.zero;
         Vector3[] feelers = new Vector3[]
         {
@@ -301,11 +298,10 @@ public class TankEnemyController : Enemy
         if (avoidDir != Vector3.zero)
             avoidDir.Normalize();
 
-        float avoidWeightRush = 0.5f; // Less avoidance during rush to bomber
+        float avoidWeightRush = 0.5f;
 
         Vector3 desiredDir = (seekDir + avoidDir * avoidWeightRush).normalized;
 
-        // Use higher smoothing speed for faster correction
         currentDir = Vector3.Slerp(currentDir, desiredDir, smoothing * 5f * Time.deltaTime);
 
         transform.position += currentDir * CurrentMoveSpeed * Time.deltaTime;
@@ -336,7 +332,6 @@ public class TankEnemyController : Enemy
             smoothing = originalSmoothing;
             ResetSpeed();
 
-            // Stop tank movement just before throwing
             StopMovement();
 
             StartCoroutine(ThrowBomberAfterDelay(1.5f));
@@ -346,7 +341,7 @@ public class TankEnemyController : Enemy
 
     private void StopMovement()
     {
-        CurrentMoveSpeed = 0f; // Assuming CurrentMoveSpeed controls translation
+        CurrentMoveSpeed = 0f;
     }
 
 
@@ -395,7 +390,6 @@ public class TankEnemyController : Enemy
         carriedBomber = null;
         isCarrying = false;
 
-        // Restore tank's original speed after throw
         ResetSpeed();
 
         StartCoroutine(ThrownTimer());

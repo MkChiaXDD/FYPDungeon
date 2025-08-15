@@ -31,7 +31,6 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (Room room in allRooms)
         {
-            // Get all child transforms that contain "EnemySpawnPoint" in their name
             Transform[] spawnPoints = room.GetComponentsInChildren<Transform>();
             List<Transform> validSpawnPoints = new List<Transform>();
 
@@ -52,14 +51,12 @@ public class EnemySpawner : MonoBehaviour
 
                 for (int i = 0; i < numOfEnemies; i++)
                 {
-                    // Pick a random spawn point from the available ones
                     Transform spawnPoint = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
                     Vector3 spawnOffset = new Vector3(Random.Range(-offSet, offSet), 0, Random.Range(-offSet, offSet));
                     Vector3 spawnPos = spawnPoint.position + spawnOffset;
 
                     GameObject chosenEnemy = null;
 
-                    // Try to spawn a healer with low chance (independent of scaling)
                     if (Random.value <= healerSpawnChance)
                     {
                         foreach (GameObject enemy in enemyPrefabs)
@@ -72,7 +69,6 @@ public class EnemySpawner : MonoBehaviour
                         }
                     }
 
-                    // If not healer, pick based on round-scaling
                     if (chosenEnemy == null)
                     {
                         List<GameObject> availableEnemies = new List<GameObject>();
@@ -90,7 +86,7 @@ public class EnemySpawner : MonoBehaviour
                             else if (name.Contains("bomber") && round >= RoundToSpawnBomber)
                                 availableEnemies.Add(enemy);
                             else if (!name.Contains("fast") && !name.Contains("ranged") && !name.Contains("tank") && !name.Contains("bomber") && !name.Contains("healer"))
-                                availableEnemies.Add(enemy); // Basic/default enemies only
+                                availableEnemies.Add(enemy);
                         }
 
                         if (availableEnemies.Count == 0)
@@ -121,7 +117,6 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        // Loop through all children of enemyParent and destroy them
         for (int i = enemyParent.childCount - 1; i >= 0; i--)
         {
             Transform child = enemyParent.GetChild(i);

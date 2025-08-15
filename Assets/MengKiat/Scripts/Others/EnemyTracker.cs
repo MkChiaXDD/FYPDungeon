@@ -30,7 +30,7 @@ public class EnemyTracker : MonoBehaviour
             Debug.LogWarning("DifficultyManager is not assigned.");
         }
 
-        UpdateKillCountText(); // Update text on start
+        UpdateKillCountText();
         PrintKillData();
     }
 
@@ -62,7 +62,6 @@ public class EnemyTracker : MonoBehaviour
 
             int killsRemaining = currentEntry.killGoal - currentEntry.killCount;
 
-            // Show popup for last 5 kills (but only if not already completed)
             if (killsRemaining <= 5 && killsRemaining > 0)
             {
                 PopUpManager.ShowPopUp($"{killsRemaining} kill{(killsRemaining == 1 ? "" : "s")} left!", 1f, Color.yellow);
@@ -96,7 +95,7 @@ public class EnemyTracker : MonoBehaviour
             Debug.Log($"Round {currentRound}: 1 / {newEntry.killGoal} kills");
         }
 
-        UpdateKillCountText(); // Update the UI text after increasing kills
+        UpdateKillCountText();
     }
 
     private void UpdateKillCountText()
@@ -118,7 +117,7 @@ public class EnemyTracker : MonoBehaviour
         }
         else
         {
-            killCountText.text = $"Kills: 0/10"; // Default display if no entry exists
+            killCountText.text = $"Kills: 0/10";
         }
     }
 

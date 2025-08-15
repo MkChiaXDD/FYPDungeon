@@ -8,7 +8,7 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] private List<Door> doors;
 
     [Header("Plate Visual")]
-    [SerializeField] private Transform plateMesh; // The part you step on
+    [SerializeField] private Transform plateMesh;
     [SerializeField] private float pressDepth = 0.1f;
     [SerializeField] private float pressSpeed = 4f;
 

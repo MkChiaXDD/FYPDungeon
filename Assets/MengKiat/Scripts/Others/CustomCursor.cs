@@ -33,7 +33,7 @@ public class CustomCursor : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0)) // Hold or click left mouse
+        if (Input.GetMouseButton(0))
         {
             if (!usingClickCursor)
             {

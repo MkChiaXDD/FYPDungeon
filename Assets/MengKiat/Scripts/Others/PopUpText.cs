@@ -29,13 +29,11 @@ public class PopUpText : MonoBehaviour
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + Vector3.up * 50f;
 
-        float holdTime = Mathf.Max(0f, duration - 0.5f); // Time to stay still
+        float holdTime = Mathf.Max(0f, duration - 0.5f);
         float fadeTime = 0.5f;
 
-        // Phase 1: Hold position
         yield return new WaitForSeconds(holdTime);
 
-        // Phase 2: Fade and move
         float elapsed = 0f;
 
         while (elapsed < fadeTime)

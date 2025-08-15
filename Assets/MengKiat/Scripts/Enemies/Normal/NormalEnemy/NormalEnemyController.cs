@@ -87,12 +87,10 @@ public class NormalEnemyController : Enemy
 
     private void ChaseWithAvoidance()
     {
-        // 1) pure XZ seek
         Vector3 toPlayer = player.position - transform.position;
         toPlayer.y = 0;
         Vector3 seekDir = toPlayer.normalized;
 
-        // 2) avoidance with SphereCasts
         Vector3 avoidDir = Vector3.zero;
         Vector3[] feelers = new Vector3[]
         {

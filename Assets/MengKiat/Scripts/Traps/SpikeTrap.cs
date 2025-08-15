@@ -40,8 +40,6 @@ public class SpikeTrap : MonoBehaviour
                 haveHitPlayer = false;
                 timer = 0;
             }
-
-            // Move spikes back (retracted)
             spikes.transform.localPosition = Vector3.MoveTowards(spikes.transform.localPosition, initialPos, spikeMoveSpeed * Time.deltaTime);
         }
         else
@@ -51,8 +49,6 @@ public class SpikeTrap : MonoBehaviour
                 isActivated = false;
                 timer = 0;
             }
-
-            // Move spikes forward (extended)
             spikes.transform.localPosition = Vector3.MoveTowards(spikes.transform.localPosition, extendedPos, spikeMoveSpeed * Time.deltaTime);
         }
     }
