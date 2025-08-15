@@ -410,13 +410,16 @@ MonoBehaviour:
   dodgeSpeedMultiplier: 2
   rageSpeedMultiplier: 1.5
   rotationSpeed: 100
-  drops:
-  - {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d, type: 3}
-  - {fileID: 5047510887184404655, guid: db56bba1f96da8b4fb021a98ed34c501, type: 3}
+  healthDrop: {fileID: 289327307675193091, guid: 0e93b51e3d50ea142bfdd3550aff046d,
+    type: 3}
+  buffDrop: {fileID: 5047510887184404655, guid: db56bba1f96da8b4fb021a98ed34c501,
+    type: 3}
   minDrops: 1
   maxDrops: 2
   dropHealthThresholds:
+  - 0.75
   - 0.5
+  - 0.25
   launchForce: 30
 --- !u!114 &2972188434460100755
 MonoBehaviour:

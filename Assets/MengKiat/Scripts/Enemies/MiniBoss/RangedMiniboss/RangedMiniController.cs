@@ -55,7 +55,8 @@ public class RangedMiniController : Enemy
     [SerializeField] private float rotationSpeed = 5f;
 
     [Header("Health Drop Settings")]
-    [SerializeField] private GameObject[] drops;
+    [SerializeField] private GameObject healthDrop;
+    [SerializeField] private GameObject buffDrop;
     [SerializeField] private int minDrops = 1;
     [SerializeField] private int maxDrops = 3;
     // Example: 0.75, 0.5, 0.25 means drop at 75%, 50%, 25% health
@@ -79,6 +80,7 @@ public class RangedMiniController : Enemy
     private int bulletSplitAmt;
     private bool homingReady = false;
     private bool isDead = false;
+    private bool dropped = false;
     
 
     void Start()
@@ -94,6 +96,13 @@ public class RangedMiniController : Enemy
 
     void Update()
     {
+        if (isDead && !dropped)
+        {
+            Debug.Log("Buff Item dropped");
+            DropItem(buffDrop); // or whatever you want to drop on death
+            dropped = true;
+        }
+
         if (isDead) return;
 
         SmoothFacePlayer();
@@ -180,19 +189,21 @@ public class RangedMiniController : Enemy
     {
         float healthPercent = currentHealth / maxHealth;
 
+        // Check all thresholds
         for (int i = 0; i < dropHealthThresholds.Length; i++)
         {
             if (!hasDropped[i] && healthPercent <= dropHealthThresholds[i])
             {
-                DropHealth();
+                DropItem(healthDrop);
                 hasDropped[i] = true;
             }
         }
     }
 
-    private void DropHealth()
+
+    private void DropItem(GameObject itemToDrop)
     {
-        if (drops == null) return;
+        if (itemToDrop == null) return;
 
         int dropCount = Random.Range(minDrops, maxDrops + 1);
         for (int i = 0; i < dropCount; i++)
@@ -200,7 +211,7 @@ public class RangedMiniController : Enemy
             // Spawn just above the boss so they don't clip into the ground
             Vector3 spawnPos = transform.position + Vector3.up * 1f;
 
-            GameObject drop = Instantiate(drops[Random.Range(0, drops.Length)], spawnPos, Quaternion.identity);
+            GameObject drop = Instantiate(itemToDrop, spawnPos, Quaternion.identity);
 
             // Launch in a random horizontal direction
             if (drop.TryGetComponent<Rigidbody>(out Rigidbody rb))
