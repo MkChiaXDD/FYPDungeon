@@ -73,35 +73,35 @@ namespace RMG
             }
         }
 
-        //private void SpawnBossRoom()
-        //{
-        //    Instantiate(bossRoom[Random.Range(0, bossRoom.Length)], bossRoomPosition, Quaternion.Euler(new Vector3(Quaternion.identity.x, bossRoomRotation[Random.Range(0, bossRoomRotation.Length)], Quaternion.identity.z)), transform);
-        //}
-
         private void SpawnBossRoom()
         {
-            // Destroy the existing boss room if one exists
-            if (currentBossRoomInstance != null)
-            {
-                Destroy(currentBossRoomInstance);
-            }
-
-            // Select random boss room prefab and rotation
-            GameObject selectedBossRoom = bossRoom[Random.Range(0, bossRoom.Length)];
-            float selectedRotation = bossRoomRotation[Random.Range(0, bossRoomRotation.Length)];
-
-            // Instantiate the new boss room and store the reference
-            currentBossRoomInstance = Instantiate(
-                selectedBossRoom,
-                bossRoomPosition,
-                Quaternion.Euler(0f, selectedRotation, 0f),
-                transform
-            );
+            Instantiate(bossRoom[Random.Range(0, bossRoom.Length)], bossRoomPosition, Quaternion.Euler(new Vector3(Quaternion.identity.x, bossRoomRotation[Random.Range(0, bossRoomRotation.Length)], Quaternion.identity.z)), transform);
         }
+
+        //private void SpawnBossRoom()
+        //{
+        //    // Destroy the existing boss room if one exists
+        //    if (currentBossRoomInstance != null)
+        //    {
+        //        Destroy(currentBossRoomInstance);
+        //    }
+
+        //    // Select random boss room prefab and rotation
+        //    GameObject selectedBossRoom = bossRoom[Random.Range(0, bossRoom.Length)];
+        //    float selectedRotation = bossRoomRotation[Random.Range(0, bossRoomRotation.Length)];
+
+        //    // Instantiate the new boss room and store the reference
+        //    currentBossRoomInstance = Instantiate(
+        //        selectedBossRoom,
+        //        bossRoomPosition,
+        //        Quaternion.Euler(0f, selectedRotation, 0f),
+        //        transform
+        //    );
+        //}
 
         public void Generate()
         {
-            SpawnBossRoom();
+           // SpawnBossRoom();
             Generate(System.DateTime.Now.Millisecond);
         }
 
