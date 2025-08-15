@@ -17,8 +17,7 @@ public class MenuHandler : MonoBehaviour
     [SerializeField] private Button quitButton;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject loadingScreen;
-    [SerializeField] private Slider loadingBar;
-    [SerializeField] private TMP_Text loadingText;
+
     [SerializeField] private TMP_Text versionText;
 
     [Header("Loading Settings")]
@@ -100,8 +99,8 @@ public class MenuHandler : MonoBehaviour
             progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
 
             // Update UI
-            loadingBar.value = progress;
-            loadingText.text = $"LOADING... {Mathf.Round(progress * 100)}%";
+           // loadingBar.value = progress;
+           
 
             // Check if loading is complete
             if (asyncLoad.progress >= 0.9f)
@@ -110,7 +109,7 @@ public class MenuHandler : MonoBehaviour
                 if (Time.time - startTime < minLoadingTime)
                 {
                     // Continue showing loading screen
-                    loadingText.text = "COMPLETING INITIALIZATION...";
+                
                 }
                 else
                 {
@@ -147,9 +146,7 @@ public class MenuHandler : MonoBehaviour
             // Calculate progress (0-0.9 for loading, 0.9-1.0 for activation)
             progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
 
-            // Update UI
-            loadingBar.value = progress;
-            loadingText.text = $"LOADING... {Mathf.Round(progress * 100)}%";
+     
 
             // Check if loading is complete
             if (asyncLoad.progress >= 0.9f)
@@ -158,7 +155,7 @@ public class MenuHandler : MonoBehaviour
                 if (Time.time - startTime < minLoadingTime)
                 {
                     // Continue showing loading screen
-                    loadingText.text = "COMPLETING INITIALIZATION...";
+                   
                 }
                 else
                 {
