@@ -214,6 +214,7 @@ public class PlayerCombat : MonoBehaviour
         //HasLineOfSightTesting(_TestObj);
 
         SetWeaponAnim();
+        SetUltIfGone();
         //HandleBlocking();
         HandleLockOn();
         // Update recovery timer
@@ -710,6 +711,40 @@ public class PlayerCombat : MonoBehaviour
             _animator.SetInteger("Weapon", 2);
         }
     }
+
+    private void SetUltIfGone()
+    {
+        if (_currentWeapon == null)
+        {
+            //_animator.SetInteger("Weapon", 0);
+            return;
+        }
+
+        if (_currentWeapon.weaponData.weaponType == WeaponType.Sword)
+        {
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+            {
+                swordUltAttackIcon.SetActive(true);
+            }
+            else
+            {
+                swordUltAttackIcon.SetActive(false);
+            }
+            //_animator.SetInteger("Weapon", 1);
+        }
+        else if (_currentWeapon.weaponData.weaponType == WeaponType.Hammer)
+        {
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+            {
+                hammerUltAttackIcon.SetActive(true);
+            }
+            else
+            {
+                hammerUltAttackIcon.SetActive(false);
+            }
+            //_animator.SetInteger("Weapon", 2);
+        }
+    }
     private void ClearCurrentWeapon()
     {
         if (_equippedWeapon != null)
@@ -758,12 +793,28 @@ public class PlayerCombat : MonoBehaviour
         {
             case WeaponType.Hammer:
                 hammerBasicAttackIcon.SetActive(true);
-                hammerUltAttackIcon.SetActive(true);
+                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+                {
+                    hammerUltAttackIcon.SetActive(true);
+                }
+                else
+                {
+                    hammerUltAttackIcon.SetActive(false);
+                }
+                //hammerUltAttackIcon.SetActive(true);
                 break;
 
             case WeaponType.Sword:
                 swordBasicAttackIcon.SetActive(true);
-                swordUltAttackIcon.SetActive(true);
+                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+                {
+                    swordUltAttackIcon.SetActive(true);
+                }
+                else
+                {
+                    swordUltAttackIcon.SetActive(false);
+                }
+                //swordUltAttackIcon.SetActive(true);
                 break;
 
             case WeaponType.Unarmed:
