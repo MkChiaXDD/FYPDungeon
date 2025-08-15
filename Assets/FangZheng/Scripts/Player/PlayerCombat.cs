@@ -375,7 +375,7 @@ public class PlayerCombat : MonoBehaviour
                 return;
             }
 
-            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 3)
             {
                 
                 Debug.Log(_currentWeapon.CurrDurability + " " + _currentWeapon.weaponData.MaxDurability);
@@ -722,7 +722,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (_currentWeapon.weaponData.weaponType == WeaponType.Sword)
         {
-            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 3)
             {
                 swordUltAttackIcon.SetActive(true);
             }
@@ -734,7 +734,7 @@ public class PlayerCombat : MonoBehaviour
         }
         else if (_currentWeapon.weaponData.weaponType == WeaponType.Hammer)
         {
-            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+            if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 3)
             {
                 hammerUltAttackIcon.SetActive(true);
             }
@@ -793,7 +793,7 @@ public class PlayerCombat : MonoBehaviour
         {
             case WeaponType.Hammer:
                 hammerBasicAttackIcon.SetActive(true);
-                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 3)
                 {
                     hammerUltAttackIcon.SetActive(true);
                 }
@@ -806,7 +806,7 @@ public class PlayerCombat : MonoBehaviour
 
             case WeaponType.Sword:
                 swordBasicAttackIcon.SetActive(true);
-                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 2)
+                if (_inventory.GetItemDurability() >= _currentWeapon.weaponData.MaxDurability / 3)
                 {
                     swordUltAttackIcon.SetActive(true);
                 }
