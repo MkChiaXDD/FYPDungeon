@@ -73,21 +73,10 @@ public class WeaponBreak : MonoBehaviour
 
     private IEnumerator HandleDissolve()
     {
-        while (currentDissolve < 1)
-        {
-            currentDissolve += Time.deltaTime * dissolveSpeed;
 
-            foreach (var mat in GetComponent<Renderer>().materials)
-            {
-                mat.SetFloat("_DisolveValue", currentDissolve);
-            }
-
-            yield return null;
-        }
-
-        yield return null;
-
+     
         SoundManager.Instance.PlaySFX("WeaponBreak", this.gameObject);
         Destroy(this.gameObject);
+        yield return null;
     }
 }
