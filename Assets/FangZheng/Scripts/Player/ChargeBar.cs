@@ -23,7 +23,6 @@ public class ChargeBar : MonoBehaviour
     public bool _isCharging;
     public float _chargeTimer;
     private float _chargeStartTime;
-    private bool _delayedShowActive;
     private Coroutine _delayedShowCoroutine;
 
     private void OnEnable()
@@ -62,7 +61,6 @@ public class ChargeBar : MonoBehaviour
 
     private IEnumerator DelayedShowChargeBar()
     {
-        _delayedShowActive = true;
         yield return new WaitForSeconds(showDelay);
 
         // Only show if still charging after delay
@@ -70,7 +68,6 @@ public class ChargeBar : MonoBehaviour
         {
             BarObj.SetActive(true);
         }
-        _delayedShowActive = false;
     }
 
     private void Update()
@@ -107,7 +104,6 @@ public class ChargeBar : MonoBehaviour
         {
             StopCoroutine(_delayedShowCoroutine);
         }
-        _delayedShowActive = false;
     }
 
     private void InitialiseChargeBar()

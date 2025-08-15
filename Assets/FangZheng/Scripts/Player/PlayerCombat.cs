@@ -60,7 +60,6 @@ public class PlayerCombat : MonoBehaviour
     public float _baseheavyAttackCooldown = 1.5f;
     public float _baseminChargeTime = 0.1f;
     public float _basemaxChargeTime = 2f;
-    [SerializeField] private float _baseheavyAttackMoveDistance = 1.5f;
     [SerializeField] private float _baseheavyAttackMoveDuration = 0.3f;
 
     [SerializeField] private float _baselightAttackMoveDistance = 1.5f;

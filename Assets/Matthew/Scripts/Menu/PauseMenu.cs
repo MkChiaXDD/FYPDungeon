@@ -39,13 +39,6 @@ public class PauseMenu : MonoBehaviour
             eventSystem.AddComponent<EventSystem>();
             eventSystem.AddComponent<StandaloneInputModule>();
         }
-
-        // Configure input module to work with paused game
-        inputModule = FindObjectOfType<StandaloneInputModule>();
-        if (inputModule != null)
-        {
-            inputModule.forceModuleActive = true;
-        }
     }
 
     private void Update()

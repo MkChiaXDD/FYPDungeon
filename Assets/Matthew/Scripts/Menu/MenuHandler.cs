@@ -40,7 +40,7 @@ public class MenuHandler : MonoBehaviour
         quitButton.onClick.AddListener(QuitGame);
 
         // Ensure settings panel is hidden on start
-        settingsPanel.SetActive(false);
+        //settingsPanel.SetActive(false);
         loadingScreen.SetActive(false);
 
         // Display version number

@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 1699023673485884663}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3742113108900954040}
@@ -66,8 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3994622918974638590, guid: de8b358065c051f49a5530a058052c2f,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4d4317a0010a4241b121f609f6fe37f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -230,7 +229,7 @@ Transform:
   - {fileID: 7750300920106005919}
   - {fileID: 3742113108900954040}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2984200832428850686
 MonoBehaviour:
@@ -246,6 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Buff: {fileID: 0}
   CanCollectUI: {fileID: 2892344718981573101}
+  CardContainer: {fileID: 0}
 --- !u!65 &6198541122024115592
 BoxCollider:
   m_ObjectHideFlags: 0
