@@ -117,7 +117,7 @@ public class Breakable : MonoBehaviour, IDamageable
     
     private void ApplyStun(GameObject target)
     {     
-        ApplyStatusEffect(target, statusEffects[(int)StatusEffectList.STUN]);
+      //  ApplyStatusEffect(target, statusEffects[(int)StatusEffectList.STUN]);
     }
 
     protected virtual void ApplyStatusEffect(GameObject target, StatusEffect effect)

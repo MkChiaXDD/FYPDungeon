@@ -112,6 +112,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
         if (CurrentHealth <= 0)
         {
+            Debug.Log("I died");
             Die();
         }
 
