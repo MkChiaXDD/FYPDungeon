@@ -10,11 +10,11 @@ public class FunFactShuffler : MonoBehaviour
 
     [Header("Fun Facts Settings")]   
     [SerializeField] private List<FunFact> funFacts = new List<FunFact>();
-    [SerializeField] private float displayDuration = 5f; // Time between fact changes
+    [SerializeField] private float displayDuration = 5f; 
 
     [Header("UI References")]
     [SerializeField] private TMP_Text factTextComponent;
-    [SerializeField] private Image factImageComponent; // Optional: for displaying images
+    [SerializeField] private Image factImageComponent; 
 
     private List<FunFact> unusedFacts = new List<FunFact>();
     private float timer;
@@ -23,9 +23,9 @@ public class FunFactShuffler : MonoBehaviour
     [System.Serializable]
     public class FunFact
     {
-        [TextArea(2, 5)] // Makes the text area in the Inspector larger for better readability
+        [TextArea(2, 5)] 
         public string factText;
-        public Sprite optionalImage; // Optional: if you want to include images with facts
+        public Sprite optionalImage; // Optional
     }
 
     private void Awake()
@@ -53,7 +53,7 @@ public class FunFactShuffler : MonoBehaviour
 
     public void ShowNextFact()
     {
-        // If we've used all facts, reset the unused list
+        // rset after used up
         if (unusedFacts.Count == 0)
         {
             ResetUnusedFacts();
@@ -63,10 +63,10 @@ public class FunFactShuffler : MonoBehaviour
         int randomIndex = Random.Range(0, unusedFacts.Count);
         FunFact selectedFact = unusedFacts[randomIndex];
 
-        // Remove the fact so we don't repeat it until we've shown all facts
+        //prevent repeats until after finishing
         unusedFacts.RemoveAt(randomIndex);
 
-        // Display the fact
+        // Display  fact
         DisplayFact(selectedFact);
     }
 
@@ -77,7 +77,7 @@ public class FunFactShuffler : MonoBehaviour
             factTextComponent.text = fact.factText;
         }
 
-        // Optional image display
+        
         if (factImageComponent != null)
         {
             factImageComponent.sprite = fact.optionalImage;
@@ -91,7 +91,7 @@ public class FunFactShuffler : MonoBehaviour
         unusedFacts.AddRange(funFacts);
     }
 
-    // Editor utility to add a new fact quickly
+   
     [ContextMenu("Add New Fact")]
     private void AddNewFact()
     {

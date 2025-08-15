@@ -41,7 +41,7 @@ public class DamageNumberManager : MonoBehaviour
                 worldCanvas = canvasGO.AddComponent<Canvas>();
                 worldCanvas.renderMode = RenderMode.WorldSpace;
 
-                // Adjust these settings:
+                // REMINDEr these settings
                 worldCanvas.transform.localScale = Vector3.one * 0.01f; // Try increasing if too small
                 worldCanvas.sortingOrder = 100; // Ensure it renders on top
                 worldCanvas.worldCamera = Camera.main; // Explicitly assign camera

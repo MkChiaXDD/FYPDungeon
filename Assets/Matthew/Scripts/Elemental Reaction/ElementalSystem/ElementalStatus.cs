@@ -4,7 +4,7 @@ using System.Linq;
 
 public class ElementalStatus : MonoBehaviour
 {
-    // Tracks active elements and their gauges
+    // Tracks active elements and gauges
     private Dictionary<ElementType, float> _elementGauges = new();
 
     [Header("Debug Settings")]
@@ -13,22 +13,12 @@ public class ElementalStatus : MonoBehaviour
     // Apply element to target
     public void ApplyElement(ElementType element, float gaugeUnits)
     {
-
-       
-
         // Initialize if needed
         if (!_elementGauges.ContainsKey(element))
         {
             DebugLogGauge($"Initializing {element} gauge", element);
             _elementGauges[element] = gaugeUnits;
-
-           
-
         }
-
-        Debug.LogWarning(gaugeUnits);
-
-
 
         float oldValue = _elementGauges[element];
         _elementGauges[element] = Mathf.Clamp(_elementGauges[element] + gaugeUnits, 0, 2f);

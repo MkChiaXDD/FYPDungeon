@@ -101,7 +101,7 @@ public class Inventory : MonoBehaviour
 
     private void SelectSlot()
     {
-        // --- Number key selection ---
+        // number keyyboard press
         for (int i = 0; i < 7; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i) && i < hotbarSize)
@@ -111,7 +111,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        // --- Scroll wheel selection ---
+        // scrollwheel
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f) // Scroll up
         {
@@ -129,14 +129,14 @@ public class Inventory : MonoBehaviour
 
     public bool Pickup(ItemInstance itemToPickup, int amount = 1)
     {
-        // Early return if invalid parameters
+        // check for empty
         if (itemToPickup == null || amount <= 0)
         {
             Debug.LogWarning("Attempted to pickup invalid item or amount");
             return false;
         }
 
-        // Check if inventory can fit the item
+        // check can fit
         if (!CanFitItem(itemToPickup, amount))
         {
             Debug.Log("Inventory full, cannot pickup item");

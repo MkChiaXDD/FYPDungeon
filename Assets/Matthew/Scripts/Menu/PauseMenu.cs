@@ -151,7 +151,7 @@ public class PauseMenu : MonoBehaviour
 
     private void EnableUIInput()
     {
-        // Force UI to process input even when time is stopped
+       //enable input
         if (inputModule != null)
         {
             inputModule.Process();
@@ -161,7 +161,7 @@ public class PauseMenu : MonoBehaviour
     public void ExitGame()
     {
         //        Debug.Log("you have exited");
-        //        // Note: In editor this won't work, only in built game
+        //       
         //#if UNITY_EDITOR
         //        UnityEditor.EditorApplication.isPlaying = false;
         //#else

@@ -43,7 +43,7 @@ public class MenuHandler : MonoBehaviour
         //settingsPanel.SetActive(false);
         loadingScreen.SetActive(false);
 
-        // Display version number
+        // Display version number 
         versionText.text = $"v{Application.version}";
 
         // Prevent double-clicks
@@ -58,7 +58,7 @@ public class MenuHandler : MonoBehaviour
         playButton.interactable = false;
         isLoading = true;
 
-        // Start loading process
+        // Start loading 
         StartCoroutine(LoadGameScene());
     }
 
@@ -86,7 +86,7 @@ public class MenuHandler : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(gameSceneName);
         asyncLoad.allowSceneActivation = false;
 
-        // Simulate slow load for testing if enabled
+       //fake load screen
         if (simulateSlowLoad)
         {
             yield return new WaitForSeconds(simulatedLoadDelay);

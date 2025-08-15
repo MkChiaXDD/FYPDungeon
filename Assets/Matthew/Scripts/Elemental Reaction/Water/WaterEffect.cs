@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
+//NOT IN USE
 public class WaterEffect : MonoBehaviour
 {
     private float damagePerSecond;

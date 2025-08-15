@@ -130,7 +130,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (item == null || amt <= 0) return false;
 
-        // First try to stack with existing items
+        //  try to stack with existing items
         for (int i = 0; i < inventory.maxItemSlots; i++)
         {
             if (inventory.items[i] != null &&
@@ -159,7 +159,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // Then try empty slots
+        // try empty slots
         if (amt > 0)
         {
             for (int i = 0; i < inventory.maxItemSlots; i++)
@@ -230,10 +230,7 @@ public class InventoryManager : MonoBehaviour
         if (inventory.equippedSlotNum < 0 || inventory.equippedSlotNum >= hotbarSize)
             return null;
 
-
-        
-
-        return inventory.GetItem(inventory.equippedSlotNum); // -1 to set to 0 (first)
+        return inventory.GetItem(inventory.equippedSlotNum); 
     }
 
     public void RemoveCurrentHotbarItem()

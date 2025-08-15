@@ -22,6 +22,8 @@ public class StatusEffectReceiver : MonoBehaviour
                 effect.Update(Time.deltaTime, this);
             }
         }
+
+        //DEBUG ONLYS
         //if (Input.GetKeyDown(KeyCode.Alpha1))
         //{
         //    GetComponent<StatusEffectReceiver>().ApplyEffect(poison);

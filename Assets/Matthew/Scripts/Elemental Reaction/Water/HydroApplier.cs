@@ -1,4 +1,4 @@
-// Example elemental effect component
+// Example TESTING elemental effect component
 using System.Collections;
 using UnityEngine;
 

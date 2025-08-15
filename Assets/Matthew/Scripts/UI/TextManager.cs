@@ -59,7 +59,7 @@ public class TextManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            CreateText(new Vector3(1, 1, 1), "gay nigga", Color.black);
+            CreateText(new Vector3(1, 1, 1), "hi", Color.black);
         }
     }
     private void InitializeSingleton()

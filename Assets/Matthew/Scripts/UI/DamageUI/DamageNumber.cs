@@ -66,9 +66,9 @@ public class DamageNumber : MonoBehaviour
     //DEBUG MODE
     public void Initialize(string text, Color color)
     {
-        damageText.text = text; // Now accepts any string
+        damageText.text = text; 
         damageText.color = color;
-        // ... rest of initialization ...
+        
         StartCoroutine(Animate());
     }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//IGNORE no longer done by me
 public class CharacterStateMachine : MonoBehaviour
 {
     // Animator reference and state tracking

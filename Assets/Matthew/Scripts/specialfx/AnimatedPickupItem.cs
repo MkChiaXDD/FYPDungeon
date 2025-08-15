@@ -3,14 +3,14 @@ using UnityEngine;
 public class AnimatedPickupItem : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    [SerializeField] private float rotationSpeed = 30f; // Degrees per second
-    [SerializeField] private Vector3 rotationAxis = Vector3.up; // Default to Y-axis rotation
+    [SerializeField] private float rotationSpeed = 30f; // degrees per second
+    [SerializeField] private Vector3 rotationAxis = Vector3.up; // direction to rotate
 
     [Header("Bobbing Settings")]
-    [SerializeField] private float bobHeight = 0.5f; // How high the bob goes
-    [SerializeField] private float bobSpeed = 1f; // How fast the bob is
-    [SerializeField] private float bobOffset = 0f; // Phase offset for multiple items
-    [SerializeField] private float minVelocityForBobbing = 0.1f; // When to start bobbing
+    [SerializeField] private float bobHeight = 0.5f; // how high the bob goes
+    [SerializeField] private float bobSpeed = 1f; // how fast the bob is
+    [SerializeField] private float bobOffset = 0f; // put offset for multiple items
+    [SerializeField] private float minVelocityForBobbing = 0.1f; // when start bob
 
     private Rigidbody rb;
     private float baseY;
@@ -27,7 +27,6 @@ public class AnimatedPickupItem : MonoBehaviour
     {
         Rotation();
 
-        // Start bobbing only when object is almost still
         if (rb != null && rb.velocity.magnitude < minVelocityForBobbing)
         {
             BobbingMotion();
@@ -36,7 +35,6 @@ public class AnimatedPickupItem : MonoBehaviour
 
     private void Rotation()
     {
-        // Rotate the object
         transform.Rotate(rotationAxis * rotationSpeed * Time.deltaTime);
     }
 
@@ -46,8 +44,7 @@ public class AnimatedPickupItem : MonoBehaviour
         timer += Time.deltaTime * bobSpeed;
         float offsetY = Mathf.Sin(timer) * bobHeight;
 
-        // Apply bobbing only to Y position
-        Vector3 pos = transform.position;
+         Vector3 pos = transform.position;
         pos.y = baseY + offsetY;
         transform.position = pos;
     }

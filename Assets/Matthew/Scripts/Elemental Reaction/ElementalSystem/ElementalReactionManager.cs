@@ -54,7 +54,7 @@ public class ElementalReactionManager : MonoBehaviour
         }
     }
 
-    // Define reaction rules
+    //  reaction rules
     private ReactionType GetReactionType(ElementType trigger, ElementType existing)
     {
         Debug.Log($"[ElementalSystem] Checking reaction between TRIGGER: {trigger} and EXISTING: {existing}");
@@ -98,7 +98,7 @@ public class ElementalReactionManager : MonoBehaviour
     {
         Debug.Log($"[Reaction] STARTING {reaction} reaction on {target.gameObject.name}");
 
-        // Log element consumption
+        // use up elemenet
         Debug.Log($"[Reaction] Consuming elements: {trigger} and {existing}");
         target.ApplyElement(existing, -5f);
         target.ApplyElement(trigger, -5f);
@@ -169,21 +169,18 @@ public class ElementalReactionManager : MonoBehaviour
     private void ApplyFrozenEffect(ElementalStatus target)
     {
         Debug.Log($"[Frozen] Freezing {target.gameObject.name} for 2 seconds");
-        // Actual implementation would go here
     }
 
     private void ApplySuperconductEffect(ElementalStatus target, float damage)
     {
         Debug.Log($"[Superconduct] Applying {damage} cryo damage to {target.gameObject.name}");
         Debug.Log($"[Superconduct] Reducing defense by 30% for {_superconductDuration} seconds");
-        // Actual implementation would go here
-    }
+       }
 
     // Helper methods
     private void ApplyDamage(ElementalStatus target, float amount, ElementType element)
     {
         Debug.Log($"[Damage] Applying {amount} {element} damage to {target.gameObject.name}");
-        // Actual damage implementation would go here
     }
 
     private void ApplyAOE(Vector3 center, float radius, float damage)
@@ -203,14 +200,14 @@ public class ElementalReactionManager : MonoBehaviour
     }
 }
 
-// ElementType.cs
+//ElementType.cs
 public enum ElementType
 {
-    Pyro,       // Fire
-    Hydro,      // Water
-    Electro,    // Electricity
-    Cryo,       // Ice
-    None        // Neutral
+    Pyro,       //Fire
+    Hydro,      //Water
+    Electro,    //Electricity
+    Cryo,       //Ice
+    None        //Neutral
 }
 
 public enum PhysicalAttackType
@@ -223,11 +220,11 @@ public enum PhysicalAttackType
 // ReactionType.cs
 public enum ReactionType
 {
-    Vaporize,       // Pyro + Hydro
-    Overload,       // Pyro + Electro
-    ElectroCharged, // Hydro + Electro
-    Frozen,         // Hydro + Cryo
-    Melt,           // Pyro + Cryo
-    Superconduct,   // Cryo + Electro
+    Vaporize,       //Pyro + Hydro
+    Overload,       //Pyro + Electro
+    ElectroCharged, //Hydro + Electro
+    Frozen,         //Hydro + Cryo
+    Melt,           //Pyro + Cryo
+    Superconduct,   //Cryo + Electro
     None
 }

@@ -11,7 +11,6 @@ public class HitStopManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                // Find existing instance in scene
                 _instance = FindObjectOfType<HitStopManager>();
 
                 // Create new instance if none exists
@@ -47,7 +46,7 @@ public class HitStopManager : MonoBehaviour
         else
         {
             _instance = this;
-            // Optional: Uncomment below to persist across scenes
+            // dont persist through scene
             // DontDestroyOnLoad(gameObject);
         }
 
@@ -55,19 +54,19 @@ public class HitStopManager : MonoBehaviour
         originalTimeScale = Time.timeScale;
     }
 
-    // Public static access point (uses inspector defaults)
+    // Public static access (default)
     public static void ActivateHitStopGlobal()
     {
         Instance.HitStop(Instance.defaultDuration, Instance.targetTimeScale);
     }
 
-    // Public static access point with custom parameters
+    // Public static access (can modify)
     public static void ActivateHitStopGlobal(float duration, float timeScale)
     {
         Instance.HitStop(duration, timeScale);
     }
 
-    // Original non-static implementation
+    // non-static implementation
     public void HitStop(float duration, float targetTimeScale)
     {
         if (currentHitStop != null)

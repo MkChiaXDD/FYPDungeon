@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 [System.Serializable]
@@ -38,10 +37,10 @@ public class ItemDropSystem : MonoBehaviour
                 // Spawn the item
                 GameObject droppedItem = Instantiate(_drop._dropItemPrefab, spawnPosition, Quaternion.identity);
 
-                // Random throw direction on XZ plane
+                // Random throw direction on horizontally (xz)
                 Vector3 randomDir = new Vector3(Random.Range(-1f, 1f), 0.5f, Random.Range(-1f, 1f)).normalized;
 
-                // Apply force if it has Rigidbody
+                // Apply force if it got rb
                 Rigidbody rb = droppedItem.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
