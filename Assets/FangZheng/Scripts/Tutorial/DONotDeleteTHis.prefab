@@ -1,0 +1,373 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2834194302243335602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5861764811432982759}
+  - component: {fileID: 9003110410909495527}
+  m_Layer: 0
+  m_Name: DONotDeleteTHis
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5861764811432982759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2834194302243335602}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 23.848894, y: 17.711042, z: 164.84016}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9003110410909495527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2834194302243335602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2c585a3779f5645ba3ecca86ac3ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps:
+  - _StepName: Movment
+    Instruction: Use WASD to move around
+    HelpStuff: Press WASD to move Around
+    requiredKeys: 
+    requiredAction: []
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate:
+    - {fileID: 0}
+    NeedToBeDisabled:
+    - {fileID: 0}
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 0
+    hasWaypoint: 0
+    waypointTarget:
+    - {fileID: 0}
+    waypointRadius: 5
+  - _StepName: Dash
+    Instruction: Move Around and press Spcae to Dash at the direction
+    HelpStuff: Press Spcae to Dash
+    requiredKeys: 
+    requiredAction: []
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate:
+    - {fileID: 0}
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 0
+    hasWaypoint: 0
+    waypointTarget:
+    - {fileID: 0}
+    waypointRadius: 2
+  - _StepName: NormalAttack
+    Instruction: Press M1 or Left Mouse Button to do a light attack
+    HelpStuff: Press M1 or Left Mouse Button to do a light attack
+    requiredKeys: 
+    requiredAction:
+    - NormalAttack
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate:
+    - {fileID: 0}
+    NeedToBeDisabled:
+    - {fileID: 0}
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 1
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: BreakCrate
+    Instruction: Break the crate use basic attack
+    HelpStuff: Break the crate use basic attack
+    requiredKeys: 
+    requiredAction:
+    - BreakCrate
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 4
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: PickUpWeapon
+    Instruction: Pick up the weapon dropped from the crate
+    HelpStuff: Pick up the weapon dropped from the crate
+    requiredKeys: 
+    requiredAction:
+    - PickUpItem
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 3
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: HeavyAttack
+    Instruction: Hold M1 or Left Mouse Button until the bar turn colour to do a heavy
+      attack the more the charge the more the dmg
+    HelpStuff: Hold M1 or Left Mouse Button until the bar turn colour to do a heavy
+      attack the more the charge the more the dmg
+    requiredKeys: 
+    requiredAction:
+    - HeavyAttack
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 1
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: SpellCast
+    Instruction: Press Right mouse button with a weapon use a special attack
+    HelpStuff: Press Right mouse button with a weapon use a special attack
+    requiredKeys: 
+    requiredAction:
+    - SpecialSkill
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 1
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: Enemy
+    Instruction: Attack the enemy
+    HelpStuff: Attack the enemy
+    requiredKeys: 
+    requiredAction:
+    - AttackEnemy
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 2
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: KillEnemy
+    Instruction: Kill the enemy
+    HelpStuff: Kill the enemy
+    requiredKeys: 
+    requiredAction:
+    - DeadEnemy
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 2
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: OpenMap
+    Instruction: Press Tab To Open Map
+    HelpStuff: Press Tab To Open Map
+    requiredKeys: 09000000
+    requiredAction: []
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 6
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: PickUpBuff
+    Instruction: Go and pick up the upgrade
+    HelpStuff: Go and pick up the upgrade
+    requiredKeys: 
+    requiredAction:
+    - PickUpBuff
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 5
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: ToPortal?
+    Instruction: Go to portal
+    HelpStuff: Go to portal
+    requiredKeys: 
+    requiredAction: []
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    ObjToActivate:
+    - {fileID: 0}
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 6
+    hasWaypoint: 0
+    waypointTarget:
+    - {fileID: 0}
+    waypointRadius: 12
+  - _StepName: Fight
+    Instruction: You got ambushed kill them
+    HelpStuff: You got ambushed kill them
+    requiredKeys: 
+    requiredAction:
+    - KillAll
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 2
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: Complete
+    Instruction: You have completed the tutorial
+    HelpStuff: You have completed the tutorial
+    requiredKeys: 
+    requiredAction:
+    - Compledte
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate:
+    - {fileID: 0}
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 6
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: BreakShield
+    Instruction: Use HeavyAttack to break shield
+    HelpStuff: Use HeavyAttack to break shield
+    requiredKeys: 
+    requiredAction:
+    - BreakEnemy
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 2
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  - _StepName: Nothing
+    Instruction: Nothing
+    HelpStuff: Nothing
+    requiredKeys: 
+    requiredAction: []
+    objectToHighlight: {fileID: 0}
+    UiNeeded: {fileID: 0}
+    ObjToInactive: []
+    ObjToActivate: []
+    NeedToBeDisabled: []
+    isCompleted: 0
+    TimeForHint: 100000000
+    _npc: {fileID: 0}
+    Tutorial_Type: 5
+    hasWaypoint: 0
+    waypointTarget: []
+    waypointRadius: 2
+  TutorialUI: {fileID: 0}
+  HelpPrompt: {fileID: 0}
+  instructionText: {fileID: 0}
+  keysPressed: 
+  Targets: []
+  WayPointStore: []
+  _dialogSystem: {fileID: 0}
+  _playerCombat: {fileID: 0}
+  _TargetingSystem: {fileID: 0}
+  _player: {fileID: 0}
+  _TempObj: []
+  _previousItems: []
+  _AddItem: []
+  _RemoveItem: []
