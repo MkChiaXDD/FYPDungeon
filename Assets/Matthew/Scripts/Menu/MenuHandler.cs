@@ -197,9 +197,9 @@ public class MenuHandler : MonoBehaviour
     private void Update()
     {
         // Back button closes settings
-        if (settingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleSettings();
-        }
+        //if (settingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    ToggleSettings();
+        //}
     }
 }
